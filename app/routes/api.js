@@ -20,9 +20,7 @@ var apiRouter = express.Router();
 		
 		.get(function(req, res) {
 			UserModel.find(function(err, users) {				
-				if(err) {
-					return res.send(err);
-				}
+				if(err) return res.send(err);
 				res.json(users);
 			});
 		})
@@ -42,18 +40,45 @@ var apiRouter = express.Router();
 						return res.send(err);
 					}
 				}
-				res.send({ success : true, message : 'Save success' });
+				res.json({ success : true, message : 'Add success' });
 			});
 		});
 	
-	apiRouter.route('/user/:user_id')
+	apiRouter.route('/users/:user_id')
 		
 		.get(function(req, res) {			
 			UserModel.findById(req.params.user_id, function(err, user) {
-				if(err) {
-					return res.send(err);
-				}
+				if(err) return res.send(err);
+
 				res.json(user);
+			});
+		})
+		
+		.put(function(req, res) {
+			UserModel.findById(req.params.user_id, function(err, user) {
+				if(err) return res.send(err);
+
+				if(req.body.name) {
+					user.name = req.body.name;
+				}
+				if(req.body.username) {
+					user.username = req.body.username;
+				}
+				if(req.body.password) {
+					user.password = req.body.password;
+				}
+				
+				user.save(function(err) {
+					if(err) return res.send(err);
+					res.json({ success : true, message : 'Update success' })
+				});
+			});
+		})
+		
+		.delete(function(req, res) {
+			UserModel.remove({ _id : req.params.user_id }, function(err, user) {
+				if(err) return res.send(err);
+				res.json({ success : true, message : 'Remove success' });
 			});
 		});
 
