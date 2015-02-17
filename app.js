@@ -24,11 +24,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 // DataBase ==================================================
 
 var database = require('./config/database');
-
 mongoose.connect(database.url);
 
 // Routers ===================================================
 
-require('./app/routes/routes.js')(app);
+require('./app/routes/api.js')(app);
 
 module.exports = app;
