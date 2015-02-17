@@ -1,16 +1,16 @@
 
 
-# BudgetApp
+# MEAN-PROJECT
 
-
+Starting project ...
 
 ## Usage
 
-
+Personal
 
 ## Developing
 
-
+François Caron
 
 ### Tools
 
