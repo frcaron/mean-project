@@ -10,7 +10,7 @@ Personal
 
 ## Developing
 
-François Caron
+Francois Caron
 
 ### Tools
 
