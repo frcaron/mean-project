@@ -1,7 +1,8 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var userSchema = new Schema({
+// Schema
+var schema = new Schema({
 	name 		: String,
 	username 	: { type : String, 
 					required : true, 
@@ -13,7 +14,8 @@ var userSchema = new Schema({
     updated_at 	: Date
 });
 
-userSchema.pre('save', function(next) {
+// Previous function
+schema.pre('save', function(next) {
 	
 	var currentDate = new Date();
 	
@@ -26,4 +28,5 @@ userSchema.pre('save', function(next) {
 	next();
 });
 
-module.exports = mongoose.model('user', userSchema);
+// Return
+module.exports = mongoose.model('user', schema);
