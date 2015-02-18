@@ -1,18 +1,18 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var ObjectId = mongoose.Schema.Types.ObjectId;
 
 // Schema
-var schema = new Schema({
-	category		: { type : ObjectId,
+var ProgramSchema = new Schema({
+	_category		: { type : Schema.Types.ObjectId,
+						ref : 'Category',
 						required : true },
-	transactions_id	: [ ObjectId ],
+	_transactions	: [ { type : Schema.Types.ObjectId, ref : 'Transaction' } ],
     created_at 		: Date,
     updated_at 		: Date
 });
 
 // Previous function
-schema.pre('save', function(next) {
+ProgramSchema.pre('save', function(next) {
 	
 	var currentDate = new Date();
 	
@@ -26,4 +26,4 @@ schema.pre('save', function(next) {
 });
 
 // Return
-module.exports = mongoose.model('program', schema);
+module.exports = mongoose.model('Program', ProgramSchema);

@@ -1,24 +1,23 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var ObjectId = mongoose.Schema.Types.ObjectId;
 
 // Schema
-var schema = new Schema({
+var PlanSchema = new Schema({
 	month 			: { type : Number,
 						required : true,
 						min : [ 1, 'The value of month ‘{PATH}‘ ({VALUE} is beneath the limit {MIN})' ],
 						max : [ 12, 'The value of month ‘{PATH}‘ ({VALUE} is above the limit {MAX})' ] }, 
-	year			: { type : Number,
+	date			: { type : Number,
 						required : true,
 						min : [ 1900, 'The value of year ‘{PATH}‘ ({VALUE} is beneath the limit {MIN})' ],
 						max : [ 2100, 'The value of year ‘{PATH}‘ ({VALUE} is above the limit {MAX})' ] }, 
-	categories_id	: [ ObjectId ],
+	_programs		: [ { type : Schema.Types.ObjectId, ref : 'Program' } ],
     created_at 		: Date,
     updated_at 		: Date
 });
 
 // Previous function
-schema.pre('save', function(next) {
+PlanSchema.pre('save', function(next) {
 	
 	var currentDate = new Date();
 	
@@ -31,7 +30,7 @@ schema.pre('save', function(next) {
 	next();
 });
 
-var Plan = mongoose.model('plan', schema);
+var Plan = mongoose.model('Plan', PlanSchema);
 
 // Validation
 Plan.schema.path('month').validate(function(err){

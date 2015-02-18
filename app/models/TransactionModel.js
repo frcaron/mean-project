@@ -2,18 +2,18 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 // Schema
-var schema = new Schema({
-	date		: { type : Date,
-					required : true	},
-	sum 		: { type : Number,
-					required : true },
-	comment 	: String,
-    created_at 	: Date,
-    updated_at 	: Date
+var TransactionSchema = new Schema({
+	date			: { type : Date,
+						required : true	},
+	sum 			: { type : Number,
+						required : true },
+	comment 		: String,
+    created_at 		: Date,
+    updated_at 		: Date
 });
 
 // Previous function
-schema.pre('save', function(next) {
+TransactionSchema.pre('save', function(next) {
 	
 	var currentDate = new Date();
 	
@@ -27,4 +27,4 @@ schema.pre('save', function(next) {
 });
 
 // Return
-module.exports = mongoose.model('transaction', schema);
+module.exports = mongoose.model('Transaction', TransactionSchema);

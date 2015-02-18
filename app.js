@@ -4,7 +4,7 @@
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
-var logger = require('morgan');
+var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
@@ -14,7 +14,7 @@ var app = express();
 // Configuration =============================================
 
 //app.use(favicon(__dirname + '/public/favicon.ico'));
-app.use(logger('dev'));
+app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
@@ -28,6 +28,6 @@ mongoose.connect(database.url);
 
 // Routers ===================================================
 
-require('./app/routes/api.js')(app);
+require('./app/routes/routes.js')(app);
 
 module.exports = app;
