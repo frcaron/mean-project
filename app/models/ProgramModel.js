@@ -1,11 +1,10 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = mongoose.Schema.Types.ObjectId;
-var CategoryModel = require('/CategoryModel');
 
 // Schema
 var schema = new Schema({
-	category		: { type : CategoryModel,
+	category		: { type : ObjectId,
 						required : true },
 	transactions_id	: [ ObjectId ],
     created_at 		: Date,

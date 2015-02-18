@@ -56,13 +56,13 @@ module.exports = function(router) {
 				
 				user.save(function(err) {
 					if(err) return res.send(err);
-					res.json({ success : true, message : 'Update success' })
+					res.json({ success : true, message : 'Update success' });
 				});
 			});
 		})
 		
 		.delete(function(req, res) {
-			UserModel.remove({ _id : req.params.user_id }, function(err, user) {
+			UserModel.remove({ _id : req.params.user_id }, function(err) {
 				if(err) return res.send(err);
 				res.json({ success : true, message : 'Remove success' });
 			});
