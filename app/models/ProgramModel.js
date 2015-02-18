@@ -7,6 +7,9 @@ var ProgramSchema = new Schema({
 						ref : 'Category',
 						required : true },
 	_transactions	: [ { type : Schema.Types.ObjectId, ref : 'Transaction' } ],
+	sum				: Number,
+	_user			: { type : Schema.Types.ObjectId,
+						ref : 'User' },
     created_at 		: Date,
     updated_at 		: Date
 });

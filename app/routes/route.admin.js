@@ -3,10 +3,6 @@ var jwt = require('jsonwebtoken');
 var tokenUtils = require('./../../config/tokenUtils');
 
 module.exports = function(router) {
-
-	// =========================================================================================
-	// Public ==================================================================================
-	// =========================================================================================
 	
 	// =========================================================================================
 	// Middleware ==============================================================================
@@ -24,7 +20,7 @@ module.exports = function(router) {
 				} else {
 					
 					// Admin access
-					if(!decoded.admin) return res.status(403).send({ success : false, message : 'Permission refused' });
+					if(!decoded.admin) return res.status(403).json({ success : false, message : 'Permission refused' });
 					
 					// Follow token
 					req.decoded = decoded;
@@ -33,7 +29,7 @@ module.exports = function(router) {
 				}
 			});
 		} else {
-			return res.status(403).send({ success : false, message : 'No session' });
+			return res.status(403).json({ success : false, message : 'No session' });
 		}
 	});
 
@@ -42,4 +38,5 @@ module.exports = function(router) {
 	// =========================================================================================
 	
 	require('./admin/user')(router);
+	require('./admin/typecategory')(router);
 };

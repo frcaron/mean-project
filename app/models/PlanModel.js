@@ -12,6 +12,8 @@ var PlanSchema = new Schema({
 						min : [ 1900, 'The value of year ‘{PATH}‘ ({VALUE} is beneath the limit {MIN})' ],
 						max : [ 2100, 'The value of year ‘{PATH}‘ ({VALUE} is above the limit {MAX})' ] }, 
 	_programs		: [ { type : Schema.Types.ObjectId, ref : 'Program' } ],
+	_user			: { type : Schema.Types.ObjectId,
+						ref : 'User' },
     created_at 		: Date,
     updated_at 		: Date
 });

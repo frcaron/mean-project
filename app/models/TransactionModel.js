@@ -8,6 +8,8 @@ var TransactionSchema = new Schema({
 	sum 			: { type : Number,
 						required : true },
 	comment 		: String,
+	_user			: { type : Schema.Types.ObjectId,
+						ref : 'User' },
     created_at 		: Date,
     updated_at 		: Date
 });

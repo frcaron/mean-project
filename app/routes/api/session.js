@@ -10,7 +10,7 @@ module.exports = function(router) {
 		// Get all type category
 		.post(function(req, res) {
 			
-			if(!req.body.username) return res.status(403).send({ success : false, message : 'Param username missing' });
+			if(!req.body.username) return res.status(403).json({ success : false, message : 'Param username missing' });
 			
 			UserModel.findOne({ username : req.body.username })
 				.select('_id name username password admin')

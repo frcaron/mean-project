@@ -9,6 +9,7 @@ module.exports = function(router) {
 	// =========================================================================================
 	
 	require('./api/session')(router);
+	require('./api/typecategory')(router);
 
 	// =========================================================================================
 	// Middleware ==============================================================================
@@ -22,7 +23,7 @@ module.exports = function(router) {
 		if(token) {
 			jwt.verify(token, tokenUtils.secret, function(err, decoded) {
 				if(err) {
-					return res.status(403).send({ success : false, message : 'Session expired' });
+					return res.status(403).json({ success : false, message : 'Session expired' });
 				} else {
 					// Follow token
 					req.decoded = decoded;
@@ -31,13 +32,14 @@ module.exports = function(router) {
 				}
 			});
 		} else {
-			return res.status(403).send({ success : false, message : 'No session' });
+			return res.status(403).json({ success : false, message : 'No session' });
 		}
 	});
 
 	// =========================================================================================
 	// Private =================================================================================
 	// =========================================================================================
-	
+
+	require('./api/category')(router);
 	require('./api/me')(router);
 };

@@ -8,6 +8,8 @@ var CategorySchema = new Schema({
 	_type			: { type : Schema.Types.ObjectId,
 						ref : 'TypeCategory',
 						required : true },
+	_user			: { type : Schema.Types.ObjectId,
+						ref : 'User' },
     created_at 		: Date,
     updated_at 		: Date
 });
