@@ -9,7 +9,8 @@ var CategorySchema = new Schema({
 						ref : 'TypeCategory',
 						required : true },
 	_user			: { type : Schema.Types.ObjectId,
-						ref : 'User' },
+						ref : 'User',
+						required : true },
     created_at 		: Date,
     updated_at 		: Date
 });
@@ -25,7 +26,7 @@ CategorySchema.pre('save', function(next) {
 		this.created_at = currentDate;
 	}
 	
-	next();
+	return next();
 });
 
 // Return

@@ -1,108 +1,169 @@
-var mongoose = require('mongoose');
-
+var UserModel = require('../../models/UserModel');
 var CategoryModel = require('../../models/CategoryModel');
+var TypeCategoryModel = require('../../models/TypeCategoryModel');
+
+var api_prefix = '/categories'; 
 
 module.exports = function(router) {
 	
-	router.route('/categories')
+	// Validate param category_id
+	router.param('category_id', function(req, res, next, category_id) {
+		if(!category_id) {
+			return res.status(403).json({ success : false, message : 'Param category missing' });
+		}
+		next();
+	});
+	
+	// Validate param type_id
+	router.param('type_cat_id', function(req, res, next, type_cat_id) {
+		if(!type_cat_id) {
+			return res.status(403).json({ success : false, message : 'Param type category missing' });
+		}
+		next();
+	});
+	
+	// Validation token exist
+	router.use(function(req, res, next){
+		
+		// Get token user
+		var decoded = req.decoded;
+		if(!decoded) {
+			return res.status(403).json({ success : false, message : 'Error token' });
+		} else {
+			UserModel.findById(decoded.id, '_id', function(err, user) {
+				if(err || !user) {
+					return res.status(403).json({ success : false, message : 'User id invalid' });
+				}
+			});
+		}
+		
+		if(req.body.type_cat_id) {
+			TypeCategoryModel.findById(req.body.type_cat_id, '_id', function(err, typeCategory) {
+				if(err || !typeCategory) {
+					 res.status(403).json({ success : false, message : 'Type category id invalid' });
+					res.end();
+				}
+			});
+		}
+		
+		next();
+	});
+	
+	router.route(api_prefix)
 		
 		// Get all categories user
 		.get(function(req, res) {
 			
-			var decoded = req.decoded;
-			if(!decoded) return res.json({ success : false, message : 'Error token' });
+			console.log('get');
 			
-			CategoryModel.find({ _user : decoded.id }, function(err, categories) {
-					if(err) return res.json({ success : false, message : 'Category not found' });
-					res.json(categories);
+			// Query find categories by user
+			CategoryModel.find({ _user : req.decoded.id }, function(err, categories) {
+					if(err) {
+						return res.json({ success : false, message : 'Category not found' });
+					}
+					
+					return res.json({ success : true, result : categories });
 				});
 		})
 		
 		// Create one category
 		.post(function(req, res) {
 			
-			var decoded = req.decoded;
-			if(!decoded) return res.json({ success : false, message : 'Error token' });
+			console.log('post');
+			
+			// Validation
+			if(!req.body.name) {
+				return res.status(403).json({ success : false, message : 'Param name missing' });
+			}
+			if(!req.body.type_cat_id) {
+				return res.status(403).json({ success : false, message : 'Param type category id missing' });
+			}
 
 			var category = new CategoryModel();
 			
-			if(!req.body.name) return res.status(403).json({ success : false, message : 'Param name missing' });
-			if(!req.body.type_category_id) return res.status(403).json({ success : false, message : 'Param type category id missing' });
-			
+			// Build object
 			category.name = req.body.name;
-			category._type = req.body.type_category_id;
-			category._user = decoded.id;
+			category._type = req.body.type_cat_id;
+			category._user = req.decoded.id;
 			
+			// Query save
 			category.save(function(err) {
-				if(err) return res.json({ success : false, message : 'Add failed' });
-				res.json({ success : true, message : 'Add success' });
+				if(err) {
+					return res.json({ success : false, message : 'Add failed' });
+				}
+				
+				return res.json({ success : true, message : 'Add success', result : category._id });
 			});
 		});
 	
-	router.route('/categories/:category_id')
+	router.route(api_prefix + '/:category_id')
 	
-		// Get one category by ID
+		// Get one category
 		.get(function(req, res) {
 			
-			var decoded = req.decoded;
-			if(!decoded) return res.json({ success : false, message : 'Error token' });
-			
-			if(!req.params.category_id) return res.status(403).json({ success : false, message : 'Param category id missing' });
-			
-			CategoryModel.find({ _id : req.params.category_id, _user : decoded.id}, function(err, category) {
-				if(err) return res.json({ success : false, message : 'Category not found' });
-				res.json(category);
+			// Query find category by id and user
+			CategoryModel.findOne({ _id : req.params.category_id, _user : req.decoded.id}, function(err, category) {
+				if(err) {
+					return res.json({ success : false, message : 'Category not found' });
+				}
+				
+				return res.json({ success : true, result : category});
 			});
 		})
 		
-		// Update one category by ID
+		// Update one category
 		.put(function(req, res) {
 			
-			var decoded = req.decoded;
-			if(!decoded) return res.json({ success : false, message : 'Error token' });
-			
-			if(!req.params.category_id) return res.status(403).json({ success : false, message : 'Param category id missing' });
-			
-			CategoryModel.find({ _id : req.params.category_id, _user : decoded.id}, function(err, category) {
-				if(err) return res.json({ success : false, message : 'Category not found' });
+			// Query find category by id and user
+			CategoryModel.findOne({ _id : req.params.category_id, _user : req.decoded.id}, function(err, category) {
+				if(err) {
+					return res.json({ success : false, message : 'Category not found' });
+				}
 
-				if(req.body.name) category.name = req.body.name;
-				if(req.body.type_id) category._type = req.body.type_id;
+				// Build object
+				if(req.body.name) {
+					category.name = req.body.name;
+				}
+				if(req.body.type_id) {
+					category._type = req.body.type_id;
+				}
 				
+				// Query save
 				category.save(function(err) {
-					if(err) return res.json({ success : false, message : 'Update failed' });
-					res.json({ success : true, message : 'Update success' });
+					if(err) {
+						return res.json({ success : false, message : 'Update failed' });
+					}
+					
+					return res.json({ success : true, message : 'Update success' });
 				});
 			});
 		})
 		
-		// Delete one category by ID
+		// Delete one category
 		.delete(function(req, res) {
 			
-			var decoded = req.decoded;
-			if(!decoded) return res.json({ success : false, message : 'Error token' });
-			
-			if(!req.params.category_id) return res.status(403).json({ success : false, message : 'Param category id missing' });
-			
-			CategoryModel.remove({ _id : req.params.category_id, _user : decoded.id}, function(err) {
-				if(err) return res.json({ success : false, message : 'Remove failed' });
-				res.json({ success : true, message : 'Remove success' });
+			// Query remove
+			CategoryModel.remove({ _id : req.params.category_id, _user : req.decoded.id}, function(err) {
+				if(err) {
+					return res.json({ success : false, message : 'Remove failed' });
+				}
+				
+				return res.json({ success : true, message : 'Remove success' });
 			});
 		});
 	
-		router.route('/categories/type/:type_id')
+	router.route(api_prefix + '/typecat/:type_cat_id')
+		
+		// Get all categories user by type
+		.get(function(req, res) {
 			
-			// Get all categories user by type
-			.get(function(req, res) {
-				
-				var decoded = req.decoded;
-				if(!decoded) return res.json({ success : false, message : 'Error token' });
-				
-				if(!req.params.type_id) return res.status(403).json({ success : false, message : 'Param type category id missing' });
-				
-				CategoryModel.find({ _user : decoded.id, _type : req.params.type_id }, function(err, categories) {
-						if(err) return res.json({ success : false, message : 'Category not found' });
-						res.json(categories);
-					});
-			});
+			// Query find categories by id and type category
+			CategoryModel.find({ _user : req.decoded.id, _type : req.params.type_cat_id }, function(err, categories) {
+					if(err) {
+						return res.json({ success : false, message : 'Category not found' });
+					}
+					
+					return res.json({ success : true, result : categories });
+				});
+		});
 };

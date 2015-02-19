@@ -1,4 +1,3 @@
-
 var jwt = require('jsonwebtoken');
 var tokenUtils = require('./../../config/tokenUtils');
 

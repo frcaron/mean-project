@@ -7,13 +7,13 @@ var PlanSchema = new Schema({
 						required : true,
 						min : [ 1, 'The value of month ‘{PATH}‘ ({VALUE} is beneath the limit {MIN})' ],
 						max : [ 12, 'The value of month ‘{PATH}‘ ({VALUE} is above the limit {MAX})' ] }, 
-	date			: { type : Number,
+	year			: { type : Number,
 						required : true,
 						min : [ 1900, 'The value of year ‘{PATH}‘ ({VALUE} is beneath the limit {MIN})' ],
-						max : [ 2100, 'The value of year ‘{PATH}‘ ({VALUE} is above the limit {MAX})' ] }, 
-	_programs		: [ { type : Schema.Types.ObjectId, ref : 'Program' } ],
+						max : [ 2100, 'The value of year ‘{PATH}‘ ({VALUE} is above the limit {MAX})' ] },
 	_user			: { type : Schema.Types.ObjectId,
-						ref : 'User' },
+						ref : 'User',
+						required : true },
     created_at 		: Date,
     updated_at 		: Date
 });
@@ -29,7 +29,7 @@ PlanSchema.pre('save', function(next) {
 		this.created_at = currentDate;
 	}
 	
-	next();
+	return next();
 });
 
 var Plan = mongoose.model('Plan', PlanSchema);

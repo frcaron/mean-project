@@ -1,4 +1,3 @@
-
 var jwt = require('jsonwebtoken');
 var tokenUtils = require('./../../config/tokenUtils');
 
@@ -20,7 +19,9 @@ module.exports = function(router) {
 				} else {
 					
 					// Admin access
-					if(!decoded.admin) return res.status(403).json({ success : false, message : 'Permission refused' });
+					if(!decoded.admin) {
+						return res.status(403).json({ success : false, message : 'Permission refused' });
+					}
 					
 					// Follow token
 					req.decoded = decoded;

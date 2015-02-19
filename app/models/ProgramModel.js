@@ -6,10 +6,13 @@ var ProgramSchema = new Schema({
 	_category		: { type : Schema.Types.ObjectId,
 						ref : 'Category',
 						required : true },
-	_transactions	: [ { type : Schema.Types.ObjectId, ref : 'Transaction' } ],
 	sum				: Number,
+	_plan			: { type : Schema.Types.ObjectId,
+						ref : 'Plan',
+						required : true },		
 	_user			: { type : Schema.Types.ObjectId,
-						ref : 'User' },
+						ref : 'User',
+						required : true },
     created_at 		: Date,
     updated_at 		: Date
 });
@@ -25,7 +28,7 @@ ProgramSchema.pre('save', function(next) {
 		this.created_at = currentDate;
 	}
 	
-	next();
+	return next();
 });
 
 // Return

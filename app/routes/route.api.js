@@ -1,4 +1,3 @@
-
 var jwt = require('jsonwebtoken');
 var tokenUtils = require('./../../config/tokenUtils');
 
@@ -9,7 +8,6 @@ module.exports = function(router) {
 	// =========================================================================================
 	
 	require('./api/session')(router);
-	require('./api/typecategory')(router);
 
 	// =========================================================================================
 	// Middleware ==============================================================================
@@ -40,6 +38,10 @@ module.exports = function(router) {
 	// Private =================================================================================
 	// =========================================================================================
 
+	require('./api/plan')(router);
+	require('./api/program')(router);
+	require('./api/transaction')(router);
 	require('./api/category')(router);
+	require('./api/typecategory')(router);
 	require('./api/me')(router);
 };

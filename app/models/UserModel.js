@@ -12,9 +12,7 @@ var UserSchema = new Schema({
 	    				required : true, 
 	    				select : false},
 	admin			: { type : Boolean, 
-						default : false },				
-    _plans			: { type : [ Schema.Types.ObjectId ],
-    					ref : 'Plan' },
+						default : false },
     created_at 		: Date,
     updated_at 		: Date
 });
@@ -31,13 +29,17 @@ UserSchema.pre('save', function(next) {
 		this.created_at = currentDate;
 	}
 
-	if(!user.isModified('password')) return next();
+	if(!user.isModified('password')) {
+		return next();
+	}
 	
 	bcrypt.hash(user.password, null, null, function(err, hash) {
-		if(err) return next();
+		if(err) {
+			return next();
+		}
 		
 		user.password = hash;
-		next();
+		return next();
 	});
 });
 

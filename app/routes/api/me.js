@@ -1,10 +1,11 @@
+var api_prefix = '/me'; 
 
 module.exports = function(router) {
 	
-	router.route('/me')
+	router.route(api_prefix)
 		
 		// User token information
 		.get(function(req, res) {
-			res.send(req.decoded);
+			return res.json(req.decoded);
 		});
 };
