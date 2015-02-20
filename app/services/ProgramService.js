@@ -14,7 +14,7 @@ module.exports = {
 		var program = new ProgramModel();
 		
 		// Build object
-		program._category = req.body.category_id;
+		program.category = req.body.category_id;
 		if(req.body.sum) {
 			program.sum = req.body.sum;
 		}
@@ -55,7 +55,7 @@ module.exports = {
 						return res.json(responseService.fail('Update failed', err.message));
 					}
 					
-					program._category = req.body.category_id;
+					program.category = req.body.category_id;
 				}
 				if(req.body.sum) {
 					program.sum = req.body.sum;

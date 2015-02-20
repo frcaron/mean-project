@@ -3,10 +3,12 @@ var Schema = mongoose.Schema;
 
 // Schema
 var ProgramSchema = new Schema({
-	_category		: { type : Schema.Types.ObjectId,
+	category		: { type : Schema.Types.ObjectId,
 						ref : 'Category',
 						required : true },
 	sum				: Number,
+	transactions	: [ { type : Schema.Types.ObjectId, 
+						ref : 'Transaction' } ],
 	_plan			: { type : Schema.Types.ObjectId,
 						ref : 'Plan',
 						required : true },		
@@ -30,7 +32,7 @@ ProgramSchema.pre('save', function(next) {
 		this.created_at = currentDate;
 	}
 
-	ProgramModel.findOne({ _category : this._category, _plan : this._plan }, '_id', function(err, program) {
+	ProgramModel.findOne({ category : this.category, _plan : this._plan }, '_id', function(err, program) {
 		if(err || program) {
 			return next(new Error('The pair category/plan already exist'));
 		} 

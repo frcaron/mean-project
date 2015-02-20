@@ -40,7 +40,7 @@ module.exports = {
 		// Query find transaction by id and user
 		TransactionModel
 			.findOne({ _id : req.params.transaction_id, _user : req.decoded.id })
-			.populate('_program', '_category')
+			.populate('_program', 'category')
 			.exec(function(err, transaction) {
 			
 				if(err) {
@@ -64,7 +64,7 @@ module.exports = {
 					if(req.body.comment) {
 						transaction.comment = req.body.comment;
 					}
-					if(!req.body.category_id.equals(transaction._program._category) || 
+					if(!req.body.category_id.equals(transaction._program.category) || 
 							!req.body.date.equals(transaction.date)) {
 							
 						try {
@@ -108,9 +108,9 @@ module.exports = {
 
 		// Query find transactions by user and type category
 		TransactionModel.find({ _user : req.decoded.id })
-			.populate('_program', '_category')
-			.populate('_program._category', '_type')
-			.where('_program._category._type').equals(req.params.type_category_id)
+			.populate('_program', 'category')
+			.populate('_program.category', 'type')
+			.where('_program.category.type').equals(req.params.type_category_id)
 			.exec(function(err, transactions) {
 				if(err) {
 					return res.json(responseService.fail('Find failed', err.message));	

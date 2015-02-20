@@ -13,9 +13,13 @@ var UserSchema = new Schema({
 	    				select : false},
 	admin			: { type : Boolean, 
 						default : false },
+	plans			: [ { type : Schema.Types.ObjectId, 
+						ref : 'Plan' } ],
     created_at 		: Date,
     updated_at 		: Date
 });
+
+var UserModel = mongoose.model('User', UserSchema);
 
 // Previous function
 UserSchema.pre('save', function(next) {
@@ -49,4 +53,4 @@ UserSchema.methods.comparePassword = function(password) {
 };
 
 // Return
-module.exports = mongoose.model('User', UserSchema);
+module.exports = UserModel;

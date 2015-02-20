@@ -15,7 +15,7 @@ module.exports = {
 		
 		// Build object
 		category.name = req.body.name;
-		category._type = req.body.type_category_id;
+		category.type = req.body.type_category_id;
 		category._user = req.decoded.id;
 		
 		// Query save
@@ -55,7 +55,7 @@ module.exports = {
 						return res.json(responseService.fail('Update failed', err.message));
 					}
 					
-					category._type = req.body.type_category_id;
+					category.type = req.body.type_category_id;
 				}
 				
 				// Query save
@@ -97,7 +97,7 @@ module.exports = {
 	getAllByTypeCategoryU : function(req, res) {
 
 		// Query find categories by id and type category
-		CategoryModel.find({ _user : req.decoded.id, _type : req.params.type_category_id }, function(err, categories) {
+		CategoryModel.find({ _user : req.decoded.id, type : req.params.type_category_id }, function(err, categories) {
 				if(err) {
 					return res.json(responseService.fail('Find failed', err.message));
 				}

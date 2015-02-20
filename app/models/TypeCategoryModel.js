@@ -9,6 +9,8 @@ var TypeCategorySchema = new Schema({
     updated_at 		: Date
 });
 
+var TypeCategoryModel = mongoose.model('TypeCategory', TypeCategorySchema);
+
 //Previous function
 TypeCategorySchema.pre('save', function(next) {
 	
@@ -24,4 +26,4 @@ TypeCategorySchema.pre('save', function(next) {
 });
 
 // Return
-module.exports = mongoose.model('TypeCategory', TypeCategorySchema);
+module.exports = TypeCategoryModel;

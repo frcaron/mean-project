@@ -19,6 +19,8 @@ var TransactionSchema = new Schema({
     updated_at 		: Date
 });
 
+var TransactionModel = mongoose.model('Transaction', TransactionSchema);
+
 // Previous function
 TransactionSchema.pre('save', function(next) {
 
@@ -102,4 +104,4 @@ TransactionSchema.methods.findOrGenerateProgram = function(date, category_id) {
 };
 
 // Return
-module.exports = mongoose.model('Transaction', TransactionSchema);
+module.exports = TransactionModel;
