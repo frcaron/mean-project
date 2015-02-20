@@ -47,7 +47,7 @@ TransactionSchema.methods.findOrGenerateProgram = function(date, category_id) {
 		.select('_id')
 		.exec(function(err, plan) {
 			if(err) {
-				throw err;
+				throw new Error('TransactionSchema#findOrGenerateProgram : Find plan error');
 			}
 			
 			if(plan) {
@@ -59,7 +59,7 @@ TransactionSchema.methods.findOrGenerateProgram = function(date, category_id) {
 					.select('_id')
 					.exec(function(err, program) {
 						if(err) {
-							throw err;
+							throw new Error('TransactionSchema#findOrGenerateProgram : Find program error');
 						}
 						
 						if(program) {
@@ -78,7 +78,7 @@ TransactionSchema.methods.findOrGenerateProgram = function(date, category_id) {
 				
 				newPlan.save(function(err) {
 					if(err) {
-						throw err;
+						throw new Error('TransactionSchema#findOrGenerateProgram : Save plan error');
 					}
 					
 					plan._id = newPlan._id;
@@ -94,7 +94,7 @@ TransactionSchema.methods.findOrGenerateProgram = function(date, category_id) {
 			
 			newProgram.save(function(err) {
 				if(err) {
-					throw err;
+					throw new Error('TransactionSchema#findOrGenerateProgram : Save program error');
 				}
 				return newProgram._id;
 			});

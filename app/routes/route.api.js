@@ -1,5 +1,6 @@
+// Inject application
 var jwt = require('jsonwebtoken');
-var tokenUtils = require('./../../config/tokenUtils');
+var tokenConfig = require(global.__config + '/token');
 
 module.exports = function(router) {
 
@@ -10,7 +11,7 @@ module.exports = function(router) {
 	// Validate param plan_id
 	router.param('plan_id', function(req, res, next, plan_id) {
 		if(!plan_id) {
-			return res.json({ success : false, message : 'Param plan id missing' });
+			return res.json({ success : false, message : 'Param "plan_id" missing' });
 		}
 		next();
 	});
@@ -18,7 +19,7 @@ module.exports = function(router) {
 	// Validate param program_id
 	router.param('program_id', function(req, res, next, program_id) {
 		if(!program_id) {
-			return res.json({ success : false, message : 'Param program id missing' });
+			return res.json({ success : false, message : 'Param "program_id" missing' });
 		}
 		next();
 	});
@@ -26,7 +27,7 @@ module.exports = function(router) {
 	// Validate param transaction_id
 	router.param('transaction_id', function(req, res, next, transaction_id) {
 		if(!transaction_id) {
-			return res.json({ success : false, message : 'Param transaction id missing' });
+			return res.json({ success : false, message : 'Param "transaction_id" missing' });
 		}
 		next();
 	});
@@ -34,7 +35,7 @@ module.exports = function(router) {
 	// Validate param category_id
 	router.param('category_id', function(req, res, next, category_id) {
 		if(!category_id) {
-			return res.json({ success : false, message : 'Param category id missing' });
+			return res.json({ success : false, message : 'Param "category_id" missing' });
 		}
 		next();
 	});
@@ -42,7 +43,7 @@ module.exports = function(router) {
 	// Validate param type_category_id
 	router.param('type_category_id', function(req, res, next, type_category_id) {
 		if(!type_category_id) {
-			return res.json({ success : false, message : 'Param type category id missing' });
+			return res.json({ success : false, message : 'Param "type_category_id" missing' });
 		}
 		next();
 	});
@@ -63,7 +64,7 @@ module.exports = function(router) {
 		var token = req.body.token || req.param('token') || req.headers['x-access-token'];
 		
 		if(token) {
-			jwt.verify(token, tokenUtils.secret, function(err, decoded) {
+			jwt.verify(token, tokenConfig.secret, function(err, decoded) {
 				if(err) {
 					return res.status(403).json({ success : false, message : 'Session expired' });
 				} else {

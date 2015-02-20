@@ -17,6 +17,8 @@ var ProgramSchema = new Schema({
     updated_at 		: Date
 });
 
+var ProgramModel = mongoose.model('Program', ProgramSchema);
+
 // Previous function
 ProgramSchema.pre('save', function(next) {
 	
@@ -27,9 +29,14 @@ ProgramSchema.pre('save', function(next) {
 	if(!this.created_at) {
 		this.created_at = currentDate;
 	}
-	
-	return next();
+
+	ProgramModel.findOne({ _category : this._category, _plan : this._plan }, '_id', function(err, program) {
+		if(err || program) {
+			return next(new Error('The pair category/plan already exist'));
+		} 
+		return next();
+	});
 });
 
 // Return
-module.exports = mongoose.model('Program', ProgramSchema);
+module.exports = ProgramModel;

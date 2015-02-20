@@ -1,8 +1,8 @@
-var jwt = require('jsonwebtoken');
-var tokenUtils = require('./../../../config/tokenUtils');
+//Inject services
+var responseService = require(global.__service + '/ResponseService');
+var sessionService = require(global.__service + '/SessionService');
 
-var UserModel = require('../../models/UserModel');
-
+// Properties
 var api_prefix = '/authenticate'; 
 
 module.exports = function(router) {
@@ -14,46 +14,12 @@ module.exports = function(router) {
 			
 			// Validation
 			if(!req.body.username) {
-				return res.json({ success : false, message : 'Param username missing' });
+				return res.json(responseService.fail('Authentication failed', 'Param "username" missing'));
 			}
 			if(!req.body.password) {
-				return res.send({ success : false, message : 'Param password missing' });
+				return res.json(responseService.fail('Authentication failed', 'Param "password" missing'));
 			}
 			
-			// Query find user by username
-			UserModel.findOne({ username : req.body.username })
-				.select('_id name username password admin')
-				.exec(function(err, user) {
-					if(err) {
-						throw err;
-					}
-					
-					if(!user) {
-						
-						// User not exist
-						return res.json({ success : false, message : 'Authentication failed, User not found'});
-						
-					} else if(user) {
-						
-						var validPassword = user.comparePassword(req.body.password);
-						if(!validPassword) {
-							
-							// Wrong password
-							return res.json({ success : false, message : 'Authentication failed, Wrong password'});
-							
-						} else {
-
-							// Generate token
-							var token = jwt.sign({
-								id 			: user._id,
-								name 		: user.name,
-								username 	: user.username,
-								admin 		: user.admin
-							}, tokenUtils.secret, { expiresMinutes : 1440 });
-
-							return res.json({ success : true, message : 'Authentication success', token : token });
-						}
-					}					
-			});
+			sessionService.login(req, res);
 		});
 };

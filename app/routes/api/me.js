@@ -1,3 +1,7 @@
+//Inject services
+var responseService = require(global.__service + '/ResponseService');
+
+// Properties
 var api_prefix = '/me'; 
 
 module.exports = function(router) {
@@ -6,6 +10,6 @@ module.exports = function(router) {
 		
 		// User token information
 		.get(function(req, res) {
-			return res.json(req.decoded);
+			return res.json(responseService.success('Get success', req.decoded));
 		});
 };

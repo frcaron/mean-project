@@ -1,5 +1,8 @@
-var TypeCategoryModel = require('../../models/TypeCategoryModel');
+// Inject services
+var responseService = require(global.__service + '/ResponseService');
+var typeCategoryService = require(global.__service + '/TypeCategoryService');
 
+// Properties
 var api_prefix = '/typeCategories'; 
 
 module.exports = function(router) {
@@ -11,22 +14,10 @@ module.exports = function(router) {
 			
 			// Validation
 			if(!req.body.type) {
-				return res.json({ success : false, message : 'Param type missing' });
+				return res.json(responseService.fail('Add failed', 'Param "type" missing'));
 			}
 			
-			var typeCategory = new TypeCategoryModel();
-			
-			// Build object
-			typeCategory.type = req.body.type;
-			
-			// Query save
-			typeCategory.save(function(err) {
-				if(err) {
-					return res.json({ success : false, message : 'Add failed' });
-				}
-				
-				return res.json({ success : true, message : 'Add success', result : typeCategory._id });
-			});
+			typeCategoryService.create(req, res);
 		});
 		
 	
@@ -34,39 +25,11 @@ module.exports = function(router) {
 	
 		// Update one type category
 		.put(function(req, res) {
-			
-			// Query find type category by id
-			TypeCategoryModel.findById(req.params.type_category_id, function(err, typeCategory) {
-				if(err) {
-					return res.json({ success : false, message : 'Type category not found' });
-				}
-
-				// Build object
-				if(req.body.type) {
-					typeCategory.type = req.body.type;
-				}
-				
-				// Query save
-				typeCategory.save(function(err) {
-					if(err) {
-						return res.json({ success : false, message : 'Update failed' });
-					}
-					
-					return res.json({ success : true, message : 'Update success' });
-				});
-			});
+			typeCategoryService.update(req, res);
 		})
 	
 		// Delete one type category
 		.delete(function(req, res) {
-			
-			// Query remove
-			TypeCategoryModel.remove({ _id : req.params.type_category_id }, function(err) {
-				if(err) {
-					return res.json({ success : false, message : 'Remode failed' });
-				}
-				
-				return res.json({ success : true, message : 'Remove success' });
-			});
+			typeCategoryService.remove(req, res);
 		});
 };

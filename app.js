@@ -21,13 +21,19 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+global.__base = __dirname + '/';
+global.__config = __dirname + '/config';
+global.__model = __dirname + '/app/models';
+global.__route = __dirname + '/app/routes';
+global.__service = __dirname + '/app/services';
+
 // DataBase ==================================================
 
-var database = require('./config/database');
+var database = require(global.__config + '/database');
 mongoose.connect(database.url);
 
 // Routers ===================================================
 
-require('./app/routes/routes.js')(app);
+require(global.__route + '/routes.js')(app);
 
 module.exports = app;

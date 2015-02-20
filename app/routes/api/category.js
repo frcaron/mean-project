@@ -1,6 +1,9 @@
-var CategoryModel = require('../../models/CategoryModel');
-var TypeCategoryModel = require('../../models/TypeCategoryModel');
+//Inject services
+var responseService = require(global.__service + '/ResponseService');
+var categoryService = require(global.__service + '/CategoryService');
+var typeCategoryService = require(global.__service + '/TypeCategoryService');
 
+// Properties
 var api_prefix = '/categories'; 
 
 module.exports = function(router) {
@@ -9,15 +12,7 @@ module.exports = function(router) {
 		
 		// Get all categories user
 		.get(function(req, res) {
-			
-			// Query find categories by user
-			CategoryModel.find({ _user : req.decoded.id }, function(err, categories) {
-					if(err) {
-						return res.json({ success : false, message : 'Category not found' });
-					}
-					
-					return res.json({ success : true, result : categories });
-				});
+			categoryService.getAllByU(req, res);
 		})
 		
 		// Create one category
@@ -25,118 +20,42 @@ module.exports = function(router) {
 			
 			// Validation
 			if(!req.body.name) {
-				return res.json({ success : false, message : 'Param name missing' });
+				return res.json(responseService.fail('Add failed', 'Param "name" missing'));
 			}
 			if(!req.body.type_category_id) {
-				return res.json({ success : false, message : 'Param type category id missing' });
+				return res.json(responseService.fail('Add failed', 'Param "type_category_id" missing'));
 			} else {
 				try {
-					TypeCategoryModel.findById(req.body.type_category_id, '_id', function(err, typeCategory) {
-						if(err || !typeCategory) {
-							throw err;
-						}
-					});	
+					typeCategoryService.isExist(req.body.type_category_id);
 				} catch(err) {
-					return res.json({ success : false, message : 'Type category id invalid' });
+					return res.json(responseService.fail('Add failed', err.message));
 				}
 			}
-
-			var category = new CategoryModel();
 			
-			// Build object
-			category.name = req.body.name;
-			category._type = req.body.type_category_id;
-			category._user = req.decoded.id;
-			
-			// Query save
-			category.save(function(err) {
-				if(err) {
-					return res.json({ success : false, message : 'Add failed' });
-				}
-				
-				return res.json({ success : true, message : 'Add success', result : category._id });
-			});
+			categoryService.create(req, res);
 		});
 	
 	router.route(api_prefix + '/:category_id')
 	
 		// Get one category
 		.get(function(req, res) {
-			
-			// Query find category by id and user
-			CategoryModel.findOne({ _id : req.params.category_id, _user : req.decoded.id}, function(err, category) {
-				if(err) {
-					return res.json({ success : false, message : 'Category not found' });
-				}
-				
-				return res.json({ success : true, result : category});
-			});
+			categoryService.getOneByIdU(req, res);
 		})
 		
 		// Update one category
 		.put(function(req, res) {
-			
-			// Query find category by id and user
-			CategoryModel.findOne({ _id : req.params.category_id, _user : req.decoded.id}, function(err, category) {
-				if(err) {
-					return res.json({ success : false, message : 'Category not found' });
-				}
-
-				// Build object
-				if(req.body.name) {
-					category.name = req.body.name;
-				}
-				if(req.body.type_category_id) {
-
-					try {
-						TypeCategoryModel.findById(req.body.type_category_id, '_id', function(err, typeCategory) {
-							if(err || !typeCategory) {
-								throw err;
-							}
-						});	
-					} catch(err) {
-						return res.json({ success : false, message : 'Type category id invalid' });
-					}
-					
-					category._type = req.body.type_category_id;
-				}
-				
-				// Query save
-				category.save(function(err) {
-					if(err) {
-						return res.json({ success : false, message : 'Update failed' });
-					}
-					
-					return res.json({ success : true, message : 'Update success' });
-				});
-			});
+			categoryService.update(req, res);			
 		})
 		
 		// Delete one category
 		.delete(function(req, res) {
-			
-			// Query remove
-			CategoryModel.remove({ _id : req.params.category_id, _user : req.decoded.id}, function(err) {
-				if(err) {
-					return res.json({ success : false, message : 'Remove failed' });
-				}
-				
-				return res.json({ success : true, message : 'Remove success' });
-			});
+			categoryService.remove(req, res);			
 		});
 	
 	router.route(api_prefix + '/typecat/:type_category_id')
 		
 		// Get all categories user by type
 		.get(function(req, res) {
-			
-			// Query find categories by id and type category
-			CategoryModel.find({ _user : req.decoded.id, _type : req.params.type_category_id }, function(err, categories) {
-					if(err) {
-						return res.json({ success : false, message : 'Category not found' });
-					}
-					
-					return res.json({ success : true, result : categories });
-				});
+			categoryService.getAllByTypeCategoryU(req, res);
 		});
 };

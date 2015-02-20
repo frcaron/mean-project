@@ -1,5 +1,8 @@
-var TypeCategoryModel = require('../../models/TypeCategoryModel');
+// Inject services
+var responseService = require(global.__service + '/ResponseService');
+var typeCategoryService = require(global.__service + '/TypeCategoryService');
 
+// Propeties
 var api_prefix = '/typeCategories'; 
 
 module.exports = function(router) {
@@ -8,30 +11,14 @@ module.exports = function(router) {
 		
 		// Get all type category
 		.get(function(req, res) {
-			
-			// Query find categories
-			TypeCategoryModel.find(function(err, typeCategories) {
-				if(err) {
-					return res.json({ success : false, message : 'Type category not found' });
-				}
-				
-				return res.json({ success : true, result : typeCategories });
-			});
+			typeCategoryService.getAllByU(req, res);
 		});
 		
 	
 	router.route(api_prefix + '/:type_category_id')
 	
 		// Get one type category
-		.get(function(req, res) {	
-			
-			// Query find category by id
-			TypeCategoryModel.findById(req.params.type_category_id, function(err, typeCategory) {
-				if(err) {
-					return res.json({ success : false, message : 'Type category not found' });
-				}
-				
-				return res.json({ success : true, result : typeCategory });
-			});
+		.get(function(req, res) {
+			typeCategoryService.getOneByIdU(req, res);
 		});
 };
