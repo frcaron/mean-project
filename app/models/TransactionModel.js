@@ -6,16 +6,12 @@ var ProgramModel = require('./ProgramModel');
 
 // Schema
 var TransactionSchema = new Schema({
-	day				: { type : Number,
-						required : true,
-						min : [ 1, 'The value of day ‘{PATH}‘ ({VALUE} is beneath the limit {MIN})' ],
-						max : [ 31, 'The value of day ‘{PATH}‘ ({VALUE} is above the limit {MAX})' ] },
+	date			: Date,
 	sum 			: { type : Number,
 						required : true },
 	comment 		: String,
 	_program		: { type : Schema.Types.ObjectId,
-						ref : 'Program',
-						required : true },
+						ref : 'Program' },
 	_user			: { type : Schema.Types.ObjectId,
 						ref : 'User',
 						required : true },
@@ -102,15 +98,8 @@ TransactionSchema.methods.findOrGenerateProgram = function(date, category_id) {
 				}
 				return newProgram._id;
 			});
-		});	
+		});
 };
 
-var Transaction = mongoose.model('Transaction', TransactionSchema);
-
-//Validation
-Transaction.schema.path('day').validate(function(err){
-	console.log(String(err));
-});
-
 // Return
-module.exports = Transaction;
+module.exports = mongoose.model('Transaction', TransactionSchema);

@@ -3,7 +3,7 @@ var tokenUtils = require('./../../../config/tokenUtils');
 
 var UserModel = require('../../models/UserModel');
 
-var api_prefix = '/login'; 
+var api_prefix = '/authenticate'; 
 
 module.exports = function(router) {
 	
@@ -14,10 +14,10 @@ module.exports = function(router) {
 			
 			// Validation
 			if(!req.body.username) {
-				return res.status(403).json({ success : false, message : 'Param username missing' });
+				return res.json({ success : false, message : 'Param username missing' });
 			}
 			if(!req.body.password) {
-				return res.status(403).send({ success : false, message : 'Param password missing' });
+				return res.send({ success : false, message : 'Param password missing' });
 			}
 			
 			// Query find user by username

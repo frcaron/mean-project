@@ -2,6 +2,18 @@ var jwt = require('jsonwebtoken');
 var tokenUtils = require('./../../config/tokenUtils');
 
 module.exports = function(router) {
+
+	// =========================================================================================
+	// Param validation ========================================================================
+	// =========================================================================================
+	
+	// Validate param type_category_id
+	router.param('type_category_id', function(req, res, next, type_category_id) {
+		if(!type_category_id) {
+			return res.json({ success : false, message : 'Param type category id missing' });
+		}
+		next();
+	});
 	
 	// =========================================================================================
 	// Middleware ==============================================================================

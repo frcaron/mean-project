@@ -4,14 +4,6 @@ var api_prefix = '/typeCategories';
 
 module.exports = function(router) {
 	
-	// Validate param type_cat_id
-	router.param('type_cat_id', function(req, res, next, type_cat_id) {
-		if(!type_cat_id) {
-			return res.status(403).json({ success : false, message : 'Param type category missing' });
-		}
-		next();
-	});
-	
 	router.route(api_prefix)
 		
 		// Create type category
@@ -19,7 +11,7 @@ module.exports = function(router) {
 			
 			// Validation
 			if(!req.body.type) {
-				return res.status(403).json({ success : false, message : 'Param type missing' });
+				return res.json({ success : false, message : 'Param type missing' });
 			}
 			
 			var typeCategory = new TypeCategoryModel();
@@ -38,13 +30,13 @@ module.exports = function(router) {
 		});
 		
 	
-	router.route(api_prefix + '/:type_cat_id')
+	router.route(api_prefix + '/:type_category_id')
 	
 		// Update one type category
 		.put(function(req, res) {
 			
 			// Query find type category by id
-			TypeCategoryModel.findById(req.params.type_cat_id, function(err, typeCategory) {
+			TypeCategoryModel.findById(req.params.type_category_id, function(err, typeCategory) {
 				if(err) {
 					return res.json({ success : false, message : 'Type category not found' });
 				}
@@ -69,7 +61,7 @@ module.exports = function(router) {
 		.delete(function(req, res) {
 			
 			// Query remove
-			TypeCategoryModel.remove({ _id : req.params.type_cat_id }, function(err) {
+			TypeCategoryModel.remove({ _id : req.params.type_category_id }, function(err) {
 				if(err) {
 					return res.json({ success : false, message : 'Remode failed' });
 				}

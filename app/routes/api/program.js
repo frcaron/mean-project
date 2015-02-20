@@ -1,39 +1,11 @@
+var PlanModel = require('../../models/PlanModel');
 var ProgramModel = require('../../models/ProgramModel');
 var TransactionModel = require('../../models/TransactionModel');
+var CategoryModel = require('../../models/CategoryModel');
 
 var api_prefix = '/programs'; 
 
 module.exports = function(router) {
-	
-	// Validate param program_id
-	router.param('program_id', function(req, res, next, program_id) {
-		if(!program_id) {
-			return res.status(403).json({ success : false, message : 'Param program missing' });
-		}
-		next();
-	});
-	
-	// Validate param plan_id
-	router.param('plan_id', function(req, res, next, plan_id) {
-		if(!plan_id) {
-			return res.status(403).json({ success : false, message : 'Param plan id missing' });
-		}
-		next();
-	});
-	
-	// Validation token exist
-	router.route(api_prefix + '/*')
-			
-		.all(function(req, res, next){
-			
-			// Get token user
-			var decoded = req.decoded;
-			if(!decoded) {
-				return res.json({ success : false, message : 'Error token' });
-			}
-			
-			next();
-		});
 	
 	router.route(api_prefix)
 	
@@ -42,10 +14,30 @@ module.exports = function(router) {
 			
 			// Validation
 			if(!req.body.category_id) {
-				return res.status(403).json({ success : false, message : 'Param category id missing' });
+				return res.json({ success : false, message : 'Param category id missing' });
+			} else {
+//				try {
+//					CategoryModel.findById(req.body.category_id, '_id', function(err, category) {
+//						if(err || !category) {
+//							throw err;
+//						}
+//					});
+//				} catch(err) {
+//					return res.json({ success : false, message : 'Category id invalid' });
+//				}
 			}
 			if(!req.body.plan_id) {
-				return res.status(403).json({ success : false, message : 'Param type plan id missing' });
+				return res.json({ success : false, message : 'Param type plan id missing' });
+			} else {
+//				try {
+//					PlanModel.findById(req.body.plan_id, '_id', function(err, plan) {
+//						if(err || !plan) {
+//							throw err;
+//						}
+//					});	
+//				} catch(err) {
+//					return res.json({ success : false, message : 'Plan id invalid' });
+//				}
 			}
 	
 			var program = new ProgramModel();
@@ -55,12 +47,15 @@ module.exports = function(router) {
 			if(req.body.sum) {
 				program.sum = req.body.sum;
 			}
-			program._plan = req.params.plan_id;
+			program._plan = req.body.plan_id;
 			program._user = req.decoded.id;
+			
+			console.log(program);
 			
 			// Query save
 			program.save(function(err) {
 				if(err) {
+					console.log(err);
 					return res.json({ success : false, message : 'Add failed' });
 				}
 				
@@ -94,12 +89,34 @@ module.exports = function(router) {
 
 				// Build object
 				if(req.body.category_id) {
+
+					try {
+						CategoryModel.findById(req.body.category_id, '_id', function(err, category) {
+							if(err || !category) {
+								throw err;
+							}
+						});
+					} catch(err) {
+						return res.json({ success : false, message : 'Category id invalid' });
+					}
+					
 					program._category = req.body.category_id;
 				}
 				if(req.body.sum) {
 					program.sum = req.body.sum;
 				}
 				if(req.body.plan_id) {
+
+					try {
+						PlanModel.findById(req.body.plan_id, '_id', function(err, plan) {
+							if(err || !plan) {
+								throw err;
+							}
+						});	
+					} catch(err) {
+						return res.json({ success : false, message : 'Plan id invalid' });
+					}
+					
 					program._plan = req.body.plan_id;
 				}
 				

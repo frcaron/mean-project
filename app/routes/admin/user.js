@@ -24,13 +24,13 @@ module.exports = function(router) {
 			
 			// Validation
 			if(!req.body.name) {
-				return res.status(403).json({ success : false, message : 'Param name missing' });
+				return res.json({ success : false, message : 'Param name missing' });
 			}
 			if(!req.body.username) {
-				return res.status(403).json({ success : false, message : 'Param username missing' });
+				return res.json({ success : false, message : 'Param username missing' });
 			}
 			if(!req.body.password) {
-				return res.status(403).json({ success : false, message : 'Param password missing' });
+				return res.json({ success : false, message : 'Param password missing' });
 			}
 			
 			var user = new UserModel();
@@ -64,7 +64,7 @@ module.exports = function(router) {
 			
 			// Validation
 			if(!req.params.user_id) {
-				return res.status(403).json({ success : false, message : 'Param user id missing' });
+				return res.json({ success : false, message : 'Param user id missing' });
 			}
 			
 			// Query find user by id
@@ -82,7 +82,7 @@ module.exports = function(router) {
 			
 			// Validation
 			if(!req.params.user_id) {
-				return res.status(403).json({ success : false, message : 'Param user id missing' });
+				return res.json({ success : false, message : 'Param user id missing' });
 			}
 			
 			// Query find user by id
@@ -121,7 +121,7 @@ module.exports = function(router) {
 			
 			// Validation
 			if(!req.params.user_id) {
-				return res.status(403).json({ success : false, message : 'Param user id missing' });
+				return res.json({ success : false, message : 'Param user id missing' });
 			}
 			
 			// Query remove

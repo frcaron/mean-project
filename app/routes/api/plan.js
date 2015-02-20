@@ -4,28 +4,6 @@ var api_prefix = '/plans';
 
 module.exports = function(router) {
 	
-	// Validate param plan_id
-	router.param('plan_id', function(req, res, next, plan_id) {
-		if(!plan_id) {
-			return res.status(403).json({ success : false, message : 'Param plan missing' });
-		}
-		next();
-	});
-	
-	// Validation token exist
-	router.route(api_prefix + '/*')
-			
-		.all(function(req, res, next){
-			
-			// Get token user
-			var decoded = req.decoded;
-			if(!decoded) {
-				return res.json({ success : false, message : 'Error token' });
-			}
-			
-			next();
-		});
-	
 	router.route(api_prefix)
 		
 		// Get all plans
@@ -46,10 +24,10 @@ module.exports = function(router) {
 			
 			// Validation
 			if(!req.body.month) {
-				return res.status(403).json({ success : false, message : 'Param month missing' });
+				return res.json({ success : false, message : 'Param month missing' });
 			}
 			if(!req.body.year) {
-				return res.status(403).json({ success : false, message : 'Param year missing' });
+				return res.json({ success : false, message : 'Param year missing' });
 			}
 	
 			var plan = new PlanModel();
@@ -80,17 +58,17 @@ module.exports = function(router) {
 					return res.json({ success : false, message : 'Plan not found' });
 				}
 				
-				return res.json({ success : true, result : plan});
+				return res.json({ success : true, result : plan });
 			});
 		})
 		
 		// Update one plan
 		.put(function(req, res) {
 			
-			// Query find prgram by id and user
+			// Query find plan by id and user
 			PlanModel.findOne({ _id : req.params.plan_id, _user : req.decoded.id}, function(err, plan) {
 				if(err) {
-					return res.json({ success : false, message : 'Program not found' });
+					return res.json({ success : false, message : 'Plan not found' });
 				}
 
 				// Build object
@@ -112,7 +90,7 @@ module.exports = function(router) {
 			});
 		})
 	
-		// Delete one program
+		// Delete one plan
 		.delete(function(req, res) {
 			
 			// Query remove

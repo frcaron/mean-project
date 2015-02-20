@@ -1,39 +1,11 @@
 var mongoose = require('mongoose');
+
 var TransactionModel = require('../../models/TransactionModel');
+var CategoryModel = require('../../models/CategoryModel');
 
 var api_prefix = '/transactions'; 
 
 module.exports = function(router) {
-	
-	// Validate param transaction_id
-	router.param('transaction_id', function(req, res, next, transaction_id) {
-		if(!transaction_id) {
-			return res.status(403).json({ success : false, message : 'Param transaction missing' });
-		}
-		next();
-	});
-	
-	// Validate param type_cat_id
-	router.param('type_cat_id', function(req, res, next, type_cat_id) {
-		if(!type_cat_id) {
-			return res.status(403).json({ success : false, message : 'Param type category missing' });
-		}
-		next();
-	});
-	
-	// Validation token exist
-	router.route(api_prefix + '/*')
-			
-		.all(function(req, res, next){
-			
-			// Get token user
-			var decoded = req.decoded;
-			if(!decoded) {
-				return res.json({ success : false, message : 'Error token' });
-			}
-			
-			next();
-		});
 	
 	router.route(api_prefix)
 		
@@ -42,28 +14,40 @@ module.exports = function(router) {
 			
 			// Validation
 			if(!req.body.date) {
-				return res.status(403).json({ success : false, message : 'Param date missing' });
+				return res.json({ success : false, message : 'Param date missing' });
 			}
 			if(!req.body.sum) {
-				return res.status(403).json({ success : false, message : 'Param sum missing' });
+				return res.json({ success : false, message : 'Param sum missing' });
 			}
 			if(!req.body.category_id) {
-				return res.status(403).json({ success : false, message : 'Param category missing' });
+				return res.json({ success : false, message : 'Param category missing' });
+			} else {
+				try {
+					CategoryModel.findById(req.body.category_id, '_id', function(err, category) {
+						if(err || !category) {
+							throw err;
+						}
+					});
+				} catch(err) {
+					return res.json({ success : false, message : 'Category id invalid' });
+				}
 			}
 
 			var transaction = new TransactionModel();
 			
-			var date_split = req.body.date.split('/');
-			
 			// Build object
-			transaction.day = date_split[0];
+			transaction.day = req.body.date;
 			transaction.sum = req.body.sum;
 			if(req.body.comment) {
 				transaction.comment = req.body.comment;
 			}
 			transaction._user = req.decoded.id;
-			transaction._program = transaction.findOrGenerateProgram(date_split, req.body.category_id);	
-			
+			try {
+				transaction._program = transaction.findOrGenerateProgram(req.body.date, req.body.category_id);	
+			} catch(err) {
+				return res.json({ success : false, message : 'findOrGenerateProgram error' });
+			}
+				
 			// Query save
 			transaction.save(function(err) {
 				if(err) {
@@ -93,35 +77,63 @@ module.exports = function(router) {
 		// Update one transaction
 		.put(function(req, res) {
 			
+			// Validation
+			if(!req.body.date) {
+				return res.json({ success : false, message : 'Param date missing' });
+			}
+			if(!req.body.category_id) {
+				return res.json({ success : false, message : 'Param category missing' });
+			}
+			
 			// Query find transaction by id and user
-			TransactionModel.findOne({ _id : req.params.transaction_id, _user : req.decoded.id }, function(err, transaction) {
-				if(err) {
-					return res.json({ success : false, message : 'Transaction not found' });
-				}
-
-				// Build object
-				if(req.body.date) {
-					var date_split = req.body.date.split('/');
-					
-					transaction.day = date_split[0];
-					transaction._program = transaction.findOrGenerateProgram(date_split, req.body.category_id);
-				}
-				if(req.body.sum) {
-					transaction.sum = req.body.sum;
-				}
-				if(req.body.comment) {
-					transaction.comment = req.body.comment;
-				}
+			TransactionModel
+				.findOne({ _id : req.params.transaction_id, _user : req.decoded.id })
+				.populate('_program', '_category')
+				.exec(function(err, transaction) {
 				
-				// Query save
-				transaction.save(function(err) {
 					if(err) {
-						return res.json({ success : false, message : 'Update failed' });
+						return res.json({ success : false, message : 'Transaction not found' });
+					}
+	
+					// Build object
+					if(!req.body.date.equals(transaction.date)) {
+						transaction.date = req.body.date;
+					}
+					if(req.body.sum) {
+						transaction.sum = req.body.sum;
+					}
+					if(req.body.comment) {
+						transaction.comment = req.body.comment;
+					}
+					if(!req.body.category_id.equals(transaction._program._category) || 
+							!req.body.date.equals(transaction.date)) {
+							
+						try {
+							CategoryModel.findById(req.body.category_id, '_id', function(err, category) {
+								if(err || !category) {
+									throw err;
+								}
+							});
+						} catch(err) {
+							return res.json({ success : false, message : 'Category id invalid' });
+						}
+						
+						try {
+							transaction._program = transaction.findOrGenerateProgram(transaction.date, req.body.category_id);	
+						} catch(err) {
+							return res.json({ success : false, message : 'findOrGenerateProgram error' });
+						}
 					}
 					
-					return res.json({ success : true, message : 'Update success' });
+					// Query save
+					transaction.save(function(err) {
+						if(err) {
+							return res.json({ success : false, message : 'Update failed' });
+						}
+						
+						return res.json({ success : true, message : 'Update success' });
+					});
 				});
-			});
 		})
 		
 		// Delete one transaction
@@ -137,16 +149,16 @@ module.exports = function(router) {
 			});
 		});
 	
-	router.route(api_prefix + '/type/:type_cat_id')
+	router.route(api_prefix + '/type/:type_category_id')
 		
-		// Get all transactions user by type category
+		// Get all transactions user by type category id
 		.get(function(req, res) {
 			
 			// Query find transactions by user and type category
 			TransactionModel.find({ _user : req.decoded.id })
 				.populate('_program', '_category')
 				.populate('_program._category', '_type')
-				.where('_program._category._type').equals(req.params.type_cat_id)
+				.where('_program._category._type').equals(req.params.type_category_id)
 				.exec(function(err, transactions) {
 					if(err) {
 						return res.json({ success : false, message : 'Transaction not found' });
@@ -157,7 +169,7 @@ module.exports = function(router) {
 	
 	router.route(api_prefix + '/program/:program_id')
 		
-		// Get all transactions user by type category
+		// Get all transactions user by program id
 		.get(function(req, res) {
 			
 			// Query find transactions by user and type category
