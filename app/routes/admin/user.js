@@ -11,7 +11,7 @@ module.exports = function(router) {
 		
 		// Get all users
 		.get(function(req, res) {
-			userService.getAll(req, res);
+			userService.all(req, res);
 		})
 	
 		// Create new user
@@ -35,7 +35,7 @@ module.exports = function(router) {
 		
 		// Get one user
 		.get(function(req, res) {
-			userService.getOneById(req, res);
+			userService.getById(req, res);
 		})
 		
 		// Update one user

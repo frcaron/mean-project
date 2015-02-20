@@ -1,6 +1,8 @@
+// Inject application
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+// Inject models
 var PlanModel = require('./PlanModel');
 var ProgramModel = require('./ProgramModel');
 
@@ -18,8 +20,6 @@ var TransactionSchema = new Schema({
     created_at 		: Date,
     updated_at 		: Date
 });
-
-var TransactionModel = mongoose.model('Transaction', TransactionSchema);
 
 // Previous function
 TransactionSchema.pre('save', function(next) {
@@ -104,4 +104,4 @@ TransactionSchema.methods.findOrGenerateProgram = function(date, category_id) {
 };
 
 // Return
-module.exports = TransactionModel;
+module.exports = mongoose.model('Transaction', TransactionSchema);

@@ -1,3 +1,4 @@
+// Inject application
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
@@ -17,8 +18,6 @@ var CategorySchema = new Schema({
     updated_at 		: Date
 });
 
-var CategoryModel = mongoose.model('Category', CategorySchema);
-
 // Previous function
 CategorySchema.pre('save', function(next) {
 	
@@ -34,4 +33,4 @@ CategorySchema.pre('save', function(next) {
 });
 
 // Return
-module.exports = CategoryModel;
+module.exports = mongoose.model('Category', CategorySchema);

@@ -11,7 +11,7 @@ module.exports = function(router) {
 		
 		// Get all type category
 		.get(function(req, res) {
-			typeCategoryService.getAllByU(req, res);
+			typeCategoryService.allByU(req, res);
 		});
 		
 	
@@ -19,6 +19,6 @@ module.exports = function(router) {
 	
 		// Get one type category
 		.get(function(req, res) {
-			typeCategoryService.getOneByIdU(req, res);
+			typeCategoryService.getByIdU(req, res);
 		});
 };

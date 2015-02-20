@@ -3,9 +3,14 @@ var TransactionModel = require(global.__model + '/TransactionModel');
 
 //Inject services
 var responseService = require(global.__service + '/ResponseService');
+var programService = require(global.__service + '/ProgramService');
 var categoryService = require(global.__service + '/CategoryService');
 
 module.exports = {
+		
+	// =========================================================================================
+	// Public ==================================================================================
+	// =========================================================================================
 	
 	// Create one transaction
 	create : function(req, res) {
@@ -30,6 +35,13 @@ module.exports = {
 			if(err) {
 				return res.json(responseService.fail('Add failed', err.message));
 			}
+
+			try {
+				programService.addChildTransaction(transaction._program, transaction);
+			} catch(err) {
+				return res.json(responseService.fail('Add failed', err.message));
+			}
+			
 			return res.json(responseService.success('Add success', transaction._id));
 		});
 	},
@@ -54,6 +66,8 @@ module.exports = {
 				
 				} else if(transaction){
 					
+					var last_transaction = transaction;
+					
 					// Build object
 					if(!req.body.date.equals(transaction.date)) {
 						transaction.date = req.body.date;
@@ -69,15 +83,17 @@ module.exports = {
 							
 						try {
 							categoryService.isExist(req.body.category_id);
+							transaction._program = transaction.findOrGenerateProgram(transaction.date, req.body.category_id);
 						} catch(err) {
 							return res.json(responseService.fail('Update failed', err.message));	
 						}
-						
-						try {
-							transaction._program = transaction.findOrGenerateProgram(transaction.date, req.body.category_id);	
-						} catch(err) {
-							return res.json(responseService.fail('Update failed', err.message));	
-						}
+					}
+					
+					try {
+						programService.removeChildTransaction(last_transaction._program, last_transaction);
+						programService.addChildTransaction(transaction._program, transaction);
+					} catch(err) {
+						return res.json(responseService.fail('Update failed', err.message));	
 					}
 					
 					// Query save
@@ -95,16 +111,28 @@ module.exports = {
 	remove : function(req, res) {
 
 		// Query remove
-		TransactionModel.remove({ _id : req.params.transaction_id, _user : req.decoded.id }, function(err) {
+		TransactionModel.findOneAndRemove({ _id : req.params.transaction_id, _user : req.decoded.id }, function(err, transaction) {
 			if(err) {
 				return res.json(responseService.fail('Remove failed', err.message));	
 			}
-			return res.json(responseService.success('Remove success'));
+			
+			if(!transaction) {
+				return res.json(responseService.fail('Remove failed', 'Transaction not found'));
+			} else if(transaction) {
+				
+				try {
+					programService.removeChildTransaction(transaction._plan, transaction);
+				} catch(err) {
+					return res.json(responseService.fail('Remove failed', err.message));
+				}
+
+				return res.json(responseService.success('Remove success'));
+			}
 		});
 	},
 	
 	// Get transactions by type category
-	getAllByTypeCategoryU : function(req, res) {
+	allByTypeCategoryU : function(req, res) {
 
 		// Query find transactions by user and type category
 		TransactionModel.find({ _user : req.decoded.id })
@@ -120,7 +148,7 @@ module.exports = {
 	},
 	
 	// Get transactions by program
-	getAllByProgramU : function(req, res) {
+	allByProgramU : function(req, res) {
 
 		// Query find transactions by user and type category
 		TransactionModel.find({ _user : req.decoded.id, _program : req.params.program_id }, function(err, transactions) {
@@ -132,7 +160,7 @@ module.exports = {
 	},
 	
 	// Get one transaction by id
-	getOneByIdU : function(req, res) {
+	getByIdU : function(req, res) {
 
 		// Query find transaction by id and user
 		TransactionModel.findOne({ _id : req.params.transaction_id, _user : req.decoded.id }, function(err, transaction) {
@@ -141,5 +169,19 @@ module.exports = {
 			}
 			return res.json(responseService.success('Find success', transaction));
 		});
-	}		
+	},
+	
+	// =========================================================================================
+	// Private =================================================================================
+	// =========================================================================================
+	
+	removeByProgram : function(program_id, user_id) {
+		
+		// Query remove
+		TransactionModel.remove({ _program : program_id, _user : user_id }, function(err){
+			if(err) {
+				throw new Error('Remove failed', err.message);
+			}
+		});
+	}
 };

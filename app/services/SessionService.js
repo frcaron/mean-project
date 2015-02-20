@@ -9,6 +9,10 @@ var UserModel = require(global.__model + '/UserModel');
 var responseService = require(global.__service + '/ResponseService');
 
 module.exports = {
+		
+	// =========================================================================================
+	// Public ==================================================================================
+	// =========================================================================================
 	
 	// Authenticate user
 	login : function(req, res) {

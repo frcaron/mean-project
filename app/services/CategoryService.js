@@ -1,12 +1,15 @@
 // Inject models
 var CategoryModel = require(global.__model + '/CategoryModel');
-var TypeCategoryModel = require(global.__model + '/TypeCategoryModel');
 
 //Inject services
 var responseService = require(global.__service + '/ResponseService');
 var typeCategoryService = require(global.__service + '/TypeCategoryService');
 
 module.exports = {
+		
+	// =========================================================================================
+	// Public ==================================================================================
+	// =========================================================================================
 	
 	// Create one category
 	create : function(req, res) {
@@ -82,7 +85,7 @@ module.exports = {
 	},
 	
 	// Get categories by user
-	getAllByU : function(req, res) {
+	allByU : function(req, res) {
 
 		// Query find categories by user
 		CategoryModel.find({ _user : req.decoded.id }, function(err, categories) {
@@ -94,7 +97,7 @@ module.exports = {
 	},
 	
 	// Get categories by type category
-	getAllByTypeCategoryU : function(req, res) {
+	allByTypeCategoryU : function(req, res) {
 
 		// Query find categories by id and type category
 		CategoryModel.find({ _user : req.decoded.id, type : req.params.type_category_id }, function(err, categories) {
@@ -106,7 +109,7 @@ module.exports = {
 	},
 	
 	// Get one category by id
-	getOneByIdU : function(req, res) {
+	getByIdU : function(req, res) {
 
 		// Query find category by id and user
 		CategoryModel.findOne({ _id : req.params.category_id, _user : req.decoded.id}, function(err, category) {
@@ -116,6 +119,10 @@ module.exports = {
 			return res.json(responseService.success('Find success', category));
 		});
 	},
+	
+	// =========================================================================================
+	// Private =================================================================================
+	// =========================================================================================
 	
 	// Test category existing
 	isExist : function(category_id) {
@@ -128,5 +135,47 @@ module.exports = {
 				throw new Error('Category id invalid');
 			}
 		});
-	}		
+	},
+
+	// Add link program
+	addParentProgram : function(id_parent, parent) {
+
+		CategoryModel.findOne({ _id : id_parent, _user : parent._user }, function(err, category) {
+				if(err) {
+					throw err;
+				}
+				
+				if(!category) {
+					throw new Error('Category not found');
+				} else if(category) {
+					category._programs.push(parent);
+					category.save(function(err){
+						if(err) {
+							throw err;
+						}
+					});
+				}
+		});
+	},
+	
+	// Remove link program
+	removeParentProgram : function(id_parent, parent) {
+
+		CategoryModel.findOne({ _id : id_parent, _user : parent._user }, function(err, category) {
+				if(err) {
+					throw err;
+				}
+				
+				if(!category) {
+					throw new Error('Category not found');
+				} else if(category) {
+					category._programs.pull(parent);
+					category.save(function(err){
+						if(err) {
+							throw err;
+						}
+					});
+				}
+		});
+	},
 };

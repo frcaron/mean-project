@@ -1,5 +1,9 @@
+// Inject application
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+
+//Inject models
+var PlanModel = require(global.__model + '/PlanModel');
 
 // Schema
 var PlanSchema = new Schema({
@@ -20,8 +24,6 @@ var PlanSchema = new Schema({
     updated_at 		: Date
 });
 
-var PlanModel = mongoose.model('Plan', PlanSchema);
-
 // Previous function
 PlanSchema.pre('save', function(next) {
 	
@@ -32,18 +34,18 @@ PlanSchema.pre('save', function(next) {
 	if(!this.created_at) {
 		this.created_at = currentDate;
 	}
-
+	
 	PlanModel.findOne({ month : this.month, year : this.year }, '_id', function(err, program) {
 		if(err || program) {
 			return next(new Error('The pair month/year already exist'));
-		} 
+		}
 		return next();
 	});
-	
-	return next();
 });
 
-// Validation
+var PlanModel = mongoose.model('Plan', PlanSchema);
+
+//Validation
 PlanModel.schema.path('month').validate(function(err){
 	console.log(String(err));
 });

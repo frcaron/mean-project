@@ -41,7 +41,7 @@ module.exports = function(router) {
 	
 		// Get one program
 		.get(function(req, res) {
-			programService.getOneByIdU(req, res);
+			programService.getByIdU(req, res);
 		})
 		
 		// Update one program
@@ -58,6 +58,6 @@ module.exports = function(router) {
 			
 		// Get programs by plan
 		.get(function(req, res) {
-			programService.getAllByPlanU(req, res);
+			programService.allByPlanU(req, res);
 		});
 };

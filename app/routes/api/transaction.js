@@ -38,7 +38,7 @@ module.exports = function(router) {
 	
 		// Get one transaction
 		.get(function(req, res) {
-			transactionService.getOneByIdU(req, res);
+			transactionService.getByIdU(req, res);
 		})
 		
 		// Update one transaction
@@ -49,7 +49,7 @@ module.exports = function(router) {
 				return res.json(responseService.fail('Update failed', 'Param "date" missing'));
 			}
 			if(!req.body.category_id) {
-				return res.json(responseService.fail('Update failed', 'Param "category" missing'));
+				return res.json(responseService.fail('Update failed', 'Param "category_id" missing'));
 			}
 			
 			transactionService.update(req, res);
@@ -64,13 +64,13 @@ module.exports = function(router) {
 		
 		// Get transactions user by type category id
 		.get(function(req, res) {
-			transactionService.getAllByTypeCategoryU(req, res);
+			transactionService.allByTypeCategoryU(req, res);
 		});
 	
 	router.route(api_prefix + '/program/:program_id')
 		
 		// Get transactions user by program id
 		.get(function(req, res) {
-			transactionService.getAllByProgramU(req, res);
+			transactionService.allByProgramU(req, res);
 		});
 };

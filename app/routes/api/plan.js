@@ -11,7 +11,7 @@ module.exports = function(router) {
 		
 		// Get all plans
 		.get(function(req, res) {
-			planService.getAllByU(req, res);
+			planService.allByU(req, res);
 		})
 	
 		// Create one plan
@@ -32,7 +32,7 @@ module.exports = function(router) {
 	
 		// Get one program
 		.get(function(req, res) {
-			planService.getOneById(req, res);
+			planService.getById(req, res);
 		})
 		
 		// Update one plan

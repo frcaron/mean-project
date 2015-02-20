@@ -5,6 +5,10 @@ var TypeCategoryModel = require(global.__model + '/TypeCategoryModel');
 var responseService = require(global.__service + '/ResponseService');
 
 module.exports = {
+		
+	// =========================================================================================
+	// Public ==================================================================================
+	// =========================================================================================
 	
 	// Create one type category
 	create : function(req, res) {
@@ -68,7 +72,7 @@ module.exports = {
 	},
 	
 	// Get all type category
-	getAllByU : function(req, res) {
+	allByU : function(req, res) {
 		
 		// Query find categories
 		var test = TypeCategoryModel.find(function(err, typeCategories) {
@@ -80,7 +84,7 @@ module.exports = {
 	},
 	
 	// Get one type category by id
-	getOneByIdU : function(req, res) {
+	getByIdU : function(req, res) {
 		
 		// Query find category by id
 		TypeCategoryModel.findById(req.params.type_category_id, function(err, typeCategory) {

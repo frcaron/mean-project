@@ -1,3 +1,4 @@
+// Inject application
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
 var Schema = mongoose.Schema;
@@ -19,7 +20,10 @@ var UserSchema = new Schema({
     updated_at 		: Date
 });
 
-var UserModel = mongoose.model('User', UserSchema);
+UserSchema.methods.comparePassword = function(password) {
+	var user = this;
+	return bcrypt.compareSync(password, user.password);
+};
 
 // Previous function
 UserSchema.pre('save', function(next) {
@@ -47,10 +51,5 @@ UserSchema.pre('save', function(next) {
 	});
 });
 
-UserSchema.methods.comparePassword = function(password) {
-	var user = this;
-	return bcrypt.compareSync(password, user.password);
-};
-
 // Return
-module.exports = UserModel;
+module.exports = mongoose.model('User', UserSchema);

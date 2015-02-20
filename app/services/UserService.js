@@ -5,6 +5,10 @@ var UserModel = require(global.__model + '/UserModel');
 var responseService = require(global.__service + '/ResponseService');
 
 module.exports = {
+		
+	// =========================================================================================
+	// Public ==================================================================================
+	// =========================================================================================
 	
 	// Create one user
 	create : function(req, res) {
@@ -85,7 +89,7 @@ module.exports = {
 	},
 	
 	// Get all users
-	getAll : function(req, res) {
+	all : function(req, res) {
 	
 		// Query find users
 		UserModel.find(function(err, users) {
@@ -97,7 +101,7 @@ module.exports = {
 	},
 	
 	// Get one user by id
-	getOneById : function(req, res) {
+	getById : function(req, res) {
 	
 		// Query find user by id
 		UserModel.findById(req.params.user_id, function(err, user) {
@@ -106,6 +110,51 @@ module.exports = {
 			}
 			return res.json(responseService.success('Find success', user));
 		});
+	},
+	
+	// =========================================================================================
+	// Private =================================================================================
+	// =========================================================================================
+	
+	// Add link plan
+	addChildPlan : function(id_parent, child) {
+
+		UserModel.findOne({ _id : id_parent }, function(err, user) {
+				if(err) {
+					throw err;
+				}
+				
+				if(!user) {
+					throw new Error('User not found');
+				} else if(user) {
+					user.plans.push(child);
+					user.save(function(err){
+						if(err) {
+							throw err;
+						}
+					});
+				}
+		});
+	},
+	
+	// Remove link plan
+	removeChildPlan : function(id_parent, child) {
+
+		UserModel.findOne({ _id : id_parent }, function(err, user) {
+				if(err) {
+					throw err;
+				}
+				
+				if(!user) {
+					throw new Error('User not found');
+				} else if(user) {
+					user.plans.pull(child);
+					user.save(function(err){
+						if(err) {
+							throw err;
+						}
+					});
+				}
+		});
 	}
-		
 };

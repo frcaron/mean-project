@@ -12,7 +12,7 @@ module.exports = function(router) {
 		
 		// Get all categories user
 		.get(function(req, res) {
-			categoryService.getAllByU(req, res);
+			categoryService.allByU(req, res);
 		})
 		
 		// Create one category
@@ -39,7 +39,7 @@ module.exports = function(router) {
 	
 		// Get one category
 		.get(function(req, res) {
-			categoryService.getOneByIdU(req, res);
+			categoryService.getByIdU(req, res);
 		})
 		
 		// Update one category
@@ -56,6 +56,6 @@ module.exports = function(router) {
 		
 		// Get all categories user by type
 		.get(function(req, res) {
-			categoryService.getAllByTypeCategoryU(req, res);
+			categoryService.allByTypeCategoryU(req, res);
 		});
 };

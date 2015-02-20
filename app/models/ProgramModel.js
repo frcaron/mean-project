@@ -1,5 +1,9 @@
+// Inject application
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+
+//Inject models
+var ProgramModel = require(global.__model + '/ProgramModel');
 
 // Schema
 var ProgramSchema = new Schema({
@@ -10,16 +14,13 @@ var ProgramSchema = new Schema({
 	transactions	: [ { type : Schema.Types.ObjectId, 
 						ref : 'Transaction' } ],
 	_plan			: { type : Schema.Types.ObjectId,
-						ref : 'Plan',
-						required : true },		
+						ref : 'Plan' },		
 	_user			: { type : Schema.Types.ObjectId,
 						ref : 'User',
 						required : true },
     created_at 		: Date,
     updated_at 		: Date
 });
-
-var ProgramModel = mongoose.model('Program', ProgramSchema);
 
 // Previous function
 ProgramSchema.pre('save', function(next) {
@@ -41,4 +42,4 @@ ProgramSchema.pre('save', function(next) {
 });
 
 // Return
-module.exports = ProgramModel;
+module.exports = mongoose.model('Program', ProgramSchema);
