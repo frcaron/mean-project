@@ -3,15 +3,72 @@ var ProgramModel = require(global.__model + '/ProgramModel');
 
 //Inject services
 var responseService = require(global.__service + '/ResponseService');
-var planService = require(global.__service + '/PlanService');
-var transactionService = require(global.__service + '/transactionService');
+var transactionService = require(global.__service + '/TransactionService');
 var categoryService = require(global.__service + '/CategoryService');
 
+// Add link program
+var addProgramToParent = function(child) {
+
+	ProgramModel
+		.findOne({ _id : child._id })
+		.select('_plan')
+		.populate('_plan')
+		.exec(function(err, program) {
+			if(err) {
+				throw err;
+			}
+			
+			if(!program) {
+				throw new Error('Program not found');
+			} else if(program) {
+				var plan = program._plan;
+				
+				if(!plan) {
+					throw new Error('Plan not found');
+				} else if(plan) {
+					plan.programs.push(child);
+					plan.save(function(err){
+						if(err) {
+							throw err;
+						}
+					});
+				}	
+			}
+		});
+};
+
+// Remove link program
+var removeProgramToParent = function(id_parent, child) {
+
+	ProgramModel
+		.findOne({ _id : child._id })
+		.select('_plan')
+		.populate('_plan')
+		.exec(function(err, program) {
+			if(err) {
+				throw err;
+			}
+			
+			if(!program) {
+				throw new Error('Program not found');
+			} else if(program) {
+				var plan = program._plan;
+				
+				if(!plan) {
+					throw new Error('Plan not found');
+				} else if(plan) {
+					plan.programs.pull(child);
+					plan.save(function(err){
+						if(err) {
+							throw err;
+						}
+					});
+				}
+			}
+		});
+};
+
 module.exports = {
-		
-	// =========================================================================================
-	// Public ==================================================================================
-	// =========================================================================================
 	
 	// Create one program
 	create : function(req, res) {
@@ -31,9 +88,9 @@ module.exports = {
 			if(err) {
 				return res.json(responseService.fail('Add failed', err.message));
 			}
-			
+
 			try {
-				planService.addChildProgram(program._plan, program);
+				addProgramToParent(program);
 				categoryService.addParentProgram(program._category, program);
 			} catch(err) {
 				return res.json(responseService.fail('Add failed', err.message));
@@ -96,6 +153,8 @@ module.exports = {
 	
 	// Remove one program
 	remove : function(req, res) {
+		
+		var planService = require(global.__service + '/PlanService');
 
 		// Query remove
 		ProgramModel.findOneAndRemove({ _id : req.params.program_id, _user : req.decoded.id }, function(err, program) {

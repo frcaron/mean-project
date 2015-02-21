@@ -5,10 +5,6 @@ var UserModel = require(global.__model + '/UserModel');
 var responseService = require(global.__service + '/ResponseService');
 
 module.exports = {
-		
-	// =========================================================================================
-	// Public ==================================================================================
-	// =========================================================================================
 	
 	// Create one user
 	create : function(req, res) {
@@ -109,52 +105,6 @@ module.exports = {
 				return res.json(responseService.fail('Find failed', err.message));
 			}
 			return res.json(responseService.success('Find success', user));
-		});
-	},
-	
-	// =========================================================================================
-	// Private =================================================================================
-	// =========================================================================================
-	
-	// Add link plan
-	addChildPlan : function(id_parent, child) {
-
-		UserModel.findOne({ _id : id_parent }, function(err, user) {
-				if(err) {
-					throw err;
-				}
-				
-				if(!user) {
-					throw new Error('User not found');
-				} else if(user) {
-					user.plans.push(child);
-					user.save(function(err){
-						if(err) {
-							throw err;
-						}
-					});
-				}
-		});
-	},
-	
-	// Remove link plan
-	removeChildPlan : function(id_parent, child) {
-
-		UserModel.findOne({ _id : id_parent }, function(err, user) {
-				if(err) {
-					throw err;
-				}
-				
-				if(!user) {
-					throw new Error('User not found');
-				} else if(user) {
-					user.plans.pull(child);
-					user.save(function(err){
-						if(err) {
-							throw err;
-						}
-					});
-				}
 		});
 	}
 };

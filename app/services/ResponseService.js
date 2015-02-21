@@ -6,7 +6,7 @@ module.exports = {
 	// =========================================================================================
 	
 	// Fail response
-	fail : function(res, message, detail) {
+	fail : function(message, detail) {
 		return { success : false, message : message, detail : detail };
 	},
 	

@@ -57,7 +57,7 @@ TransactionSchema.methods.findOrGenerateProgram = function(date, category_id) {
 				// Plan exist
 				ProgramModel.find({ _user : transaction._user })
 					.where('_plan').equals(plan._id)
-					.where('_category').equals(category_id)
+					.where('category').equals(category_id)
 					.select('_id')
 					.exec(function(err, program) {
 						if(err) {

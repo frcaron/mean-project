@@ -3,14 +3,71 @@ var PlanModel = require(global.__model + '/PlanModel');
 
 //Inject services
 var responseService = require(global.__service + '/ResponseService');
-var userService = require(global.__service + '/UserService');
 var programService = require(global.__service + '/ProgramService');
 
+// Add link plan
+var addPlanToParent = function(child) {
+
+	PlanModel
+		.findOne({ _id : child._id })
+		.select('_user')
+		.populate('_user')
+		.exec(function(err, plan) {
+			if(err) {
+				throw err;
+			}
+
+			if(!plan) {
+				throw new Error('Plan not found');
+			} else if(plan) {
+				var user = plan._user;
+				
+				if(!user) {
+					throw new Error('User not found');
+				} else if(user) {
+					user.plans.push(child);
+					user.save(function(err){
+						if(err) {
+							throw err;
+						}
+					});
+				}
+			}
+		});
+};
+
+// Remove link plan
+var removePlanToParent = function(child) {
+
+	PlanModel
+		.findOne({ _id : child._id })
+		.select('_user')
+		.populate('_user')
+		.exec(function(err, plan) {
+			if(err) {
+				throw err;
+			}
+			
+			if(!plan) {
+				throw new Error('Plan not found');
+			} else if(plan) {
+				var user = plan._user;
+				
+				if(!user) {
+					throw new Error('User not found');
+				} else if(user) {
+					user.plans.pull(child);
+					user.save(function(err){
+						if(err) {
+							throw err;
+						}
+					});
+				}
+			}
+		});
+};
+
 module.exports = {
-		
-	// =========================================================================================
-	// Public ==================================================================================
-	// =========================================================================================
 	
 	// Create one plan
 	create : function(req, res) {
@@ -29,7 +86,7 @@ module.exports = {
 			}
 			
 			try {
-				userService.addChildPlan(plan._user, plan);
+				addPlanToParent(plan);
 			} catch(err) {
 				return res.json(responseService.fail('Add failed', err.message));
 			}
@@ -84,11 +141,13 @@ module.exports = {
 				} else if(plan) {
 					
 					try {
-						userService.removeChildPlan(plan._user, plan);
+						removePlanToParent(plan);
 						programService.removeByPlan(req.params.plan_id, req.decoded.id);
 					} catch(err) {
 						return res.json(responseService.fail('Remove failed', err.message));
 					}
+					
+					return res.json(responseService.success('Remove success'));
 				}
 		});
 	},
@@ -117,10 +176,6 @@ module.exports = {
 		});
 	},
 	
-	// =========================================================================================
-	// Private =================================================================================
-	// =========================================================================================
-	
 	// Test plan existing
 	isExist : function(plan_id) {
 		
@@ -131,48 +186,6 @@ module.exports = {
 			if(!plan) {
 				throw new Error('Plan id invalid');
 			}
-		});
-	},
-	
-	// Add link program
-	addChildProgram : function(id_parent, child) {
-
-		PlanModel.findOne({ _id : id_parent, _user : child._user }, function(err, plan) {
-				if(err) {
-					throw err;
-				}
-				
-				if(!plan) {
-					throw new Error('Plan not found');
-				} else if(plan) {
-					plan.programs.push(child);
-					plan.save(function(err){
-						if(err) {
-							throw err;
-						}
-					});
-				}
-		});
-	},
-	
-	// Remove link program
-	removeChildProgram : function(id_parent, child) {
-
-		PlanModel.findOne({ _id : id_parent, _user : child._user }, function(err, plan) {
-				if(err) {
-					throw err;
-				}
-				
-				if(!plan) {
-					throw new Error('Plan not found');
-				} else if(plan) {
-					plan.programs.pull(child);
-					plan.save(function(err){
-						if(err) {
-							throw err;
-						}
-					});
-				}
 		});
 	}
 };

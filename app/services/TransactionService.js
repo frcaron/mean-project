@@ -3,7 +3,6 @@ var TransactionModel = require(global.__model + '/TransactionModel');
 
 //Inject services
 var responseService = require(global.__service + '/ResponseService');
-var programService = require(global.__service + '/ProgramService');
 var categoryService = require(global.__service + '/CategoryService');
 
 module.exports = {
@@ -14,6 +13,8 @@ module.exports = {
 	
 	// Create one transaction
 	create : function(req, res) {
+		
+		var programService = require(global.__service + '/ProgramService');
 		
 		var transaction = new TransactionModel();
 		
@@ -48,6 +49,8 @@ module.exports = {
 	
 	// Update one transaction
 	update : function(req, res) {
+		
+		var programService = require(global.__service + '/ProgramService');
 
 		// Query find transaction by id and user
 		TransactionModel
@@ -109,6 +112,8 @@ module.exports = {
 	
 	// Remove one transaction
 	remove : function(req, res) {
+
+		var programService = require(global.__service + '/ProgramService');
 
 		// Query remove
 		TransactionModel.findOneAndRemove({ _id : req.params.transaction_id, _user : req.decoded.id }, function(err, transaction) {

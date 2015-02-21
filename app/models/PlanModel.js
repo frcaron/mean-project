@@ -2,9 +2,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-//Inject models
-var PlanModel = require(global.__model + '/PlanModel');
-
 // Schema
 var PlanSchema = new Schema({
 	month 			: { type : Number,

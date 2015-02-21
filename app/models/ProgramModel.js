@@ -2,9 +2,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-//Inject models
-var ProgramModel = require(global.__model + '/ProgramModel');
-
 // Schema
 var ProgramSchema = new Schema({
 	category		: { type : Schema.Types.ObjectId,
@@ -41,5 +38,7 @@ ProgramSchema.pre('save', function(next) {
 	});
 });
 
+var ProgramModel = mongoose.model('Program', ProgramSchema);
+
 // Return
-module.exports = mongoose.model('Program', ProgramSchema);
+module.exports = ProgramModel;
