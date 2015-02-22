@@ -21,15 +21,10 @@ module.exports = function(router) {
 		});
 		
 	
-	router.route(api_prefix + '/:type_category_id')
+	router.route(api_prefix + '/id/:type_category_id')
 	
 		// Update one type category
 		.put(function(req, res) {
 			typeCategoryService.update(req, res);
-		})
-	
-		// Delete one type category
-		.delete(function(req, res) {
-			typeCategoryService.remove(req, res);
 		});
 };

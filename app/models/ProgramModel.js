@@ -2,6 +2,10 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+//Inject plugin
+var datePlugin = require(global.__plugin + '/DatePlugin');
+var userPlugin = require(global.__plugin + '/UserPlugin');
+
 // Schema
 var ProgramSchema = new Schema({
 	category		: { type : Schema.Types.ObjectId,
@@ -11,34 +15,14 @@ var ProgramSchema = new Schema({
 	transactions	: [ { type : Schema.Types.ObjectId, 
 						ref : 'Transaction' } ],
 	_plan			: { type : Schema.Types.ObjectId,
-						ref : 'Plan' },		
-	_user			: { type : Schema.Types.ObjectId,
-						ref : 'User',
-						required : true },
-    created_at 		: Date,
-    updated_at 		: Date
+						ref : 'Plan', 
+						required : true }
 });
 
-// Previous function
-ProgramSchema.pre('save', function(next) {
-	
-	var currentDate = new Date();
-	
-	this.updated_at = currentDate;
-	
-	if(!this.created_at) {
-		this.created_at = currentDate;
-	}
+ProgramSchema.plugin(datePlugin);
+ProgramSchema.plugin(userPlugin);
 
-	ProgramModel.findOne({ category : this.category, _plan : this._plan }, '_id', function(err, program) {
-		if(err || program) {
-			return next(new Error('The pair category/plan already exist'));
-		} 
-		return next();
-	});
-});
-
-var ProgramModel = mongoose.model('Program', ProgramSchema);
+ProgramSchema.index({ category : 1, _plan : 1, _user : 1 } , { unique : true });
 
 // Return
-module.exports = ProgramModel;
+module.exports = mongoose.model('Program', ProgramSchema);

@@ -3,7 +3,7 @@ var responseService = require(global.__service + '/ResponseService');
 var typeCategoryService = require(global.__service + '/TypeCategoryService');
 
 // Propeties
-var api_prefix = '/typeCategories'; 
+var api_prefix = '/typecategories'; 
 
 module.exports = function(router) {
 	
@@ -13,9 +13,16 @@ module.exports = function(router) {
 		.get(function(req, res) {
 			typeCategoryService.allByU(req, res);
 		});
+	
+	router.route(api_prefix + '/active')
+		
+		// Get all type category active
+		.get(function(req, res) {
+			typeCategoryService.allActiveByU(req, res);
+		});
 		
 	
-	router.route(api_prefix + '/:type_category_id')
+	router.route(api_prefix + '/id/:type_category_id')
 	
 		// Get one type category
 		.get(function(req, res) {

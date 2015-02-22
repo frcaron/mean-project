@@ -18,20 +18,14 @@ module.exports = function(router) {
 		.post(function(req, res) {
 			
 			// Validation
-			if(!req.body.name) {
-				return res.json(responseService.fail('Add failed', 'Param "name" missing'));
-			}
-			if(!req.body.username) {
-				return res.json(responseService.fail('Add failed', 'Param "username" missing'));
-			}
-			if(!req.body.password) {
-				return res.json(responseService.fail('Add failed', 'Param "password" missing'));
-			}
+			if(!req.body.name) return res.json(responseService.fail('Add failed', 'Param "name" missing'));
+			if(!req.body.username) return res.json(responseService.fail('Add failed', 'Param "username" missing'));
+			if(!req.body.password) return res.json(responseService.fail('Add failed', 'Param "password" missing'));
 			
 			userService.create(req, res);
 		});
 	
-	router.route(api_prefix + '/:user_id')
+	router.route(api_prefix + '/id/:user_id')
 		
 		// Get one user
 		.get(function(req, res) {

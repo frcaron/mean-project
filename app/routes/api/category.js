@@ -19,9 +19,7 @@ module.exports = function(router) {
 		.post(function(req, res, next) {
 			
 			// Validation
-			if(!req.body.name) {
-				return res.json(responseService.fail('Add failed', 'Param "name" missing'));
-			}
+			if(!req.body.name) return res.json(responseService.fail('Add failed', 'Param "name" missing'));
 			if(!req.body.type_category_id) {
 				return res.json(responseService.fail('Add failed', 'Param "type_category_id" missing'));
 			} else {
@@ -35,7 +33,14 @@ module.exports = function(router) {
 			categoryService.create(req, res);
 		});
 	
-	router.route(api_prefix + '/:category_id')
+	router.route(api_prefix + '/active')
+		
+		// Get all categories user
+		.get(function(req, res) {
+			categoryService.allActiveByU(req, res);
+		})
+	
+	router.route(api_prefix + '/id/:category_id')
 	
 		// Get one category
 		.get(function(req, res) {
@@ -52,7 +57,7 @@ module.exports = function(router) {
 			categoryService.remove(req, res);			
 		});
 	
-	router.route(api_prefix + '/typecat/:type_category_id')
+	router.route(api_prefix + '/typecategory/:type_category_id')
 		
 		// Get all categories user by type
 		.get(function(req, res) {

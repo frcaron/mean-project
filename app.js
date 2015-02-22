@@ -24,6 +24,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 global.__base = __dirname + '/';
 global.__config = __dirname + '/config';
 global.__model = __dirname + '/app/models';
+global.__plugin = __dirname + '/app/plugins';
 global.__route = __dirname + '/app/routes';
 global.__service = __dirname + '/app/services';
 

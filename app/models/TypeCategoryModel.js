@@ -2,27 +2,19 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+//Inject plugin
+var datePlugin = require(global.__plugin + '/DatePlugin');
+
 // Schema
 var TypeCategorySchema = new Schema({
 	type 			: { type : String, 
-						index : { unique : true } },
-    created_at 		: Date,
-    updated_at 		: Date
+						required : true,
+						index : { unique : true } },
+	active			: { type : Boolean,
+						default : true }
 });
 
-//Previous function
-TypeCategorySchema.pre('save', function(next) {
-	
-	var currentDate = new Date();
-	
-	this.updated_at = currentDate;
-	
-	if(!this.created_at) {
-		this.created_at = currentDate;
-	}
-	
-	return next();
-});
+TypeCategorySchema.plugin(datePlugin);
 
 // Return
 module.exports = mongoose.model('TypeCategory', TypeCategorySchema);

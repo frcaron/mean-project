@@ -1,70 +1,45 @@
 // Inject models
 var PlanModel = require(global.__model + '/PlanModel');
+var ProgramModel = require(global.__model + '/ProgramModel');
+var TransactionModel = require(global.__model + '/TransactionModel');
+var CategoryModel = require(global.__model + '/CategoryModel');
+var TypeCategoryModel = require(global.__model + '/TypeCategoryModel');
 
 //Inject services
 var responseService = require(global.__service + '/ResponseService');
-var programService = require(global.__service + '/ProgramService');
 
 // Add link plan
-var addPlanToParent = function(child) {
+var addPlanToParentUser = function(child) {
 
-	PlanModel
-		.findOne({ _id : child._id })
-		.select('_user')
-		.populate('_user')
-		.exec(function(err, plan) {
-			if(err) {
-				throw err;
-			}
-
-			if(!plan) {
-				throw new Error('Plan not found');
-			} else if(plan) {
-				var user = plan._user;
-				
-				if(!user) {
-					throw new Error('User not found');
-				} else if(user) {
-					user.plans.push(child);
-					user.save(function(err){
-						if(err) {
-							throw err;
-						}
-					});
-				}
-			}
+	child.populate('_user',function(err, plan) {
+		if(err) throw err;
+		if(!plan) throw new Error('Plan not found');
+		
+		var user = plan._user;
+		if(!user) throw new Error('User not found');
+		
+		user.plans.push(child);
+		user.save(function(err){
+			if(err) throw err;
 		});
+	});
 };
 
 // Remove link plan
-var removePlanToParent = function(child) {
+var removePlanToParentUser = function(child, plan) {
 
-	PlanModel
-		.findOne({ _id : child._id })
-		.select('_user')
-		.populate('_user')
-		.exec(function(err, plan) {
-			if(err) {
-				throw err;
-			}
-			
-			if(!plan) {
-				throw new Error('Plan not found');
-			} else if(plan) {
-				var user = plan._user;
-				
-				if(!user) {
-					throw new Error('User not found');
-				} else if(user) {
-					user.plans.pull(child);
-					user.save(function(err){
-						if(err) {
-							throw err;
-						}
-					});
-				}
-			}
+	child.populate('_user', function(err) {
+		if(err) throw err;
+		if(!plan) throw new Error('Plan not found');
+	
+		var user = plan._user;
+		if(!user) throw new Error('User not found');
+		
+		user.plans.pull(child);
+		user.save(function(err){
+			if(err) throw err;
 		});
+	});
 };
 
 module.exports = {
@@ -78,20 +53,46 @@ module.exports = {
 		plan.month = req.body.month;
 		plan.year = req.body.year;
 		plan._user = req.decoded.id;
-		
+					
 		// Query save
 		plan.save(function(err) {
-			if(err) {
-				return res.json(responseService.fail('Add failed', err.message));
-			}
+			if(err) return res.json(responseService.fail('Add failed', err.message));
 			
 			try {
-				addPlanToParent(plan);
+				addPlanToParentUser(plan);
 			} catch(err) {
 				return res.json(responseService.fail('Add failed', err.message));
 			}
 			
-			return res.json(responseService.success('Add success', plan._id));
+			var programUnknow = new ProgramModel();
+				
+			// Query find category user unknow
+			CategoryModel.findOne({ _user : plan._user, name : 'unknow' }, function(err, category) {
+				if(err) return res.json(responseService.fail('Add failed', err.message));
+				if(!category) return res.json(responseService.fail('Add failed', 'Category not found'));
+				
+				// Build object
+				programUnknow.category = category._id;
+				programUnknow._plan = plan._id;
+				programUnknow._user = plan._user;
+				
+				// Save program unknow
+				programUnknow.save(function(err) {
+					if(err) return res.json(responseService.fail('Add failed', err.message));
+						
+					// Save program in child
+					category._programs.push(programUnknow);
+					category.save(function(err) {
+						if(err) return res.json(responseService.fail('Add failed', err.message));
+
+						// Plan update
+						plan.update({ programUnknow : programUnknow._id}, function(err) {
+							if(err) return res.json(responseService.fail('Add failed', err.message));
+							return res.json(responseService.success('Add success', plan._id));
+						});
+					});
+				});
+			});
 		});
 	},
 	
@@ -100,27 +101,16 @@ module.exports = {
 
 		// Query find plan by id and user
 		PlanModel.findOne({ _id : req.params.plan_id, _user : req.decoded.id}, function(err, plan) {
-			if(err) {
-				return res.json(responseService.fail('Update failed', 'Find plan failed / ' + err.message));
-			}
-
-			if(!plan) {
+			if(err) return res.json(responseService.fail('Update failed', err.message));
+			if(!plan) return res.json(responseService.fail('Update failed', 'Plan not found'));
 				
-				// Plan not exist
-				return res.json(responseService.fail('Update failed', 'Plan not found'));
-				
-			} else if(plan) {
-				
-				// TODO param modification ???
-				
-				// Query save
-				plan.save(function(err) {
-					if(err) {
-						return res.json(responseService.fail('Update failed', err.message));
-					}
-					return res.json(responseService.success('Update success'));
-				});
-			}
+			// TODO param modification ???
+			
+			// Query save
+			plan.save(function(err) {
+				if(err) return res.json(responseService.fail('Update failed', err.message));
+				return res.json(responseService.success('Update success'));
+			});
 		});
 	},
 	
@@ -130,25 +120,21 @@ module.exports = {
 		// Query remove
 		PlanModel
 			.findOneAndRemove({ _id : req.params.plan_id, _user : req.decoded.id })
-			.populate('programs', '_id')
+			.populate('programs', '_id category transaction')
 			.exec(function(err, plan) {
-				if(err) {
+				if(err) return res.json(responseService.fail('Remove failed', err.message));
+				if(!plan) return res.json(responseService.fail('Remove failed', 'Plan not found'));
+					
+				try {
+					removePlanToParentUser(plan);
+				} catch(err) {
 					return res.json(responseService.fail('Remove failed', err.message));
 				}
 				
-				if(!plan) {
-					return res.json(responseService.fail('Remove failed', 'Plan not found'));
-				} else if(plan) {
-					
-					try {
-						removePlanToParent(plan);
-						programService.removeByPlan(req.params.plan_id, req.decoded.id);
-					} catch(err) {
-						return res.json(responseService.fail('Remove failed', err.message));
-					}
-					
-					return res.json(responseService.success('Remove success'));
-				}
+				// TODO Remove programs and programUnknow link to category
+				// TODO Remove transactions
+				
+				return res.json(responseService.success('Remove success'));
 		});
 	},
 	
@@ -157,9 +143,7 @@ module.exports = {
 
 		// Query find by user
 		PlanModel.find({ _user : req.decoded.id}, function(err, plans) {
-			if(err) {
-				return res.json(responseService.fail('Find failed', err.message));
-			}
+			if(err) return res.json(responseService.fail('Find failed', err.message));
 			return res.json(responseService.success('Find success', plans));
 		});
 	},
@@ -169,9 +153,7 @@ module.exports = {
 
 		// Query find plan by id and user
 		PlanModel.findOne({ _id : req.params.plan_id, _user : req.decoded.id}, function(err, plan) {
-			if(err) {
-				return res.json(responseService.fail('Find failed', err.message));
-			}
+			if(err) return res.json(responseService.fail('Find failed', err.message));
 			return res.json(responseService.success('Find success', plan));
 		});
 	},
@@ -180,12 +162,8 @@ module.exports = {
 	isExist : function(plan_id) {
 		
 		PlanModel.findById(plan_id, '_id', function(err, plan) {
-			if(err) {
-				throw new Error('Find plan failed');
-			}
-			if(!plan) {
-				throw new Error('Plan id invalid');
-			}
+			if(err) throw new Error('Find plan failed');
+			if(!plan) throw new Error('Plan id invalid');
 		});
 	}
 };

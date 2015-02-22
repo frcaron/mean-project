@@ -37,7 +37,7 @@ module.exports = function(router) {
 			programService.create(req, res);
 		});
 	
-	router.route(api_prefix + '/:program_id')
+	router.route(api_prefix + '/id/:program_id')
 	
 		// Get one program
 		.get(function(req, res) {

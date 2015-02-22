@@ -2,6 +2,10 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+//Inject plugin
+var datePlugin = require(global.__plugin + '/DatePlugin');
+var userPlugin = require(global.__plugin + '/UserPlugin');
+
 // Schema
 var CategorySchema = new Schema({
 	name 			: { type : String,
@@ -9,28 +13,14 @@ var CategorySchema = new Schema({
 	type			: { type : Schema.Types.ObjectId,
 						ref : 'TypeCategory',
 						required : true },
+	active			: { type : Boolean,
+						default : true },
 	_programs		: [ { type : Schema.Types.ObjectId, 
-						ref : 'Program' } ],
-	_user			: { type : Schema.Types.ObjectId,
-						ref : 'User',
-						required : true },
-    created_at 		: Date,
-    updated_at 		: Date
+						ref : 'Program' } ]
 });
 
-// Previous function
-CategorySchema.pre('save', function(next) {
-	
-	var currentDate = new Date();
-	
-	this.updated_at = currentDate;
-	
-	if(!this.created_at) {
-		this.created_at = currentDate;
-	}
-	
-	return next();
-});
+CategorySchema.plugin(datePlugin);
+CategorySchema.plugin(userPlugin);
 
 // Return
 module.exports = mongoose.model('Category', CategorySchema);

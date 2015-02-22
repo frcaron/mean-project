@@ -9,10 +9,6 @@ var UserModel = require(global.__model + '/UserModel');
 var responseService = require(global.__service + '/ResponseService');
 
 module.exports = {
-		
-	// =========================================================================================
-	// Public ==================================================================================
-	// =========================================================================================
 	
 	// Authenticate user
 	login : function(req, res) {
@@ -21,36 +17,21 @@ module.exports = {
 		UserModel.findOne({ username : req.body.username })
 			.select('_id name username password admin')
 			.exec(function(err, user) {
-				if(err) {
-					return res.json(responseService.fail('Authentication failed', 'Find user failed / ' + err.message));
-				}
-				
-				if(!user) {
+				if(err) return res.json(responseService.fail('Authentication failed', 'Find user failed / ' + err.message));
+				if(!user) return res.json(responseService.fail('Authentication failed', 'User not found'));
 					
-					// User not exist
-					return res.json(responseService.fail('Authentication failed', 'User not found'));
-					
-				} else if(user) {
-					
-					var validPassword = user.comparePassword(req.body.password);
-					if(!validPassword) {
-						
-						// Wrong password
-						return res.json(responseService.fail('Authentication failed', 'Wrong password'));
-						
-					} else {
+				var validPassword = user.comparePassword(req.body.password);
+				if(!validPassword) return res.json(responseService.fail('Authentication failed', 'Wrong password'));
 
-						// Generate token
-						var token = jwt.sign({
-							id 			: user._id,
-							name 		: user.name,
-							username 	: user.username,
-							admin 		: user.admin
-						}, tokenConfig.secret, { expiresMinutes : 1440 });
+				// Generate token
+				var token = jwt.sign({
+					id 			: user._id,
+					name 		: user.name,
+					username 	: user.username,
+					admin 		: user.admin
+				}, tokenConfig.secret, { expiresMinutes : 1440 });
 
-						return res.json(responseService.success('Authentication success', token));
-					}
-				}					
+				return res.json(responseService.success('Authentication success', token));			
 		});
 	}
 };

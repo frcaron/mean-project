@@ -18,17 +18,13 @@ module.exports = function(router) {
 		.post(function(req, res) {
 			
 			// Validation
-			if(!req.body.month) {
-				return res.json(responseService.fail('Add failed', 'Param "month" missing'));
-			}
-			if(!req.body.year) {
-				return res.json(responseService.fail('Add failed', 'Param "year" missing'));
-			}
+			if(!req.body.month) return res.json(responseService.fail('Add failed', 'Param "month" missing'));
+			if(!req.body.year) return res.json(responseService.fail('Add failed', 'Param "year" missing'));
 	
 			planService.create(req, res);
 		});
 	
-	router.route(api_prefix + '/:plan_id')
+	router.route(api_prefix + '/id/:plan_id')
 	
 		// Get one program
 		.get(function(req, res) {

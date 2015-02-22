@@ -3,22 +3,26 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
 var Schema = mongoose.Schema;
 
+// Inject plugin
+var datePlugin = require(global.__plugin + '/DatePlugin');
+
+
 // Schema
 var UserSchema = new Schema({
 	name 			: String,
 	username 		: { type : String, 
 						required : true, 
-						index : { unique : true }},
+						 index : { unique : true } },
     password 		: { type : String, 
 	    				required : true, 
 	    				select : false},
 	admin			: { type : Boolean, 
 						default : false },
 	plans			: [ { type : Schema.Types.ObjectId, 
-						ref : 'Plan' } ],
-    created_at 		: Date,
-    updated_at 		: Date
+						ref : 'Plan' } ]
 });
+
+UserSchema.plugin(datePlugin);
 
 UserSchema.methods.comparePassword = function(password) {
 	var user = this;
@@ -29,13 +33,6 @@ UserSchema.methods.comparePassword = function(password) {
 UserSchema.pre('save', function(next) {
 	
 	var user = this;
-	var currentDate = new Date();
-	
-	this.updated_at = currentDate;
-	
-	if(!this.created_at) {
-		this.created_at = currentDate;
-	}
 
 	if(!user.isModified('password')) {
 		return next();

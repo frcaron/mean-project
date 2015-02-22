@@ -5,10 +5,6 @@ var TypeCategoryModel = require(global.__model + '/TypeCategoryModel');
 var responseService = require(global.__service + '/ResponseService');
 
 module.exports = {
-		
-	// =========================================================================================
-	// Public ==================================================================================
-	// =========================================================================================
 	
 	// Create one type category
 	create : function(req, res) {
@@ -20,9 +16,7 @@ module.exports = {
 		
 		// Query save
 		typeCategory.save(function(err) {
-			if(err) {
-				return res.json(responseService.fail('Add failed', err.message));
-			}
+			if(err) return res.json(responseService.fail('Add failed', err.message));
 			return res.json(responseService.success('Add success', typeCategory._id));
 		});
 	},
@@ -32,53 +26,37 @@ module.exports = {
 		
 		// Query find type category by id
 		TypeCategoryModel.findById(req.params.type_category_id, function(err, typeCategory) {
-			if(err) {
-				return res.json(responseService.fail('Update failed', 'Find type category failed / ' + err.message));
-			}
+			if(err) return res.json(responseService.fail('Update failed', err.message));
+			if(!typeCategory) return res.json(responseService.fail('Update failed', 'Type category not found'));
 
-			if(!typeCategory) {
-				
-				// Type category not exist
-				return res.json(responseService.fail('Update failed', 'Type category not found'));
-				
-			} else if(typeCategory) {
-				
-				// Build object
-				if(req.body.type) {
-					typeCategory.type = req.body.type;
-				}
-				
-				// Query save
-				typeCategory.save(function(err) {
-					if(err) {
-						return res.json(responseService.fail('Update failed', err.message));
-					}
-					return res.json(responseService.success('Update success'));
-				});
-			}
+			// Build object
+			if(req.body.type) typeCategory.type = req.body.type;
+			if(req.body.visible) typeCategory.visible = req.body.visible;
+			
+			// Query save
+			typeCategory.save(function(err) {
+				if(err) return res.json(responseService.fail('Update failed', err.message));
+				return res.json(responseService.success('Update success'));
+			});
 		});		
-	},
-	
-	// Remove one type category
-	remove : function(req, res) {
-		
-		// Query remove
-		TypeCategoryModel.remove({ _id : req.params.type_category_id }, function(err) {
-			if(err) {
-				return res.json(responseService.fail('Remove failed', err.message));
-			}
-			return res.json(responseService.success('Remove success'));
-		});
 	},
 	
 	// Get all type category
 	allByU : function(req, res) {
 		
 		// Query find categories
-		var test = TypeCategoryModel.find(function(err, typeCategories) {
-			if(err) {
-				return res.json(responseService.fail('Find failed', err.message));
-			}
+		TypeCategoryModel.find(function(err, typeCategories) {
+			if(err) return res.json(responseService.fail('Find failed', err.message));
+			return res.json(responseService.success('Find success', typeCategories));
+		});		
+	},
+	
+	// Get all type category active
+	allActiveByU : function(req, res) {
+		
+		// Query find categories
+		TypeCategoryModel.find({ active : true }, function(err, typeCategories) {
+			if(err) return res.json(responseService.fail('Find failed', err.message));
 			return res.json(responseService.success('Find success', typeCategories));
 		});		
 	},
@@ -88,9 +66,7 @@ module.exports = {
 		
 		// Query find category by id
 		TypeCategoryModel.findById(req.params.type_category_id, function(err, typeCategory) {
-			if(err) {
-				return res.json(responseService.fail('Find failed', err.message));
-			}
+			if(err) return res.json(responseService.fail('Find failed', err.message));
 			return res.json(responseService.success('Find success', typeCategory));
 		});		
 	},
@@ -99,12 +75,8 @@ module.exports = {
 	isExist : function(type_category_id) {
 
 		TypeCategoryModel.findById(type_category_id, '_id', function(err, typeCategory) {
-			if(err) {
-				throw new Error('Find type category failed');
-			}
-			if(!typeCategory) {
-				throw new Error('Type category id invalid');
-			}
+			if(err) throw new Error('Find type category failed');
+			if(!typeCategory) throw new Error('Type category id invalid');
 		});	
 	}
 };

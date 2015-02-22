@@ -13,12 +13,8 @@ module.exports = function(router) {
 		.post(function(req, res) {
 			
 			// Validation
-			if(!req.body.username) {
-				return res.json(responseService.fail('Authentication failed', 'Param "username" missing'));
-			}
-			if(!req.body.password) {
-				return res.json(responseService.fail('Authentication failed', 'Param "password" missing'));
-			}
+			if(!req.body.username) return res.json(responseService.fail('Authentication failed', 'Param "username" missing'));
+			if(!req.body.password) return res.json(responseService.fail('Authentication failed', 'Param "password" missing'));
 			
 			sessionService.login(req, res);
 		});
