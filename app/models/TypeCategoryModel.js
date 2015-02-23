@@ -7,15 +7,15 @@ var datePlugin = require(global.__plugin + '/DatePlugin');
 
 // Schema
 var TypeCategorySchema = new Schema({
-	type : {
-		type : String,
+	type   : {
+		type     : String,
 		required : true,
-		index : {
+		index    : {
 			unique : true
 		}
 	},
 	active : {
-		type : Boolean,
+		type    : Boolean,
 		default : true
 	}
 });

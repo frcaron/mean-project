@@ -9,9 +9,9 @@ var TypeCategoryModel = require(global.__model + '/TypeCategoryModel');
 var responseService = require(global.__service + '/ResponseService');
 
 // Add link plan
-var addPlanToParentUser = function(child) {
+var addPlanToParentUser = function (child) {
 
-	child.populate('_user', function(err, plan) {
+	child.populate('_user', function (err, plan) {
 		if (err) {
 			throw err;
 		}
@@ -25,7 +25,7 @@ var addPlanToParentUser = function(child) {
 		}
 
 		user.plans.push(child);
-		user.save(function(err) {
+		user.save(function (err) {
 			if (err) {
 				throw err;
 			}
@@ -34,9 +34,9 @@ var addPlanToParentUser = function(child) {
 };
 
 // Remove link plan
-var removePlanToParentUser = function(child, plan) {
+var removePlanToParentUser = function (child, plan) {
 
-	child.populate('_user', function(err) {
+	child.populate('_user', function (err) {
 		if (err) {
 			throw err;
 		}
@@ -50,7 +50,7 @@ var removePlanToParentUser = function(child, plan) {
 		}
 
 		user.plans.pull(child);
-		user.save(function(err) {
+		user.save(function (err) {
 			if (err) {
 				throw err;
 			}
@@ -61,7 +61,7 @@ var removePlanToParentUser = function(child, plan) {
 module.exports = {
 
 	// Create one plan
-	create : function(req, res) {
+	create  : function (req, res) {
 
 		var plan = new PlanModel();
 
@@ -71,7 +71,7 @@ module.exports = {
 		plan._user = req.decoded.id;
 
 		// Query save
-		plan.save(function(err) {
+		plan.save(function (err) {
 			if (err) {
 				return res.json(responseService.fail('Add failed', err.message));
 			}
@@ -87,8 +87,8 @@ module.exports = {
 			// Query find category user unknow
 			CategoryModel.findOne({
 				_user : plan._user,
-				name : 'unknow'
-			}, function(err, category) {
+				name  : 'unknow'
+			}, function (err, category) {
 				if (err) {
 					return res.json(responseService.fail('Add failed', err.message));
 				}
@@ -102,14 +102,14 @@ module.exports = {
 				programUnknow._user = plan._user;
 
 				// Save program unknow
-				programUnknow.save(function(err) {
+				programUnknow.save(function (err) {
 					if (err) {
 						return res.json(responseService.fail('Add failed', err.message));
 					}
 
 					// Save program in child
 					category._programs.push(programUnknow);
-					category.save(function(err) {
+					category.save(function (err) {
 						if (err) {
 							return res.json(responseService.fail('Add failed', err.message));
 						}
@@ -117,7 +117,7 @@ module.exports = {
 						// Plan update
 						plan.update({
 							programUnknow : programUnknow._id
-						}, function(err) {
+						}, function (err) {
 							if (err) {
 								return res.json(responseService.fail('Add failed', err.message));
 							}
@@ -130,13 +130,13 @@ module.exports = {
 	},
 
 	// Update one plan
-	update : function(req, res) {
+	update  : function (req, res) {
 
 		// Query find plan by id and user
 		PlanModel.findOne({
-			_id : req.params.plan_id,
+			_id   : req.params.plan_id,
 			_user : req.decoded.id
-		}, function(err, plan) {
+		}, function (err, plan) {
 			if (err) {
 				return res.json(responseService.fail('Update failed', err.message));
 			}
@@ -147,7 +147,7 @@ module.exports = {
 			// TODO param modification ???
 
 			// Query save
-			plan.save(function(err) {
+			plan.save(function (err) {
 				if (err) {
 					return res.json(responseService.fail('Update failed', err.message));
 				}
@@ -157,13 +157,13 @@ module.exports = {
 	},
 
 	// Remove one plan
-	remove : function(req, res) {
+	remove  : function (req, res) {
 
 		// Query remove
 		PlanModel.findOneAndRemove({
-			_id : req.params.plan_id,
+			_id   : req.params.plan_id,
 			_user : req.decoded.id
-		}).populate('programs', '_id category transaction').exec(function(err, plan) {
+		}).populate('programs', '_id category transaction').exec(function (err, plan) {
 			if (err) {
 				return res.json(responseService.fail('Remove failed', err.message));
 			}
@@ -185,12 +185,12 @@ module.exports = {
 	},
 
 	// Get plans by user
-	allByU : function(req, res) {
+	allByU  : function (req, res) {
 
 		// Query find by user
 		PlanModel.find({
 			_user : req.decoded.id
-		}, function(err, plans) {
+		}, function (err, plans) {
 			if (err) {
 				return res.json(responseService.fail('Find failed', err.message));
 			}
@@ -199,13 +199,13 @@ module.exports = {
 	},
 
 	// Get one plan by id
-	getById : function(req, res) {
+	getById : function (req, res) {
 
 		// Query find plan by id and user
 		PlanModel.findOne({
-			_id : req.params.plan_id,
+			_id   : req.params.plan_id,
 			_user : req.decoded.id
-		}, function(err, plan) {
+		}, function (err, plan) {
 			if (err) {
 				return res.json(responseService.fail('Find failed', err.message));
 			}
@@ -214,9 +214,9 @@ module.exports = {
 	},
 
 	// Test plan existing
-	isExist : function(plan_id) {
+	isExist : function (plan_id) {
 
-		PlanModel.findById(plan_id, '_id', function(err, plan) {
+		PlanModel.findById(plan_id, '_id', function (err, plan) {
 			if (err) {
 				throw new Error('Find plan failed');
 			}

@@ -1,21 +1,21 @@
 module.exports = {
 
 	// Fail response
-	fail : function(message, detail) {
+	fail    : function (message, detail) {
 		return {
 			success : false,
 			message : message,
-			detail : detail
+			detail  : detail
 		};
 	},
 
 	// Success response
-	success : function(message, result) {
+	success : function (message, result) {
 		if (result) {
 			return {
 				success : true,
 				message : message,
-				result : result
+				result  : result
 			};
 		} else {
 			return {

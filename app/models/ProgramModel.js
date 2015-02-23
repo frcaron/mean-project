@@ -8,19 +8,19 @@ var userPlugin = require(global.__plugin + '/UserPlugin');
 
 // Schema
 var ProgramSchema = new Schema({
-	category : {
-		type : Schema.Types.ObjectId,
-		ref : 'Category',
+	category     : {
+		type     : Schema.Types.ObjectId,
+		ref      : 'Category',
 		required : true
 	},
-	sum : Number,
+	sum          : Number,
 	transactions : [ {
 		type : Schema.Types.ObjectId,
-		ref : 'Transaction'
+		ref  : 'Transaction'
 	} ],
-	_plan : {
-		type : Schema.Types.ObjectId,
-		ref : 'Plan',
+	_plan        : {
+		type     : Schema.Types.ObjectId,
+		ref      : 'Plan',
 		required : true
 	}
 });
@@ -30,8 +30,8 @@ ProgramSchema.plugin(userPlugin);
 
 ProgramSchema.index({
 	category : 1,
-	_plan : 1,
-	_user : 1
+	_plan    : 1,
+	_user    : 1
 }, {
 	unique : true
 });

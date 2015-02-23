@@ -5,14 +5,14 @@ var tokenConfig = require(global.__config + '/token');
 // Inject service
 var responseService = require(global.__service + '/ResponseService');
 
-module.exports = function(router) {
+module.exports = function (router) {
 
 	// =========================================================================================
 	// Param validation
 	// =========================================================================================
 
 	// Validate param user_id
-	router.param('user_id', function(req, res, next, user_id) {
+	router.param('user_id', function (req, res, next, user_id) {
 		if (!user_id) {
 			return res.json(responseService.fail('Request validation failed', 'Param "user_id" missing'));
 		}
@@ -20,7 +20,7 @@ module.exports = function(router) {
 	});
 
 	// Validate param type_category_id
-	router.param('type_category_id', function(req, res, next, type_category_id) {
+	router.param('type_category_id', function (req, res, next, type_category_id) {
 		if (!type_category_id) {
 			return res.json(responseService.fail('Request validation failed', 'Param "type_category_id" missing'));
 		}
@@ -35,12 +35,12 @@ module.exports = function(router) {
 	// =========================================================================================
 
 	// Token verification
-	router.use(function(req, res, next) {
+	router.use(function (req, res, next) {
 
-		var token = req.body.token || req.param('token') || req.headers['x-access-token'];
+		var token = req.body.token || req.param('token') || req.headers[ 'x-access-token' ];
 
 		if (token) {
-			jwt.verify(token, tokenConfig.secret, function(err, decoded) {
+			jwt.verify(token, tokenConfig.secret, function (err, decoded) {
 				if (err) {
 					return res.status(403).send(responseService.fail('Session error', 'Session expired'));
 				}

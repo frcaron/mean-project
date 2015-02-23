@@ -5,25 +5,25 @@ var typeCategoryService = require(global.__service + '/TypeCategoryService');
 // Properties
 var api_prefix = '/typeCategories';
 
-module.exports = function(router) {
+module.exports = function (router) {
 
 	router.route(api_prefix)
 
-	// Create type category
-	.post(function(req, res) {
+		// Create type category
+		.post(function (req, res) {
 
-		// Validation
-		if (!req.body.type) {
-			return res.json(responseService.fail('Add failed', 'Param "type" missing'));
-		}
+			// Validation
+			if (!req.body.type) {
+				return res.json(responseService.fail('Add failed', 'Param "type" missing'));
+			}
 
-		typeCategoryService.create(req, res);
-	});
+			typeCategoryService.create(req, res);
+		});
 
 	router.route(api_prefix + '/id/:type_category_id')
 
-	// Update one type category
-	.put(function(req, res) {
-		typeCategoryService.update(req, res);
-	});
+		// Update one type category
+		.put(function (req, res) {
+			typeCategoryService.update(req, res);
+		});
 };

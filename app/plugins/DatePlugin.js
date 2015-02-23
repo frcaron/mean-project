@@ -1,11 +1,11 @@
-module.exports = function(schema) {
+module.exports = function (schema) {
 	schema.add({
 		created_at : Date,
 		updated_at : Date
 	});
 
 	// Previous function
-	schema.pre('save', function(next) {
+	schema.pre('save', function (next) {
 
 		var currentDate = new Date();
 

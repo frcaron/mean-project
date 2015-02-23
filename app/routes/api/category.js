@@ -4,63 +4,65 @@ var categoryService = require(global.__service + '/CategoryService');
 var typeCategoryService = require(global.__service + '/TypeCategoryService');
 
 // Properties
-var api_prefix = '/categories'; 
+var api_prefix = '/categories';
 
-module.exports = function(router) {
-	
+module.exports = function (router) {
+
 	router.route(api_prefix)
-		
+
 		// Get all categories user
-		.get(function(req, res) {
+		.get(function (req, res) {
 			categoryService.allByU(req, res);
 		})
-		
+
 		// Create one category
-		.post(function(req, res, next) {
-			
+		.post(function (req, res, next) {
+
 			// Validation
-			if(!req.body.name) return res.json(responseService.fail('Add failed', 'Param "name" missing'));
-			if(!req.body.type_category_id) {
+			if (!req.body.name) {
+				return res.json(responseService.fail('Add failed', 'Param "name" missing'));
+			}
+			if (!req.body.type_category_id) {
 				return res.json(responseService.fail('Add failed', 'Param "type_category_id" missing'));
 			} else {
 				try {
 					typeCategoryService.isExist(req.body.type_category_id);
-				} catch(err) {
+				} catch (err) {
 					return res.json(responseService.fail('Add failed', err.message));
 				}
 			}
-			
+
 			categoryService.create(req, res);
 		});
-	
+
 	router.route(api_prefix + '/active')
-		
+
 		// Get all categories user
-		.get(function(req, res) {
+		.get(function (req, res) {
 			categoryService.allActiveByU(req, res);
 		});
-	
+
 	router.route(api_prefix + '/id/:category_id')
-	
+
 		// Get one category
-		.get(function(req, res) {
+		.get(function (req, res) {
 			categoryService.getByIdU(req, res);
 		})
-		
+
 		// Update one category
-		.put(function(req, res) {
-			categoryService.update(req, res);			
+		.put(function (req, res) {
+			categoryService.update(req, res);
 		})
-		
+
 		// Delete one category
-		.delete(function(req, res) {
-			categoryService.remove(req, res);			
+		.delete(function (req, res) {
+			categoryService.remove(req, res);
 		});
-	
+
 	router.route(api_prefix + '/typecategory/:type_category_id')
-		
+
 		// Get all categories user by type
-		.get(function(req, res) {
+		.get(function (req, res) {
 			categoryService.allByTypeCategoryU(req, res);
 		});
 };

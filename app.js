@@ -1,4 +1,3 @@
-
 // Set up ====================================================
 
 var express = require('express');
@@ -16,8 +15,8 @@ var app = express();
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(morgan('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
+app.use(bodyParser.urlencoded({ extended : true }));
+app.use(bodyParser.json({ type : 'application/vnd.api+json' }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 

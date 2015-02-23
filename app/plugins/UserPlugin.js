@@ -2,11 +2,11 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-module.exports = function(schema, options) {
+module.exports = function (schema, options) {
 	schema.add({
 		_user : {
-			type : Schema.Types.ObjectId,
-			ref : 'User',
+			type     : Schema.Types.ObjectId,
+			ref      : 'User',
 			required : true
 		}
 	});

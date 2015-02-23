@@ -8,7 +8,7 @@ require('./route.admin')(adminRouter);
 require('./route.api')(apiRouter);
 require('./route.basic')(basicRouter);
 
-module.exports = function(app) {
+module.exports = function (app) {
 	app.use('/admin', adminRouter);
 	app.use('/api', apiRouter);
 	app.use('/', basicRouter);

@@ -12,7 +12,7 @@ var responseService = require(global.__service + '/ResponseService');
 module.exports = {
 
 	// Create one user
-	create : function(req, res) {
+	create  : function (req, res) {
 
 		var user = new UserModel();
 
@@ -26,7 +26,7 @@ module.exports = {
 
 		TypeCategoryModel.findOne({
 			type : 'unknow'
-		}, function(err, typeCategory) {
+		}, function (err, typeCategory) {
 			if (err) {
 				return res.json(responseService.success('Add failed', err.message));
 			}
@@ -47,7 +47,7 @@ module.exports = {
 			}
 
 			// Query save
-			user.save(function(err) {
+			user.save(function (err) {
 				if (err) {
 					if (err.code == 11000) {
 						return res.json(responseService.success('Add failed', 'User exist'));
@@ -71,10 +71,10 @@ module.exports = {
 	},
 
 	// Update one user
-	update : function(req, res) {
+	update  : function (req, res) {
 
 		// Query find user by id
-		UserModel.findById(req.params.user_id, function(err, user) {
+		UserModel.findById(req.params.user_id, function (err, user) {
 			if (err) {
 				return res.json(responseService.fail('Update failed', err.message));
 			}
@@ -97,7 +97,7 @@ module.exports = {
 			}
 
 			// Query save
-			user.save(function(err) {
+			user.save(function (err) {
 				if (err) {
 					return res.json(responseService.fail('Update failed', err.message));
 				}
@@ -107,12 +107,12 @@ module.exports = {
 	},
 
 	// Remove one user
-	remove : function(req, res) {
+	remove  : function (req, res) {
 
 		// Query remove
 		TransactionModel.remove({
 			_user : req.params.user_id
-		}, function(err) {
+		}, function (err) {
 			if (err) {
 				return res.json(responseService.fail('Remove failed', err.message));
 			}
@@ -120,7 +120,7 @@ module.exports = {
 
 		CategoryModel.remove({
 			_user : req.params.user_id
-		}, function(err) {
+		}, function (err) {
 			if (err) {
 				return res.json(responseService.fail('Remove failed', err.message));
 			}
@@ -128,7 +128,7 @@ module.exports = {
 
 		ProgramModel.remove({
 			_user : req.params.user_id
-		}, function(err) {
+		}, function (err) {
 			if (err) {
 				return res.json(responseService.fail('Remove failed', err.message));
 			}
@@ -136,7 +136,7 @@ module.exports = {
 
 		PlanModel.remove({
 			_user : req.params.user_id
-		}, function(err) {
+		}, function (err) {
 			if (err) {
 				return res.json(responseService.fail('Remove failed', err.message));
 			}
@@ -144,7 +144,7 @@ module.exports = {
 
 		UserModel.remove({
 			_id : req.params.user_id
-		}, function(err) {
+		}, function (err) {
 			if (err) {
 				return res.json(responseService.fail('Remove failed', err.message));
 			}
@@ -154,10 +154,10 @@ module.exports = {
 	},
 
 	// Get all users
-	all : function(req, res) {
+	all     : function (req, res) {
 
 		// Query find users
-		UserModel.find(function(err, users) {
+		UserModel.find(function (err, users) {
 			if (err) {
 				return res.json(responseService.fail('Find failed', err.message));
 			}
@@ -166,10 +166,10 @@ module.exports = {
 	},
 
 	// Get one user by id
-	getById : function(req, res) {
+	getById : function (req, res) {
 
 		// Query find user by id
-		UserModel.findById(req.params.user_id, function(err, user) {
+		UserModel.findById(req.params.user_id, function (err, user) {
 			if (err) {
 				return res.json(responseService.fail('Find failed', err.message));
 			}

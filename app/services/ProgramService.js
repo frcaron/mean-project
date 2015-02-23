@@ -7,9 +7,9 @@ var responseService = require(global.__service + '/ResponseService');
 var categoryService = require(global.__service + '/CategoryService');
 
 // Add link program
-var addProgramToParentPlan = function(child) {
+var addProgramToParentPlan = function (child) {
 
-	child.populate('_plan', function(err, program) {
+	child.populate('_plan', function (err, program) {
 		if (err) {
 			throw err;
 		}
@@ -23,7 +23,7 @@ var addProgramToParentPlan = function(child) {
 		}
 
 		plan.programs.push(child);
-		plan.save(function(err) {
+		plan.save(function (err) {
 			if (err) {
 				throw err;
 			}
@@ -32,9 +32,9 @@ var addProgramToParentPlan = function(child) {
 };
 
 // Remove link program
-var removeProgramToParentPlan = function(child) {
+var removeProgramToParentPlan = function (child) {
 
-	child.populate('_plan', function(err, program) {
+	child.populate('_plan', function (err, program) {
 		if (err) {
 			throw err;
 		}
@@ -48,7 +48,7 @@ var removeProgramToParentPlan = function(child) {
 		}
 
 		plan.programs.pull(child);
-		plan.save(function(err) {
+		plan.save(function (err) {
 			if (err) {
 				throw err;
 			}
@@ -57,9 +57,9 @@ var removeProgramToParentPlan = function(child) {
 };
 
 // Add link program
-var addProgramToChildCategory = function(parent) {
+var addProgramToChildCategory = function (parent) {
 
-	parent.populate('category', function(err, program) {
+	parent.populate('category', function (err, program) {
 		if (err) {
 			throw err;
 		}
@@ -73,7 +73,7 @@ var addProgramToChildCategory = function(parent) {
 		}
 
 		category._programs.push(parent);
-		category.save(function(err) {
+		category.save(function (err) {
 			if (err) {
 				throw err;
 			}
@@ -82,9 +82,9 @@ var addProgramToChildCategory = function(parent) {
 };
 
 // Remove link program
-var removeProgramToChildCategory = function(parent) {
+var removeProgramToChildCategory = function (parent) {
 
-	parent.populate('category', function(err, program) {
+	parent.populate('category', function (err, program) {
 		if (err) {
 			throw err;
 		}
@@ -98,7 +98,7 @@ var removeProgramToChildCategory = function(parent) {
 		}
 
 		category._programs.pull(parent);
-		category.save(function(err) {
+		category.save(function (err) {
 			if (err) {
 				throw err;
 			}
@@ -107,12 +107,12 @@ var removeProgramToChildCategory = function(parent) {
 };
 
 // Change link program
-var changeProgramToChildTransaction = function(parent) {
+var changeProgramToChildTransaction = function (parent) {
 
 	parent.populate({
-		path : '_plan',
+		path   : '_plan',
 		select : 'programUnknow'
-	}, function(err, program) {
+	}, function (err, program) {
 		if (err) {
 			throw err;
 		}
@@ -130,7 +130,7 @@ var changeProgramToChildTransaction = function(parent) {
 				_program : program._plan.programUnknow
 			}, {
 				multi : true
-			}, function(err) {
+			}, function (err) {
 				if (err) {
 					throw err;
 				}
@@ -142,7 +142,7 @@ var changeProgramToChildTransaction = function(parent) {
 module.exports = {
 
 	// Create one program
-	create : function(req, res) {
+	create     : function (req, res) {
 
 		var program = new ProgramModel();
 
@@ -155,7 +155,7 @@ module.exports = {
 		program._user = req.decoded.id;
 
 		// Query save
-		program.save(function(err) {
+		program.save(function (err) {
 			if (err) {
 				return res.json(responseService.fail('Add failed', err.message));
 			}
@@ -172,13 +172,13 @@ module.exports = {
 	},
 
 	// Update one program
-	update : function(req, res) {
+	update     : function (req, res) {
 
 		// Query find prgram by id and user
 		ProgramModel.findOne({
-			_id : req.params.program_id,
+			_id   : req.params.program_id,
 			_user : req.decoded.id
-		}, function(err, program) {
+		}, function (err, program) {
 			if (err) {
 				return res.json(responseService.fail('Update failed', err.message));
 			}
@@ -205,7 +205,7 @@ module.exports = {
 			}
 
 			// Query save
-			program.save(function(err) {
+			program.save(function (err) {
 				if (err) {
 					return res.json(responseService.fail('Update failed', err.message));
 				}
@@ -225,13 +225,13 @@ module.exports = {
 	},
 
 	// Remove one program
-	remove : function(req, res) {
+	remove     : function (req, res) {
 
 		// Query remove
 		ProgramModel.findOneAndRemove({
-			_id : req.params.program_id,
+			_id   : req.params.program_id,
 			_user : req.decoded.id
-		}, function(err, program) {
+		}, function (err, program) {
 			if (err) {
 				return res.json(responseService.fail('Remove failed', err.message));
 			}
@@ -252,13 +252,13 @@ module.exports = {
 	},
 
 	// Get programs by plan
-	allByPlanU : function(req, res) {
+	allByPlanU : function (req, res) {
 
 		// Query find programs by user and plan
 		ProgramModel.find({
 			_user : req.decoded.id,
 			_plan : req.params.plan_id
-		}, function(err, programs) {
+		}, function (err, programs) {
 			if (err) {
 				return res.json(responseService.fail('Find failed', err.message));
 			}
@@ -267,13 +267,13 @@ module.exports = {
 	},
 
 	// Get one program by id
-	getByIdU : function(req, res) {
+	getByIdU   : function (req, res) {
 
 		// Query find program by id and user
 		ProgramModel.findOne({
-			_id : req.params.program_id,
+			_id   : req.params.program_id,
 			_user : req.decoded.id
-		}, function(err, program) {
+		}, function (err, program) {
 			if (err) {
 				return res.json(responseService.fail('Find failed', err.message));
 			}

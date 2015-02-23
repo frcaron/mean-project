@@ -11,12 +11,12 @@ var responseService = require(global.__service + '/ResponseService');
 module.exports = {
 
 	// Authenticate user
-	login : function(req, res) {
+	login : function (req, res) {
 
 		// Query find user by username
 		UserModel.findOne({
 			username : req.body.username
-		}).select('_id name username password admin').exec(function(err, user) {
+		}).select('_id name username password admin').exec(function (err, user) {
 			if (err) {
 				return res.json(responseService.fail('Authentication failed', err.message));
 			}
@@ -31,10 +31,10 @@ module.exports = {
 
 			// Generate token
 			var token = jwt.sign({
-				id : user._id,
-				name : user.name,
+				id       : user._id,
+				name     : user.name,
 				username : user.username,
-				admin : user.admin
+				admin    : user.admin
 			}, tokenConfig.secret, {
 				expiresMinutes : 1440
 			});

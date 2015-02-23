@@ -2,7 +2,7 @@
 var jwt = require('jsonwebtoken');
 var tokenConfig = require(global.__config + '/token');
 
-module.exports = function(router) {
+module.exports = function (router) {
 
 	// =========================================================================================
 	// Public
@@ -13,12 +13,12 @@ module.exports = function(router) {
 	// =========================================================================================
 
 	// Token verification
-	router.use(function(req, res, next) {
+	router.use(function (req, res, next) {
 
-		var token = req.body.token || req.param('token') || req.headers['x-access-token'];
+		var token = req.body.token || req.param('token') || req.headers[ 'x-access-token' ];
 
 		if (token) {
-			jwt.verify(token, tokenConfig.secret, function(err, decoded) {
+			jwt.verify(token, tokenConfig.secret, function (err, decoded) {
 				if (!err) {
 					req.decoded = decoded;
 				}

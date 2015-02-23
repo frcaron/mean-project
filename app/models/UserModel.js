@@ -8,38 +8,38 @@ var datePlugin = require(global.__plugin + '/DatePlugin');
 
 // Schema
 var UserSchema = new Schema({
-	name : String,
+	name     : String,
 	username : {
-		type : String,
+		type     : String,
 		required : true,
-		index : {
+		index    : {
 			unique : true
 		}
 	},
 	password : {
-		type : String,
+		type     : String,
 		required : true,
-		select : false
+		select   : false
 	},
-	admin : {
-		type : Boolean,
+	admin    : {
+		type    : Boolean,
 		default : false
 	},
-	plans : [ {
+	plans    : [ {
 		type : Schema.Types.ObjectId,
-		ref : 'Plan'
+		ref  : 'Plan'
 	} ]
 });
 
 UserSchema.plugin(datePlugin);
 
-UserSchema.methods.comparePassword = function(password) {
+UserSchema.methods.comparePassword = function (password) {
 	var user = this;
 	return bcrypt.compareSync(password, user.password);
 };
 
 // Previous function
-UserSchema.pre('save', function(next) {
+UserSchema.pre('save', function (next) {
 
 	var user = this;
 
@@ -47,7 +47,7 @@ UserSchema.pre('save', function(next) {
 		return next();
 	}
 
-	bcrypt.hash(user.password, null, null, function(err, hash) {
+	bcrypt.hash(user.password, null, null, function (err, hash) {
 		if (err) {
 			return next();
 		}

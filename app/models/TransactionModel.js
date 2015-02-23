@@ -12,37 +12,37 @@ var userPlugin = require(global.__plugin + '/UserPlugin');
 
 // Schema
 var TransactionSchema = new Schema({
-	date : Date,
-	sum : {
-		type : Number,
+	date     : Date,
+	sum      : {
+		type     : Number,
 		required : true,
-		index : true
+		index    : true
 	},
-	comment : String,
+	comment  : String,
 	_program : {
 		type : Schema.Types.ObjectId,
-		ref : 'Program'
+		ref  : 'Program'
 	}
 });
 
 TransactionSchema.plugin(datePlugin);
 TransactionSchema.plugin(userPlugin);
 
-TransactionSchema.methods.findOrGenerateProgram = function(date, category_id) {
+TransactionSchema.methods.findOrGenerateProgram = function (date, category_id) {
 
 	var transaction = this;
 
 	var date_split = date.split('/');
-	var mm = date_split[1];
-	var yy = date_split[2];
+	var mm = date_split[ 1 ];
+	var yy = date_split[ 2 ];
 
 	var id;
 
 	PlanModel.findOne({
 		_user : transaction._user,
 		month : mm,
-		year : yy
-	}).populate('programs').exec(function(err, plan) {
+		year  : yy
+	}).populate('programs').exec(function (err, plan) {
 		if (err) {
 			throw new Error('TransactionSchema#findOrGenerateProgram : Find plan error / ' + err.message);
 		}
@@ -59,7 +59,7 @@ TransactionSchema.methods.findOrGenerateProgram = function(date, category_id) {
 			newPlan.year = yy;
 			newPlan._user = transaction._user;
 
-			newPlan.save(function(err) {
+			newPlan.save(function (err) {
 				if (err) {
 					throw new Error('TransactionSchema#findOrGenerateProgram : Save plan error / ' + err.message);
 				}
