@@ -38,7 +38,7 @@ module.exports = function(router) {
 		// Get all categories user
 		.get(function(req, res) {
 			categoryService.allActiveByU(req, res);
-		})
+		});
 	
 	router.route(api_prefix + '/id/:category_id')
 	

@@ -1,6 +1,6 @@
 var express = require('express');
 
-var adminRouter =  express.Router();
+var adminRouter = express.Router();
 var apiRouter = express.Router();
 var basicRouter = express.Router();
 

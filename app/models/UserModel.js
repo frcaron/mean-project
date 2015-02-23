@@ -6,20 +6,29 @@ var Schema = mongoose.Schema;
 // Inject plugin
 var datePlugin = require(global.__plugin + '/DatePlugin');
 
-
 // Schema
 var UserSchema = new Schema({
-	name 			: String,
-	username 		: { type : String, 
-						required : true, 
-						 index : { unique : true } },
-    password 		: { type : String, 
-	    				required : true, 
-	    				select : false},
-	admin			: { type : Boolean, 
-						default : false },
-	plans			: [ { type : Schema.Types.ObjectId, 
-						ref : 'Plan' } ]
+	name : String,
+	username : {
+		type : String,
+		required : true,
+		index : {
+			unique : true
+		}
+	},
+	password : {
+		type : String,
+		required : true,
+		select : false
+	},
+	admin : {
+		type : Boolean,
+		default : false
+	},
+	plans : [ {
+		type : Schema.Types.ObjectId,
+		ref : 'Plan'
+	} ]
 });
 
 UserSchema.plugin(datePlugin);
@@ -31,18 +40,18 @@ UserSchema.methods.comparePassword = function(password) {
 
 // Previous function
 UserSchema.pre('save', function(next) {
-	
+
 	var user = this;
 
-	if(!user.isModified('password')) {
+	if (!user.isModified('password')) {
 		return next();
 	}
-	
+
 	bcrypt.hash(user.password, null, null, function(err, hash) {
-		if(err) {
+		if (err) {
 			return next();
 		}
-		
+
 		user.password = hash;
 		return next();
 	});

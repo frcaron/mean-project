@@ -1,1 +1,1 @@
-{"ide":{},"plugins":{"angular":{},"chrome-apps":{},"doc_comment":{},"extjs_5.0.0":{},"gas":{},"gmaps_3.16":{},"grunt":{},"node":{},"node-express":{},"node-mongodb-native":{},"node-mongoose":{},"requirejs":{}},"libs":["browser","ecma5","jquery"]}
+{"ide":{},"plugins":{"guess-types":{},"complete_strings":{},"doc_comment":{},"chrome-apps":{},"node":{},"requirejs":{},"angular":{},"node-express":{},"extjs_5.0.0":{},"grunt":{},"node-mongodb-native":{},"node-mongoose":{}},"libs":["ecma5","browser"]}
