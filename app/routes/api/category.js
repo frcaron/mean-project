@@ -1,7 +1,6 @@
 //Inject services
 var responseService = require(global.__service + '/ResponseService');
 var categoryService = require(global.__service + '/CategoryService');
-var typeCategoryService = require(global.__service + '/TypeCategoryService');
 
 // Properties
 var api_prefix = '/categories';
@@ -20,16 +19,10 @@ module.exports = function (router) {
 
 			// Validation
 			if (!req.body.name) {
-				return res.json(responseService.fail('Add failed', 'Param "name" missing'));
+				return res.json(responseService.fail('Add failed', 'Param "name" msing'));
 			}
 			if (!req.body.type_category_id) {
 				return res.json(responseService.fail('Add failed', 'Param "type_category_id" missing'));
-			} else {
-				try {
-					typeCategoryService.isExist(req.body.type_category_id);
-				} catch (err) {
-					return res.json(responseService.fail('Add failed', err.message));
-				}
 			}
 
 			categoryService.create(req, res);

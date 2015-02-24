@@ -1,8 +1,6 @@
 //Inject services
 var responseService = require(global.__service + '/ResponseService');
 var programService = require(global.__service + '/ProgramService');
-var planService = require(global.__service + '/PlanService');
-var categoryService = require(global.__service + '/CategoryService');
 
 // Properties
 var api_prefix = '/programs';
@@ -17,21 +15,9 @@ module.exports = function (router) {
 			// Validation
 			if (!req.body.category_id) {
 				return res.json(responseService.fail('Add failed', 'Param "category_id" missing'));
-			} else {
-				try {
-					categoryService.isExist(req.body.category_id);
-				} catch (err) {
-					return res.json(responseService.fail('Add failed', err.message));
-				}
 			}
 			if (!req.body.plan_id) {
 				return res.json(responseService.fail('Add failed', 'Param "plan_id" missing'));
-			} else {
-				try {
-					planService.isExist(req.body.plan_id);
-				} catch (err) {
-					return res.json(responseService.fail('Add failed', err.message));
-				}
 			}
 
 			programService.create(req, res);

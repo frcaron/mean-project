@@ -2,10 +2,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-// Inject models
-var PlanModel = require('./PlanModel');
-var ProgramModel = require('./ProgramModel');
-
 // Inject plugin
 var datePlugin = require(global.__plugin + '/DatePlugin');
 var userPlugin = require(global.__plugin + '/UserPlugin');
@@ -28,59 +24,32 @@ var TransactionSchema = new Schema({
 TransactionSchema.plugin(datePlugin);
 TransactionSchema.plugin(userPlugin);
 
-TransactionSchema.methods.findOrGenerateProgram = function (date, category_id) {
+TransactionSchema.methods.addLinkProgram = function () {
 
-	var transaction = this;
+	this.populate('_program', function (transaction) {
+		;
+			var program = transaction._program;
+			if (!program) {
+				throw new Error('Program not found');
+			}
 
-	var date_split = date.split('/');
-	var mm = date_split[ 1 ];
-	var yy = date_split[ 2 ];
+			program.transactions.push(this);
+			program.save();
+		});
+};
 
-	var id;
+TransactionSchema.methods.removeLinkProgram = function () {
 
-	PlanModel.findOne({
-		_user : transaction._user,
-		month : mm,
-		year  : yy
-	}).populate('programs').exec(function (err, plan) {
-		if (err) {
-			throw new Error('TransactionSchema#findOrGenerateProgram : Find plan error / ' + err.message);
-		}
+	return this.populate('_program')
+		.then(function (transaction) {
+			var program = transaction._program;
+			if (!program) {
+				throw new Error('Program not found');
+			}
 
-		console.log('Plan : ' + plan.programs);
-		if (plan) {
-
-		} else if (!plan) {
-
-			// Plan unexist for this date
-			var newPlan = new PlanModel();
-
-			newPlan.month = mm;
-			newPlan.year = yy;
-			newPlan._user = transaction._user;
-
-			newPlan.save(function (err) {
-				if (err) {
-					throw new Error('TransactionSchema#findOrGenerateProgram : Save plan error / ' + err.message);
-				}
-
-				id = newPlan._id;
-			});
-		}
-
-		// Program unexist for this category
-		// var newProgram = new ProgramModel();
-		//			
-		// newProgram._category = category_id;
-		// newProgram._plan = id;
-		// newProgram._user = transaction._user;
-		//			
-		// newProgram.save(function(err) {
-		// if(err) throw new Error('TransactionSchema#findOrGenerateProgram :
-		// Save program error / ' + err.message);
-		// return newProgram._id;
-		// });
-	});
+			program.transactions.pull(this);
+			return program.save().exec();
+		});
 };
 
 // Return

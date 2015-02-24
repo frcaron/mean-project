@@ -1,94 +1,76 @@
 // Inject models
+var PlanModel = require(global.__model + '/PlanModel');
+var ProgramModel = require(global.__model + '/ProgramModel');
 var TransactionModel = require(global.__model + '/TransactionModel');
+var CategoryModel = require(global.__model + '/CategoryModel');
 
 // Inject services
 var responseService = require(global.__service + '/ResponseService');
-var categoryService = require(global.__service + '/CategoryService');
-
-// Add link transaction
-var addTransactionToParentProgram = function (child) {
-
-	child.populate('_program', function (err, transaction) {
-		if (err) {
-			throw err;
-		}
-		if (!transaction) {
-			throw new Error('Transaction');
-		}
-
-		var program = transaction._program;
-		if (!program) {
-			throw new Error('Program not found');
-		}
-
-		program.transactions.push(child);
-		program.save(function (err) {
-			if (err) {
-				throw err;
-			}
-		});
-	});
-};
-
-// Remove link transaction
-var removeTransactionToParentProgram = function (child) {
-
-	child.populate('_program', function (err, transaction) {
-		if (err) {
-			throw err;
-		}
-		if (!transaction) {
-			throw new Error('Transaction');
-		}
-
-		var program = transaction._program;
-		if (!program) {
-			throw new Error('Program not found');
-		}
-
-		program.transactions.pull(child);
-		program.save(function (err) {
-			if (err) {
-				throw err;
-			}
-		});
-	});
-};
 
 module.exports = {
 
 	// Create one transaction
 	create             : function (req, res) {
 
-		var transaction = new TransactionModel();
 
-		// Build object
-		transaction.day = req.body.date;
-		transaction.sum = req.body.sum;
-		if (req.body.comment) {
-			transaction.comment = req.body.comment;
-		}
-		transaction._user = req.decoded.id;
-
-		try {
-			transaction._program = transaction.findOrGenerateProgram(req.body.date, req.body.category_id);
-		} catch (err) {
-			return res.json(responseService.fail('Add failed', err.message));
-		}
-
-		// Query save
-		transaction.save(function (err) {
+		// Validate category id
+		CategoryModel.findById(req.body.category_id, '_id', function (err, category) {
 			if (err) {
 				return res.json(responseService.fail('Add failed', err.message));
 			}
-
-			try {
-				addTransactionToParentProgram(transaction);
-			} catch (err) {
-				return res.json(responseService.fail('Add failed', err.message));
+			if (!category) {
+				return res.json(responseService.fail('Add failed', 'Category id invalid'));
 			}
 
-			return res.json(responseService.success('Add success', transaction._id));
+			var transaction = new TransactionModel();
+
+			// Build object
+			transaction.day = req.body.date;
+			transaction.sum = req.body.sum;
+			if (req.body.comment) {
+				transaction.comment = req.body.comment;
+			}
+			transaction._user = req.decoded.id;
+
+			var date_split = req.body.date.split('/');
+			var mm = date_split[1];
+			var yy = date_split[2];
+
+			var promise = PlanModel.findOne({
+				_user : transaction._user,
+				month : mm,
+				year  : yy
+			}).populate('programs', '_id category').exec();
+
+			promise.then(function (plan) {
+
+				if (!plan) {
+					throw new Error('Plan not exist');
+				}
+
+				return ProgramModel.findOne({
+					_id      : { $in : plan.programs },
+					category : req.body.category_id
+				}).exec();
+
+			}).then(function (program) {
+
+				if (!program) {
+					throw new Error('Program not exist');
+				}
+
+				transaction._program = program._id;
+
+				transaction.save(function (err) {
+					if (!err) {
+						return res.json(responseService.fail('Add failed', err.message));
+					}
+
+					transaction.addLinkProgram().then(function () {
+						return res.json(responseService.success('Add success', transaction._id));
+					});
+				});
+			});
 		});
 	},
 
@@ -120,12 +102,21 @@ module.exports = {
 				if (req.body.comment) {
 					transaction.comment = req.body.comment;
 				}
-				if (!req.body.category_id.equals(transaction._program.category) || !req.body.date.equals(transaction.date)) {
+				if (!req.body.category_id.equals(transaction._program.category) ||
+					!req.body.date.equals(transaction.date)) {
 
 					try {
-						categoryService.isExist(req.body.category_id);
-						transaction._program = transaction.findOrGenerateProgram(
-							transaction.date, req.body.category_id);
+						// Validate category id
+						CategoryModel.findById(req.body.category_id, '_id', function (err, category) {
+							if (err) {
+								throw err;
+							}
+							if (!category) {
+								throw new Error('Category id invalid');
+							}
+						});
+
+						// TODO
 					} catch (err) {
 						return res.json(responseService.fail('Update failed', err.message));
 					}

@@ -211,18 +211,5 @@ module.exports = {
 			}
 			return res.json(responseService.success('Find success', plan));
 		});
-	},
-
-	// Test plan existing
-	isExist : function (plan_id) {
-
-		PlanModel.findById(plan_id, '_id', function (err, plan) {
-			if (err) {
-				throw new Error('Find plan failed');
-			}
-			if (!plan) {
-				throw new Error('Plan id invalid');
-			}
-		});
 	}
 };

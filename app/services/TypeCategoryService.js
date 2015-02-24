@@ -89,18 +89,5 @@ module.exports = {
 			}
 			return res.json(responseService.success('Find success', typeCategory));
 		});
-	},
-
-	// Test type category existing
-	isExist      : function (type_category_id) {
-
-		TypeCategoryModel.findById(type_category_id, '_id', function (err, typeCategory) {
-			if (err) {
-				throw new Error('Find type category failed');
-			}
-			if (!typeCategory) {
-				throw new Error('Type category id invalid');
-			}
-		});
 	}
 };

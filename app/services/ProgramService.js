@@ -1,10 +1,11 @@
 // Inject models
+var PlanModel = require(global.__model + '/PlanModel');
 var ProgramModel = require(global.__model + '/ProgramModel');
 var TransactionModel = require(global.__model + '/TransactionModel');
+var CategoryModel = require(global.__model + '/CategoryModel');
 
 // Inject services
 var responseService = require(global.__service + '/ResponseService');
-var categoryService = require(global.__service + '/CategoryService');
 
 // Add link program
 var addProgramToParentPlan = function (child) {
@@ -144,30 +145,50 @@ module.exports = {
 	// Create one program
 	create     : function (req, res) {
 
-		var program = new ProgramModel();
-
-		// Build object
-		program.category = req.body.category_id;
-		if (req.body.sum) {
-			program.sum = req.body.sum;
-		}
-		program._plan = req.body.plan_id;
-		program._user = req.decoded.id;
-
-		// Query save
-		program.save(function (err) {
+		// Validate category id
+		CategoryModel.findById(req.body.category_id, '_id', function (err, category) {
 			if (err) {
 				return res.json(responseService.fail('Add failed', err.message));
 			}
-
-			try {
-				addProgramToParentPlan(program);
-				addProgramToChildCategory(program);
-			} catch (err) {
-				return res.json(responseService.fail('Add failed', err.message));
+			if (!category) {
+				return res.json(responseService.fail('Add failed', 'Category id invalid'));
 			}
 
-			return res.json(responseService.success('Add success', program._id));
+			// Validate plan id
+			PlanModel.findById(req.body.plan_id, '_id', function (err, plan) {
+				if (err) {
+					return res.json(responseService.fail('Add failed', err.message));
+				}
+				if (!plan) {
+					return res.json(responseService.fail('Add failed', 'Plan id invalid'));
+				}
+
+				var program = new ProgramModel();
+
+				// Build object
+				program.category = req.body.category_id;
+				if (req.body.sum) {
+					program.sum = req.body.sum;
+				}
+				program._plan = req.body.plan_id;
+				program._user = req.decoded.id;
+
+				// Query save
+				program.save(function (err) {
+					if (err) {
+						return res.json(responseService.fail('Add failed', err.message));
+					}
+
+					try {
+						addProgramToParentPlan(program);
+						addProgramToChildCategory(program);
+					} catch (err) {
+						return res.json(responseService.fail('Add failed', err.message));
+					}
+
+					return res.json(responseService.success('Add success', program._id));
+				});
+			});
 		});
 	},
 
@@ -193,7 +214,17 @@ module.exports = {
 			if (req.body.category_id) {
 
 				try {
-					categoryService.isExist(req.body.category_id);
+
+					// Validate category id
+					CategoryModel.findById(req.body.category_id, '_id', function (err, category) {
+						if (err) {
+							throw err;
+						}
+						if (!category) {
+							throw new Error('Category id invalid');
+						}
+					});
+
 				} catch (err) {
 					return res.json(responseService.fail('Update failed', err.message));
 				}
@@ -212,8 +243,8 @@ module.exports = {
 
 				try {
 					if (program.isModified('category')) {
-						categoryService.removeParentProgram(last_program._category, last_program);
-						categoryService.addParentProgram(program._category, program);
+						removeProgramToChildCategory(last_program);
+						addProgramToChildCategory(program);
 					}
 				} catch (err) {
 					return res.json(responseService.fail('Update failed', err.message));

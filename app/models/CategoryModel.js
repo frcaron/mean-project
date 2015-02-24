@@ -21,10 +21,10 @@ var CategorySchema = new Schema({
 		type    : Boolean,
 		default : true
 	},
-	_programs : [ {
+	_programs : [{
 		type : Schema.Types.ObjectId,
 		ref  : 'Program'
-	} ]
+	}]
 });
 
 CategorySchema.plugin(datePlugin);

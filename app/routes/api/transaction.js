@@ -1,7 +1,6 @@
 //Inject services
 var responseService = require(global.__service + '/ResponseService');
 var transactionService = require(global.__service + '/TransactionService');
-var categoryService = require(global.__service + '/CategoryService');
 
 // Properties
 var api_prefix = '/transactions';
@@ -22,13 +21,6 @@ module.exports = function (router) {
 			}
 			if (!req.body.category_id) {
 				return res.json(responseService.fail('Add failed', 'Param "category_id" missing'));
-			} else {
-
-				try {
-					categoryService.isExist(req.body.category_id);
-				} catch (err) {
-					return res.json(responseService.fail('Add failed', err.message));
-				}
 			}
 
 			transactionService.create(req, res);

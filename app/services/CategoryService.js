@@ -1,5 +1,6 @@
 // Inject models
 var CategoryModel = require(global.__model + '/CategoryModel');
+var TypeCategoryModel = require(global.__model + '/TypeCategoryModel');
 
 // Inject services
 var responseService = require(global.__service + '/ResponseService');
@@ -9,25 +10,35 @@ module.exports = {
 	// Create one category
 	create             : function (req, res) {
 
-		var category = new CategoryModel();
-
-		// Build object
-		category.name = req.body.name;
-		category.type = req.body.type_category_id;
-		category._user = req.decoded.id;
-
-		// Validate
-		category.validate(function (err) {
+		// Validate category id
+		TypeCategoryModel.findById(req.body.type_category_id, '_id', function (err, typeCategory) {
 			if (err) {
 				return res.json(responseService.fail('Add failed', err.message));
 			}
+			if (!typeCategory) {
+				return res.json(responseService.fail('Add failed', 'Type category id invalid'));
+			}
 
-			// Query save
-			category.save(function (err) {
+			var category = new CategoryModel();
+
+			// Build object
+			category.name = req.body.name;
+			category.type = req.body.type_category_id;
+			category._user = req.decoded.id;
+
+			// Validate
+			category.validate(function (err) {
 				if (err) {
 					return res.json(responseService.fail('Add failed', err.message));
 				}
-				return res.json(responseService.success('Add success', category._id));
+
+				// Query save
+				category.save(function (err) {
+					if (err) {
+						return res.json(responseService.fail('Add failed', err.message));
+					}
+					return res.json(responseService.success('Add success', category._id));
+				});
 			});
 		});
 	},
@@ -140,19 +151,6 @@ module.exports = {
 				return res.json(responseService.fail('Find failed', err.message));
 			}
 			return res.json(responseService.success('Find success', category));
-		});
-	},
-
-	// Test category existing
-	isExist            : function (category_id) {
-
-		CategoryModel.findById(category_id, '_id', function (err, category) {
-			if (err) {
-				throw new Error('Find category failed');
-			}
-			if (!category) {
-				throw new Error('Category id invalid');
-			}
 		});
 	}
 };
