@@ -53,6 +53,20 @@ module.exports = {
 		});
 	},
 
+	// Remove one type category
+	remove		: function(req, res) {
+
+		// Query remove
+		TypeCategoryModel.remove({
+			_id : req.params.type_category_id
+		}, function (err) {
+			if (err) {
+				return res.json(responseService.fail('Remove failed', err.message));
+			}
+			return res.json(responseService.success('Remove success'));
+		});
+	},
+
 	// Get all type category
 	allByU       : function (req, res) {
 

@@ -25,5 +25,10 @@ module.exports = function (router) {
 		// Update one type category
 		.put(function (req, res) {
 			typeCategoryService.update(req, res);
+		})
+
+		// Delete one type category
+		.delete(function (req, res) {
+			typeCategoryService.remove(req, res);
 		});
 };
