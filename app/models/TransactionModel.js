@@ -27,29 +27,21 @@ TransactionSchema.plugin(userPlugin);
 TransactionSchema.methods.addLinkProgram = function () {
 
 	this.populate('_program', function (transaction) {
-		;
-			var program = transaction._program;
-			if (!program) {
-				throw new Error('Program not found');
-			}
+		var program = transaction._program;
 
-			program.transactions.push(this);
-			program.save();
-		});
+		program.transactions.push(transaction);
+		program.save();
 };
 
 TransactionSchema.methods.removeLinkProgram = function () {
 
-	return this.populate('_program')
-		.then(function (transaction) {
-			var program = transaction._program;
-			if (!program) {
-				throw new Error('Program not found');
-			}
+	});this.populate('_program', function (transaction) {
+		var program = transaction._program;
 
-			program.transactions.pull(this);
-			return program.save().exec();
-		});
+
+		program.transactions.pull(transaction);
+		program.save();
+	});
 };
 
 // Return
