@@ -7,15 +7,20 @@ var api_prefix = '/users';
 
 module.exports = function (router) {
 
-	router.route(api_prefix + '/:user_id')
+	router.route(api_prefix)
+
+		// Get one user
+		.get(function (req, res) {
+			userService.getById(req, res);
+		})
 
 		// Update one user
 		.put(function (req, res) {
-
-			if (!req.params.user_id) {
-				return res.json(responseService.fail('Give permission failed', 'Param "user_id" missing'));
-			}
-
-			userService.giveAdmin(req, res);
+			userService.update(req, res);
 		})
+
+		// Delete one user
+		.delete(function (req, res) {
+			userService.remove(req, res);
+		});
 };

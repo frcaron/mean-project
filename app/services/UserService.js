@@ -20,7 +20,7 @@ module.exports = {
 		user.name = req.body.name;
 		user.username = req.body.username;
 		user.password = req.body.password;
-		if (req.body.admin) {
+		if (req.body.admin) { // TODO remove permission
 			user.admin = req.body.admin;
 		}
 
@@ -74,7 +74,7 @@ module.exports = {
 	update  : function (req, res) {
 
 		// Query find user by id
-		UserModel.findById(req.params.user_id, function (err, user) {
+		UserModel.findById(req.decoded.id, function (err, user) {
 			if (err) {
 				return res.json(responseService.fail('Update failed', err.message));
 			}
@@ -92,9 +92,6 @@ module.exports = {
 			if (req.body.password) {
 				user.password = req.body.password;
 			}
-			if (req.body.admin) {
-				user.admin = req.body.admin;
-			}
 
 			// Query save
 			user.save(function (err) {
@@ -111,7 +108,7 @@ module.exports = {
 
 		// Query remove
 		TransactionModel.remove({
-			_user : req.params.user_id
+			_user : req.decoded.id
 		}, function (err) {
 			if (err) {
 				return res.json(responseService.fail('Remove failed', err.message));
@@ -119,7 +116,7 @@ module.exports = {
 		});
 
 		CategoryModel.remove({
-			_user : req.params.user_id
+			_user : req.decoded.id
 		}, function (err) {
 			if (err) {
 				return res.json(responseService.fail('Remove failed', err.message));
@@ -127,7 +124,7 @@ module.exports = {
 		});
 
 		ProgramModel.remove({
-			_user : req.params.user_id
+			_user : req.decoded.id
 		}, function (err) {
 			if (err) {
 				return res.json(responseService.fail('Remove failed', err.message));
@@ -135,7 +132,7 @@ module.exports = {
 		});
 
 		PlanModel.remove({
-			_user : req.params.user_id
+			_user : req.decoded.id
 		}, function (err) {
 			if (err) {
 				return res.json(responseService.fail('Remove failed', err.message));
@@ -143,7 +140,7 @@ module.exports = {
 		});
 
 		UserModel.remove({
-			_id : req.params.user_id
+			_id : req.decoded.id
 		}, function (err) {
 			if (err) {
 				return res.json(responseService.fail('Remove failed', err.message));
@@ -169,11 +166,32 @@ module.exports = {
 	getById : function (req, res) {
 
 		// Query find user by id
-		UserModel.findById(req.params.user_id, function (err, user) {
+		UserModel.findById(req.decoded.id, function (err, user) {
 			if (err) {
 				return res.json(responseService.fail('Find failed', err.message));
 			}
 			return res.json(responseService.success('Find success', user));
+		});
+	}
+
+	// Set permission
+	giveAdmin : function (req, res) {
+
+		// Query find user by id
+		UserModel.findById(req.params.user_id, function (err, user) {
+			if (err) {
+				return res.json(responseService.fail('Give permission failed', err.message));
+			}
+
+			user.admin = true;
+
+			// Query save
+			user.save(function (err) {
+				if (err) {
+					return res.json(responseService.fail('Give permission failed', err.message));
+				}
+				return res.json(responseService.success('Give permission success'));
+			});
 		});
 	}
 };

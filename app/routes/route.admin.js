@@ -27,9 +27,6 @@ module.exports = function (router) {
 		next();
 	});
 
-	// TODO move private
-	require('./admin/user')(router);
-
 	// =========================================================================================
 	// Middleware
 	// =========================================================================================
@@ -65,4 +62,5 @@ module.exports = function (router) {
 	// =========================================================================================
 
 	require('./admin/typecategory')(router);
+	require('./admin/user')(router);
 };

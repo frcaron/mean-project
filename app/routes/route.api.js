@@ -56,6 +56,7 @@ module.exports = function (router) {
 	// =========================================================================================
 
 	require('./api/session')(router);
+	require('./api/user-unlog')(router);
 
 	// =========================================================================================
 	// Middleware
@@ -86,6 +87,7 @@ module.exports = function (router) {
 	// Private
 	// =========================================================================================
 
+	require('./api/user-log')(router);
 	require('./api/plan')(router);
 	require('./api/program')(router);
 	require('./api/transaction')(router);
