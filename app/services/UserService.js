@@ -149,7 +149,7 @@ module.exports = {
 			}
 			return res.json(responseService.success('Find success', user));
 		});
-	}
+	},
 
 	// Set permission
 	giveAdmin : function (req, res) {
