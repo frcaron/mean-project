@@ -12,7 +12,6 @@ module.exports = {
 	// Create one transaction
 	create             : function (req, res) {
 
-
 		// Validate category id
 		CategoryModel.findById(req.body.category_id, '_id', function (err, category) {
 			if (err) {
@@ -66,9 +65,9 @@ module.exports = {
 						return res.json(responseService.fail('Add failed', err.message));
 					}
 
-					transaction.addLinkProgram().then(function () {
-						return res.json(responseService.success('Add success', transaction._id));
-					});
+					transaction.addLinkProgram();
+
+					return res.json(responseService.success('Add success', transaction._id));
 				});
 			});
 		});

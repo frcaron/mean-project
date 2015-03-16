@@ -39,7 +39,6 @@ TransactionSchema.methods.removeLinkProgram = function () {
 	this.populate('_program', function (transaction) {
 		var program = transaction._program;
 
-
 		program.transactions.pull(transaction);
 		program.save();
 	});
