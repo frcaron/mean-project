@@ -1,7 +1,6 @@
 // Inject models
 var PlanModel = require(global.__model + '/PlanModel');
 var ProgramModel = require(global.__model + '/ProgramModel');
-var TransactionModel = require(global.__model + '/TransactionModel');
 var CategoryModel = require(global.__model + '/CategoryModel');
 
 // Inject services
@@ -70,28 +69,9 @@ module.exports = {
 				return res.json(responseService.fail('Update failed', 'Program not found'));
 			}
 
-			var last_program = program;
-
 			// Build object
 			if (req.body.category_id) {
-
-				try { // TODO 
-
-					// Validate category id
-					CategoryModel.findById(req.body.category_id, '_id', function (err, category) {
-						if (err) {
-							throw err;
-						}
-						if (!category) {
-							throw new Error('Category id invalid');
-						}
-					});
-
-				} catch (err) {
-					return res.json(responseService.fail('Update failed', err.message));
-				}
-
-				program.category = req.body.category_id;
+				program.removeLinkCategory();
 			}
 			if (req.body.sum) {
 				program.sum = req.body.sum;
@@ -104,8 +84,9 @@ module.exports = {
 				}
 
 				if (program.isModified('category')) {
-					last_program.removeLinkCategory();
+					program.category = req.body.category_id;
 					program.addLinkCategory();
+					program.save().exec();
 				}
 
 				return res.json(responseService.success('Update success'));

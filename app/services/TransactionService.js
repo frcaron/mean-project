@@ -114,6 +114,7 @@ module.exports = {
 					}).exec();
 
 					promise.then(function (category) {
+
 						if (!category) {
 							return res.json(responseService.success('Update success but no link program'));
 						}
@@ -127,6 +128,7 @@ module.exports = {
 						}).populate('programs', '_id category').exec();
 
 					}).then(function (plan) {
+
 						if (!plan) {
 							return res.json(responseService.success('Update success but no link program'));
 						}
@@ -134,15 +136,15 @@ module.exports = {
 						return ProgramModel.findOne({
 							_plan    : plan._id,
 							category : req.body.category_id
-						})
-							.exec();
+						}).exec();
 
 					}).then(function (program) {
+
 						if (!program) {
 							return res.json(responseService.success('Update success but no link program'));
 						}
 
-						transaction.save();
+						transaction.save().exec();
 
 						return res.json(responseService.success('Update success'));
 					});
