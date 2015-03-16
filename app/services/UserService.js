@@ -39,7 +39,7 @@ module.exports = {
 
 				newTypeCategory.type = 'unknow';
 				newTypeCategory.active = false;
-				newTypeCategory.save();
+				newTypeCategory.save().exec();
 
 				id = newTypeCategory._id;
 			} else {
@@ -128,7 +128,7 @@ module.exports = {
 	},
 
 	// Get all users
-	all       : function (req, res) {
+	all       : function (res) {
 
 		// Query find users
 		UserModel.find(function (err, users) {

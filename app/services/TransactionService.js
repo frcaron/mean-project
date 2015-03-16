@@ -79,7 +79,7 @@ module.exports = {
 			_user : req.decoded.id
 		}).populate('_program', 'category').exec();
 
-		promise.then(function (err, transaction) {
+		promise.then(function (transaction) {
 
 			if (!transaction) {
 				return res.json(responseService.fail('Update failed', 'Transaction not found'));
@@ -108,7 +108,7 @@ module.exports = {
 
 				if (transaction.isModified('_program')) {
 
-					var promise = CategoryModel.findOne({
+					promise = CategoryModel.findOne({
 						_id   : req.body.category_id,
 						_user : req.decoded.id
 					}).exec();
