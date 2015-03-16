@@ -86,9 +86,6 @@ module.exports = {
 			if (req.body.name) {
 				user.name = req.body.name;
 			}
-			if (req.body.username) {
-				user.username = req.body.username;
-			}
 			if (req.body.password) {
 				user.password = req.body.password;
 			}
@@ -109,43 +106,23 @@ module.exports = {
 		// Query remove
 		TransactionModel.remove({
 			_user : req.decoded.id
-		}, function (err) {
-			if (err) {
-				return res.json(responseService.fail('Remove failed', err.message));
-			}
-		});
+		}).exec();
 
 		CategoryModel.remove({
 			_user : req.decoded.id
-		}, function (err) {
-			if (err) {
-				return res.json(responseService.fail('Remove failed', err.message));
-			}
-		});
+		}).exec();
 
 		ProgramModel.remove({
 			_user : req.decoded.id
-		}, function (err) {
-			if (err) {
-				return res.json(responseService.fail('Remove failed', err.message));
-			}
-		});
+		}.exec());
 
 		PlanModel.remove({
 			_user : req.decoded.id
-		}, function (err) {
-			if (err) {
-				return res.json(responseService.fail('Remove failed', err.message));
-			}
-		});
+		}.exec());
 
 		UserModel.remove({
 			_id : req.decoded.id
-		}, function (err) {
-			if (err) {
-				return res.json(responseService.fail('Remove failed', err.message));
-			}
-		});
+		}.exec());
 
 		return res.json(responseService.success('Remove success'));
 	},

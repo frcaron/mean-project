@@ -55,8 +55,8 @@ module.exports = function (router) {
 	// Public
 	// =========================================================================================
 
-	require('./api/session')(router);
-	require('./api/user-unlog')(router);
+	require('./api/unlog/session')(router);
+	require('./api/unlog/user')(router);
 
 	// =========================================================================================
 	// Middleware
@@ -87,11 +87,11 @@ module.exports = function (router) {
 	// Private
 	// =========================================================================================
 
-	require('./api/user-log')(router);
-	require('./api/plan')(router);
-	require('./api/program')(router);
-	require('./api/transaction')(router);
-	require('./api/category')(router);
-	require('./api/typecategory')(router);
-	require('./api/me')(router);
+	require('./api/log/user-log')(router);
+	require('./api/log/plan')(router);
+	require('./api/log/program')(router);
+	require('./api/log/transaction')(router);
+	require('./api/log/category')(router);
+	require('./api/log/typecategory')(router);
+	require('./api/log/me')(router);
 };

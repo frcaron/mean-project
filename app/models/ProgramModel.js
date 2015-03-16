@@ -36,5 +36,67 @@ ProgramSchema.index({
 	unique : true
 });
 
+ProgramSchema.methods.addLinkPlan = function () {
+
+	this.populate('_plan', function (program) {
+		var plan = program._plan;
+
+		plan.programs.push(program);
+		plan.save();
+	});
+};
+
+ProgramSchema.methods.removeLinkPlan = function () {
+
+	this.populate('_plan', function (program) {
+		var plan = program._plan;
+
+		plan.programs.pull(program);
+		plan.save();
+	});
+};
+
+ProgramSchema.methods.addLinkCategory = function () {
+
+	this.populate('category', function (program) {
+		var category = program.category;
+
+		category._programs.push(program);
+		category.save();
+	});
+};
+
+ProgramSchema.methods.removeLinkCategory = function () {
+
+	this.populate('category', function (program) {
+		var category = program.category;
+
+		category._programs.pull(program);
+		category.save();
+	});
+};
+
+ProgramSchema.methods.resetLinkTransaction = function () {
+
+	this.populate({
+		path   : '_plan',
+		select : 'programUnknow'
+	}, function (program) {
+		var transactions = program.transactions;
+		
+		if (transactions) {
+			TransactionModel.update({
+				_id : {
+					$in : transactions
+				}
+			}, {
+				_program : program._plan.programUnknow
+			}, {
+				multi : true
+			}).exec();
+		}
+	});
+};
+
 // Return
 module.exports = mongoose.model('Program', ProgramSchema);

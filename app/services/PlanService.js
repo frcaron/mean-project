@@ -8,56 +8,6 @@ var TypeCategoryModel = require(global.__model + '/TypeCategoryModel');
 // Inject services
 var responseService = require(global.__service + '/ResponseService');
 
-// Add link plan
-var addPlanToParentUser = function (child) {
-
-	child.populate('_user', function (err, plan) {
-		if (err) {
-			throw err;
-		}
-		if (!plan) {
-			throw new Error('Plan not found');
-		}
-
-		var user = plan._user;
-		if (!user) {
-			throw new Error('User not found');
-		}
-
-		user.plans.push(child);
-		user.save(function (err) {
-			if (err) {
-				throw err;
-			}
-		});
-	});
-};
-
-// Remove link plan
-var removePlanToParentUser = function (child, plan) {
-
-	child.populate('_user', function (err) {
-		if (err) {
-			throw err;
-		}
-		if (!plan) {
-			throw new Error('Plan not found');
-		}
-
-		var user = plan._user;
-		if (!user) {
-			throw new Error('User not found');
-		}
-
-		user.plans.pull(child);
-		user.save(function (err) {
-			if (err) {
-				throw err;
-			}
-		});
-	});
-};
-
 module.exports = {
 
 	// Create one plan
@@ -76,13 +26,7 @@ module.exports = {
 				return res.json(responseService.fail('Add failed', err.message));
 			}
 
-			try {
-				addPlanToParentUser(plan);
-			} catch (err) {
-				return res.json(responseService.fail('Add failed', err.message));
-			}
-
-			var programUnknow = new ProgramModel();
+			plan.addLinkUser();
 
 			// Query find category user unknow
 			CategoryModel.findOne({
@@ -95,6 +39,8 @@ module.exports = {
 				if (!category) {
 					return res.json(responseService.fail('Add failed', 'Category not found'));
 				}
+
+				var programUnknow = new ProgramModel();
 
 				// Build object
 				programUnknow.category = category._id;
@@ -171,11 +117,7 @@ module.exports = {
 				return res.json(responseService.fail('Remove failed', 'Plan not found'));
 			}
 
-			try {
-				removePlanToParentUser(plan);
-			} catch (err) {
-				return res.json(responseService.fail('Remove failed', err.message));
-			}
+			plan.removeLinkUser();
 
 			// TODO Remove programs and programUnknow link to category
 			// TODO Remove transactions

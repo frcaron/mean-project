@@ -7,139 +7,6 @@ var CategoryModel = require(global.__model + '/CategoryModel');
 // Inject services
 var responseService = require(global.__service + '/ResponseService');
 
-// Add link program
-var addProgramToParentPlan = function (child) {
-
-	child.populate('_plan', function (err, program) {
-		if (err) {
-			throw err;
-		}
-		if (!program) {
-			throw new Error('Program not found');
-		}
-
-		var plan = program._plan;
-		if (!plan) {
-			throw new Error('Plan not found');
-		}
-
-		plan.programs.push(child);
-		plan.save(function (err) {
-			if (err) {
-				throw err;
-			}
-		});
-	});
-};
-
-// Remove link program
-var removeProgramToParentPlan = function (child) {
-
-	child.populate('_plan', function (err, program) {
-		if (err) {
-			throw err;
-		}
-		if (!program) {
-			throw new Error('Program not found');
-		}
-
-		var plan = program._plan;
-		if (!plan) {
-			throw new Error('Plan not found');
-		}
-
-		plan.programs.pull(child);
-		plan.save(function (err) {
-			if (err) {
-				throw err;
-			}
-		});
-	});
-};
-
-// Add link program
-var addProgramToChildCategory = function (parent) {
-
-	parent.populate('category', function (err, program) {
-		if (err) {
-			throw err;
-		}
-		if (!program) {
-			throw new Error('Program not found');
-		}
-
-		var category = program.category;
-		if (!category) {
-			throw new Error('Category not found');
-		}
-
-		category._programs.push(parent);
-		category.save(function (err) {
-			if (err) {
-				throw err;
-			}
-		});
-	});
-};
-
-// Remove link program
-var removeProgramToChildCategory = function (parent) {
-
-	parent.populate('category', function (err, program) {
-		if (err) {
-			throw err;
-		}
-		if (!program) {
-			throw new Error('Program not found');
-		}
-
-		var category = program.category;
-		if (!category) {
-			throw new Error('Category not found');
-		}
-
-		category._programs.pull(parent);
-		category.save(function (err) {
-			if (err) {
-				throw err;
-			}
-		});
-	});
-};
-
-// Change link program
-var changeProgramToChildTransaction = function (parent) {
-
-	parent.populate({
-		path   : '_plan',
-		select : 'programUnknow'
-	}, function (err, program) {
-		if (err) {
-			throw err;
-		}
-		if (!program) {
-			throw new Error('Program not found');
-		}
-
-		var transactions = program.transactions;
-		if (transactions) {
-			TransactionModel.update({
-				_id : {
-					$in : transactions
-				}
-			}, {
-				_program : program._plan.programUnknow
-			}, {
-				multi : true
-			}, function (err) {
-				if (err) {
-					throw err;
-				}
-			});
-		}
-	});
-};
-
 module.exports = {
 
 	// Create one program
@@ -179,12 +46,8 @@ module.exports = {
 						return res.json(responseService.fail('Add failed', err.message));
 					}
 
-					try {
-						addProgramToParentPlan(program);
-						addProgramToChildCategory(program);
-					} catch (err) {
-						return res.json(responseService.fail('Add failed', err.message));
-					}
+					program.addLinkPlan();
+					program.addLinkCategory();
 
 					return res.json(responseService.success('Add success', program._id));
 				});
@@ -203,7 +66,6 @@ module.exports = {
 			if (err) {
 				return res.json(responseService.fail('Update failed', err.message));
 			}
-
 			if (!program) {
 				return res.json(responseService.fail('Update failed', 'Program not found'));
 			}
@@ -213,7 +75,7 @@ module.exports = {
 			// Build object
 			if (req.body.category_id) {
 
-				try {
+				try { // TODO 
 
 					// Validate category id
 					CategoryModel.findById(req.body.category_id, '_id', function (err, category) {
@@ -241,13 +103,9 @@ module.exports = {
 					return res.json(responseService.fail('Update failed', err.message));
 				}
 
-				try {
-					if (program.isModified('category')) {
-						removeProgramToChildCategory(last_program);
-						addProgramToChildCategory(program);
-					}
-				} catch (err) {
-					return res.json(responseService.fail('Update failed', err.message));
+				if (program.isModified('category')) {
+					last_program.removeLinkCategory();
+					program.addLinkCategory();
 				}
 
 				return res.json(responseService.success('Update success'));
@@ -270,13 +128,9 @@ module.exports = {
 				return res.json(responseService.fail('Remove failed', 'Program not found'));
 			}
 
-			try {
-				removeProgramToParentPlan(program);
-				removeProgramToChildCategory(program);
-				changeProgramToChildTransaction(program);
-			} catch (err) {
-				return res.json(responseService.fail('Remove failed', err.message));
-			}
+			program.removeLinkPlan();
+			program.removeLinkCategory();
+			program.resetLinkTransaction();
 
 			return res.json(responseService.success('Remove success'));
 		});

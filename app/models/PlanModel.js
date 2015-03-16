@@ -41,5 +41,25 @@ PlanSchema.index({
 	unique : true
 });
 
+PlanSchema.methods.addLinkUser = function () {
+
+	this.populate('_user', function (plan) {
+		var user = plan._user;
+
+		user.plans.push(plan);
+		user.save();
+	});
+};
+
+PlanSchema.methods.removeLinkUser = function () {
+
+	this.populate('_user', function (plan) {
+		var user = plan._user;
+
+		user.plans.pull(plan);
+		user.save();
+	});
+};
+
 // Return
 module.exports = mongoose.model('Plan', PlanSchema);
