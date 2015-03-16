@@ -26,18 +26,23 @@ TransactionSchema.plugin(userPlugin);
 
 TransactionSchema.methods.addLinkProgram = function () {
 
-	this.populate('_program', function (err, transaction) {
-			transaction._program.transactions.push(transaction);
-			transaction._program.save();
-		});
+	this.populate('_program', function (transaction) {
+		var program = transaction._program;
+
+		program.transactions.push(transaction);
+		program.save();
+	});
 };
 
 TransactionSchema.methods.removeLinkProgram = function () {
 
-	this.populate('_program',function (err, transaction) {
-			transaction._program.transactions.pull(transaction);
-			transaction._program.save();
-		});
+	this.populate('_program', function (transaction) {
+		var program = transaction._program;
+
+
+		program.transactions.pull(transaction);
+		program.save();
+	});
 };
 
 // Return
