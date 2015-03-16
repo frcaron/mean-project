@@ -54,7 +54,7 @@ module.exports = {
 	},
 
 	// Remove one type category
-	remove		: function(req, res) {
+	remove       : function (req, res) {
 
 		// Query remove
 		TypeCategoryModel.remove({

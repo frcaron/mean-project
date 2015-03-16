@@ -8,25 +8,25 @@ var userPlugin = require(global.__plugin + '/UserPlugin');
 
 // Schema
 var TransactionSchema = new Schema({
-	date: Date,
-	sum: {
-		type: Number,
-		required: true,
-		index: true
+	date     : Date,
+	sum      : {
+		type     : Number,
+		required : true,
+		index    : true
 	},
-	comment: String,
-	_program: {
-		type: Schema.Types.ObjectId,
-		ref: 'Program'
+	comment  : String,
+	_program : {
+		type : Schema.Types.ObjectId,
+		ref  : 'Program'
 	}
 });
 
 TransactionSchema.plugin(datePlugin);
 TransactionSchema.plugin(userPlugin);
 
-TransactionSchema.methods.addLinkProgram = function() {
+TransactionSchema.methods.addLinkProgram = function () {
 
-	this.populate('_program', function(transaction) {
+	this.populate('_program', function (transaction) {
 		var program = transaction._program;
 
 		program.transactions.push(transaction);
@@ -34,9 +34,9 @@ TransactionSchema.methods.addLinkProgram = function() {
 	});
 };
 
-TransactionSchema.methods.removeLinkProgram = function() {
+TransactionSchema.methods.removeLinkProgram = function () {
 
-	this.populate('_program', function(transaction) {
+	this.populate('_program', function (transaction) {
 		var program = transaction._program;
 
 		program.transactions.pull(transaction);

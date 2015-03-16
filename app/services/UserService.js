@@ -12,7 +12,7 @@ var responseService = require(global.__service + '/ResponseService');
 module.exports = {
 
 	// Create one user
-	create  : function (req, res) {
+	create    : function (req, res) {
 
 		var user = new UserModel();
 
@@ -71,7 +71,7 @@ module.exports = {
 	},
 
 	// Update one user
-	update  : function (req, res) {
+	update    : function (req, res) {
 
 		// Query find user by id
 		UserModel.findById(req.decoded.id, function (err, user) {
@@ -101,7 +101,7 @@ module.exports = {
 	},
 
 	// Remove one user
-	remove  : function (req, res) {
+	remove    : function (req, res) {
 
 		// Query remove
 		TransactionModel.remove({
@@ -128,7 +128,7 @@ module.exports = {
 	},
 
 	// Get all users
-	all     : function (req, res) {
+	all       : function (req, res) {
 
 		// Query find users
 		UserModel.find(function (err, users) {
@@ -140,7 +140,7 @@ module.exports = {
 	},
 
 	// Get one user by id
-	getById : function (req, res) {
+	getById   : function (req, res) {
 
 		// Query find user by id
 		UserModel.findById(req.decoded.id, function (err, user) {

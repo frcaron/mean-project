@@ -1,14 +1,11 @@
 // Inject models
 var PlanModel = require(global.__model + '/PlanModel');
 var ProgramModel = require(global.__model + '/ProgramModel');
-var TransactionModel = require(global.__model +
-'/TransactionModel');
-var CategoryModel = require(global.__model +
-'/CategoryModel');
+var TransactionModel = require(global.__model + '/TransactionModel');
+var CategoryModel = require(global.__model + '/CategoryModel');
 
 // Inject services
-var responseService = require(global.__service +
-'/ResponseService');
+var responseService = require(global.__service + '/ResponseService');
 
 module.exports = {
 
@@ -18,14 +15,12 @@ module.exports = {
 		var promise = CategoryModel.findOne({
 			_id   : req.body.category_id,
 			_user : req.decoded.id
-		})
-			.exec();
+		}).exec();
 
 		promise.then(function (category) {
 
 			if (!category) {
-				return res.json(responseService.fail('Add failed',
-					'Category not found'));
+				return res.json(responseService.fail('Add failed', 'Category not found'));
 			}
 
 			var date_split = req.body.date.split('/');
@@ -34,28 +29,23 @@ module.exports = {
 				_user : req.decoded.id,
 				month : date_split[ 1 ],
 				year  : date_split[ 2 ]
-			})
-				.populate('programs', '_id category')
-				.exec();
+			}).populate('programs', '_id category').exec();
 
 		}).then(function (plan) {
 
 			if (!plan) {
-				return res.json(responseService.fail('Add failed',
-					'Plan not found'));
+				return res.json(responseService.fail('Add failed', 'Plan not found'));
 			}
 
 			return ProgramModel.findOne({
 				_plan    : plan._id,
 				category : req.body.category_id
-			})
-				.exec();
+			}).exec();
 
 		}).then(function (program) {
 
 			if (!program) {
-				return res.json(responseService.fail('Add failed',
-					'Program not found'));
+				return res.json(responseService.fail('Add failed', 'Program not found'));
 			}
 
 			var transaction = new TransactionModel();
@@ -87,18 +77,13 @@ module.exports = {
 		var promise = TransactionModel.findOne({
 			_id   : req.params.transaction_id,
 			_user : req.decoded.id
-		})
-			.populate('_program', 'category')
-			.exec();
+		}).populate('_program', 'category').exec();
 
 		promise.then(function (err, transaction) {
 
 			if (!transaction) {
-				return res.json(responseService.fail(
-					'Update failed', 'Transaction not found'));
+				return res.json(responseService.fail('Update failed', 'Transaction not found'));
 			}
-
-			var last_transaction = transaction;
 
 			// Build object
 			if (!req.body.date.equals(transaction.date)) {
@@ -110,9 +95,8 @@ module.exports = {
 			if (req.body.comment) {
 				transaction.comment = req.body.comment;
 			}
-			if (!req.body.category_id.equals(transaction._program
-					.category) || !req.body.date.equals(transaction.date)) {
-
+			if (!req.body.category_id.equals(transaction._program.category) ||
+				!req.body.date.equals(transaction.date)) {
 				transaction.removeLinkProgram();
 			}
 
@@ -127,13 +111,11 @@ module.exports = {
 					var promise = CategoryModel.findOne({
 						_id   : req.body.category_id,
 						_user : req.decoded.id
-					})
-						.exec();
+					}).exec();
 
 					promise.then(function (category) {
 						if (!category) {
-							return res.json(responseService.success(
-								'Update success but no link program'));
+							return res.json(responseService.success('Update success but no link program'));
 						}
 
 						var date_split = req.body.date.split('/');
@@ -142,35 +124,28 @@ module.exports = {
 							_user : req.decoded.id,
 							month : date_split[ 1 ],
 							year  : date_split[ 2 ]
+						}).populate('programs', '_id category').exec();
+
+					}).then(function (plan) {
+						if (!plan) {
+							return res.json(responseService.success('Update success but no link program'));
+						}
+
+						return ProgramModel.findOne({
+							_plan    : plan._id,
+							category : req.body.category_id
 						})
-							.populate('programs', '_id category')
 							.exec();
 
-					})
-						.then(function (plan) {
-							if (!plan) {
-								return res.json(responseService.success(
-									'Update success but no link program'));
-							}
+					}).then(function (program) {
+						if (!program) {
+							return res.json(responseService.success('Update success but no link program'));
+						}
 
-							return ProgramModel.findOne({
-								_plan    : plan._id,
-								category : req.body.category_id
-							})
-								.exec();
+						transaction.save();
 
-						})
-						.then(function (program) {
-							if (!program) {
-								return res.json(responseService.success(
-									'Update success but no link program'));
-							}
-
-							transaction.save();
-
-							return res.json(responseService.success(
-								'Update success'));
-						});
+						return res.json(responseService.success('Update success'));
+					});
 				}
 			});
 		});
@@ -185,18 +160,15 @@ module.exports = {
 			_user : req.decoded.id
 		}, function (err, transaction) {
 			if (err) {
-				return res.json(responseService.fail(
-					'Remove failed', err.message));
+				return res.json(responseService.fail('Remove failed', err.message));
 			}
 			if (!transaction) {
-				return res.json(responseService.fail(
-					'Remove failed', 'Transaction not found'));
+				return res.json(responseService.fail('Remove failed', 'Transaction not found'));
 			}
 
 			transaction.removeLinkProgram();
 
-			return res.json(responseService.success(
-				'Remove success'));
+			return res.json(responseService.success('Remove success'));
 		});
 	},
 
@@ -208,16 +180,14 @@ module.exports = {
 			_user : req.decoded.id
 		})
 			.populate('_program', 'category')
-			.populate('_program.category', 'type')
+			.populate('_program.category','type')
 			.where('_program.category.type')
 			.equals(req.params.type_category_id)
-			.exec(function (err, transactions) {
+			.exec(function (err,transactions) {
 				if (err) {
-					return res.json(responseService.fail('Find failed',
-						err.message));
+					return res.json(responseService.fail('Find failed', err.message));
 				}
-				return res.json(responseService.success(
-					'Find success', transactions));
+				return res.json(responseService.success('Find success', transactions));
 			});
 	},
 
@@ -230,11 +200,9 @@ module.exports = {
 			_program : req.params.program_id
 		}, function (err, transactions) {
 			if (err) {
-				return res.json(responseService.fail('Find failed',
-					err.message));
+				return res.json(responseService.fail('Find failed', err.message));
 			}
-			return res.json(responseService.success(
-				'Find success', transactions));
+			return res.json(responseService.success('Find success', transactions));
 		});
 	},
 
@@ -247,11 +215,9 @@ module.exports = {
 			_user : req.decoded.id
 		}, function (err, transaction) {
 			if (err) {
-				return res.json(responseService.fail('Find failed',
-					err.message));
+				return res.json(responseService.fail('Find failed', err.message));
 			}
-			return res.json(responseService.success(
-				'Find success', transaction));
+			return res.json(responseService.success('Find success', transaction));
 		});
 	}
 };
