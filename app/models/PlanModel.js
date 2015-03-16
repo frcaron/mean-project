@@ -43,7 +43,7 @@ PlanSchema.index({
 
 PlanSchema.methods.addLinkUser = function () {
 
-	this.populate('_user', function (plan) {
+	this.populate('_user', function (err, plan) {
 		var user = plan._user;
 
 		user.plans.push(plan);
@@ -53,7 +53,7 @@ PlanSchema.methods.addLinkUser = function () {
 
 PlanSchema.methods.removeLinkUser = function () {
 
-	this.populate('_user', function (plan) {
+	this.populate('_user', function (err, plan) {
 		var user = plan._user;
 
 		user.plans.pull(plan);

@@ -87,7 +87,7 @@ module.exports = function (router) {
 	// Private
 	// =========================================================================================
 
-	require('./api/log/user-log')(router);
+	require('./api/log/user')(router);
 	require('./api/log/plan')(router);
 	require('./api/log/program')(router);
 	require('./api/log/transaction')(router);

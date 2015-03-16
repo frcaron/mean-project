@@ -7,6 +7,13 @@ var api_prefix = '/users';
 
 module.exports = function (router) {
 
+	router.route(api_prefix)
+
+		// Get all users
+		.get(function(req, res) {
+			userService.all(req, res);
+		});
+
 	router.route(api_prefix + '/:user_id')
 
 		// Update one user
@@ -17,5 +24,5 @@ module.exports = function (router) {
 			}
 
 			userService.giveAdmin(req, res);
-		})
+		});
 };

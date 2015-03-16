@@ -26,7 +26,7 @@ TransactionSchema.plugin(userPlugin);
 
 TransactionSchema.methods.addLinkProgram = function () {
 
-	this.populate('_program', function (transaction) {
+	this.populate('_program', function (err, transaction) {
 		var program = transaction._program;
 
 		program.transactions.push(transaction);
@@ -36,7 +36,7 @@ TransactionSchema.methods.addLinkProgram = function () {
 
 TransactionSchema.methods.removeLinkProgram = function () {
 
-	this.populate('_program', function (transaction) {
+	this.populate('_program', function (err, transaction) {
 		var program = transaction._program;
 
 		program.transactions.pull(transaction);

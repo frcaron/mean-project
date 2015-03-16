@@ -70,9 +70,6 @@ module.exports = {
 			}
 
 			// Build object
-			if (req.body.category_id) {
-				program.removeLinkCategory();
-			}
 			if (req.body.sum) {
 				program.sum = req.body.sum;
 			}
@@ -82,13 +79,6 @@ module.exports = {
 				if (err) {
 					return res.json(responseService.fail('Update failed', err.message));
 				}
-
-				if (program.isModified('category')) {
-					program.category = req.body.category_id;
-					program.addLinkCategory();
-					program.save().exec();
-				}
-
 				return res.json(responseService.success('Update success'));
 			});
 		});

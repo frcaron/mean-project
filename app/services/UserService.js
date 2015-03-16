@@ -128,7 +128,7 @@ module.exports = {
 	},
 
 	// Get all users
-	all       : function (res) {
+	all       : function (req, res) {
 
 		// Query find users
 		UserModel.find(function (err, users) {

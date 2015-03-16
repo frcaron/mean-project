@@ -6,6 +6,9 @@ var Schema = mongoose.Schema;
 var datePlugin = require(global.__plugin + '/DatePlugin');
 var userPlugin = require(global.__plugin + '/UserPlugin');
 
+// Inject models
+var TransactionModel = require(global.__model + '/TransactionModel');
+
 // Schema
 var ProgramSchema = new Schema({
 	category     : {
@@ -14,10 +17,10 @@ var ProgramSchema = new Schema({
 		required : true
 	},
 	sum          : Number,
-	transactions : [ {
+	transactions : [{
 		type : Schema.Types.ObjectId,
 		ref  : 'Transaction'
-	} ],
+	}],
 	_plan        : {
 		type     : Schema.Types.ObjectId,
 		ref      : 'Plan',
@@ -38,7 +41,7 @@ ProgramSchema.index({
 
 ProgramSchema.methods.addLinkPlan = function () {
 
-	this.populate('_plan', function (program) {
+	this.populate('_plan', function (err, program) {
 		var plan = program._plan;
 
 		plan.programs.push(program);
@@ -48,7 +51,7 @@ ProgramSchema.methods.addLinkPlan = function () {
 
 ProgramSchema.methods.removeLinkPlan = function () {
 
-	this.populate('_plan', function (program) {
+	this.populate('_plan', function (err, program) {
 		var plan = program._plan;
 
 		plan.programs.pull(program);
@@ -58,7 +61,7 @@ ProgramSchema.methods.removeLinkPlan = function () {
 
 ProgramSchema.methods.addLinkCategory = function () {
 
-	this.populate('category', function (program) {
+	this.populate('category', function (err, program) {
 		var category = program.category;
 
 		category._programs.push(program);
@@ -68,7 +71,7 @@ ProgramSchema.methods.addLinkCategory = function () {
 
 ProgramSchema.methods.removeLinkCategory = function () {
 
-	this.populate('category', function (program) {
+	this.populate('category', function (err, program) {
 		var category = program.category;
 
 		category._programs.pull(program);
@@ -81,19 +84,31 @@ ProgramSchema.methods.resetLinkTransaction = function () {
 	this.populate({
 		path   : '_plan',
 		select : 'programUnknow'
-	}, function (program) {
+	}, function (err, program) {
 		var transactions = program.transactions;
-		
+		var programUId = program._plan.programUnknow;
+
 		if (transactions) {
+
 			TransactionModel.update({
 				_id : {
 					$in : transactions
 				}
 			}, {
-				_program : program._plan.programUnknow
+				_program : programUId
 			}, {
 				multi : true
-			}).exec();
+			}).exec(function () {
+
+				program._plan.populate('programUnknow', function (e1, plan) {
+					plan.programUnknow.populate('transactions', function (e2, programU) {
+						transactions.forEach(function (transaction) {
+							programU.transactions.push(transaction);
+						});
+						programU.save();
+					});
+				});
+			});
 		}
 	});
 };

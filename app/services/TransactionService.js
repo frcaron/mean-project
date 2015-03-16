@@ -27,8 +27,8 @@ module.exports = {
 
 			return PlanModel.findOne({
 				_user : req.decoded.id,
-				month : date_split[ 1 ],
-				year  : date_split[ 2 ]
+				month : date_split[1],
+				year  : date_split[2]
 			}).populate('programs', '_id category').exec();
 
 		}).then(function (plan) {
@@ -60,7 +60,7 @@ module.exports = {
 			transaction._program = program._id;
 
 			transaction.save(function (err) {
-				if (!err) {
+				if (err) {
 					return res.json(responseService.fail('Add failed', err.message));
 				}
 
@@ -123,8 +123,8 @@ module.exports = {
 
 						return PlanModel.findOne({
 							_user : req.decoded.id,
-							month : date_split[ 1 ],
-							year  : date_split[ 2 ]
+							month : date_split[1],
+							year  : date_split[2]
 						}).populate('programs', '_id category').exec();
 
 					}).then(function (plan) {
@@ -178,18 +178,34 @@ module.exports = {
 	allByTypeCategoryU : function (req, res) {
 
 		// Query find transactions by user and type category
-		TransactionModel.find({
-			_user : req.decoded.id
-		})
-			.populate('_program', 'category')
-			.populate('_program.category','type')
-			.where('_program.category.type')
-			.equals(req.params.type_category_id)
-			.exec(function (err,transactions) {
+		CategoryModel
+			.find({ type : req.params.type_category_id })
+			.populate('_programs', 'transactions')
+			.exec(function (err, categories) {
 				if (err) {
 					return res.json(responseService.fail('Find failed', err.message));
 				}
-				return res.json(responseService.success('Find success', transactions));
+				if (!categories) {
+					return res.json(responseService.fail('Find failed', 'Transaction not found'));
+				}
+
+				categories.forEach(function (category) {
+					category._programs.forEach(function (program) {
+
+						program.populate('transactions', function (err, programEnrichy) {
+							if (err) {
+								return res.json(responseService.fail('Find failed', err.message));
+							}
+							if (!programEnrichy || !programEnrichy.transactions) {
+								return res.json(responseService.fail('Find failed', 'Transaction not found'));
+							}
+							console.log('each ------------------------');
+							console.log(programEnrichy.transactions);
+							console.log('-----------------------------');
+						});
+					});
+				});
+				return res.json(responseService.success('Find success'));
 			});
 	},
 
