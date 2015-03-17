@@ -1,27 +1,27 @@
 module.exports = {
 
 	// Fail response
-	fail    : function (message, detail) {
-		return {
+	fail    : function (res, message, detail) {
+		return res.status(500).json({
 			success : false,
 			message : message,
 			detail  : detail
-		};
+		});
 	},
 
 	// Success response
-	success : function (message, result) {
+	success : function (res, message, result) {
 		if (result) {
-			return {
+			return res.status(200).json({
 				success : true,
 				message : message,
 				result  : result
-			};
+			});
 		} else {
-			return {
+			return res.status(200).json({
 				success : true,
 				message : message
-			};
+			});
 		}
 	}
 };

@@ -14,19 +14,19 @@ module.exports = {
 		// Validate category id
 		CategoryModel.findById(req.body.category_id, '_id', function (err, category) {
 			if (err) {
-				return res.json(responseService.fail('Add failed', err.message));
+				return responseService.fail(res, 'Add failed', err.message);
 			}
 			if (!category) {
-				return res.json(responseService.fail('Add failed', 'Category id invalid'));
+				return responseService.fail(res, 'Add failed', 'Category id invalid');
 			}
 
 			// Validate plan id
 			PlanModel.findById(req.body.plan_id, '_id', function (err, plan) {
 				if (err) {
-					return res.json(responseService.fail('Add failed', err.message));
+					return responseService.fail(res, 'Add failed', err.message);
 				}
 				if (!plan) {
-					return res.json(responseService.fail('Add failed', 'Plan id invalid'));
+					return responseService.fail(res, 'Add failed', 'Plan id invalid');
 				}
 
 				var program = new ProgramModel();
@@ -42,13 +42,13 @@ module.exports = {
 				// Query save
 				program.save(function (err) {
 					if (err) {
-						return res.json(responseService.fail('Add failed', err.message));
+						return responseService.fail(res, 'Add failed', err.message);
 					}
 
 					program.addLinkPlan();
 					program.addLinkCategory();
 
-					return res.json(responseService.success('Add success', program._id));
+					return responseService.success(res, 'Add success', program._id);
 				});
 			});
 		});
@@ -63,10 +63,10 @@ module.exports = {
 			_user : req.decoded.id
 		}, function (err, program) {
 			if (err) {
-				return res.json(responseService.fail('Update failed', err.message));
+				return responseService.fail(res, 'Update failed', err.message);
 			}
 			if (!program) {
-				return res.json(responseService.fail('Update failed', 'Program not found'));
+				return responseService.fail(res, 'Update failed', 'Program not found');
 			}
 
 			// Build object
@@ -77,9 +77,9 @@ module.exports = {
 			// Query save
 			program.save(function (err) {
 				if (err) {
-					return res.json(responseService.fail('Update failed', err.message));
+					return responseService.fail(res, 'Update failed', err.message);
 				}
-				return res.json(responseService.success('Update success'));
+				return responseService.success(res, 'Update success');
 			});
 		});
 	},
@@ -93,17 +93,17 @@ module.exports = {
 			_user : req.decoded.id
 		}, function (err, program) {
 			if (err) {
-				return res.json(responseService.fail('Remove failed', err.message));
+				return responseService.fail(res, 'Remove failed', err.message);
 			}
 			if (!program) {
-				return res.json(responseService.fail('Remove failed', 'Program not found'));
+				return responseService.fail(res, 'Remove failed', 'Program not found');
 			}
 
 			program.removeLinkPlan();
 			program.removeLinkCategory();
 			program.resetLinkTransaction();
 
-			return res.json(responseService.success('Remove success'));
+			return responseService.success(res, 'Remove success');
 		});
 	},
 
@@ -116,9 +116,9 @@ module.exports = {
 			_plan : req.params.plan_id
 		}, function (err, programs) {
 			if (err) {
-				return res.json(responseService.fail('Find failed', err.message));
+				return responseService.fail(res, 'Find failed', err.message);
 			}
-			return res.json(responseService.success('Find success', programs));
+			return responseService.success(res, 'Find success', programs);
 		});
 	},
 
@@ -131,9 +131,12 @@ module.exports = {
 			_user : req.decoded.id
 		}, function (err, program) {
 			if (err) {
-				return res.json(responseService.fail('Find failed', err.message));
+				return responseService.fail(res, 'Find failed', err.message);
 			}
-			return res.json(responseService.success('Find success', program));
+            if(!program) {
+                return responseService.fail(res, 'Find failed', 'Program not found');
+            }
+			return responseService.success(res, 'Find success', program);
 		});
 	}
 };

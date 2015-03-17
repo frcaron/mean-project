@@ -21,7 +21,7 @@ module.exports = {
 		// Query save
 		plan.save(function (err) {
 			if (err) {
-				return res.json(responseService.fail('Add failed', err.message));
+				return responseService.fail(res, 'Add failed', err.message);
 			}
 
 			plan.addLinkUser();
@@ -32,10 +32,10 @@ module.exports = {
 				name  : 'unknow'
 			}, function (err, category) {
 				if (err) {
-					return res.json(responseService.fail('Add failed', err.message));
+					return responseService.fail(res, 'Add failed', err.message);
 				}
 				if (!category) {
-					return res.json(responseService.fail('Add failed', 'Category not found'));
+					return responseService.fail(res, 'Add failed', 'Category not found');
 				}
 
 				var programUnknow = new ProgramModel();
@@ -48,14 +48,14 @@ module.exports = {
 				// Save program unknow
 				programUnknow.save(function (err) {
 					if (err) {
-						return res.json(responseService.fail('Add failed', err.message));
+						return responseService.fail(res, 'Add failed', err.message);
 					}
 
 					// Save program in child
 					category._programs.push(programUnknow);
 					category.save(function (err) {
 						if (err) {
-							return res.json(responseService.fail('Add failed', err.message));
+							return responseService.fail(res, 'Add failed', err.message);
 						}
 
 						// Plan update
@@ -63,39 +63,12 @@ module.exports = {
 							programUnknow : programUnknow._id
 						}, function (err) {
 							if (err) {
-								return res.json(responseService.fail('Add failed', err.message));
+								return responseService.fail(res, 'Add failed', err.message);
 							}
-							return res.json(responseService.success('Add success', plan._id));
+							return responseService.success(res, 'Add success', plan._id);
 						});
 					});
 				});
-			});
-		});
-	},
-
-	// Update one plan
-	update  : function (req, res) {
-
-		// Query find plan by id and user
-		PlanModel.findOne({
-			_id   : req.params.plan_id,
-			_user : req.decoded.id
-		}, function (err, plan) {
-			if (err) {
-				return res.json(responseService.fail('Update failed', err.message));
-			}
-			if (!plan) {
-				return res.json(responseService.fail('Update failed', 'Plan not found'));
-			}
-
-			// TODO param modification ???
-
-			// Query save
-			plan.save(function (err) {
-				if (err) {
-					return res.json(responseService.fail('Update failed', err.message));
-				}
-				return res.json(responseService.success('Update success'));
 			});
 		});
 	},
@@ -104,15 +77,15 @@ module.exports = {
 	remove  : function (req, res) {
 
 		// Query remove
-		PlanModel.findOneAndRemove({
+        /*PlanModel.findOneAndRemove({
 			_id   : req.params.plan_id,
 			_user : req.decoded.id
 		}).populate('programs', '_id category transaction').exec(function (err, plan) {
 			if (err) {
-				return res.json(responseService.fail('Remove failed', err.message));
+				return responseService.fail(res, 'Remove failed', err.message);
 			}
 			if (!plan) {
-				return res.json(responseService.fail('Remove failed', 'Plan not found'));
+				return responseService.fail(res, 'Remove failed', 'Plan not found');
 			}
 
 			plan.removeLinkUser();
@@ -120,8 +93,8 @@ module.exports = {
 			// TODO Remove programs and programUnknow link to category
 			// TODO Remove transactions
 
-			return res.json(responseService.success('Remove success'));
-		});
+			return responseService.success(res, 'Remove success');
+		});*/
 	},
 
 	// Get plans by user
@@ -132,9 +105,9 @@ module.exports = {
 			_user : req.decoded.id
 		}, function (err, plans) {
 			if (err) {
-				return res.json(responseService.fail('Find failed', err.message));
+				return responseService.fail(res, 'Find failed', err.message);
 			}
-			return res.json(responseService.success('Find success', plans));
+			return responseService.success(res, 'Find success', plans);
 		});
 	},
 
@@ -147,9 +120,9 @@ module.exports = {
 			_user : req.decoded.id
 		}, function (err, plan) {
 			if (err) {
-				return res.json(responseService.fail('Find failed', err.message));
+				return responseService.fail(res, 'Find failed', err.message);
 			}
-			return res.json(responseService.success('Find success', plan));
+			return responseService.success(res, 'Find success', plan);
 		});
 	}
 };

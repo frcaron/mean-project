@@ -18,15 +18,15 @@ module.exports = {
 			username : req.body.username
 		}).select('_id name username password admin').exec(function (err, user) {
 			if (err) {
-				return res.json(responseService.fail('Authentication failed', err.message));
+				return responseService.fail(res, 'Authentication failed', err.message);
 			}
 			if (!user) {
-				return res.json(responseService.fail('Authentication failed', 'User not found'));
+				return responseService.fail(res, 'Authentication failed', 'User not found');
 			}
 
 			var validPassword = user.comparePassword(req.body.password);
 			if (!validPassword) {
-				return res.json(responseService.fail('Authentication failed', 'Wrong password'));
+				return responseService.fail(res, 'Authentication failed', 'Wrong password');
 			}
 
 			// Generate token
@@ -39,7 +39,7 @@ module.exports = {
 				expiresMinutes : 1440
 			});
 
-			return res.json(responseService.success('Authentication success', token));
+			return responseService.success(res,'Authentication success', token);
 		});
 	}
 };

@@ -28,7 +28,7 @@ module.exports = {
 			type : 'unknow'
 		}, function (err, typeCategory) {
 			if (err) {
-				return res.json(responseService.success('Add failed', err.message));
+				return responseService.fail(res, 'Add failed', err.message);
 			}
 
 			var id;
@@ -50,9 +50,9 @@ module.exports = {
 			user.save(function (err) {
 				if (err) {
 					if (err.code == 11000) {
-						return res.json(responseService.success('Add failed', 'User exist'));
+						return responseService.fail(res, 'Add failed', 'User exist');
 					} else if (err) {
-						return res.json(responseService.success('Add failed', err.message));
+						return responseService.fail(res, 'Add failed', err.message);
 					}
 				}
 
@@ -65,7 +65,7 @@ module.exports = {
 				category._user = user._id;
 				category.save();
 
-				return res.json(responseService.success('Add success', user._id));
+				return responseService.success(res, 'Add success', user._id);
 			});
 		});
 	},
@@ -76,10 +76,10 @@ module.exports = {
 		// Query find user by id
 		UserModel.findById(req.decoded.id, function (err, user) {
 			if (err) {
-				return res.json(responseService.fail('Update failed', err.message));
+				return responseService.fail(res, 'Update failed', err.message);
 			}
 			if (!user) {
-				return res.json(responseService.fail('Update failed', 'User not found'));
+				return responseService.fail(res, 'Update failed', 'User not found');
 			}
 
 			// Build object
@@ -93,9 +93,9 @@ module.exports = {
 			// Query save
 			user.save(function (err) {
 				if (err) {
-					return res.json(responseService.fail('Update failed', err.message));
+					return responseService.fail(res, 'Update failed', err.message);
 				}
-				return res.json(responseService.success('Update success'));
+				return responseService.success(res, 'Update success');
 			});
 		});
 	},
@@ -124,7 +124,7 @@ module.exports = {
 			_id : req.decoded.id
 		}.exec());
 
-		return res.json(responseService.success('Remove success'));
+		return responseService.success(res, 'Remove success');
 	},
 
 	// Get all users
@@ -133,9 +133,9 @@ module.exports = {
 		// Query find users
 		UserModel.find(function (err, users) {
 			if (err) {
-				return res.json(responseService.fail('Find failed', err.message));
+				return responseService.fail(res, 'Find failed', err.message);
 			}
-			return res.json(responseService.success('Find success', users));
+			return responseService.success(res, 'Find success', users);
 		});
 	},
 
@@ -145,9 +145,9 @@ module.exports = {
 		// Query find user by id
 		UserModel.findById(req.decoded.id, function (err, user) {
 			if (err) {
-				return res.json(responseService.fail('Find failed', err.message));
+				return responseService.fail(res, 'Find failed', err.message);
 			}
-			return res.json(responseService.success('Find success', user));
+			return responseService.success(res, 'Find success', user);
 		});
 	},
 
@@ -157,7 +157,7 @@ module.exports = {
 		// Query find user by id
 		UserModel.findById(req.params.user_id, function (err, user) {
 			if (err) {
-				return res.json(responseService.fail('Give permission failed', err.message));
+				return responseService.fail(res, 'Give permission failed', err.message);
 			}
 
 			user.admin = true;
@@ -165,9 +165,9 @@ module.exports = {
 			// Query save
 			user.save(function (err) {
 				if (err) {
-					return res.json(responseService.fail('Give permission failed', err.message));
+					return responseService.fail(res, 'Give permission failed', err.message);
 				}
-				return res.json(responseService.success('Give permission success'));
+				return responseService.success(res, 'Give permission success');
 			});
 		});
 	}

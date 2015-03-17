@@ -1,3 +1,6 @@
+// Inject application
+var Promise = require('bluebird');
+
 // Inject models
 var PlanModel = require(global.__model + '/PlanModel');
 var ProgramModel = require(global.__model + '/ProgramModel');
@@ -9,233 +12,238 @@ var responseService = require(global.__service + '/ResponseService');
 
 module.exports = {
 
-	// Create one transaction
-	create             : function (req, res) {
+    // Create one transaction
+    create             : function (req, res) {
 
-		var promise = CategoryModel.findOne({
-			_id   : req.body.category_id,
-			_user : req.decoded.id
-		}).exec();
+        var promise = CategoryModel.findOne({
+            _id   : req.body.category_id,
+            _user : req.decoded.id
+        }).exec();
 
-		promise.then(function (category) {
+        promise.then(function (category) {
 
-			if (!category) {
-				return res.json(responseService.fail('Add failed', 'Category not found'));
-			}
+            if (!category) {
+                return responseService.fail(res, 'Add failed', 'Category not found');
+            }
 
-			var date_split = req.body.date.split('/');
+            var date_split = req.body.date.split('/');
 
-			return PlanModel.findOne({
-				_user : req.decoded.id,
-				month : date_split[1],
-				year  : date_split[2]
-			}).populate('programs', '_id category').exec();
+            return PlanModel.findOne({
+                _user : req.decoded.id,
+                month : date_split[ 1 ],
+                year  : date_split[ 2 ]
+            }).populate('programs', '_id category').exec();
 
-		}).then(function (plan) {
+        }).then(function (plan) {
 
-			if (!plan) {
-				return res.json(responseService.fail('Add failed', 'Plan not found'));
-			}
+            if (!plan) {
+                return responseService.fail(res, 'Add failed', 'Plan not found');
+            }
 
-			return ProgramModel.findOne({
-				_plan    : plan._id,
-				category : req.body.category_id
-			}).exec();
+            return ProgramModel.findOne({
+                _plan    : plan._id,
+                category : req.body.category_id
+            }).exec();
 
-		}).then(function (program) {
+        }).then(function (program) {
 
-			if (!program) {
-				return res.json(responseService.fail('Add failed', 'Program not found'));
-			}
+            if (!program) {
+                return responseService.fail(res, 'Add failed', 'Program not found');
+            }
 
-			var transaction = new TransactionModel();
+            var transaction = new TransactionModel();
 
-			// Build object
-			transaction.day = req.body.date;
-			transaction.sum = req.body.sum;
-			if (req.body.comment) {
-				transaction.comment = req.body.comment;
-			}
-			transaction._user = req.decoded.id;
-			transaction._program = program._id;
+            // Build object
+            transaction.date = req.body.date;
+            transaction.sum = req.body.sum;
+            if (req.body.comment) {
+                transaction.comment = req.body.comment;
+            }
+            transaction._user = req.decoded.id;
+            transaction._program = program._id;
 
-			transaction.save(function (err) {
-				if (err) {
-					return res.json(responseService.fail('Add failed', err.message));
-				}
+            transaction.save(function (err) {
+                if (err) {
+                    return responseService.fail(res, 'Add failed', err.message);
+                }
 
-				transaction.addLinkProgram();
+                transaction.addLinkProgram();
 
-				return res.json(responseService.success('Add success', transaction._id));
-			});
-		});
-	},
+                return responseService.success(res, 'Add success', transaction._id);
+            });
+        });
+    },
 
-	// Update one transaction
-	update             : function (req, res) {
+    // Update one transaction
+    update             : function (req, res) {
 
-		var promise = TransactionModel.findOne({
-			_id   : req.params.transaction_id,
-			_user : req.decoded.id
-		}).populate('_program', 'category').exec();
+        var promise = TransactionModel.findOne({
+            _id   : req.params.transaction_id,
+            _user : req.decoded.id
+        }).populate('_program', 'category').exec();
 
-		promise.then(function (transaction) {
+        promise.then(function (transaction) {
 
-			if (!transaction) {
-				return res.json(responseService.fail('Update failed', 'Transaction not found'));
-			}
+            if (!transaction) {
+                return responseService.fail(res, 'Update failed', 'Transaction not found');
+            }
 
-			// Build object
-			if (!req.body.date.equals(transaction.date)) {
-				transaction.date = req.body.date;
-			}
-			if (req.body.sum) {
-				transaction.sum = req.body.sum;
-			}
-			if (req.body.comment) {
-				transaction.comment = req.body.comment;
-			}
-			if (!req.body.category_id.equals(transaction._program.category) ||
-				!req.body.date.equals(transaction.date)) {
-				transaction.removeLinkProgram();
-			}
+            var last_category = transaction._program.category;
 
-			// Query save
-			transaction.save(function (err) {
-				if (err) {
-					return res.json(responseService.fail('Update failed', err.message));
-				}
+            // Build object
+            if (!req.body.date.equals(transaction.date)) {
+                transaction.date = req.body.date;
+            }
+            if (req.body.sum) {
+                transaction.sum = req.body.sum;
+            }
+            if (req.body.comment) {
+                transaction.comment = req.body.comment;
+            }
+            if (!req.body.category_id.equals(transaction._program.category) ||
+                !req.body.date.equals(transaction.date)) {
+                transaction.removeLinkProgram();
+            }
 
-				if (transaction.isModified('_program')) {
+            // Query save
+            transaction.save(function (err) {
+                if (err) {
+                    return responseService.fail(res, 'Update failed', err.message);
+                }
 
-					promise = CategoryModel.findOne({
-						_id   : req.body.category_id,
-						_user : req.decoded.id
-					}).exec();
+                if (transaction.isModified('_program')) {
 
-					promise.then(function (category) {
+                    promise = CategoryModel.findOne({
+                        _id   : req.body.category_id,
+                        _user : req.decoded.id
+                    }).exec();
 
-						if (!category) {
-							return res.json(responseService.success('Update success but no link program'));
-						}
+                    promise.then(function (category) {
 
-						var date_split = req.body.date.split('/');
+                        if (!category) {
+                            return responseService.success(res, 'Update success but no link program');
+                        }
 
-						return PlanModel.findOne({
-							_user : req.decoded.id,
-							month : date_split[1],
-							year  : date_split[2]
-						}).populate('programs', '_id category').exec();
+                        var date_split = req.body.date.split('/');
 
-					}).then(function (plan) {
+                        return PlanModel.findOne({
+                            _user : req.decoded.id,
+                            month : date_split[ 1 ],
+                            year  : date_split[ 2 ]
+                        }).populate('programs', '_id category').exec();
 
-						if (!plan) {
-							return res.json(responseService.success('Update success but no link program'));
-						}
+                    }).then(function (plan) {
 
-						return ProgramModel.findOne({
-							_plan    : plan._id,
-							category : req.body.category_id
-						}).exec();
+                        if (!plan) {
+                            return responseService.success(res, 'Update success but no link program');
+                        }
 
-					}).then(function (program) {
+                        return ProgramModel.findOne({
+                            _plan    : plan._id,
+                            category : req.body.category_id
+                        }).exec();
 
-						if (!program) {
-							return res.json(responseService.success('Update success but no link program'));
-						}
+                    }).then(function (program) {
 
-						transaction.save().exec();
+                        if (!program) {
+                            return responseService.success(res, 'Update success but no link program');
+                        }
 
-						return res.json(responseService.success('Update success'));
-					});
-				}
-			});
-		});
-	},
+                        transaction.save();
 
-	// Remove one transaction
-	remove             : function (req, res) {
+                        return responseService.success(res, 'Update success');
+                    });
+                }
+            });
+        });
+    },
 
-		// Query remove
-		TransactionModel.findOneAndRemove({
-			_id   : req.params.transaction_id,
-			_user : req.decoded.id
-		}, function (err, transaction) {
-			if (err) {
-				return res.json(responseService.fail('Remove failed', err.message));
-			}
-			if (!transaction) {
-				return res.json(responseService.fail('Remove failed', 'Transaction not found'));
-			}
+    // Remove one transaction
+    remove             : function (req, res) {
 
-			transaction.removeLinkProgram();
+        // Query remove
+        TransactionModel.findOneAndRemove({
+            _id   : req.params.transaction_id,
+            _user : req.decoded.id
+        }, function (err, transaction) {
+            if (err) {
+                return responseService.fail(res, 'Remove failed', err.message);
+            }
+            if (!transaction) {
+                return responseService.fail(res, 'Remove failed', 'Transaction not found');
+            }
 
-			return res.json(responseService.success('Remove success'));
-		});
-	},
+            transaction.removeLinkProgram();
 
-	// Get transactions by type category
-	allByTypeCategoryU : function (req, res) {
+            return responseService.success(res, 'Remove success');
+        });
+    },
 
-		// Query find transactions by user and type category
-		CategoryModel
-			.find({ type : req.params.type_category_id })
-			.populate('_programs', 'transactions')
-			.exec(function (err, categories) {
-				if (err) {
-					return res.json(responseService.fail('Find failed', err.message));
-				}
-				if (!categories) {
-					return res.json(responseService.fail('Find failed', 'Transaction not found'));
-				}
+    // Get transactions by type category
+    allByTypeCategoryU : function (req, res) {
 
-				categories.forEach(function (category) {
-					category._programs.forEach(function (program) {
+        // Query find transactions by user and type category
+        CategoryModel
+            .find({ type : req.params.type_category_id })
+            .populate('_programs', 'transactions')
+            .exec(function (err, categories) {
+                if (err) {
+                    return responseService.fail(res, 'Find failed', err.message);
+                }
+                if (!categories) {
+                    return responseService.fail(res, 'Find failed', 'Transaction not found');
+                }
 
-						program.populate('transactions', function (err, programEnrichy) {
-							if (err) {
-								return res.json(responseService.fail('Find failed', err.message));
-							}
-							if (!programEnrichy || !programEnrichy.transactions) {
-								return res.json(responseService.fail('Find failed', 'Transaction not found'));
-							}
-							console.log('each ------------------------');
-							console.log(programEnrichy.transactions);
-							console.log('-----------------------------');
-						});
-					});
-				});
-				return res.json(responseService.success('Find success'));
-			});
-	},
+                var result = [];
+                categories.map(function (category) {
+                    category._programs.map(function (program) {
+                        program.transactions.map(function (transaction) {
+                            result.push(transaction);
+                        });
+                    });
+                });
 
-	// Get transactions by program
-	allByProgramU      : function (req, res) {
+                Promise.all(result).then(function (transactions) {
+                    TransactionModel.find({ _id : { $in : transactions } }, function (err, t) {
+                        if (err) {
+                            return responseService.fail(res, 'Find failed', err.message);
+                        }
+                        if (!t) {
+                            return responseService.fail(res, 'Find failed', 'Transaction not found');
+                        }
+                        return responseService.success(res, 'Find success', t);
+                    });
+                });
+            });
+    },
 
-		// Query find transactions by user and type category
-		TransactionModel.find({
-			_user    : req.decoded.id,
-			_program : req.params.program_id
-		}, function (err, transactions) {
-			if (err) {
-				return res.json(responseService.fail('Find failed', err.message));
-			}
-			return res.json(responseService.success('Find success', transactions));
-		});
-	},
+    // Get transactions by program
+    allByProgramU      : function (req, res) {
 
-	// Get one transaction by id
-	getByIdU           : function (req, res) {
+        // Query find transactions by user and type category
+        TransactionModel.find({
+            _user    : req.decoded.id,
+            _program : req.params.program_id
+        }, function (err, transactions) {
+            if (err) {
+                return responseService.fail(res, 'Find failed', err.message);
+            }
+            return responseService.success(res, 'Find success', transactions);
+        });
+    },
 
-		// Query find transaction by id and user
-		TransactionModel.findOne({
-			_id   : req.params.transaction_id,
-			_user : req.decoded.id
-		}, function (err, transaction) {
-			if (err) {
-				return res.json(responseService.fail('Find failed', err.message));
-			}
-			return res.json(responseService.success('Find success', transaction));
-		});
-	}
+    // Get one transaction by id
+    getByIdU           : function (req, res) {
+
+        // Query find transaction by id and user
+        TransactionModel.findOne({
+            _id   : req.params.transaction_id,
+            _user : req.decoded.id
+        }, function (err, transaction) {
+            if (err) {
+                return responseService.fail(res, 'Find failed', err.message);
+            }
+            return responseService.success(res, 'Find success', transaction);
+        });
+    }
 };

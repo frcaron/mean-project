@@ -17,9 +17,9 @@ module.exports = {
 		// Query save
 		typeCategory.save(function (err) {
 			if (err) {
-				return res.json(responseService.fail('Add failed', err.message));
+				return responseService.fail(res, 'Add failed', err.message);
 			}
-			return res.json(responseService.success('Add success', typeCategory._id));
+			return responseService.success(res, 'Add success', typeCategory._id);
 		});
 	},
 
@@ -29,10 +29,10 @@ module.exports = {
 		// Query find type category by id
 		TypeCategoryModel.findById(req.params.type_category_id, function (err, typeCategory) {
 			if (err) {
-				return res.json(responseService.fail('Update failed', err.message));
+				return responseService.fail(res, 'Update failed', err.message);
 			}
 			if (!typeCategory) {
-				return res.json(responseService.fail('Update failed', 'Type category not found'));
+				return responseService.fail(res, 'Update failed', 'Type category not found');
 			}
 
 			// Build object
@@ -46,9 +46,9 @@ module.exports = {
 			// Query save
 			typeCategory.save(function (err) {
 				if (err) {
-					return res.json(responseService.fail('Update failed', err.message));
+					return responseService.fail(res, 'Update failed', err.message);
 				}
-				return res.json(responseService.success('Update success'));
+				return responseService.success(res, 'Update success');
 			});
 		});
 	},
@@ -61,9 +61,9 @@ module.exports = {
 			_id : req.params.type_category_id
 		}, function (err) {
 			if (err) {
-				return res.json(responseService.fail('Remove failed', err.message));
+				return responseService.fail(res, 'Remove failed', err.message);
 			}
-			return res.json(responseService.success('Remove success'));
+			return responseService.success(res, 'Remove success');
 		});
 	},
 
@@ -73,9 +73,9 @@ module.exports = {
 		// Query find categories
 		TypeCategoryModel.find(function (err, typeCategories) {
 			if (err) {
-				return res.json(responseService.fail('Find failed', err.message));
+				return responseService.fail(res, 'Find failed', err.message);
 			}
-			return res.json(responseService.success('Find success', typeCategories));
+			return responseService.success(res, 'Find success', typeCategories);
 		});
 	},
 
@@ -87,9 +87,9 @@ module.exports = {
 			active : true
 		}, function (err, typeCategories) {
 			if (err) {
-				return res.json(responseService.fail('Find failed', err.message));
+				return responseService.fail(res, 'Find failed', err.message);
 			}
-			return res.json(responseService.success('Find success', typeCategories));
+			return responseService.success(res, 'Find success', typeCategories);
 		});
 	},
 
@@ -99,9 +99,9 @@ module.exports = {
 		// Query find category by id
 		TypeCategoryModel.findById(req.params.type_category_id, function (err, typeCategory) {
 			if (err) {
-				return res.json(responseService.fail('Find failed', err.message));
+				return responseService.fail(res, 'Find failed', err.message);
 			}
-			return res.json(responseService.success('Find success', typeCategory));
+			return responseService.success(res, 'Find success', typeCategory);
 		});
 	}
 };

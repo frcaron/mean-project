@@ -36,11 +36,6 @@ module.exports = function (router) {
 			planService.getById(req, res);
 		})
 
-		// Update one plan
-		.put(function (req, res) {
-			planService.update(req, res);
-		})
-
 		// Delete one plan
 		.delete(function (req, res) {
 			planService.remove(req, res);

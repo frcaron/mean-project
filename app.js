@@ -6,7 +6,8 @@ var favicon = require('serve-favicon');
 var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
+var Promise = require('bluebird');
+var mongoose = Promise.promisifyAll(require('mongoose'));
 
 var app = express();
 
