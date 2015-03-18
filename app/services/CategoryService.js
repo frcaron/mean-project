@@ -10,141 +10,162 @@ module.exports = {
 	// Create one category
 	create: function(req, res) {
 
-		// Validate category id
-		TypeCategoryModel.findById(req.body.type_category_id, '_id', function(err,
-			typeCategory) {
-			if (err) {
-				return responseService.fail(res, 'Add failed', err.message);
-			}
-			if (!typeCategory) {
-				return responseService.fail(res, 'Add failed', 'Type category id invalid');
-			}
+		var category = new CategoryModel();
 
-			var category = new CategoryModel();
+		var promise = TypeCategoryModel.findByIdAsync(req.query.type_category_id, '_id');
 
-			// Build object
-			category.name = req.body.name;
-			category.type = req.body.type_category_id;
-			category._user = req.decoded.id;
+		promise
+			.then(function (typeCategory) {
 
-			// Query save
-			category.save(function(err) {
-				if (err) {
-					return responseService.fail(res, 'Add failed', err.message);
+				if (!typeCategory) {
+					throw new Error('Type category id invalid');
 				}
-				return responseService.success(res, 'Add success', category._id);
+
+				category.name = req.body.name;
+				category.type = req.query.type_category_id;
+				category._user = req.decoded.id;
+
+				
+				return category.saveAsync();
+			})
+
+			.then(function() {
+				responseService.success(res, 'Add success', category._id);
+			})
+
+			.catch(function (err) {
+				responseService.fail(res, 'Add failed', err.message);
 			});
-		});
 	},
 
 	// Update one category
 	update: function(req, res) {
 
-		// Query find category by id and user
-		CategoryModel.findOne({
-			_id: req.params.category_id,
-			_user: req.decoded.id
-		}, function(err, category) {
-			if (err) {
-				return responseService.fail(res, 'Update failed', 'Find category failed  / ' + err.message);
-			}
-			if (!category) {
-				return responseService.fail(res, 'Update failed', 'Category not found');
-			}
+		var promise = CategoryModel.findOneAsync({
+						_id: req.params.category_id,
+						_user: req.decoded.id
+					});
 
-			// Build object
-			if (req.body.name) {
-				category.name = req.body.name;
-			}
-
-			// Query save
-			category.save(function(err) {
-				if (err) {
-					return responseService.fail(res, 'Update failed', err.message);
+		promise
+			.then(function (category) {
+			
+				if (!category) {
+					throw new Error('Category not found');
 				}
-				return responseService.success(res, 'Update success');
+
+				if (req.body.name) {
+					category.name = req.body.name;
+				}
+
+				return category.saveAsync();
+			})
+
+			.then(function() {
+				responseService.success(res, 'Update success');
+			})
+
+			.catch(function (err) {
+				responseService.fail(res, 'Update failed', err.message);
 			});
-		});
 	},
 
 	// Remove one category
 	remove: function(req, res) {
 
-		// Query find category by id and user
-		CategoryModel.findOneAndUpdate({
-			_id: req.params.category_id,
-			_user: req.decoded.id
-		}, function(err, category) {
-			if (err) {
-				return responseService.fail(res, 'Remove failed', err.message);
-			}
-			if (!category) {
-				return responseService.fail(res, 'Remove failed', 'Category not found');
-			}
+		var promise = CategoryModel.findOneAsync({
+						_id: req.params.category_id,
+						_user: req.decoded.id
+					});
 
-			category.active = false;
+		promise
+			.then(function (category) {
+				if (!category) {
+					throw new Error('Category not found');
+				}
 
-			return responseService.success(res, 'Remove success');
-		});
+				category.active = false;
+
+				return category.saveAsync();
+			})
+
+			.then(function () {
+				responseService.success(res, 'Remove success');
+			})
+
+			.catch(function (err) {
+				responseService.fail(res, 'Remove failed', err.message);
+			});
 	},
 
 	// Get categories by user
 	allByU: function(req, res) {
 
-		// Query find categories by user
-		CategoryModel.find({
-			_user: req.decoded.id
-		}, function(err, categories) {
-			if (err) {
-				return responseService.fail(res, 'Find failed', err.message);
-			}
-			return responseService.success(res, 'Find success', categories);
-		});
+		var promise = CategoryModel.findAsync({
+						_user: req.decoded.id
+					});
+
+		promise
+			.then(function (categories) {
+				responseService.success(res, 'Find success', categories);
+			})
+
+			.catch(function (err) {
+				responseService.fail(res, 'Find failed', err.message);
+			});
 	},
 
 	// Get active categories by user
 	allActiveByU: function(req, res) {
 
-		// Query find categories by user
-		CategoryModel.find({
-			_user: req.decoded.id,
-			active: true
-		}, function(err, categories) {
-			if (err) {
-				return responseService.fail(res, 'Find failed', err.message);
-			}
-			return responseService.success(res, 'Find success', categories);
-		});
+		var promise = CategoryModel.findAsync({
+						_user: req.decoded.id,
+						active: true
+					});
+
+		promise
+			.then(function (categories) {
+				responseService.success(res, 'Find success', categories);
+			})
+
+			.catch(function (err) {
+				responseService.fail(res, 'Find failed', err.message);
+			});
 	},
 
 	// Get categories by type category
 	allByTypeCategoryU: function(req, res) {
 
-		// Query find categories by id and type category
-		CategoryModel.find({
-			_user: req.decoded.id,
-			type: req.params.type_category_id,
-			active: true
-		}, function(err, categories) {
-			if (err) {
-				return responseService.fail(res, 'Find failed', err.message);
-			}
-			return responseService.success(res, 'Find success', categories);
-		});
+		var promise = CategoryModel.findAsync({
+						_user: req.decoded.id,
+						type: req.params.type_category_id,
+						active: true
+					});
+
+		promise
+			.then(function (categories) {
+				responseService.success(res, 'Find success', categories);
+			})
+
+			.catch(function (err) {
+				responseService.fail(res, 'Find failed', err.message);
+			});
 	},
 
 	// Get one category by id
 	getByIdU: function(req, res) {
 
-		// Query find category by id and user
-		CategoryModel.findOne({
-			_id: req.params.category_id,
-			_user: req.decoded.id
-		}, function(err, category) {
-			if (err) {
-				return responseService.fail(res, 'Find failed', err.message);
-			}
-			return responseService.success(res, 'Find success', category);
-		});
+		var promise = CategoryModel.findOneAsync({
+						_id: req.params.category_id,
+						_user: req.decoded.id
+					});
+
+		promise
+			.then(function (category) {
+				responseService.success(res, 'Find success', category);
+			})
+
+			.catch(function (err) {
+				responseService.fail(res, 'Find failed', err.message);
+			});
 	}
 };

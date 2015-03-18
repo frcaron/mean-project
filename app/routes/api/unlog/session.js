@@ -14,12 +14,12 @@ module.exports = function (router) {
 
 			// Validation
 			if (!req.body.username) {
-				return res.json(responseService.fail('Authentication failed',
-					'Param "username" missing'));
+				return responseService.fail(res, 'Authentication failed',
+					'Param "username" missing');
 			}
 			if (!req.body.password) {
-				return res.json(responseService.fail('Authentication failed',
-					'Param "password" missing'));
+				return responseService.fail(res, 'Authentication failed',
+					'Param "password" missing');
 			}
 
 			sessionService.login(req, res);

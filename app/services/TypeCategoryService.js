@@ -11,97 +11,112 @@ module.exports = {
 
 		var typeCategory = new TypeCategoryModel();
 
-		// Build object
 		typeCategory.type = req.body.type;
 
-		// Query save
-		typeCategory.save(function (err) {
-			if (err) {
-				return responseService.fail(res, 'Add failed', err.message);
-			}
-			return responseService.success(res, 'Add success', typeCategory._id);
-		});
+		var promise = typeCategory.saveAsync();
+
+		promise
+			.then(function () {
+				responseService.success(res, 'Add success', typeCategory._id);
+			})
+
+			.catch(function (err){
+				responseService.fail(res, 'Add failed', err.message);
+			});
 	},
 
 	// Update one type category
 	update       : function (req, res) {
 
-		// Query find type category by id
-		TypeCategoryModel.findById(req.params.type_category_id, function (err, typeCategory) {
-			if (err) {
-				return responseService.fail(res, 'Update failed', err.message);
-			}
-			if (!typeCategory) {
-				return responseService.fail(res, 'Update failed', 'Type category not found');
-			}
+		var promise = TypeCategoryModel.findByIdAsync(req.params.type_category_id);
 
-			// Build object
-			if (req.body.type) {
-				typeCategory.type = req.body.type;
-			}
-			if (req.body.visible) {
-				typeCategory.visible = req.body.visible;
-			}
-
-			// Query save
-			typeCategory.save(function (err) {
-				if (err) {
-					return responseService.fail(res, 'Update failed', err.message);
+		promise
+			.then(function (typeCategory) {
+				
+				if (!typeCategory) {
+					throw new Error('Type category not found');
 				}
-				return responseService.success(res, 'Update success');
+
+				if (req.body.type) {
+					typeCategory.type = req.body.type;
+				}
+				if (req.body.visible) {
+					typeCategory.visible = req.body.visible;
+				}
+
+				return typeCategory.saveAsync();
+			})
+
+			.then(function () {
+				responseService.success(res, 'Update success');
+			})
+
+			.catch(function (err) {
+				responseService.fail(res, 'Update failed', err.message);
 			});
-		});
 	},
 
 	// Remove one type category
 	remove       : function (req, res) {
 
-		// Query remove
-		TypeCategoryModel.remove({
-			_id : req.params.type_category_id
-		}, function (err) {
-			if (err) {
-				return responseService.fail(res, 'Remove failed', err.message);
-			}
-			return responseService.success(res, 'Remove success');
-		});
+		var promise = TypeCategoryModel.removeAsync({
+						_id : req.params.type_category_id
+					});
+
+		promise
+			.then(function () {
+				responseService.success(res, 'Remove success');
+			})
+
+			.catch(function (err) {
+				responseService.fail(res, 'Remove failed', err.message);
+			});
 	},
 
 	// Get all type category
-	allByU       : function (req, res) {
+	all          : function (req, res) {
 
-		// Query find categories
-		TypeCategoryModel.find(function (err, typeCategories) {
-			if (err) {
-				return responseService.fail(res, 'Find failed', err.message);
-			}
-			return responseService.success(res, 'Find success', typeCategories);
-		});
+		var promise = TypeCategoryModel.findAsync();
+
+		promise
+			.then(function (typeCategories) {
+				responseService.success(res, 'Find success', typeCategories);
+			})
+
+			.catch(function (err) {
+				responseService.fail(res, 'Find failed', err.message);
+			});
 	},
 
 	// Get all type category active
-	allActiveByU : function (req, res) {
+	allActive : function (req, res) {
 
-		// Query find categories
-		TypeCategoryModel.find({
-			active : true
-		}, function (err, typeCategories) {
-			if (err) {
-				return responseService.fail(res, 'Find failed', err.message);
-			}
-			return responseService.success(res, 'Find success', typeCategories);
-		});
+		var promise = TypeCategoryModel.findAsync({
+						active : true
+					});
+
+		promise
+			.then(function (typeCategories) {
+				responseService.success(res, 'Find success', typeCategories);
+			})
+
+			.catch(function (err) {
+				responseService.fail(res, 'Find failed', err.message);
+			});
 	},
 
 	// Get one type category by id
-	getByIdU     : function (req, res) {
+	getById      : function (req, res) {
 
-		// Query find category by id
-		TypeCategoryModel.findById(req.params.type_category_id, function (err, typeCategory) {
-			if (err) {
-				return responseService.fail(res, 'Find failed', err.message);
-			}
-			return responseService.success(res, 'Find success', typeCategory);
-		});
+		var promise = TypeCategoryModel.findByIdAsync(req.params.type_category_id);
+
+		promise
+			.then(function (typeCategory) {
+				responseService.success(res, 'Find success', typeCategory);
+			})
+
+			.catch(function (err) {
+				responseService.fail(res, 'Find failed', err.message);
+			});
 	}
 };

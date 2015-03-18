@@ -11,132 +11,153 @@ module.exports = {
 	// Create one program
 	create     : function (req, res) {
 
-		// Validate category id
-		CategoryModel.findById(req.body.category_id, '_id', function (err, category) {
-			if (err) {
-				return responseService.fail(res, 'Add failed', err.message);
-			}
-			if (!category) {
-				return responseService.fail(res, 'Add failed', 'Category id invalid');
-			}
+		var program = new ProgramModel();
 
-			// Validate plan id
-			PlanModel.findById(req.body.plan_id, '_id', function (err, plan) {
-				if (err) {
-					return responseService.fail(res, 'Add failed', err.message);
+		var promise = CategoryModel.findByIdAsync(req.body.category_id, '_id');
+
+		promise
+			.then(function (category) {
+				
+				if (!category) {
+					throw new Error('Category id invalid');
 				}
+
+				return PlanModel.findByIdAsync(req.body.plan_id, '_id');
+			})
+
+			.then(function (plan) {
+					
 				if (!plan) {
-					return responseService.fail(res, 'Add failed', 'Plan id invalid');
+					throw new Error('Plan id invalid');
 				}
 
-				var program = new ProgramModel();
-
-				// Build object
-				program.category = req.body.category_id;
+				program.category = req.query.category_id;
 				if (req.body.sum) {
 					program.sum = req.body.sum;
 				}
-				program._plan = req.body.plan_id;
+				program._plan = req.query.plan_id;
 				program._user = req.decoded.id;
 
-				// Query save
-				program.save(function (err) {
-					if (err) {
-						return responseService.fail(res, 'Add failed', err.message);
-					}
+				return program.saveAsync();
+			})
 
-					program.addLinkPlan();
-					program.addLinkCategory();
+			.then(function () {
 
-					return responseService.success(res, 'Add success', program._id);
-				});
+				program.addLinkPlan();
+				program.addLinkCategory();
+
+				responseService.success(res, 'Add success', program._id);
+				
+			})
+
+			.catch(function(err) {
+
+				// Rollback
+				if(program._id) {
+					program.removeLinkPlan();
+					program.removeLinkCategory();
+					program.remove().execAsync();
+				}
+
+				responseService.fail(res, 'Add failed', err.message);
 			});
-		});
 	},
 
 	// Update one program
 	update     : function (req, res) {
 
-		// Query find prgram by id and user
-		ProgramModel.findOne({
-			_id   : req.params.program_id,
-			_user : req.decoded.id
-		}, function (err, program) {
-			if (err) {
-				return responseService.fail(res, 'Update failed', err.message);
-			}
-			if (!program) {
-				return responseService.fail(res, 'Update failed', 'Program not found');
-			}
+		var promise = ProgramModel.findOneAsync({
+						_id   : req.params.program_id,
+						_user : req.decoded.id
+					});
 
-			// Build object
-			if (req.body.sum) {
-				program.sum = req.body.sum;
-			}
+		promise
+			.then(function (program) {
 
-			// Query save
-			program.save(function (err) {
-				if (err) {
-					return responseService.fail(res, 'Update failed', err.message);
+				if (!program) {
+					throw new Error('Program not found');
 				}
-				return responseService.success(res, 'Update success');
+
+				if (req.body.sum) {
+					program.sum = req.body.sum;
+				}
+
+				return program.saveAsync();
+			})
+
+			.then(function () {
+				responseService.success(res, 'Update success');
+			})
+
+			.catch(function(err) {
+				 responseService.fail(res, 'Update failed', err.message);
 			});
-		});
 	},
 
 	// Remove one program
 	remove     : function (req, res) {
 
-		// Query remove
-		ProgramModel.findOneAndRemove({
-			_id   : req.params.program_id,
-			_user : req.decoded.id
-		}, function (err, program) {
-			if (err) {
-				return responseService.fail(res, 'Remove failed', err.message);
-			}
-			if (!program) {
-				return responseService.fail(res, 'Remove failed', 'Program not found');
-			}
+		var promise = ProgramModel.findOneAndRemoveAsync({
+						_id   : req.params.program_id,
+						_user : req.decoded.id
+					});
 
-			program.removeLinkPlan();
-			program.removeLinkCategory();
-			program.resetLinkTransaction();
+		promise
+			.then(function (program) {
 
-			return responseService.success(res, 'Remove success');
-		});
+				if (!program) {
+					throw new Error('Program not found');
+				}
+
+				program.removeLinkPlan();
+				program.removeLinkCategory();
+				program.resetLinkTransaction();
+
+				responseService.success(res, 'Remove success');
+			})
+
+			.catch(function(err) {
+				responseService.fail(res, 'Remove failed', err.message);
+			});
 	},
 
 	// Get programs by plan
 	allByPlanU : function (req, res) {
 
-		// Query find programs by user and plan
-		ProgramModel.find({
-			_user : req.decoded.id,
-			_plan : req.params.plan_id
-		}, function (err, programs) {
-			if (err) {
-				return responseService.fail(res, 'Find failed', err.message);
-			}
-			return responseService.success(res, 'Find success', programs);
-		});
+		var promise  = ProgramModel.findAsync({
+						_user : req.decoded.id,
+						_plan : req.params.plan_id
+					})
+
+		promise
+			.then(function (programs) {
+				responseService.success(res, 'Find success', programs);
+			})
+
+			.catch(function(err) {
+				responseService.fail(res, 'Find failed', err.message);
+			});
 	},
 
 	// Get one program by id
 	getByIdU   : function (req, res) {
 
-		// Query find program by id and user
-		ProgramModel.findOne({
-			_id   : req.params.program_id,
-			_user : req.decoded.id
-		}, function (err, program) {
-			if (err) {
-				return responseService.fail(res, 'Find failed', err.message);
-			}
-            if(!program) {
-                return responseService.fail(res, 'Find failed', 'Program not found');
-            }
-			return responseService.success(res, 'Find success', program);
-		});
+		var promise = ProgramModel.findOneAsync({
+						_id   : req.params.program_id,
+						_user : req.decoded.id
+					});
+
+		promise
+			.then(function (program) {
+	           
+	            if(!program) {
+	               throw new Error('Program not found');
+	            }
+				responseService.success(res, 'Find success', program);
+			})
+
+			.catch(function(err) {
+				responseService.fail(res, 'Find failed', err.message);
+			});
 	}
 };

@@ -11,20 +11,20 @@ module.exports = function (router) {
 
 		// Get all type category
 		.get(function (req, res) {
-			typeCategoryService.allByU(req, res);
+			typeCategoryService.all(req, res);
 		});
 
 	router.route(api_prefix + '/active')
 
 		// Get all type category active
 		.get(function (req, res) {
-			typeCategoryService.allActiveByU(req, res);
+			typeCategoryService.allActive(req, res);
 		});
 
 	router.route(api_prefix + '/:type_category_id')
 
 		// Get one type category
 		.get(function (req, res) {
-			typeCategoryService.getByIdU(req, res);
+			typeCategoryService.getById(req, res);
 		});
 };

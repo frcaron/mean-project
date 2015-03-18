@@ -14,7 +14,7 @@ module.exports = function (router) {
 	// Validate param plan_id
 	router.param('plan_id', function (req, res, next, plan_id) {
 		if (!plan_id) {
-			return res.json(responseService.fail('Request validation failed', 'Param "plan_id" missing'));
+			return responseService.fail(res, 'Request validation failed', 'Param "plan_id" missing');
 		}
 		next();
 	});
@@ -22,7 +22,7 @@ module.exports = function (router) {
 	// Validate param program_id
 	router.param('program_id', function (req, res, next, program_id) {
 		if (!program_id) {
-			return res.json(responseService.fail('Request validation failed', 'Param "program_id" missing'));
+			return responseService.fail(res, 'Request validation failed', 'Param "program_id" missing');
 		}
 		next();
 	});
@@ -30,7 +30,7 @@ module.exports = function (router) {
 	// Validate param transaction_id
 	router.param('transaction_id', function (req, res, next, transaction_id) {
 		if (!transaction_id) {
-			return res.json(responseService.fail('Request validation failed', 'Param "transaction_id" missing'));
+			return responseService.fail(res, 'Request validation failed', 'Param "transaction_id" missing');
 		}
 		next();
 	});
@@ -38,7 +38,7 @@ module.exports = function (router) {
 	// Validate param category_id
 	router.param('category_id', function (req, res, next, category_id) {
 		if (!category_id) {
-			return res.json(responseService.fail('Request validation failed', 'Param "category_id" missing'));
+			return responseService.fail(res, 'Request validation failed', 'Param "category_id" missing');
 		}
 		next();
 	});
@@ -46,7 +46,7 @@ module.exports = function (router) {
 	// Validate param type_category_id
 	router.param('type_category_id', function (req, res, next, type_category_id) {
 		if (!type_category_id) {
-			return res.json(responseService.fail('Request validation failed', 'Param "type_category_id" missing'));
+			return responseService.fail(res, 'Request validation failed', 'Param "type_category_id" missing');
 		}
 		next();
 	});
@@ -56,7 +56,6 @@ module.exports = function (router) {
 	// =========================================================================================
 
 	require('./api/unlog/session')(router);
-	require('./api/unlog/user')(router);
 
 	// =========================================================================================
 	// Middleware
@@ -70,7 +69,7 @@ module.exports = function (router) {
 		if (token) {
 			jwt.verify(token, tokenConfig.secret, function (err, decoded) {
 				if (err) {
-					return res.status(403).json(responseService.fail('Session error', 'Session expired'));
+					return responseService.fail(res, 'Session error', 'Session expired', 403);
 				}
 
 				// Follow token
@@ -79,7 +78,7 @@ module.exports = function (router) {
 				next();
 			});
 		} else {
-			return res.status(403).json(responseService.fail('Session error', 'No session'));
+			return responseService.fail(res, 'Session error', 'No session', 403);
 		}
 	});
 

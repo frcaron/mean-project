@@ -20,9 +20,14 @@ module.exports = function (router) {
 		.put(function (req, res) {
 
 			if (!req.params.user_id) {
-				return res.json(responseService.fail('Give permission failed', 'Param "user_id" missing'));
+				return responseService.fail(res, 'Give permission failed', 'Param "user_id" missing');
 			}
 
 			userService.giveAdmin(req, res);
+		})
+
+		// Delete one user
+		.delete(function (req, res) {
+			userService.remove(req, res, req.params.user_id);
 		});
 };

@@ -10,6 +10,6 @@ module.exports = function (router) {
 
 		// User token information
 		.get(function (req, res) {
-			return res.json(responseService.success('Get success', req.decoded));
+			return responseService.success(res, 'Get success', req.decoded);
 		});
 };

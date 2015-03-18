@@ -12,117 +12,104 @@ module.exports = {
 	create  : function (req, res) {
 
 		var plan = new PlanModel();
+		var programUnknow = new ProgramModel();
 
-		// Build object
 		plan.month = req.body.month;
 		plan.year = req.body.year;
 		plan._user = req.decoded.id;
 
-		// Query save
-		plan.save(function (err) {
-			if (err) {
-				return responseService.fail(res, 'Add failed', err.message);
-			}
+		var promise = plan.saveAsync();
 
-			plan.addLinkUser();
+		promise
+			.then(function () {
 
-			// Query find category user unknow
-			CategoryModel.findOne({
-				_user : plan._user,
-				name  : 'unknow'
-			}, function (err, category) {
-				if (err) {
-					return responseService.fail(res, 'Add failed', err.message);
-				}
+				plan.addLinkUser();
+
+				return CategoryModel.findOneAsync({
+							_user : plan._user,
+							name  : 'unknow'
+						});
+			})
+
+			.then(function (category) {
+
 				if (!category) {
-					return responseService.fail(res, 'Add failed', 'Category not found');
-				}
+					throw new Error('Category not found');
+				}	
 
-				var programUnknow = new ProgramModel();
-
-				// Build object
 				programUnknow.category = category._id;
 				programUnknow._plan = plan._id;
 				programUnknow._user = plan._user;
 
-				// Save program unknow
-				programUnknow.save(function (err) {
-					if (err) {
-						return responseService.fail(res, 'Add failed', err.message);
-					}
+				programUnknow.saveAsync();
 
-					// Save program in child
-					category._programs.push(programUnknow);
-					category.save(function (err) {
-						if (err) {
-							return responseService.fail(res, 'Add failed', err.message);
-						}
+				category._programs.push(programUnknow);
+				
+				return category.saveAsync();
+			})
 
-						// Plan update
-						plan.update({
-							programUnknow : programUnknow._id
-						}, function (err) {
-							if (err) {
-								return responseService.fail(res, 'Add failed', err.message);
-							}
-							return responseService.success(res, 'Add success', plan._id);
-						});
-					});
+			.then(function () {
+				return plan.update({
+					programUnknow : programUnknow._id
 				});
+			})
+
+			.then(function () {
+				responseService.success(res, 'Add success', plan._id);
+			})
+
+			.catch(function (err) {
+
+				// Rollback
+				if(plan._id) {
+					PlanModel.remove({ _id : plan._id}).execAsync();
+				}
+				if(programUnknow._id) {
+					ProgramModel.remove({ _id : programUnknow._id }).execAsync();
+					CategoryModel.findOne({ _programs : programUnknow._id }, function (err, category) {
+						if(!err && category) {
+							category._programs.pull(programUnknow);
+							category.saveAsync();
+						}
+					});
+				}
+
+				responseService.fail(res, 'Add failed', err.message);
 			});
-		});
-	},
-
-	// Remove one plan
-	remove  : function (req, res) {
-
-		// Query remove
-        /*PlanModel.findOneAndRemove({
-			_id   : req.params.plan_id,
-			_user : req.decoded.id
-		}).populate('programs', '_id category transaction').exec(function (err, plan) {
-			if (err) {
-				return responseService.fail(res, 'Remove failed', err.message);
-			}
-			if (!plan) {
-				return responseService.fail(res, 'Remove failed', 'Plan not found');
-			}
-
-			plan.removeLinkUser();
-
-			// TODO Remove programs and programUnknow link to category
-			// TODO Remove transactions
-
-			return responseService.success(res, 'Remove success');
-		});*/
 	},
 
 	// Get plans by user
 	allByU  : function (req, res) {
 
-		// Query find by user
-		PlanModel.find({
-			_user : req.decoded.id
-		}, function (err, plans) {
-			if (err) {
-				return responseService.fail(res, 'Find failed', err.message);
-			}
-			return responseService.success(res, 'Find success', plans);
-		});
+		var promise = PlanModel.findAsync({
+						_user : req.decoded.id
+					});
+
+		promise
+			.then(function (plans) {
+				responseService.success(res, 'Find success', plans);
+			})
+
+			.catch(function(err) {
+				responseService.fail(res, 'Find failed', err.message);
+			});
 	},
 
 	// Get one plan by id
 	getById : function (req, res) {
 
-		// Query find plan by id and user
-		PlanModel.findOne({
+		var promise = PlanModel.findOneAsync({
 			_id   : req.params.plan_id,
 			_user : req.decoded.id
-		}, function (err, plan) {
-			if (err) {
-				return responseService.fail(res, 'Find failed', err.message);
-			}
-			return responseService.success(res, 'Find success', plan);
 		});
+
+		promise
+			.then(function (plan) {
+				responseService.success(res, 'Find success', plan);
+			})
+
+			.catch(function(err) {
+				responseService.fail(res, 'Find failed', err.message);
+			});
 	}
 };

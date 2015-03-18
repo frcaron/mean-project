@@ -21,6 +21,6 @@ module.exports = function (router) {
 
 		// Delete one user
 		.delete(function (req, res) {
-			userService.remove(req, res);
+			userService.remove(req, res, req.decoded.id);
 		});
 };

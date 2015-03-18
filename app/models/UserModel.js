@@ -1,5 +1,6 @@
 // Inject application
-var mongoose = require('mongoose');
+var Promise = require('bluebird');
+var mongoose = Promise.promisifyAll(require('mongoose'));
 var bcrypt = require('bcrypt-nodejs');
 var Schema = mongoose.Schema;
 

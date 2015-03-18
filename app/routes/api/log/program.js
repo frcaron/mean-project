@@ -14,11 +14,11 @@ module.exports = function (router) {
 		.post(function (req, res) {
 
 			// Validation
-			if (!req.body.category_id) {
-				return res.json(responseService.fail('Add failed', 'Param "category_id" missing'));
+			if (!req.query.category_id) {
+				return responseService.fail(res, 'Add failed', 'Param "category_id" missing');
 			}
-			if (!req.body.plan_id) {
-				return res.json(responseService.fail('Add failed', 'Param "plan_id" missing'));
+			if (!req.query.plan_id) {
+				return responseService.fail(res, 'Add failed', 'Param "plan_id" missing');
 			}
 
 			programService.create(req, res);

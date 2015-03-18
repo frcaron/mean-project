@@ -15,160 +15,189 @@ module.exports = {
 	create    : function (req, res) {
 
 		var user = new UserModel();
+		var id;
 
-		// Build object
-		user.name = req.body.name;
-		user.username = req.body.username;
-		user.password = req.body.password;
-		if (req.body.admin) { // TODO remove permission
-			user.admin = req.body.admin;
-		}
-
-		TypeCategoryModel.findOne({
+		var promise = TypeCategoryModel.findOneAsync({
 			type : 'unknow'
-		}, function (err, typeCategory) {
-			if (err) {
-				return responseService.fail(res, 'Add failed', err.message);
-			}
+		});
 
-			var id;
-			if (!typeCategory) {
+		promise
+			.then(function (typeCategory) {
 
-				// Type category not exist, create new
-				var newTypeCategory = new TypeCategoryModel();
+				if (!typeCategory) {
 
-				newTypeCategory.type = 'unknow';
-				newTypeCategory.active = false;
-				newTypeCategory.save().exec();
+					// Type category not exist, create new
+					var newTypeCategory = new TypeCategoryModel();
 
-				id = newTypeCategory._id;
-			} else {
-				id = typeCategory._id;
-			}
+					newTypeCategory.type = 'unknow';
+					newTypeCategory.active = false;
+					newTypeCategory.save();
 
-			// Query save
-			user.save(function (err) {
-				if (err) {
-					if (err.code == 11000) {
-						return responseService.fail(res, 'Add failed', 'User exist');
-					} else if (err) {
-						return responseService.fail(res, 'Add failed', err.message);
-					}
+					id = newTypeCategory._id;
+				} else {
+					id = typeCategory._id;
 				}
+
+				user.name = req.body.name;
+				user.username = req.body.username;
+				user.password = req.body.password;
+				if (req.body.admin) { // TODO remove permission
+					user.admin = req.body.admin;
+				}
+
+				return user.saveAsync();
+			})
+
+			.then(function() {
 
 				var category = new CategoryModel();
 
-				// Build object
 				category.name = 'unknow';
 				category.type = id;
 				category.active = false;
 				category._user = user._id;
-				category.save();
+				
+				return category.saveAsync();
 
-				return responseService.success(res, 'Add success', user._id);
+			}, function (err) {
+				
+				if (err.code == 11000) {
+					throw new Error('User exist');
+				} else if (err) {
+					throw err;
+				}
+			})
+
+			.then(function(){
+				responseService.success(res, 'Add success', user._id);
+			})
+
+			.catch(function(err) {
+				responseService.fail(res, 'Add failed', err.message);
 			});
-		});
+
 	},
 
 	// Update one user
 	update    : function (req, res) {
 
-		// Query find user by id
-		UserModel.findById(req.decoded.id, function (err, user) {
-			if (err) {
-				return responseService.fail(res, 'Update failed', err.message);
-			}
-			if (!user) {
-				return responseService.fail(res, 'Update failed', 'User not found');
-			}
+		var promise = UserModel.findByIdAsync(req.decoded.id);
 
-			// Build object
-			if (req.body.name) {
-				user.name = req.body.name;
-			}
-			if (req.body.password) {
-				user.password = req.body.password;
-			}
+		promise
+			.then(function (user) {
 
-			// Query save
-			user.save(function (err) {
-				if (err) {
-					return responseService.fail(res, 'Update failed', err.message);
+				if (!user) {
+					throw new Error('User not found');
 				}
-				return responseService.success(res, 'Update success');
+
+				if (req.body.name) {
+					user.name = req.body.name;
+				}
+				if (req.body.password) {
+					user.password = req.body.password;
+				}
+
+				return user.saveAsync();
+			})
+
+			.then(function (){
+				responseService.success(res, 'Update success');
+			})
+
+			.catch(function(err) {
+				responseService.fail(res, 'Update failed', err.message);
 			});
-		});
 	},
 
 	// Remove one user
-	remove    : function (req, res) {
+	remove    : function (req, res, id) {
 
-		// Query remove
-		TransactionModel.remove({
-			_user : req.decoded.id
-		}).exec();
+		var promise = TransactionModel.removeAsync({
+			_user : id
+		});
 
-		CategoryModel.remove({
-			_user : req.decoded.id
-		}).exec();
+		promise
+			.then(function() {
+				return CategoryModel.removeAsync({
+							_user : id
+						});
+			})
 
-		ProgramModel.remove({
-			_user : req.decoded.id
-		}.exec());
+			.then(function() {
+				return ProgramModel.removeAsync({
+							_user : id
+						});
+			})
 
-		PlanModel.remove({
-			_user : req.decoded.id
-		}.exec());
+			.then(function() {
+				return PlanModel.removeAsync({
+							_user : id
+						});
+			})
 
-		UserModel.remove({
-			_id : req.decoded.id
-		}.exec());
+			.then(function() {
+				return UserModel.removeAsync({
+							_id : id
+						});
+			})
 
-		return responseService.success(res, 'Remove success');
+			.then(function(){
+				responseService.success(res, 'Remove success');
+			})
+
+			.catch(function(err) {
+				responseService.fail(res, 'Remove failed', err.message);
+			});
 	},
 
 	// Get all users
 	all       : function (req, res) {
 
-		// Query find users
-		UserModel.find(function (err, users) {
-			if (err) {
-				return responseService.fail(res, 'Find failed', err.message);
-			}
-			return responseService.success(res, 'Find success', users);
-		});
+		var promise = UserModel.findAsync();
+
+		promise
+			.then(function (users) {
+				responseService.success(res, 'Find success', users);
+			})
+
+			.catch(function(err) {
+				responseService.fail(res, 'Find failed', err.message);
+			});
 	},
 
 	// Get one user by id
 	getById   : function (req, res) {
 
-		// Query find user by id
-		UserModel.findById(req.decoded.id, function (err, user) {
-			if (err) {
-				return responseService.fail(res, 'Find failed', err.message);
-			}
-			return responseService.success(res, 'Find success', user);
-		});
+		var promise = UserModel.findByIdAsync(req.decoded.id);
+
+		promise
+			.then(function (user) {
+				responseService.success(res, 'Find success', user);
+			})
+
+			.catch(function(err) {
+				responseService.fail(res, 'Find failed', err.message);
+			});
 	},
 
 	// Set permission
 	giveAdmin : function (req, res) {
 
-		// Query find user by id
-		UserModel.findById(req.params.user_id, function (err, user) {
-			if (err) {
-				return responseService.fail(res, 'Give permission failed', err.message);
-			}
+		var promise = UserModel.findByIdAsync(req.params.user_id);
 
-			user.admin = true;
+		promise
+			.then(function (user) {
 
-			// Query save
-			user.save(function (err) {
-				if (err) {
-					return responseService.fail(res, 'Give permission failed', err.message);
-				}
-				return responseService.success(res, 'Give permission success');
+				user.admin = true;
+				return user.saveAsync();
+			})
+
+			.then(function () {
+				responseService.success(res, 'Give permission success');
+			})
+
+			.catch(function(err) {
+				responseService.fail(res, 'Give permission failed', err.message);
 			});
-		});
 	}
 };

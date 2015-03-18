@@ -14,13 +14,13 @@ module.exports = function (router) {
 
 			// Validation
 			if (!req.body.date) {
-				return res.json(responseService.fail('Add failed', 'Param "date" missing'));
+				return responseService.fail(res, 'Add failed', 'Param "date" missing');
 			}
 			if (!req.body.sum) {
-				return res.json(responseService.fail('Add failed', 'Param "sum" missing'));
+				return responseService.fail(res, 'Add failed', 'Param "sum" missing');
 			}
-			if (!req.body.category_id) {
-				return res.json(responseService.fail('Add failed', 'Param "category_id" missing'));
+			if (!req.query.category_id) {
+				return responseService.fail(res, 'Add failed', 'Param "category_id" missing');
 			}
 
 			transactionService.create(req, res);
@@ -38,11 +38,11 @@ module.exports = function (router) {
 
 			// Validation
 			if (!req.body.date) {
-				return res.json(responseService.fail('Update failed', 'Param "date" missing'));
+				return responseService.fail(res, 'Update failed', 'Param "date" missing');
 			}
-			if (!req.body.category_id) {
-				return res.json(responseService.fail('Update failed',
-					'Param "category_id" missing'));
+			if (!req.query.category_id) {
+				return responseService.fail(res, 'Update failed',
+					'Param "category_id" missing');
 			}
 
 			transactionService.update(req, res);

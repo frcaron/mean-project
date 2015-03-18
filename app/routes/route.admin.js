@@ -14,7 +14,7 @@ module.exports = function (router) {
 	// Validate param user_id
 	router.param('user_id', function (req, res, next, user_id) {
 		if (!user_id) {
-			return res.json(responseService.fail('Request validation failed', 'Param "user_id" missing'));
+			return responseService.fail(res, 'Request validation failed', 'Param "user_id" missing');
 		}
 		next();
 	});
@@ -22,7 +22,7 @@ module.exports = function (router) {
 	// Validate param type_category_id
 	router.param('type_category_id', function (req, res, next, type_category_id) {
 		if (!type_category_id) {
-			return res.json(responseService.fail('Request validation failed', 'Param "type_category_id" missing'));
+			return responseService.fail(res, 'Request validation failed', 'Param "type_category_id" missing');
 		}
 		next();
 	});
@@ -32,6 +32,7 @@ module.exports = function (router) {
 	// =========================================================================================
 
 	require('./admin/unlog/typecategory')(router);
+	require('./admin/unlog/user')(router);
 
 	// =========================================================================================
 	// Middleware
@@ -45,12 +46,12 @@ module.exports = function (router) {
 		if (token) {
 			jwt.verify(token, tokenConfig.secret, function (err, decoded) {
 				if (err) {
-					return res.status(403).send(responseService.fail('Session error', 'Session expired'));
+					return responseService.fail(res, 'Session error', 'Session expired', 403);
 				}
 
 				// Admin access
 				if (!decoded.admin) {
-					return res.status(403).json(responseService.fail('Session error', 'Permission refused'));
+					return responseService.fail(res, 'Session error', 'Permission refused', 403);
 				}
 
 				// Follow token
@@ -59,7 +60,7 @@ module.exports = function (router) {
 				next();
 			});
 		} else {
-			return res.status(403).json(responseService.fail('Session error', 'No session'));
+			return responseService.fail(res, 'Session error', 'No session', 403);
 		}
 	});
 

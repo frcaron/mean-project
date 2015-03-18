@@ -1,8 +1,9 @@
 module.exports = {
 
 	// Fail response
-	fail    : function (res, message, detail) {
-		return res.status(500).json({
+	fail    : function (res, message, detail, code) {
+		if(!code) code = 500;
+		return res.status(code).json({
 			success : false,
 			message : message,
 			detail  : detail

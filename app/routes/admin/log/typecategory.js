@@ -14,7 +14,7 @@ module.exports = function (router) {
 
 			// Validation
 			if (!req.body.type) {
-				return res.json(responseService.fail('Add failed', 'Param "type" missing'));
+				return responseService.fail(res, 'Add failed', 'Param "type" missing');
 			}
 
 			typeCategoryService.create(req, res);

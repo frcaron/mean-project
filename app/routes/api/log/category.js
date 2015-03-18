@@ -19,10 +19,10 @@ module.exports = function (router) {
 
 			// Validation
 			if (!req.body.name) {
-				return res.json(responseService.fail('Add failed', 'Param "name" msing'));
+				return responseService.fail(res, 'Add failed', 'Param "name" msing');
 			}
-			if (!req.body.type_category_id) {
-				return res.json(responseService.fail('Add failed', 'Param "type_category_id" missing'));
+			if (!req.query.type_category_id) {
+				return responseService.fail(res, 'Add failed', 'Param "type_category_id" missing');
 			}
 
 			categoryService.create(req, res);

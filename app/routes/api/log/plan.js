@@ -20,10 +20,10 @@ module.exports = function (router) {
 
 			// Validation
 			if (!req.body.month) {
-				return res.json(responseService.fail('Add failed', 'Param "month" missing'));
+				return responseService.fail(res, 'Add failed', 'Param "month" missing');
 			}
 			if (!req.body.year) {
-				return res.json(responseService.fail('Add failed', 'Param "year" missing'));
+				return responseService.fail(res, 'Add failed', 'Param "year" missing');
 			}
 
 			planService.create(req, res);
@@ -35,11 +35,6 @@ module.exports = function (router) {
 		.get(function (req, res) {
 			planService.getById(req, res);
 		})
-
-		// Delete one plan
-		.delete(function (req, res) {
-			planService.remove(req, res);
-		});
 
 	router.route(api_prefix + '/:plan_id/programs')
 
