@@ -48,7 +48,7 @@ module.exports = {
 				return user.saveAsync();
 			})
 
-			.then(function() {
+			.then(function () {
 
 				var category = new CategoryModel();
 
@@ -56,11 +56,11 @@ module.exports = {
 				category.type = id;
 				category.active = false;
 				category._user = user._id;
-				
+
 				return category.saveAsync();
 
 			}, function (err) {
-				
+
 				if (err.code == 11000) {
 					throw new Error('User exist');
 				} else if (err) {
@@ -68,11 +68,11 @@ module.exports = {
 				}
 			})
 
-			.then(function(){
+			.then(function () {
 				responseService.success(res, 'Add success', user._id);
 			})
 
-			.catch(function(err) {
+			.catch(function (err) {
 				responseService.fail(res, 'Add failed', err.message);
 			});
 
@@ -100,11 +100,11 @@ module.exports = {
 				return user.saveAsync();
 			})
 
-			.then(function (){
+			.then(function () {
 				responseService.success(res, 'Update success');
 			})
 
-			.catch(function(err) {
+			.catch(function (err) {
 				responseService.fail(res, 'Update failed', err.message);
 			});
 	},
@@ -117,35 +117,35 @@ module.exports = {
 		});
 
 		promise
-			.then(function() {
+			.then(function () {
 				return CategoryModel.removeAsync({
-							_user : id
-						});
+					_user : id
+				});
 			})
 
-			.then(function() {
+			.then(function () {
 				return ProgramModel.removeAsync({
-							_user : id
-						});
+					_user : id
+				});
 			})
 
-			.then(function() {
+			.then(function () {
 				return PlanModel.removeAsync({
-							_user : id
-						});
+					_user : id
+				});
 			})
 
-			.then(function() {
+			.then(function () {
 				return UserModel.removeAsync({
-							_id : id
-						});
+					_id : id
+				});
 			})
 
-			.then(function(){
+			.then(function () {
 				responseService.success(res, 'Remove success');
 			})
 
-			.catch(function(err) {
+			.catch(function (err) {
 				responseService.fail(res, 'Remove failed', err.message);
 			});
 	},
@@ -160,7 +160,7 @@ module.exports = {
 				responseService.success(res, 'Find success', users);
 			})
 
-			.catch(function(err) {
+			.catch(function (err) {
 				responseService.fail(res, 'Find failed', err.message);
 			});
 	},
@@ -175,7 +175,7 @@ module.exports = {
 				responseService.success(res, 'Find success', user);
 			})
 
-			.catch(function(err) {
+			.catch(function (err) {
 				responseService.fail(res, 'Find failed', err.message);
 			});
 	},
@@ -196,7 +196,7 @@ module.exports = {
 				responseService.success(res, 'Give permission success');
 			})
 
-			.catch(function(err) {
+			.catch(function (err) {
 				responseService.fail(res, 'Give permission failed', err.message);
 			});
 	}

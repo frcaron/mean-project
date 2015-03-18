@@ -26,16 +26,16 @@ module.exports = {
 				plan.addLinkUser();
 
 				return CategoryModel.findOneAsync({
-							_user : plan._user,
-							name  : 'unknow'
-						});
+					_user : plan._user,
+					name  : 'unknow'
+				});
 			})
 
 			.then(function (category) {
 
 				if (!category) {
 					throw new Error('Category not found');
-				}	
+				}
 
 				programUnknow.category = category._id;
 				programUnknow._plan = plan._id;
@@ -44,7 +44,7 @@ module.exports = {
 				programUnknow.saveAsync();
 
 				category._programs.push(programUnknow);
-				
+
 				return category.saveAsync();
 			})
 
@@ -61,13 +61,13 @@ module.exports = {
 			.catch(function (err) {
 
 				// Rollback
-				if(plan._id) {
-					PlanModel.remove({ _id : plan._id}).execAsync();
+				if (plan._id) {
+					PlanModel.remove({ _id : plan._id }).execAsync();
 				}
-				if(programUnknow._id) {
+				if (programUnknow._id) {
 					ProgramModel.remove({ _id : programUnknow._id }).execAsync();
 					CategoryModel.findOne({ _programs : programUnknow._id }, function (err, category) {
-						if(!err && category) {
+						if (!err && category) {
 							category._programs.pull(programUnknow);
 							category.saveAsync();
 						}
@@ -82,15 +82,15 @@ module.exports = {
 	allByU  : function (req, res) {
 
 		var promise = PlanModel.findAsync({
-						_user : req.decoded.id
-					});
+			_user : req.decoded.id
+		});
 
 		promise
 			.then(function (plans) {
 				responseService.success(res, 'Find success', plans);
 			})
 
-			.catch(function(err) {
+			.catch(function (err) {
 				responseService.fail(res, 'Find failed', err.message);
 			});
 	},
@@ -108,7 +108,7 @@ module.exports = {
 				responseService.success(res, 'Find success', plan);
 			})
 
-			.catch(function(err) {
+			.catch(function (err) {
 				responseService.fail(res, 'Find failed', err.message);
 			});
 	}

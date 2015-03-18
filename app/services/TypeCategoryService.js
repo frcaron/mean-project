@@ -7,7 +7,7 @@ var responseService = require(global.__service + '/ResponseService');
 module.exports = {
 
 	// Create one type category
-	create       : function (req, res) {
+	create    : function (req, res) {
 
 		var typeCategory = new TypeCategoryModel();
 
@@ -20,19 +20,19 @@ module.exports = {
 				responseService.success(res, 'Add success', typeCategory._id);
 			})
 
-			.catch(function (err){
+			.catch(function (err) {
 				responseService.fail(res, 'Add failed', err.message);
 			});
 	},
 
 	// Update one type category
-	update       : function (req, res) {
+	update    : function (req, res) {
 
 		var promise = TypeCategoryModel.findByIdAsync(req.params.type_category_id);
 
 		promise
 			.then(function (typeCategory) {
-				
+
 				if (!typeCategory) {
 					throw new Error('Type category not found');
 				}
@@ -57,11 +57,11 @@ module.exports = {
 	},
 
 	// Remove one type category
-	remove       : function (req, res) {
+	remove    : function (req, res) {
 
 		var promise = TypeCategoryModel.removeAsync({
-						_id : req.params.type_category_id
-					});
+			_id : req.params.type_category_id
+		});
 
 		promise
 			.then(function () {
@@ -74,7 +74,7 @@ module.exports = {
 	},
 
 	// Get all type category
-	all          : function (req, res) {
+	all       : function (req, res) {
 
 		var promise = TypeCategoryModel.findAsync();
 
@@ -92,8 +92,8 @@ module.exports = {
 	allActive : function (req, res) {
 
 		var promise = TypeCategoryModel.findAsync({
-						active : true
-					});
+			active : true
+		});
 
 		promise
 			.then(function (typeCategories) {
@@ -106,7 +106,7 @@ module.exports = {
 	},
 
 	// Get one type category by id
-	getById      : function (req, res) {
+	getById   : function (req, res) {
 
 		var promise = TypeCategoryModel.findByIdAsync(req.params.type_category_id);
 

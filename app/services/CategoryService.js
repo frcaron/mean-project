@@ -8,7 +8,7 @@ var responseService = require(global.__service + '/ResponseService');
 module.exports = {
 
 	// Create one category
-	create: function(req, res) {
+	create             : function (req, res) {
 
 		var category = new CategoryModel();
 
@@ -25,11 +25,10 @@ module.exports = {
 				category.type = req.query.type_category_id;
 				category._user = req.decoded.id;
 
-				
 				return category.saveAsync();
 			})
 
-			.then(function() {
+			.then(function () {
 				responseService.success(res, 'Add success', category._id);
 			})
 
@@ -39,16 +38,16 @@ module.exports = {
 	},
 
 	// Update one category
-	update: function(req, res) {
+	update             : function (req, res) {
 
 		var promise = CategoryModel.findOneAsync({
-						_id: req.params.category_id,
-						_user: req.decoded.id
-					});
+			_id   : req.params.category_id,
+			_user : req.decoded.id
+		});
 
 		promise
 			.then(function (category) {
-			
+
 				if (!category) {
 					throw new Error('Category not found');
 				}
@@ -60,7 +59,7 @@ module.exports = {
 				return category.saveAsync();
 			})
 
-			.then(function() {
+			.then(function () {
 				responseService.success(res, 'Update success');
 			})
 
@@ -70,12 +69,12 @@ module.exports = {
 	},
 
 	// Remove one category
-	remove: function(req, res) {
+	remove             : function (req, res) {
 
 		var promise = CategoryModel.findOneAsync({
-						_id: req.params.category_id,
-						_user: req.decoded.id
-					});
+			_id   : req.params.category_id,
+			_user : req.decoded.id
+		});
 
 		promise
 			.then(function (category) {
@@ -98,11 +97,11 @@ module.exports = {
 	},
 
 	// Get categories by user
-	allByU: function(req, res) {
+	allByU             : function (req, res) {
 
 		var promise = CategoryModel.findAsync({
-						_user: req.decoded.id
-					});
+			_user : req.decoded.id
+		});
 
 		promise
 			.then(function (categories) {
@@ -115,12 +114,12 @@ module.exports = {
 	},
 
 	// Get active categories by user
-	allActiveByU: function(req, res) {
+	allActiveByU       : function (req, res) {
 
 		var promise = CategoryModel.findAsync({
-						_user: req.decoded.id,
-						active: true
-					});
+			_user  : req.decoded.id,
+			active : true
+		});
 
 		promise
 			.then(function (categories) {
@@ -133,13 +132,13 @@ module.exports = {
 	},
 
 	// Get categories by type category
-	allByTypeCategoryU: function(req, res) {
+	allByTypeCategoryU : function (req, res) {
 
 		var promise = CategoryModel.findAsync({
-						_user: req.decoded.id,
-						type: req.params.type_category_id,
-						active: true
-					});
+			_user  : req.decoded.id,
+			type   : req.params.type_category_id,
+			active : true
+		});
 
 		promise
 			.then(function (categories) {
@@ -152,12 +151,12 @@ module.exports = {
 	},
 
 	// Get one category by id
-	getByIdU: function(req, res) {
+	getByIdU           : function (req, res) {
 
 		var promise = CategoryModel.findOneAsync({
-						_id: req.params.category_id,
-						_user: req.decoded.id
-					});
+			_id   : req.params.category_id,
+			_user : req.decoded.id
+		});
 
 		promise
 			.then(function (category) {

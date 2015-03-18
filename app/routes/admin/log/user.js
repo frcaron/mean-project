@@ -10,7 +10,7 @@ module.exports = function (router) {
 	router.route(api_prefix)
 
 		// Get all users
-		.get(function(req, res) {
+		.get(function (req, res) {
 			userService.all(req, res);
 		});
 

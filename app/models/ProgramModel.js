@@ -18,10 +18,10 @@ var ProgramSchema = new Schema({
 		required : true
 	},
 	sum          : Number,
-	transactions : [{
+	transactions : [ {
 		type : Schema.Types.ObjectId,
 		ref  : 'Transaction'
-	}],
+	} ],
 	_plan        : {
 		type     : Schema.Types.ObjectId,
 		ref      : 'Plan',

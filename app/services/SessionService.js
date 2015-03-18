@@ -39,7 +39,7 @@ module.exports = {
 				expiresMinutes : 1440
 			});
 
-			return responseService.success(res,'Authentication success', token);
+			return responseService.success(res, 'Authentication success', token);
 		});
 	}
 };

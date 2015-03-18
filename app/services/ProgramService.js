@@ -17,7 +17,7 @@ module.exports = {
 
 		promise
 			.then(function (category) {
-				
+
 				if (!category) {
 					throw new Error('Category id invalid');
 				}
@@ -26,7 +26,7 @@ module.exports = {
 			})
 
 			.then(function (plan) {
-					
+
 				if (!plan) {
 					throw new Error('Plan id invalid');
 				}
@@ -47,13 +47,13 @@ module.exports = {
 				program.addLinkCategory();
 
 				responseService.success(res, 'Add success', program._id);
-				
+
 			})
 
-			.catch(function(err) {
+			.catch(function (err) {
 
 				// Rollback
-				if(program._id) {
+				if (program._id) {
 					program.removeLinkPlan();
 					program.removeLinkCategory();
 					program.remove().execAsync();
@@ -67,9 +67,9 @@ module.exports = {
 	update     : function (req, res) {
 
 		var promise = ProgramModel.findOneAsync({
-						_id   : req.params.program_id,
-						_user : req.decoded.id
-					});
+			_id   : req.params.program_id,
+			_user : req.decoded.id
+		});
 
 		promise
 			.then(function (program) {
@@ -89,8 +89,8 @@ module.exports = {
 				responseService.success(res, 'Update success');
 			})
 
-			.catch(function(err) {
-				 responseService.fail(res, 'Update failed', err.message);
+			.catch(function (err) {
+				responseService.fail(res, 'Update failed', err.message);
 			});
 	},
 
@@ -98,9 +98,9 @@ module.exports = {
 	remove     : function (req, res) {
 
 		var promise = ProgramModel.findOneAndRemoveAsync({
-						_id   : req.params.program_id,
-						_user : req.decoded.id
-					});
+			_id   : req.params.program_id,
+			_user : req.decoded.id
+		});
 
 		promise
 			.then(function (program) {
@@ -116,7 +116,7 @@ module.exports = {
 				responseService.success(res, 'Remove success');
 			})
 
-			.catch(function(err) {
+			.catch(function (err) {
 				responseService.fail(res, 'Remove failed', err.message);
 			});
 	},
@@ -124,17 +124,17 @@ module.exports = {
 	// Get programs by plan
 	allByPlanU : function (req, res) {
 
-		var promise  = ProgramModel.findAsync({
-						_user : req.decoded.id,
-						_plan : req.params.plan_id
-					})
+		var promise = ProgramModel.findAsync({
+			_user : req.decoded.id,
+			_plan : req.params.plan_id
+		})
 
 		promise
 			.then(function (programs) {
 				responseService.success(res, 'Find success', programs);
 			})
 
-			.catch(function(err) {
+			.catch(function (err) {
 				responseService.fail(res, 'Find failed', err.message);
 			});
 	},
@@ -143,20 +143,20 @@ module.exports = {
 	getByIdU   : function (req, res) {
 
 		var promise = ProgramModel.findOneAsync({
-						_id   : req.params.program_id,
-						_user : req.decoded.id
-					});
+			_id   : req.params.program_id,
+			_user : req.decoded.id
+		});
 
 		promise
 			.then(function (program) {
-	           
-	            if(!program) {
-	               throw new Error('Program not found');
-	            }
+
+				if (!program) {
+					throw new Error('Program not found');
+				}
 				responseService.success(res, 'Find success', program);
 			})
 
-			.catch(function(err) {
+			.catch(function (err) {
 				responseService.fail(res, 'Find failed', err.message);
 			});
 	}
