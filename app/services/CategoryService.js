@@ -21,8 +21,8 @@ module.exports = {
 					throw new Error('Type category id invalid');
 				}
 
-				category.name = req.body.name;
-				category.type = req.query.type_category_id;
+				category.name  = req.body.name;
+				category.type  = req.query.type_category_id;
 				category._user = req.decoded.id;
 
 				return category.saveAsync();
@@ -33,6 +33,9 @@ module.exports = {
 			})
 
 			.catch(function (err) {
+				if(category._id) {
+					CategoryModel.remove({ _id : category._id }).execAsync();
+				}
 				responseService.fail(res, 'Add failed', err.message);
 			});
 	},

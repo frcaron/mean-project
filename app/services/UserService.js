@@ -29,7 +29,7 @@ module.exports = {
 					// Type category not exist, create new
 					var newTypeCategory = new TypeCategoryModel();
 
-					newTypeCategory.type = 'unknow';
+					newTypeCategory.type   = 'unknow';
 					newTypeCategory.active = false;
 					newTypeCategory.save();
 
@@ -38,11 +38,11 @@ module.exports = {
 					id = typeCategory._id;
 				}
 
-				user.name = req.body.name;
+				user.name     = req.body.name;
 				user.username = req.body.username;
 				user.password = req.body.password;
 				if (req.body.admin) { // TODO remove permission
-					user.admin = req.body.admin;
+				user.admin    = req.body.admin;
 				}
 
 				return user.saveAsync();
@@ -52,10 +52,10 @@ module.exports = {
 
 				var category = new CategoryModel();
 
-				category.name = 'unknow';
-				category.type = id;
+				category.name   = 'unknow';
+				category.type   = id;
 				category.active = false;
-				category._user = user._id;
+				category._user  = user._id;
 
 				return category.saveAsync();
 

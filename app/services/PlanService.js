@@ -15,7 +15,7 @@ module.exports = {
 		var programUnknow = new ProgramModel();
 
 		plan.month = req.body.month;
-		plan.year = req.body.year;
+		plan.year  = req.body.year;
 		plan._user = req.decoded.id;
 
 		var promise = plan.saveAsync();
@@ -38,8 +38,8 @@ module.exports = {
 				}
 
 				programUnknow.category = category._id;
-				programUnknow._plan = plan._id;
-				programUnknow._user = plan._user;
+				programUnknow._plan    = plan._id;
+				programUnknow._user    = plan._user;
 
 				programUnknow.saveAsync();
 

@@ -33,10 +33,10 @@ module.exports = {
 
 				program.category = req.query.category_id;
 				if (req.body.sum) {
-					program.sum = req.body.sum;
+				program.sum      = req.body.sum;
 				}
-				program._plan = req.query.plan_id;
-				program._user = req.decoded.id;
+				program._plan    = req.query.plan_id;
+				program._user    = req.decoded.id;
 
 				return program.saveAsync();
 			})
@@ -47,7 +47,6 @@ module.exports = {
 				program.addLinkCategory();
 
 				responseService.success(res, 'Add success', program._id);
-
 			})
 
 			.catch(function (err) {
@@ -56,7 +55,7 @@ module.exports = {
 				if (program._id) {
 					program.removeLinkPlan();
 					program.removeLinkCategory();
-					program.remove().execAsync();
+					program.remove({ _id : program._id }).execAsync();
 				}
 
 				responseService.fail(res, 'Add failed', err.message);
@@ -127,7 +126,7 @@ module.exports = {
 		var promise = ProgramModel.findAsync({
 			_user : req.decoded.id,
 			_plan : req.params.plan_id
-		})
+		});
 
 		promise
 			.then(function (programs) {

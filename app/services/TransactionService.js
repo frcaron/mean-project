@@ -27,11 +27,11 @@ function changeProgram(transaction, user_id, category_id, date) {
 
 			var date_split = date.split('/');
 
-			return PlanModel.findOneAsync({
+			return PlanModel.findOne({
 				_user : user_id,
 				month : date_split[ 1 ],
 				year  : date_split[ 2 ]
-			}).populate('programs', '_id category');
+			}).populate('programs', '_id category').execAsync();
 		})
 
 		.then(function (plan) {
@@ -58,9 +58,11 @@ function changeProgram(transaction, user_id, category_id, date) {
 		})
 
 		.then(function () {
+
 			transaction.addLinkProgram();
+
 			return transaction._id;
-		})
+		});
 }
 
 module.exports = {
@@ -70,12 +72,14 @@ module.exports = {
 
 		var transaction = new TransactionModel();
 
-		transaction.date = req.body.date;
-		transaction.sum = req.body.sum;
+		transaction.date    = Date.parse(req.body.date);
+		transaction.sum     = req.body.sum;
 		if (req.body.comment) {
-			transaction.comment = req.body.comment;
+		transaction.comment = req.body.comment;
 		}
-		transaction._user = req.decoded.id;
+		transaction._user   = req.decoded.id;
+
+		console.log(transaction);
 
 		var promise = changeProgram(
 			transaction,
@@ -89,6 +93,12 @@ module.exports = {
 			})
 
 			.catch(function (err) {
+
+				if(transaction._id) {
+					transaction.removeLinkProgram();
+					TransactionModel.remove({ _id : transaction._id }).execAsync();
+				}
+
 				responseService.fail(res, 'Add failed', err.message);
 			});
 	},
@@ -99,7 +109,7 @@ module.exports = {
 		var promise = TransactionModel.findOneAsync({
 			_id   : req.params.transaction_id,
 			_user : req.decoded.id
-		}).populate('_program', 'category');
+		}).populate('_program', 'category').execAsync();
 
 		promise
 			.then(function (transaction) {
@@ -108,13 +118,11 @@ module.exports = {
 					throw new Error('Transaction not found');
 				}
 
-				var last_category = transaction._program.category;
-
 				if (!req.body.date.equals(transaction.date)) {
-					transaction.date = req.body.date;
+					transaction.date    = Date.parse(req.body.date);
 				}
 				if (req.body.sum) {
-					transaction.sum = req.body.sum;
+					transaction.sum     = req.body.sum;
 				}
 				if (req.body.comment) {
 					transaction.comment = req.body.comment;
@@ -124,10 +132,7 @@ module.exports = {
 					transaction.removeLinkProgram();
 				}
 
-				return transaction.saveAsync();
-			})
-
-			.then(function () {
+				transaction.saveAsync();
 
 				if (transaction.isModified('_program')) {
 					return changeProgram(
@@ -240,7 +245,7 @@ module.exports = {
 	// Get one transaction by id
 	getByIdU           : function (req, res) {
 
-		var promise = TransactionModel.findOne({
+		var promise = TransactionModel.findOneAsync({
 			_id   : req.params.transaction_id,
 			_user : req.decoded.id
 		});
