@@ -39,13 +39,44 @@
 	},
 	"buffers":
 	[
+		{
+			"contents": "Remote:   origin @ https://github.com/frcaron/mean-project.git\nLocal:    master ~\\WebstormProjects\\mean-project\nHead:     5c2a9b5 unversionned\n\n\nStashes:\n	0: On master: Uncommitted changes before update operation at 19/03/15 09:42\n	1: On master: Uncommitted changes before update operation at 16/03/15 11:10\n\nChanges:\n	Modified   node_modules/serve-favicon/HISTORY.md\n	Modified   node_modules/serve-favicon/LICENSE\n	Modified   node_modules/serve-favicon/README.md\n	Modified   node_modules/serve-favicon/index.js\n	Modified   node_modules/serve-favicon/node_modules/etag/HISTORY.md\n	Modified   node_modules/serve-favicon/node_modules/etag/LICENSE\n	Modified   node_modules/serve-favicon/node_modules/etag/README.md\n	Modified   node_modules/serve-favicon/node_modules/etag/index.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/.npmignore\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/LICENSE\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/README.md\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc1.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc16.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc16_ccitt.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc16_modbus.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc24.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc32.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc8.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc8_1wire.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/create.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/hex.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/index.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/package.json\n	Modified   node_modules/serve-favicon/node_modules/etag/package.json\n	Modified   node_modules/serve-favicon/node_modules/fresh/HISTORY.md\n	Modified   node_modules/serve-favicon/node_modules/fresh/LICENSE\n	Modified   node_modules/serve-favicon/node_modules/fresh/README.md\n	Modified   node_modules/serve-favicon/node_modules/fresh/index.js\n	Modified   node_modules/serve-favicon/node_modules/fresh/package.json\n	Modified   node_modules/serve-favicon/node_modules/ms/.npmignore\n	Modified   node_modules/serve-favicon/node_modules/ms/README.md\n	Modified   node_modules/serve-favicon/node_modules/ms/index.js\n	Modified   node_modules/serve-favicon/node_modules/ms/package.json\n	Modified   node_modules/serve-favicon/package.json\n\n\n# Movement:\n#    r = refresh status\n#    1-5 = jump to section\n#    n = next item, N = next section\n#    p = previous item, P = previous section\n#\n# Staging:\n#    s = stage file/section, S = stage all unstaged files\n#    ctrl+shift+s = stage all unstaged and untracked files\n#    u = unstage file/section, U = unstage all files\n#    backspace = discard file/section, shift+backspace = discard everything\n#\n# Commit:\n#    c = commit, C = commit -a (add unstaged)\n#    ctrl+shift+c = commit --amend (amend previous commit)\n#\n# Other:\n#    i = ignore file, I = ignore pattern\n#    enter = open file\n#    d = view diff\n#\n# Stashes:\n#    a = apply stash, A = pop stash\n#    z = create stash, Z = create stash including untracked files\n#    backspace = discard stash",
+			"settings":
+			{
+				"buffer_size": 3661,
+				"line_ending": "Windows",
+				"name": "*git-status*: mean-project",
+				"read_only": true,
+				"scratch": true
+			}
+		}
 	],
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 172.0,
+		"height": 392.0,
 		"selected_items":
 		[
+			[
+				"stat",
+				"Git: Status"
+			],
+			[
+				"sta",
+				"Git: Stash Include Untracked"
+			],
+			[
+				"pull",
+				"Git: Pull"
+			],
+			[
+				"statu",
+				"Git: Status"
+			],
+			[
+				"merge",
+				"Git: Merge"
+			],
 			[
 				"instal",
 				"Package Control: Install Package"
@@ -83,10 +114,6 @@
 				"Git: Fetch"
 			],
 			[
-				"pull",
-				"Git: Pull Current Branch"
-			],
-			[
 				"qui",
 				"Git: Quick Commit"
 			],
@@ -109,10 +136,6 @@
 			[
 				"push",
 				"Git: Push Current Branch"
-			],
-			[
-				"stat",
-				"Git: Status"
 			],
 			[
 				"fe",
@@ -183,19 +206,11 @@
 				"Git: Show"
 			],
 			[
-				"statu",
-				"Git: Status"
-			],
-			[
 				"Git",
 				"Git: Status"
 			],
 			[
 				"mer",
-				"Git: Merge"
-			],
-			[
-				"merge",
 				"Git: Merge"
 			]
 		],
@@ -227,6 +242,7 @@
 	],
 	"file_history":
 	[
+		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/.gitignore",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/package.json",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/services/CategoryService.js",
 		"/C/Documents and Settings/Administrateur/Application Data/Sublime Text 3/Packages/User/SublimeLinter.sublime-settings",
@@ -375,8 +391,43 @@
 	"groups":
 	[
 		{
+			"selected": 0,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3661,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								142,
+								142
+							]
+						],
+						"settings":
+						{
+							"__vi_external_disable": true,
+							"draw_white_space": "none",
+							"git_repo": "C:\\Documents and Settings\\Administrateur\\WebstormProjects\\mean-project",
+							"git_status": true,
+							"git_view": "status",
+							"syntax": "Packages/SublimeGit/syntax/SublimeGit Status.tmLanguage",
+							"translate_tabs_to_spaces": false,
+							"word_wrap": false
+						},
+						"translation.x": -0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
 			]
 		}
 	],
