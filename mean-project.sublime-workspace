@@ -40,7 +40,7 @@
 	"buffers":
 	[
 		{
-			"contents": "Remote:   origin @ https://github.com/frcaron/mean-project.git\nLocal:    master ~\\WebstormProjects\\mean-project\nHead:     cf3876d test\n\n\nStashes:\n	0: On master: Uncommitted changes before update operation at 19/03/15 09:42\n	1: On master: Uncommitted changes before update operation at 16/03/15 11:10\n\nChanges:\n	Modified   node_modules/serve-favicon/HISTORY.md\n	Modified   node_modules/serve-favicon/LICENSE\n	Modified   node_modules/serve-favicon/README.md\n	Modified   node_modules/serve-favicon/index.js\n	Modified   node_modules/serve-favicon/node_modules/etag/HISTORY.md\n	Modified   node_modules/serve-favicon/node_modules/etag/LICENSE\n	Modified   node_modules/serve-favicon/node_modules/etag/README.md\n	Modified   node_modules/serve-favicon/node_modules/etag/index.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/.npmignore\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/LICENSE\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/README.md\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc1.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc16.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc16_ccitt.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc16_modbus.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc24.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc32.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc8.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc8_1wire.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/create.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/hex.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/index.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/package.json\n	Modified   node_modules/serve-favicon/node_modules/etag/package.json\n	Modified   node_modules/serve-favicon/node_modules/fresh/HISTORY.md\n	Modified   node_modules/serve-favicon/node_modules/fresh/LICENSE\n	Modified   node_modules/serve-favicon/node_modules/fresh/README.md\n	Modified   node_modules/serve-favicon/node_modules/fresh/index.js\n	Modified   node_modules/serve-favicon/node_modules/fresh/package.json\n	Modified   node_modules/serve-favicon/node_modules/ms/.npmignore\n	Modified   node_modules/serve-favicon/node_modules/ms/README.md\n	Modified   node_modules/serve-favicon/node_modules/ms/index.js\n	Modified   node_modules/serve-favicon/node_modules/ms/package.json\n	Modified   node_modules/serve-favicon/package.json\n\n\n# Movement:\n#    r = refresh status\n#    1-5 = jump to section\n#    n = next item, N = next section\n#    p = previous item, P = previous section\n#\n# Staging:\n#    s = stage file/section, S = stage all unstaged files\n#    ctrl+shift+s = stage all unstaged and untracked files\n#    u = unstage file/section, U = unstage all files\n#    backspace = discard file/section, shift+backspace = discard everything\n#\n# Commit:\n#    c = commit, C = commit -a (add unstaged)\n#    ctrl+shift+c = commit --amend (amend previous commit)\n#\n# Other:\n#    i = ignore file, I = ignore pattern\n#    enter = open file\n#    d = view diff\n#\n# Stashes:\n#    a = apply stash, A = pop stash\n#    z = create stash, Z = create stash including untracked files\n#    backspace = discard stash",
+			"contents": "Remote:   origin @ https://github.com/frcaron/mean-project.git\nLocal:    master ~\\WebstormProjects\\mean-project\nHead:     3ed62ce test\n\n\nStashes:\n	0: On master: Uncommitted changes before update operation at 19/03/15 09:42\n	1: On master: Uncommitted changes before update operation at 16/03/15 11:10\n\nChanges:\n	Modified   node_modules/serve-favicon/HISTORY.md\n	Modified   node_modules/serve-favicon/LICENSE\n	Modified   node_modules/serve-favicon/README.md\n	Modified   node_modules/serve-favicon/index.js\n	Modified   node_modules/serve-favicon/node_modules/etag/HISTORY.md\n	Modified   node_modules/serve-favicon/node_modules/etag/LICENSE\n	Modified   node_modules/serve-favicon/node_modules/etag/README.md\n	Modified   node_modules/serve-favicon/node_modules/etag/index.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/.npmignore\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/LICENSE\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/README.md\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc1.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc16.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc16_ccitt.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc16_modbus.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc24.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc32.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc8.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc8_1wire.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/create.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/hex.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/index.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/package.json\n	Modified   node_modules/serve-favicon/node_modules/etag/package.json\n	Modified   node_modules/serve-favicon/node_modules/fresh/HISTORY.md\n	Modified   node_modules/serve-favicon/node_modules/fresh/LICENSE\n	Modified   node_modules/serve-favicon/node_modules/fresh/README.md\n	Modified   node_modules/serve-favicon/node_modules/fresh/index.js\n	Modified   node_modules/serve-favicon/node_modules/fresh/package.json\n	Modified   node_modules/serve-favicon/node_modules/ms/.npmignore\n	Modified   node_modules/serve-favicon/node_modules/ms/README.md\n	Modified   node_modules/serve-favicon/node_modules/ms/index.js\n	Modified   node_modules/serve-favicon/node_modules/ms/package.json\n	Modified   node_modules/serve-favicon/package.json\n\n\n# Movement:\n#    r = refresh status\n#    1-5 = jump to section\n#    n = next item, N = next section\n#    p = previous item, P = previous section\n#\n# Staging:\n#    s = stage file/section, S = stage all unstaged files\n#    ctrl+shift+s = stage all unstaged and untracked files\n#    u = unstage file/section, U = unstage all files\n#    backspace = discard file/section, shift+backspace = discard everything\n#\n# Commit:\n#    c = commit, C = commit -a (add unstaged)\n#    ctrl+shift+c = commit --amend (amend previous commit)\n#\n# Other:\n#    i = ignore file, I = ignore pattern\n#    enter = open file\n#    d = view diff\n#\n# Stashes:\n#    a = apply stash, A = pop stash\n#    z = create stash, Z = create stash including untracked files\n#    backspace = discard stash",
 			"settings":
 			{
 				"buffer_size": 3653,
@@ -59,11 +59,23 @@
 		[
 			[
 				"push",
-				"Git: Push"
+				"Git: Push Current Branch"
 			],
 			[
 				"stat",
 				"Git: Status"
+			],
+			[
+				"qu",
+				"Git: Quick Status"
+			],
+			[
+				"sublimegit",
+				"Set Syntax: SublimeGit Show"
+			],
+			[
+				"pus",
+				"Git: Push Current Branch"
 			],
 			[
 				"sta",
@@ -108,10 +120,6 @@
 			[
 				"remove",
 				"Package Control: Remove Package"
-			],
-			[
-				"pus",
-				"Git: Push Current Branch"
 			],
 			[
 				"fet",
