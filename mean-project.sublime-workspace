@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"Progr",
+				"ProgramModel"
+			],
+			[
 				"remo",
 				"removeLinkCategory"
 			],
@@ -40,25 +44,38 @@
 	"buffers":
 	[
 		{
-			"contents": "Remote:   origin @ https://github.com/frcaron/mean-project.git\nLocal:    master ~\\WebstormProjects\\mean-project\nHead:     3ed62ce test\n\n\nStashes:\n	0: On master: Uncommitted changes before update operation at 19/03/15 09:42\n	1: On master: Uncommitted changes before update operation at 16/03/15 11:10\n\nChanges:\n	Modified   node_modules/serve-favicon/HISTORY.md\n	Modified   node_modules/serve-favicon/LICENSE\n	Modified   node_modules/serve-favicon/README.md\n	Modified   node_modules/serve-favicon/index.js\n	Modified   node_modules/serve-favicon/node_modules/etag/HISTORY.md\n	Modified   node_modules/serve-favicon/node_modules/etag/LICENSE\n	Modified   node_modules/serve-favicon/node_modules/etag/README.md\n	Modified   node_modules/serve-favicon/node_modules/etag/index.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/.npmignore\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/LICENSE\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/README.md\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc1.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc16.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc16_ccitt.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc16_modbus.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc24.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc32.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc8.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/crc8_1wire.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/create.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/hex.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/lib/index.js\n	Modified   node_modules/serve-favicon/node_modules/etag/node_modules/crc/package.json\n	Modified   node_modules/serve-favicon/node_modules/etag/package.json\n	Modified   node_modules/serve-favicon/node_modules/fresh/HISTORY.md\n	Modified   node_modules/serve-favicon/node_modules/fresh/LICENSE\n	Modified   node_modules/serve-favicon/node_modules/fresh/README.md\n	Modified   node_modules/serve-favicon/node_modules/fresh/index.js\n	Modified   node_modules/serve-favicon/node_modules/fresh/package.json\n	Modified   node_modules/serve-favicon/node_modules/ms/.npmignore\n	Modified   node_modules/serve-favicon/node_modules/ms/README.md\n	Modified   node_modules/serve-favicon/node_modules/ms/index.js\n	Modified   node_modules/serve-favicon/node_modules/ms/package.json\n	Modified   node_modules/serve-favicon/package.json\n\n\n# Movement:\n#    r = refresh status\n#    1-5 = jump to section\n#    n = next item, N = next section\n#    p = previous item, P = previous section\n#\n# Staging:\n#    s = stage file/section, S = stage all unstaged files\n#    ctrl+shift+s = stage all unstaged and untracked files\n#    u = unstage file/section, U = unstage all files\n#    backspace = discard file/section, shift+backspace = discard everything\n#\n# Commit:\n#    c = commit, C = commit -a (add unstaged)\n#    ctrl+shift+c = commit --amend (amend previous commit)\n#\n# Other:\n#    i = ignore file, I = ignore pattern\n#    enter = open file\n#    d = view diff\n#\n# Stashes:\n#    a = apply stash, A = pop stash\n#    z = create stash, Z = create stash including untracked files\n#    backspace = discard stash",
+			"file": "app/services/TransactionService.js",
 			"settings":
 			{
-				"buffer_size": 3653,
-				"line_ending": "Windows",
-				"name": "*git-status*: mean-project",
-				"read_only": true,
-				"scratch": true
+				"buffer_size": 6390,
+				"line_ending": "Windows"
 			}
 		}
 	],
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 132.0,
+		"height": 392.0,
 		"selected_items":
 		[
 			[
+				"at",
+				"AlignTab"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
 				"push",
+				"Git: Push"
+			],
+			[
+				"fetc",
+				"Git: Fetch"
+			],
+			[
+				"pus",
 				"Git: Push Current Branch"
 			],
 			[
@@ -72,10 +89,6 @@
 			[
 				"sublimegit",
 				"Set Syntax: SublimeGit Show"
-			],
-			[
-				"pus",
-				"Git: Push Current Branch"
 			],
 			[
 				"sta",
@@ -104,10 +117,6 @@
 			[
 				"rem",
 				"Package Control: Remove Package"
-			],
-			[
-				"install",
-				"Package Control: Install Package"
 			],
 			[
 				"insta",
@@ -156,10 +165,6 @@
 			[
 				"a",
 				"Git: Add Remote"
-			],
-			[
-				"fetc",
-				"Git: Fetch"
 			],
 			[
 				"git",
@@ -226,9 +231,10 @@
 	},
 	"console":
 	{
-		"height": 309.0,
+		"height": 428.0,
 		"history":
 		[
+			"ls",
 			"import urllib.request,os,hashlib; h = 'eb2297e1a458f27d836c04bb0cbaf282' + 'd0e7a3098092775ccb37ca9d6b2e4b7d'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
 		]
 	},
@@ -246,40 +252,42 @@
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/models",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/services"
+		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/services",
+		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/config"
 	],
 	"file_history":
 	[
+		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/api/log/transaction.js",
+		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/models/TransactionModel.js",
+		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/services/ProgramService.js",
+		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/services/CategoryService.js",
+		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/models/ProgramModel.js",
+		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/services/PlanService.js",
+		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/models/CategoryModel.js",
+		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/models/PlanModel.js",
+		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/models/TypeCategoryModel.js",
+		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/services/TransactionService.js",
+		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/config/database.js",
+		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/.jshintrc",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/mean-project.sublime-workspace",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/.gitignore",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/package.json",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/services/CategoryService.js",
 		"/C/Documents and Settings/Administrateur/Application Data/Sublime Text 3/Packages/User/SublimeLinter.sublime-settings",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/.jshintrc",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/services/ProgramService.js",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/services/ResponseService.js",
 		"/C/Documents and Settings/Administrateur/Application Data/Sublime Text 3/Packages/SublimeLinter/SublimeLinter.sublime-settings",
 		"/C/Documents and Settings/Administrateur/Application Data/Sublime Text 3/Packages/SublimeLinter/Default (Windows).sublime-keymap",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/services/UserService.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/services/PlanService.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/models/CategoryModel.js",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/services/TransactionService.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/api/log/transaction.js",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/api/log/program.js",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/api/log/plan.js",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/api/log/category.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/models/ProgramModel.js",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/node_modules/body-parser/node_modules/iconv-lite/encodings/sbcs-data-generated.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/models/PlanModel.js",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/mean-project.sublime-project",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/node_modules/bluebird/js/main/captured_trace.js",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/node_modules/bluebird/changelog.md",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/admin/unlog/typecategory.js",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/services/TypeCategoryService.js",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/admin/log/typecategory.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/models/TypeCategoryModel.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/models/TransactionModel.js",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/route.admin.js",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/models/UserModel.js",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/admin/log/user.js",
@@ -291,7 +299,6 @@
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/api/log/typecategory.js",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/api/log/me.js",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/README.md",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/config/database.js",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/node_modules/mongoose/lib/errors/divergentArray.js",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/.idea/deployment.xml",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/services/SessionService.js",
@@ -342,6 +349,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"testa",
 			"category_id",
 			"t",
 			"2",
@@ -405,33 +413,28 @@
 			[
 				{
 					"buffer": 0,
+					"file": "app/services/TransactionService.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3653,
+						"buffer_size": 6390,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								310,
-								310
+								3743,
+								3744
 							]
 						],
 						"settings":
 						{
-							"__vi_external_disable": true,
-							"draw_white_space": "none",
-							"git_repo": "C:\\Documents and Settings\\Administrateur\\WebstormProjects\\mean-project",
-							"git_status": true,
-							"git_view": "status",
-							"syntax": "Packages/SublimeGit/syntax/SublimeGit Status.tmLanguage",
-							"translate_tabs_to_spaces": false,
-							"word_wrap": false
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1845.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -510,6 +513,10 @@
 		"height": 0.0,
 		"selected_items":
 		[
+			[
+				"tra",
+				"app\\routes\\api\\log\\transaction.js"
+			],
 			[
 				"program",
 				"app\\routes\\api\\log\\program.js"

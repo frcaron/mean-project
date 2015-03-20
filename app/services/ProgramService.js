@@ -13,7 +13,7 @@ module.exports = {
 
 		var program = new ProgramModel();
 
-		var promise = CategoryModel.findByIdAsync(req.body.category_id, '_id');
+		var promise = CategoryModel.findByIdAsync(req.query.category_id, '_id');
 
 		promise
 			.then(function (category) {
@@ -22,7 +22,7 @@ module.exports = {
 					throw new Error('Category id invalid');
 				}
 
-				return PlanModel.findByIdAsync(req.body.plan_id, '_id');
+				return PlanModel.findByIdAsync(req.query.plan_id, '_id');
 			})
 
 			.then(function (plan) {
@@ -55,7 +55,7 @@ module.exports = {
 				if (program._id) {
 					program.removeLinkPlan();
 					program.removeLinkCategory();
-					program.remove({ _id : program._id }).execAsync();
+					ProgramModel.remove({ _id : program._id }).exec();
 				}
 
 				responseService.fail(res, 'Add failed', err.message);
@@ -76,7 +76,6 @@ module.exports = {
 				if (!program) {
 					throw new Error('Program not found');
 				}
-
 				if (req.body.sum) {
 					program.sum = req.body.sum;
 				}

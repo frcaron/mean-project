@@ -34,7 +34,7 @@ module.exports = {
 
 			.catch(function (err) {
 				if(category._id) {
-					CategoryModel.remove({ _id : category._id }).execAsync();
+					CategoryModel.remove({ _id : category._id }).exec();
 				}
 				responseService.fail(res, 'Add failed', err.message);
 			});

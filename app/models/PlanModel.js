@@ -47,8 +47,10 @@ PlanSchema.methods.addLinkUser = function () {
 	this.populate('_user', function (err, plan) {
 		var user = plan._user;
 
-		user.plans.push(plan);
-		user.save();
+		if(user) {
+			user.plans.push(plan);
+			user.save();
+		}
 	});
 };
 
@@ -57,8 +59,10 @@ PlanSchema.methods.removeLinkUser = function () {
 	this.populate('_user', function (err, plan) {
 		var user = plan._user;
 
-		user.plans.pull(plan);
-		user.save();
+		if(user) {
+			user.plans.pull(plan);
+			user.save();
+		}
 	});
 };
 

@@ -1,5 +1,6 @@
 // Inject application
 var Promise = require('bluebird');
+var moment = require('moment');
 
 // Inject models
 var PlanModel = require(global.__model + '/PlanModel');
@@ -12,6 +13,12 @@ var responseService = require(global.__service + '/ResponseService');
 
 // Save transaction and update link
 function changeProgram(transaction, user_id, category_id, date) {
+
+	console.log(transaction)
+	console.log(user_id)
+	console.log(category_id)
+	console.log(date)
+
 
 	var promise = CategoryModel.findOneAsync({
 		_id   : category_id,
@@ -72,12 +79,18 @@ module.exports = {
 
 		var transaction = new TransactionModel();
 
-		transaction.date    = Date.parse(req.body.date);
-		transaction.sum     = req.body.sum;
+		
+		var m = moment(req.body.date, "DD/MM/YYYY");
+		if(m.isValid()) {
+			transaction.date = m.toDate();
+		} else {
+			throw new Error('Date is not valid');
+		}
+		transaction.sum = req.body.sum;
 		if (req.body.comment) {
 		transaction.comment = req.body.comment;
 		}
-		transaction._user   = req.decoded.id;
+		transaction._user = req.decoded.id;
 
 		console.log(transaction);
 
@@ -85,7 +98,7 @@ module.exports = {
 			transaction,
 			req.decoded.id,
 			req.query.category_id,
-			req.body.date);
+			m.toDate());
 
 		promise
 			.then(function (id) {
@@ -106,7 +119,7 @@ module.exports = {
 	// Update one transaction
 	update             : function (req, res) {
 
-		var promise = TransactionModel.findOneAsync({
+		var promise = TransactionModel.findOne({
 			_id   : req.params.transaction_id,
 			_user : req.decoded.id
 		}).populate('_program', 'category').execAsync();
@@ -118,28 +131,39 @@ module.exports = {
 					throw new Error('Transaction not found');
 				}
 
-				if (!req.body.date.equals(transaction.date)) {
-					transaction.date    = Date.parse(req.body.date);
+				var newDate = moment(req.body.date, "DD/MM/YYYY");
+				var lastDate = moment(transaction.date, "DD/MM/YYYY");
+				if(newDate.isValid()) {
+					if (!newDate.equals(lastDate)) {
+						transaction.date = newDate.toDate();
+					}
+				} else {
+					throw new Error('Date is not valid');
 				}
+				console.log('1')
 				if (req.body.sum) {
-					transaction.sum     = req.body.sum;
+					transaction.sum = req.body.sum;
 				}
+				console.log('2')
 				if (req.body.comment) {
 					transaction.comment = req.body.comment;
 				}
+				console.log('3')
 				if (!req.query.category_id.equals(transaction._program.category) ||
-					!req.body.date.equals(transaction.date)) {
+					!newDate.equals(lastDate)) {
 					transaction.removeLinkProgram();
 				}
 
-				transaction.saveAsync();
+				console.log('pre save');
+				transaction.save();
+				console.log('post save');
 
 				if (transaction.isModified('_program')) {
 					return changeProgram(
 						transaction,
 						req.decoded.id,
 						req.query.category_id,
-						req.body.date);
+						m.toDate());
 				}
 			})
 

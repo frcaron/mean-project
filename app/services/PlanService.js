@@ -41,7 +41,7 @@ module.exports = {
 				programUnknow._plan    = plan._id;
 				programUnknow._user    = plan._user;
 
-				programUnknow.saveAsync();
+				programUnknow.save();
 
 				category._programs.push(programUnknow);
 
@@ -49,7 +49,7 @@ module.exports = {
 			})
 
 			.then(function () {
-				return plan.update({
+				return plan.updateAsync({
 					programUnknow : programUnknow._id
 				});
 			})
@@ -62,10 +62,11 @@ module.exports = {
 
 				// Rollback
 				if (plan._id) {
-					PlanModel.remove({ _id : plan._id }).execAsync();
+					plan.removeLinkUser();
+					PlanModel.remove({ _id : plan._id }).exec();
 				}
 				if (programUnknow._id) {
-					ProgramModel.remove({ _id : programUnknow._id }).execAsync();
+					ProgramModel.remove({ _id : programUnknow._id }).exec();
 					CategoryModel.findOne({ _programs : programUnknow._id }, function (err, category) {
 						if (!err && category) {
 							category._programs.pull(programUnknow);

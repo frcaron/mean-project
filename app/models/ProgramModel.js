@@ -45,8 +45,10 @@ ProgramSchema.methods.addLinkPlan = function () {
 	this.populate('_plan', function (err, program) {
 		var plan = program._plan;
 
-		plan.programs.push(program);
-		plan.save();
+		if(plan) {
+			plan.programs.push(program);
+			plan.save();
+		}
 	});
 };
 
@@ -55,8 +57,10 @@ ProgramSchema.methods.removeLinkPlan = function () {
 	this.populate('_plan', function (err, program) {
 		var plan = program._plan;
 
-		plan.programs.pull(program);
-		plan.save();
+		if(plan) {
+			plan.programs.pull(program);
+			plan.save();
+		}
 	});
 };
 
@@ -65,8 +69,10 @@ ProgramSchema.methods.addLinkCategory = function () {
 	this.populate('category', function (err, program) {
 		var category = program.category;
 
-		category._programs.push(program);
-		category.save();
+		if(category) {
+			category._programs.push(program);
+			category.save();
+		}
 	});
 };
 
@@ -75,8 +81,10 @@ ProgramSchema.methods.removeLinkCategory = function () {
 	this.populate('category', function (err, program) {
 		var category = program.category;
 
-		category._programs.pull(program);
-		category.save();
+		if(category) {
+			category._programs.pull(program);
+			category.save();
+		}
 	});
 };
 

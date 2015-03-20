@@ -41,8 +41,7 @@ module.exports = function (router) {
 				return responseService.fail(res, 'Update failed', 'Param "date" missing');
 			}
 			if (!req.query.category_id) {
-				return responseService.fail(res, 'Update failed',
-					'Param "category_id" missing');
+				return responseService.fail(res, 'Update failed', 'Param "category_id" missing');
 			}
 
 			transactionService.update(req, res);
