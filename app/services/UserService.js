@@ -1,13 +1,13 @@
 // Inject models
-var UserModel = require(global.__model + '/UserModel');
-var PlanModel = require(global.__model + '/PlanModel');
-var ProgramModel = require(global.__model + '/ProgramModel');
-var TransactionModel = require(global.__model + '/TransactionModel');
-var CategoryModel = require(global.__model + '/CategoryModel');
+var UserModel         = require(global.__model + '/UserModel');
+var PlanModel         = require(global.__model + '/PlanModel');
+var ProgramModel      = require(global.__model + '/ProgramModel');
+var TransactionModel  = require(global.__model + '/TransactionModel');
+var CategoryModel     = require(global.__model + '/CategoryModel');
 var TypeCategoryModel = require(global.__model + '/TypeCategoryModel');
 
 // Inject services
-var responseService = require(global.__service + '/ResponseService');
+var responseService   = require(global.__service + '/ResponseService');
 
 module.exports = {
 
@@ -15,65 +15,29 @@ module.exports = {
 	create    : function (req, res) {
 
 		var user = new UserModel();
-		var id;
+		
+		user.surname   = req.body.surname;
+		user.firstname = req.body.username;
+		user.email     = req.body.email;
+		user.password  = req.body.password;
+		if (req.body.admin) { // TODO remove permission
+			user.admin = req.body.admin;
+		}				
 
-		var promise = TypeCategoryModel.findOneAsync({
-			type : 'unknow'
-		});
-
-		promise
-			.then(function (typeCategory) {
-
-				if (!typeCategory) {
-
-					// Type category not exist, create new
-					var newTypeCategory = new TypeCategoryModel();
-
-					newTypeCategory.type   = 'unknow';
-					newTypeCategory.active = false;
-					newTypeCategory.save();
-
-					id = newTypeCategory._id;
-				} else {
-					id = typeCategory._id;
-				}
-
-				user.name     = req.body.name;
-				user.username = req.body.username;
-				user.password = req.body.password;
-				if (req.body.admin) { // TODO remove permission
-				user.admin    = req.body.admin;
-				}
-
-				return user.saveAsync();
-			})
-
-			.then(function () {
-
-				var category = new CategoryModel();
-
-				category.name   = 'unknow';
-				category.type   = id;
-				category.active = false;
-				category._user  = user._id;
-
-				return category.saveAsync();
-
-			}, function (err) {
-
-				if (err.code == 11000) {
-					throw new Error('User exist');
-				} else if (err) {
-					throw err;
-				}
-			})
+		user.saveAsync()
 
 			.then(function () {
 				responseService.success(res, 'Add success', user._id);
 			})
 
 			.catch(function (err) {
-				responseService.fail(res, 'Add failed', err.message);
+				var message;
+				if (err.code == 11000) {
+					message = 'User exist';
+				} else {
+					message = err.message;
+				}
+				responseService.fail(res, 'Add failed', message);
 			});
 
 	},
@@ -90,8 +54,14 @@ module.exports = {
 					throw new Error('User not found');
 				}
 
-				if (req.body.name) {
-					user.name = req.body.name;
+				if (req.body.surname) {
+					user.surname = req.body.surname;
+				}
+				if (req.body.firstname) {
+					user.firstname = req.body.firstname;
+				}
+				if (req.body.email) {
+					user.email = req.body.email;
 				}
 				if (req.body.password) {
 					user.password = req.body.password;
@@ -105,7 +75,13 @@ module.exports = {
 			})
 
 			.catch(function (err) {
-				responseService.fail(res, 'Update failed', err.message);
+				var message;
+				if (err.code == 11000) {
+					message = 'User exist';
+				} else {
+					message = err.message;
+				}
+				responseService.fail(res, 'Update failed', message);
 			});
 	},
 
@@ -187,7 +163,6 @@ module.exports = {
 
 		promise
 			.then(function (user) {
-
 				user.admin = true;
 				return user.saveAsync();
 			})

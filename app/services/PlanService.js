@@ -1,7 +1,8 @@
 // Inject models
-var PlanModel = require(global.__model + '/PlanModel');
-var ProgramModel = require(global.__model + '/ProgramModel');
-var CategoryModel = require(global.__model + '/CategoryModel');
+var PlanModel          = require(global.__model + '/PlanModel');
+var ProgramModel       = require(global.__model + '/ProgramModel');
+var CategoryModel      = require(global.__model + '/CategoryModel');
+var TypeCategoryModel  = require(global.__model + '/TypeCategoryModel');
 
 // Inject services
 var responseService = require(global.__service + '/ResponseService');
@@ -12,7 +13,6 @@ module.exports = {
 	create  : function (req, res) {
 
 		var plan = new PlanModel();
-		var programUnknow = new ProgramModel();
 
 		plan.month = req.body.month;
 		plan.year  = req.body.year;
@@ -22,36 +22,35 @@ module.exports = {
 
 		promise
 			.then(function () {
-
-				plan.addLinkUser();
-
-				return CategoryModel.findOneAsync({
-					_user : plan._user,
-					name  : 'unknow'
+				return TypeCategoryModel.findOneAsync({
+					type  : 'unknow'
 				});
 			})
 
-			.then(function (category) {
-
-				if (!category) {
-					throw new Error('Category not found');
+			.then(function (typeCategory) {
+				
+				if (!typeCategory) {
+					responseService.fail(res, 'Add failed', 'TypeCategory unknow missing');
 				}
 
-				programUnknow.category = category._id;
-				programUnknow._plan    = plan._id;
-				programUnknow._user    = plan._user;
-
-				programUnknow.save();
-
-				category._programs.push(programUnknow);
-
-				return category.saveAsync();
-			})
-
-			.then(function () {
-				return plan.updateAsync({
-					programUnknow : programUnknow._id
+				return CategoryModel.findOneAsync({
+					_type : typeCategory._id,
+					_user : req.decoded.id
 				});
+			})			
+
+			.then(function (category) {
+				if(!category) {
+					responseService.fail(res, 'Add failed', 'Category unknow missing');
+				}
+				
+				var program = new ProgramModel();
+
+				program._category = category._id;
+				program._plan     = plan._id;
+				program._user     = req.decoded.id;
+
+				return program.saveAsync();
 			})
 
 			.then(function () {
@@ -59,22 +58,6 @@ module.exports = {
 			})
 
 			.catch(function (err) {
-
-				// Rollback
-				if (plan._id) {
-					plan.removeLinkUser();
-					PlanModel.remove({ _id : plan._id }).exec();
-				}
-				if (programUnknow._id) {
-					ProgramModel.remove({ _id : programUnknow._id }).exec();
-					CategoryModel.findOne({ _programs : programUnknow._id }, function (err, category) {
-						if (!err && category) {
-							category._programs.pull(programUnknow);
-							category.saveAsync();
-						}
-					});
-				}
-
 				responseService.fail(res, 'Add failed', err.message);
 			});
 	},

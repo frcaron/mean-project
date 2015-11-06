@@ -7,8 +7,12 @@ var Schema = mongoose.Schema;
 var datePlugin = require(global.__plugin + '/DatePlugin');
 var userPlugin = require(global.__plugin + '/UserPlugin');
 
+// Inject models
+var CountersModel = require(global.__model + '/CountersModel');
+
 // Schema
 var PlanSchema = new Schema({
+	id            : Number,
 	month         : {
 		type     : Number,
 		required : true,
@@ -20,20 +24,14 @@ var PlanSchema = new Schema({
 		required : true,
 		min      : [ 1900, 'The value of year ‘{PATH}‘ ({VALUE} is beneath the limit {MIN})' ],
 		max      : [ 2100, 'The value of year ‘{PATH}‘ ({VALUE} is above the limit {MAX})' ]
-	},
-	programs      : [ {
-		type : Schema.Types.ObjectId,
-		ref  : 'Program'
-	} ],
-	programUnknow : {
-		type : Schema.Types.ObjectId,
-		ref  : 'Program'
 	}
 });
 
+// Plugin
 PlanSchema.plugin(datePlugin);
 PlanSchema.plugin(userPlugin);
 
+// Index
 PlanSchema.index({
 	month : 1,
 	year  : 1,
@@ -42,29 +40,11 @@ PlanSchema.index({
 	unique : true
 });
 
-PlanSchema.methods.addLinkUser = function () {
-
-	this.populate('_user', function (err, plan) {
-		var user = plan._user;
-
-		if(user) {
-			user.plans.push(plan);
-			user.save();
-		}
-	});
-};
-
-PlanSchema.methods.removeLinkUser = function () {
-
-	this.populate('_user', function (err, plan) {
-		var user = plan._user;
-
-		if(user) {
-			user.plans.pull(plan);
-			user.save();
-		}
-	});
-};
+// MiddleWare
+PlanSchema.pre('save', function(next) {
+	this._id = CountersModel.getNextSequence('plan_id');
+	return next();
+});
 
 // Return
 module.exports = mongoose.model('Plan', PlanSchema);

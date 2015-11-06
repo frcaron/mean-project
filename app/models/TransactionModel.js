@@ -7,8 +7,12 @@ var Schema = mongoose.Schema;
 var datePlugin = require(global.__plugin + '/DatePlugin');
 var userPlugin = require(global.__plugin + '/UserPlugin');
 
+// Inject models
+var CountersModel = require(global.__model + '/CountersModel');
+
 // Schema
 var TransactionSchema = new Schema({
+	id       : Number,
 	date     : Date,
 	sum      : {
 		type     : Number,
@@ -22,32 +26,15 @@ var TransactionSchema = new Schema({
 	}
 });
 
+// Plugin
 TransactionSchema.plugin(datePlugin);
 TransactionSchema.plugin(userPlugin);
 
-TransactionSchema.methods.addLinkProgram = function () {
-
-	this.populate('_program', function (err, transaction) {
-		var program = transaction._program;
-
-		if(program) {
-			program.transactions.push(transaction);
-			program.save();
-		}	
-	});
-};
-
-TransactionSchema.methods.removeLinkProgram = function () {
-
-	this.populate('_program', function (err, transaction) {
-		var program = transaction._program;
-
-		if(program) {
-			program.transactions.pull(transaction);
-			program.save();
-		}
-	});
-};
+// MiddleWare
+TransactionSchema.pre('save', function(next) {
+	this._id = CountersModel.getNextSequence('transaction_id');
+	return next();
+});
 
 // Return
 module.exports = mongoose.model('Transaction', TransactionSchema);

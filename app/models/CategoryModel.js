@@ -7,13 +7,17 @@ var Schema = mongoose.Schema;
 var datePlugin = require(global.__plugin + '/DatePlugin');
 var userPlugin = require(global.__plugin + '/UserPlugin');
 
+// Inject models
+var CountersModel = require(global.__model + '/CountersModel');
+
 // Schema
 var CategorySchema = new Schema({
+	_id       : Number,
 	name      : {
 		type     : String,
 		required : true
 	},
-	type      : {
+	_type      : {
 		type     : Schema.Types.ObjectId,
 		ref      : 'TypeCategory',
 		required : true
@@ -21,15 +25,28 @@ var CategorySchema = new Schema({
 	active    : {
 		type    : Boolean,
 		default : true
-	},
-	_programs : [ {
-		type : Schema.Types.ObjectId,
-		ref  : 'Program'
-	} ]
+	}
 });
 
+// Plugin
 CategorySchema.plugin(datePlugin);
 CategorySchema.plugin(userPlugin);
+
+// Index
+CategorySchema.index({
+	name   : 1,
+	_type  : 1,
+	_user  : 1,
+	active : 1
+}, {
+	unique : true
+});
+
+// MiddleWare
+CategorySchema.pre('save', function(next) {
+	this._id = CountersModel.getNextSequence('category_id');
+	return next();
+});
 
 // Return
 module.exports = mongoose.model('Category', CategorySchema);

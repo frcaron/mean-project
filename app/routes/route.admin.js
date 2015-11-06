@@ -32,7 +32,6 @@ module.exports = function (router) {
 	// =========================================================================================
 
 	require('./admin/unlog/typecategory')(router);
-	require('./admin/unlog/user')(router);
 
 	// =========================================================================================
 	// Middleware
