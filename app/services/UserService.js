@@ -4,7 +4,6 @@ var PlanModel         = require(global.__model + '/PlanModel');
 var ProgramModel      = require(global.__model + '/ProgramModel');
 var TransactionModel  = require(global.__model + '/TransactionModel');
 var CategoryModel     = require(global.__model + '/CategoryModel');
-var TypeCategoryModel = require(global.__model + '/TypeCategoryModel');
 
 // Inject services
 var responseService   = require(global.__service + '/ResponseService');
@@ -32,7 +31,7 @@ module.exports = {
 
 			.catch(function (err) {
 				var message;
-				if (err.code == 11000) {
+				if (err.code === 11000) {
 					message = 'User exist';
 				} else {
 					message = err.message;
@@ -76,7 +75,7 @@ module.exports = {
 
 			.catch(function (err) {
 				var message;
-				if (err.code == 11000) {
+				if (err.code === 11000) {
 					message = 'User exist';
 				} else {
 					message = err.message;
