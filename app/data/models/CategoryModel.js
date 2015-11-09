@@ -2,13 +2,8 @@
 var Promise = require('bluebird');
 var Mongoose = Promise.promisifyAll(require('mongoose'));
 var Schema = Mongoose.Schema;
-
-// Inject plugin
-var datePlugin = require(global.__plugin + '/DatePlugin');
-var userPlugin = require(global.__plugin + '/UserPlugin');
-
-// Inject models
-var CountersModel = require(global.__model + '/CountersModel');
+var DatePlugin = require(global.__plugin + '/DatePlugin');
+var UserPlugin = require(global.__plugin + '/UserPlugin');
 
 // Schema
 var CategorySchema = new Schema({
@@ -29,8 +24,8 @@ var CategorySchema = new Schema({
 });
 
 // Plugin
-CategorySchema.plugin(datePlugin);
-CategorySchema.plugin(userPlugin);
+CategorySchema.plugin(DatePlugin);
+CategorySchema.plugin(UserPlugin);
 
 // Index
 CategorySchema.index({
@@ -40,14 +35,6 @@ CategorySchema.index({
 	active : 1
 }, {
 	unique : true
-});
-
-// MiddleWare
-CategorySchema.pre('save', function(next) {
-	if(this._id) {
-		this._id = CountersModel.getNextSequence('category_id');
-	}
-	return next();
 });
 
 // Return

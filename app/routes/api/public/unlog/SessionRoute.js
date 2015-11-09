@@ -1,6 +1,6 @@
 //Inject 
 var responseService = require(global.__service + '/ResponseService');
-var sessionService  = Injector.services.sessionService;
+var sessionService  = require(global.__service + '/SessionService');
 
 // Properties
 var api_prefix = '/authenticate';

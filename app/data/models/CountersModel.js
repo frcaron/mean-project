@@ -1,7 +1,7 @@
 // Inject application
 var Promise  = require('bluebird');
-var mongoose = Promise.promisifyAll(require('mongoose'));
-var Schema   = mongoose.Schema;
+var Mongoose = Promise.promisifyAll(require('mongoose'));
+var Schema   = Mongoose.Schema;
 
 // Schema
 var CountersSchema = new Schema({
@@ -17,9 +17,8 @@ var CountersSchema = new Schema({
 });
 
 // Model
-var CountersModel = mongoose.model('Counters', CountersSchema);
+var CountersModel = Mongoose.model('Counters', CountersSchema);
 
-// Return
 module.exports = {
 
 	// Get next id table
@@ -27,9 +26,11 @@ module.exports = {
 		return CountersModel.findByIdAndUpdateAsync(
 					name, 
 					{ $inc : { seq : 1 } }, 
-					{ new : true, upsert : true })
+					{ new  : true,
+					upsert : true
+					})
 				.then(function(ret) {
-					return ret.seq;
+					return Promise.resolve(ret.seq);
 				});
 	}
 };

@@ -37,7 +37,7 @@ module.exports = function (router) {
 		// Get one program
 		.get(function (req, res) {
 			planService.getById(req, res);
-		})
+		});
 
 	router.route(api_prefix + '/:plan_id/programs')
 

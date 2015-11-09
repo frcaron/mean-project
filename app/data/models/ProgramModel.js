@@ -1,18 +1,13 @@
-// Inject application
-var Promise = require('bluebird');
-var mongoose = Promise.promisifyAll(require('mongoose'));
-var Schema = mongoose.Schema;
-
-// Inject plugin
-var datePlugin = require(global.__plugin + '/DatePlugin');
-var userPlugin = require(global.__plugin + '/UserPlugin');
-
-// Inject models
-var CountersModel = require(global.__model + '/CountersModel');
+// Inject
+var Promise    = require('bluebird');
+var Mongoose   = Promise.promisifyAll(require('mongoose'));
+var Schema     = Mongoose.Schema;
+var DatePlugin = require(global.__plugin + '/DatePlugin');
+var UserPlugin = require(global.__plugin + '/UserPlugin');
 
 // Schema
 var ProgramSchema = new Schema({
-	id           :  Number,
+	_id           :  Number,
 	_category     : {
 		type     : Schema.Types.ObjectId,
 		ref      : 'Category',
@@ -27,8 +22,8 @@ var ProgramSchema = new Schema({
 });
 
 // Plugin
-ProgramSchema.plugin(datePlugin);
-ProgramSchema.plugin(userPlugin);
+ProgramSchema.plugin(DatePlugin);
+ProgramSchema.plugin(UserPlugin);
 
 // Index
 ProgramSchema.index({
@@ -39,13 +34,5 @@ ProgramSchema.index({
 	unique : true
 });
 
-// MiddleWare
-ProgramSchema.pre('save', function(next) {
-	if(this._id) {
-		this._id = CountersModel.getNextSequence('program_id');
-	}
-	return next();
-});
-
 // Return
-module.exports = mongoose.model('Program', ProgramSchema);
+module.exports = Mongoose.model('Program', ProgramSchema);

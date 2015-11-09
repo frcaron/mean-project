@@ -1,5 +1,4 @@
 //Inject 
-var responseService = require(global.__service + '/ResponseService');
 var userService     = require(global.__service + '/UserService');
 
 // Properties

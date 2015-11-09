@@ -1,28 +1,33 @@
 // Inject
-var Promise   = require('bluebird');
-var UserModel = require(global.__model + '/UserModel');
+var Promise       = require('bluebird');
+var UserModel     = require(global.__model + '/UserModel');
+var CountersModel = require(global.__model + '/CountersModel');
 
 function create (input) {
-		var promise = new Promise();
+
 		var user = new UserModel();
+		var promise = CountersModel.getNextSequence('user_id')
+			.then(function (seq){
 
-		user.surname   = input.surname;
-		user.firstname = input.username;
-		user.email     = input.email;
-		user.password  = input.password;
-		if ( input.admin ) {
-			user.admin = input.admin;
-		}
+				user._id       = seq;
+				user.surname   = input.surname;
+				user.firstname = input.firstname;
+				user.email     = input.email;
+				user.password  = input.password;
+				if ( input.admin ) {
+					user.admin = input.admin;
+				}
 
-		user.saveAsync()
+				return user.saveAsync();
+			})
 			.then(function () {
-				promise.fulfill(user);
+				return Promise.resolve(user);
 			})
 			.catch(function (err) {
 				if (err.code === 11000) {
-					promise.reject('User exist');
+					throw new Error('User already exist');
 				} else {
-					promise.reject(err.message);
+					throw err;
 				}
 			});
 
@@ -30,9 +35,9 @@ function create (input) {
 }
 
 function update (id, input) {
-		var promise = new Promise();
 
-		getOne(id)
+		var output;
+		var promise = getOne(id)
 			.then(function (user) {
 				if ( input.surname ) { 
 					user.surname   = input.surname;
@@ -49,63 +54,58 @@ function update (id, input) {
 				if ( input.admin ) { 
 					user.admin     = input.admin;
 				}
+				output = user;
 				return user.saveAsync();
 			})
 			.then(function () {
-				promise.fulfill();
+				Promise.resolve(output);
 			})
 			.catch(function (err) {
-				promise.reject(err.message);
+				throw err;
 			});
 
 		return promise;
 }
 
 function remove (id) {
-		var promise = new Promise();
 
-		getOne(id)
+		var promise = getOne(id)
 			.then(function(user){
 				return user.removeAsync();
 			})
-			.then(function () {
-				promise.fulfill();
-			})
 			.catch(function (err) {
-				promise.reject(err.message);
+				throw err;
 			});
 
 		return promise;
 }
 
 function getAll () {
-		var promise = new Promise();
 
-		UserModel.findAsync()
+		var promise = UserModel.findAsync()
 			.then(function (users) {
-				promise.fulfill(users);
+				Promise.resolve(users);
 			})
 			.catch(function (err) {
-				promise.reject(err.message);
+				throw err;
 			});
 
 		return promise;
 }
 
 function getOne (id) {
-		var promise = new Promise();
-
-		UserModel.findByIdAsync({
-			_id   : id
-		})
+	
+		var promise = UserModel.findByIdAsync({
+						_id   : id
+					})
 			.then(function (user) {
 				if (!user) {
 					throw new Error('User not found');
 				}
-				promise.fulfill(user);
+				Promise.resolve(user);
 			})
 			.catch(function (err) {
-				promise.reject(err.message);
+				throw err;
 			});
 
 		return promise;

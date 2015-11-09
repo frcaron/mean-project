@@ -2,16 +2,11 @@
 var Promise = require('bluebird');
 var mongoose = Promise.promisifyAll(require('mongoose'));
 var Schema = mongoose.Schema;
-
-// Inject plugin
-var datePlugin = require(global.__plugin + '/DatePlugin');
-
-// Inject models
-var CountersModel = require(global.__model + '/CountersModel');
+var DatePlugin = require(global.__plugin + '/DatePlugin');
 
 // Schema
 var TypeCategorySchema = new Schema({
-	id     : Number,
+	_id     : Number,
 	type   : {
 		type     : String,
 		required : true
@@ -23,21 +18,13 @@ var TypeCategorySchema = new Schema({
 });
 
 // Plugin
-TypeCategorySchema.plugin(datePlugin);
+TypeCategorySchema.plugin(DatePlugin);
 
 // Index
 TypeCategorySchema.index({
 	type   : 1
 }, {
 	unique : true
-});
-
-// MiddleWare
-TypeCategorySchema.pre('save', function(next) {
-	if(this._id) {
-		this._id = CountersModel.getNextSequence('type_category_id');
-	}
-	return next();
 });
 
 // Return

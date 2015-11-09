@@ -1,5 +1,4 @@
 // Inject
-var responseService     = require(global.__service + '/ResponseService');
 var typeCategoryService = require(global.__service + '/TypeCategoryService');
 
 // Propeties

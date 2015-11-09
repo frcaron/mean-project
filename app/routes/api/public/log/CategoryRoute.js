@@ -15,7 +15,7 @@ module.exports = function (router) {
 		})
 
 		// Create one category
-		.post(function (req, res, next) {
+		.post(function (req, res) {
 
 			// Validation
 			if (!req.body.name) {

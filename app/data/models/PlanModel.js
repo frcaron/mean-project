@@ -1,18 +1,13 @@
-// Inject application
-var Promise = require('bluebird');
-var mongoose = Promise.promisifyAll(require('mongoose'));
-var Schema = mongoose.Schema;
-
-// Inject plugin
-var datePlugin = require(global.__plugin + '/DatePlugin');
-var userPlugin = require(global.__plugin + '/UserPlugin');
-
-// Inject models
-var CountersModel = require(global.__model + '/CountersModel');
+// Inject
+var Promise    = require('bluebird');
+var Mongoose   = Promise.promisifyAll(require('mongoose'));
+var Schema     = Mongoose.Schema;
+var DatePlugin = require(global.__plugin + '/DatePlugin');
+var UserPlugin = require(global.__plugin + '/UserPlugin');
 
 // Schema
 var PlanSchema = new Schema({
-	id            : Number,
+	_id            : Number,
 	month         : {
 		type     : Number,
 		required : true,
@@ -28,8 +23,8 @@ var PlanSchema = new Schema({
 });
 
 // Plugin
-PlanSchema.plugin(datePlugin);
-PlanSchema.plugin(userPlugin);
+PlanSchema.plugin(DatePlugin);
+PlanSchema.plugin(UserPlugin);
 
 // Index
 PlanSchema.index({
@@ -40,13 +35,5 @@ PlanSchema.index({
 	unique : true
 });
 
-// MiddleWare
-PlanSchema.pre('save', function(next) {
-	if(this._id) {
-		this._id = CountersModel.getNextSequence('plan_id');
-	}
-	return next();
-});
-
 // Return
-module.exports = mongoose.model('Plan', PlanSchema);
+module.exports = Mongoose.model('Plan', PlanSchema);

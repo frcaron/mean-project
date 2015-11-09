@@ -1,5 +1,4 @@
 // Inject
-var responseService    = require(global.__service + '/ResponseService');
 var categoryService    = require(global.__service + '/CategoryService');
 var transactionService = require(global.__service + '/TransactionService');
 

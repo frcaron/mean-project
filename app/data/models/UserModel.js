@@ -3,13 +3,12 @@ var Promise       = require('bluebird');
 var Mongoose      = Promise.promisifyAll(require('mongoose'));
 var Bcrypt        = require('bcrypt-nodejs');
 var DatePlugin    = require(global.__plugin + '/DatePlugin');
-var CountersModel = require(global.__model + '/CountersModel');
 
 var Schema        = Mongoose.Schema;
 
 // Schema
 var UserSchema = new Schema({
-	id        : Number,
+	_id       : Number,
 	surname   : {
 		type     : String,
 		required : true
@@ -53,10 +52,6 @@ UserSchema.methods.comparePassword = function (password) {
 UserSchema.pre('save', function (next) {
 
 	var user = this;
-
-	if (!this._id) {
-		this._id = CountersModel.getNextSequence('user_id');
-	}
 
 	if (!user.isModified('password')) {
 		return next();
