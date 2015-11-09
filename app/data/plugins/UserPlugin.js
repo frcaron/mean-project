@@ -1,6 +1,7 @@
-// Inject application
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+// Inject
+var Mongoose = require('mongoose');
+
+var Schema = Mongoose.Schema;
 
 module.exports = function (schema, options) {
 	schema.add({
