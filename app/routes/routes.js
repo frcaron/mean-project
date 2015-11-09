@@ -1,15 +1,16 @@
-var express = require('express');
+// Inject 
+var express  = require('express');
 
 var adminRouter = express.Router();
-var apiRouter = express.Router();
+var publicRouter   = express.Router();
 var basicRouter = express.Router();
 
-require('./route.admin')(adminRouter);
-require('./route.api')(apiRouter);
+require('./route.api.admin')(adminRouter);
+require('./route.api.public')(publicRouter);
 require('./route.basic')(basicRouter);
 
 module.exports = function (app) {
-	app.use('/admin', adminRouter);
-	app.use('/api', apiRouter);
+	app.use('/api/admin', adminRouter);
+	app.use('/api/public', publicRouter);
 	app.use('/', basicRouter);
 };

@@ -1,6 +1,6 @@
-// Inject application
-var jwt = require('jsonwebtoken');
-var tokenConfig = require(global.__config + '/token');
+// Inject 
+var jwt             = require('jsonwebtoken');
+var tokenConfig     = require(global.__config + '/token');
 
 module.exports = function (router) {
 

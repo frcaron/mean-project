@@ -4,6 +4,34 @@
 		"selected_items":
 		[
 			[
+				"cate",
+				"categoryNew"
+			],
+			[
+				"categ",
+				"categoryNew"
+			],
+			[
+				"cat",
+				"categoryNew"
+			],
+			[
+				"type",
+				"typeCategory"
+			],
+			[
+				"sav",
+				"saveAsync"
+			],
+			[
+				"Car",
+				"CategoryModel"
+			],
+			[
+				"Categor",
+				"CategoryModel"
+			],
+			[
 				"Progr",
 				"ProgramModel"
 			],
@@ -20,16 +48,8 @@
 				"execAsync"
 			],
 			[
-				"cat",
-				"categoryCurrent"
-			],
-			[
 				"pro",
 				"programUnknow"
-			],
-			[
-				"type",
-				"typeCategory"
 			],
 			[
 				"pr",
@@ -44,27 +64,112 @@
 	"buffers":
 	[
 		{
-			"file": "app/services/TransactionService.js",
+			"file": "app/routes/route.api.admin.js",
 			"settings":
 			{
-				"buffer_size": 6390,
+				"buffer_size": 2345,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "app/routes/route.basic.js",
+			"settings":
+			{
+				"buffer_size": 1113,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "app/routes/route.api.public.js",
+			"settings":
+			{
+				"buffer_size": 3240,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "app.js",
+			"settings":
+			{
+				"buffer_size": 1447,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "app/routes/routes.js",
+			"settings":
+			{
+				"buffer_size": 481,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "mean-project.sublime-project",
+			"settings":
+			{
+				"buffer_size": 126,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": ".jshintrc",
+			"settings":
+			{
+				"buffer_size": 6090,
 				"line_ending": "Windows"
 			}
 		}
 	],
 	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
 	"command_palette":
 	{
-		"height": 392.0,
+		"height": 104.0,
+		"last_filter": "remove",
 		"selected_items":
 		[
 			[
-				"at",
-				"AlignTab"
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"install ",
+				"Package Control: Install Package"
+			],
+			[
+				"remo",
+				"Package Control: Remove Package"
 			],
 			[
 				"install",
 				"Package Control: Install Package"
+			],
+			[
+				"remov",
+				"Package Control: Remove Package"
+			],
+			[
+				"re",
+				"Package Control: Remove Package"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
+			[
+				"pull",
+				"Git: Pull"
+			],
+			[
+				"at",
+				"AlignTab"
 			],
 			[
 				"push",
@@ -95,10 +200,6 @@
 				"Git: Stash Include Untracked"
 			],
 			[
-				"pull",
-				"Git: Pull"
-			],
-			[
 				"statu",
 				"Git: Status"
 			],
@@ -123,14 +224,6 @@
 				"Package Control: Install Package"
 			],
 			[
-				"remo",
-				"Package Control: Remove Package"
-			],
-			[
-				"remove",
-				"Package Control: Remove Package"
-			],
-			[
 				"fet",
 				"Git: Fetch"
 			],
@@ -141,10 +234,6 @@
 			[
 				"status",
 				"Git: Status"
-			],
-			[
-				"inst",
-				"Package Control: Install Package"
 			],
 			[
 				"git p",
@@ -249,14 +338,78 @@
 	},
 	"expanded_folders":
 	[
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/models",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/services",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/config"
+		"/C/App/Workspace/mean-project"
 	],
 	"file_history":
 	[
+		"/C/App/Workspace/mean-project/app/routes/api/public/log/MeRoute.js",
+		"/C/App/Workspace/mean-project/app/data/models/UserModel.js",
+		"/C/App/Workspace/mean-project/app/routes/route.basic.js",
+		"/C/App/Workspace/mean-project/app/routes/routes.js",
+		"/C/App/Workspace/mean-project/app/routes/api/log/MeRoute.js",
+		"/C/App/Workspace/mean-project/app/routes/route.api.public.js",
+		"/C/App/Workspace/mean-project/app/routes/route.api.admin.js",
+		"/C/App/Workspace/mean-project/app/routes/route.api.js",
+		"/C/App/Workspace/mean-project/app/routes/route.admin.js",
+		"/C/App/Workspace/mean-project/app/routes/api/unlog/SessionRoute.js",
+		"/C/App/Workspace/mean-project/app/services/SessionService.js",
+		"/C/App/Workspace/mean-project/app/routes/api/log/TransactionRoute.js",
+		"/C/App/Workspace/mean-project/app/routes/api/log/PlanRoute.js",
+		"/C/App/Workspace/mean-project/app/routes/admin/log/TypeCategoryRoute.js",
+		"/C/App/Workspace/mean-project/app/routes/api/log/CategoryRoute.js",
+		"/C/App/Workspace/mean-project/app/routes/admin/log/UserRoute.js",
+		"/C/App/Workspace/mean-project/app/routes/admin/unlog/TypeCategoryRoute.js",
+		"/C/App/Workspace/mean-project/app/routes/api/log/ProgramRoute.js",
+		"/C/App/Workspace/mean-project/app/routes/api/log/TypeCategoryRoute.js",
+		"/C/App/Workspace/mean-project/app/routes/api/log/UserRoute.js",
+		"/C/App/Workspace/mean-project/app/routes/api/unlog/UserRoute.js",
+		"/C/App/Workspace/mean-project/app/Injector.js",
+		"/C/App/Workspace/mean-project/app/data/dao/UserDao.js",
+		"/C/App/Workspace/mean-project/app/services/UserService.js",
+		"/C/App/Workspace/mean-project/app.js",
+		"/C/App/Workspace/mean-project/app/data/models/CategoryModel.js",
+		"/C/App/SublimeText3/Data/Packages/User/Context.sublime-menu",
+		"/C/App/Workspace/mean-project/bin/www",
+		"/C/App/Workspace/mean-project/app/data/models/CountersModel.js",
+		"/C/App/Workspace/mean-project/app/data/models/TypeCategoryModel.js",
+		"/C/App/Workspace/mean-project/app/data/models/TransactionModel.js",
+		"/C/App/Workspace/mean-project/app/data/models/ProgramModel.js",
+		"/C/App/Workspace/mean-project/app/routes/admin/unlog/typecategory.js",
+		"/C/App/SublimeText3/Data/Packages/User/JavascriptBeautify.sublime-settings",
+		"/C/App/SublimeText3/Data/Packages/Javascript Beautify/JavascriptBeautify.sublime-settings",
+		"/C/App/SublimeText3/Data/Packages/JsFormat/JsFormat.sublime-settings",
+		"/C/App/SublimeText3/Data/Packages/User/JsFormat.sublime-settings",
+		"/C/App/SublimeText3/Data/Packages/Alignment/Base File.sublime-settings",
+		"/C/App/SublimeText3/Data/Packages/Alignment/Default (Windows).sublime-keymap",
+		"/C/App/SublimeText3/Data/Packages/User/Base File.sublime-settings",
+		"/C/App/SublimeText3/Data/Packages/User/JSON.sublime-settings",
+		"/C/App/Workspace/mean-project/app/routes/api/log/user.js",
+		"/C/App/Workspace/mean-project/app/routes/admin/log/user.js",
+		"/C/App/Workspace/mean-project/app/data/plugins/DatePlugin.js",
+		"/C/App/Workspace/mean-project/app/data/plugins/UserPlugin.js",
+		"/C/App/Workspace/mean-project/app/data/models/PlanModel.js",
+		"/C/App/Workspace/mean-project/app/data/UserDao.js",
+		"/C/App/Workspace/mean-project/app/services/PlanService.js",
+		"/C/App/Workspace/mean-project/app/routes/api/log/plan.js",
+		"/C/App/Workspace/mean-project/app/models/CategoryModel.js",
+		"/C/App/Workspace/mean-project/app/models/UserModel.js",
+		"/C/App/Workspace/mean-project/app/services/CategoryService.js",
+		"/C/App/Workspace/mean-project/package.json",
+		"/C/App/Workspace/mean-project/config/database.js",
+		"/C/App/Workspace/mean-project/config/token.js",
+		"/C/App/Workspace/mean-project/app/models/ProgramModel.js",
+		"/C/App/Workspace/mean-project/app/routes/api/unlog/user.js",
+		"/C/App/Workspace/mean-project/app/routes/admin/unlog/user.js",
+		"/C/App/Workspace/mean-project/app/routes/api/log/me.js",
+		"/C/App/Workspace/mean-project/app/services/ResponseService.js",
+		"/C/App/Workspace/mean-project/app/models/TypeCategoryModel.js",
+		"/C/App/Workspace/mean-project/app/models/TransactionModel.js",
+		"/C/App/Workspace/mean-project/app/models/PlanModel.js",
+		"/C/App/Workspace/mean-project/app/models/CountersModel.js",
+		"/C/App/Workspace/mean-project/app/plugins/DatePlugin.js",
+		"/C/App/Workspace/mean-project/app/plugins/UserPlugin.js",
+		"/C/App/Workspace/mean-project/mean-project.sublime-project",
+		"/C/App/Workspace/mean-project/app/services/TransactionService.js",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/api/log/transaction.js",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/models/TransactionModel.js",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/services/ProgramService.js",
@@ -316,26 +469,11 @@
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/api/category.js",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/api/transaction.js",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/config/token.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/admin/typecategory-unlog.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/admin/typecategory-log.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/api/typecategory.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/api/user-log.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/api/user-unlog.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/admin/user.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/node_modules/express/lib/router/route.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/node_modules/mongoose/node_modules/mongodb/lib/mongodb/connection/read_preference.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/routes.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/api/user.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/keep.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/admin/typecategory.js",
-		"/C/Documents and Settings/Administrateur/project/mean-project/app/services/TypeCategoryService.js",
-		"/C/Documents and Settings/Administrateur/project/mean-project/app/routes/api/typecategory.js",
-		"/C/Documents and Settings/Administrateur/project/mean-project/app/routes/admin/typecategory.js",
-		"/C/Documents and Settings/Administrateur/project/mean-project/app/models/TransactionModel.js"
+		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/admin/typecategory-unlog.js"
 	],
 	"find":
 	{
-		"height": 23.0
+		"height": 34.0
 	},
 	"find_in_files":
 	{
@@ -349,6 +487,14 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"apiRouter",
+			"UserDAO",
+			"bcrypt",
+			"mongoose",
+			"Promise",
+			"updated_at",
+			"created_at",
+			"name",
 			"testa",
 			"category_id",
 			"t",
@@ -399,7 +545,7 @@
 		"replace_history":
 		[
 		],
-		"reverse": false,
+		"reverse": true,
 		"show_context": true,
 		"use_buffer2": true,
 		"whole_word": false,
@@ -408,24 +554,53 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 6,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "app/services/TransactionService.js",
+					"file": "app/routes/route.api.admin.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6390,
+						"buffer_size": 2345,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3743,
-								3744
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": -0.0,
+						"translation.y": 225.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "app/routes/route.basic.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1113,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
 							]
 						],
 						"settings":
@@ -434,7 +609,151 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1845.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "app/routes/route.api.public.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3240,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "app.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1447,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1075,
+								1082
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "app/routes/routes.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 481,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								147,
+								147
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "mean-project.sublime-project",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 126,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								67,
+								67
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": ".jshintrc",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 6090,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -445,7 +764,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 23.0
+		"height": 34.0
 	},
 	"input":
 	{
@@ -502,6 +821,7 @@
 	{
 		"height": 156.0
 	},
+	"pinned_build_system": "",
 	"project": "mean-project.sublime-project",
 	"replace":
 	{
@@ -511,6 +831,7 @@
 	"select_file":
 	{
 		"height": 0.0,
+		"last_filter": "",
 		"selected_items":
 		[
 			[
@@ -583,6 +904,7 @@
 	"select_project":
 	{
 		"height": 500.0,
+		"last_filter": "",
 		"selected_items":
 		[
 			[
@@ -595,6 +917,7 @@
 	"select_symbol":
 	{
 		"height": 0.0,
+		"last_filter": "",
 		"selected_items":
 		[
 		],

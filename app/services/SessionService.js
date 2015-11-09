@@ -31,10 +31,11 @@ module.exports = {
 
 			// Generate token
 			var token = jwt.sign({
-				id       : user._id,
-				name     : user.name,
-				username : user.username,
-				admin    : user.admin
+				id        : user._id,
+				surname   : user.surname,
+				firstname : user.firstname,
+				email     : user.email,
+				admin     : user.admin
 			}, tokenConfig.secret, {
 				expiresMinutes : 1440
 			});

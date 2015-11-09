@@ -6,6 +6,12 @@
 			[
 				".idea"
 			],
+			"file_exclude_patterns":
+			[
+				".gitignore",
+				".jshintrc",
+				"api-skeleton.xls"
+			],
 			"follow_symlinks": true,
 			"path": "."
 		}
