@@ -1,12 +1,7 @@
-// Inject
-var Mongoose = require('mongoose');
-
-var Schema = Mongoose.Schema;
-
 module.exports = function (schema, options) {
 	schema.add({
 		_user : {
-			type     : Schema.Types.ObjectId,
+			type     : Number,
 			ref      : 'User',
 			required : true
 		}

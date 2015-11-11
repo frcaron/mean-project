@@ -1,6 +1,6 @@
 // Inject
 var ResponseService = require(global.__service + '/ResponseService');
-var TypeCategoryDao = require(global.__model + '/TypeCategoryDao');
+var TypeCategoryDao = require(global.__dao + '/TypeCategoryDao');
 
 module.exports = {
 

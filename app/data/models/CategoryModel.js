@@ -13,7 +13,7 @@ var CategorySchema = new Schema({
 		required : true
 	},
 	_type      : {
-		type     : Schema.Types.ObjectId,
+		type     : Number,
 		ref      : 'TypeCategory',
 		required : true
 	},

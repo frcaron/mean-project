@@ -26,9 +26,6 @@ module.exports = function (router) {
 				return ResponseService.fail(res, 'Add failed', 'Param "year" missing');
 			}
 
-			// TODO create typeCategory Unknow (1fois pour l'appli)
-			// TODO creat category Unknow (1 fois par user)
-
 			PlanService.create(req, res);
 		});
 

@@ -1,5 +1,4 @@
 //Inject
-var ResponseService = require(global.__service + '/ResponseService');
 var UserService     = require(global.__service + '/UserService');
 
 // Properties
@@ -16,14 +15,14 @@ module.exports = function (router) {
 
 	router.route(api_prefix + '/:user_id')
 
+		// Get one user
+		.get(function (req, res) {
+			UserService.getOne(req, res, req.params.user_id);
+		})
+
 		// Update one user
 		.put(function (req, res) {
-
-			if (!req.params.user_id) {
-				return ResponseService.fail(res, 'Give permission failed', 'Param "user_id" missing');
-			}
-
-			UserService.giveAdmin(req, res);
+			UserService.update(req, res, req.params.user_id);
 		})
 
 		// Delete one user

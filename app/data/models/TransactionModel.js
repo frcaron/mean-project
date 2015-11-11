@@ -18,7 +18,7 @@ var TransactionSchema = new Schema({
 	},
 	comment  : String,
 	_program : {
-		type     : Schema.Types.ObjectId,
+		type     : Number,
 		ref      : 'Program',
 		required : true
 	}

@@ -7,14 +7,14 @@ var UserPlugin = require(global.__plugin + '/UserPlugin');
 
 // Schema
 var PlanSchema = new Schema({
-	_id            : Number,
-	month         : {
+	_id   : Number,
+	month : {
 		type     : Number,
 		required : true,
 		min      : [ 1, 'The value of month ‘{PATH}‘ ({VALUE} is beneath the limit {MIN})' ],
 		max      : [ 12, 'The value of month ‘{PATH}‘ ({VALUE} is above the limit {MAX})' ]
 	},
-	year          : {
+	year  : {
 		type     : Number,
 		required : true,
 		min      : [ 1900, 'The value of year ‘{PATH}‘ ({VALUE} is beneath the limit {MIN})' ],

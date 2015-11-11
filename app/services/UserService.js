@@ -12,7 +12,15 @@ module.exports = {
     // Create one user
     create    : function (req, res) {
 
-        UserDao.create(req.body)
+        var input = {
+            firstname : req.body.firstname,
+            surname   : req.body.surname,
+            email     : req.body.email,
+            password  : req.body.password,
+            admin     : req.body.admin // TODO delete after test
+        };
+
+        UserDao.create(input)
             .then(function(user) {
                 ResponseService.success(res, 'Add success', user);
             })
@@ -23,10 +31,16 @@ module.exports = {
     },
 
     // Update one user
-    update    : function (req, res) {
+    update    : function (req, res, id) {
 
-        var input = req.body;
-        input.id  = req.decoded.id;
+        var input = {
+            id        : id,
+            firstname : req.body.firstname,
+            surname   : req.body.surname,
+            email     : req.body.email,
+            password  : req.body.password,
+            admin     : req.body.admin // TODO delete after test
+        };
 
         UserDao.update(input)
             .then(function(user) {
@@ -40,20 +54,27 @@ module.exports = {
     // Remove one user
     remove    : function (req, res, id) {
 
-        Promise.reduce([UserDao, PlanDao, ProgramDao, CategoryDao, TransactionDao], 
-            function(sequence, dao) {
-                return sequence                           
-                        .then(function() {
-                            return dao.remove(id);
-                        })                           
-                        .then(function() {
-                            ResponseService.success(res, 'Remove success');
+        var messageSuccess;
+        var messageError;
+        Promise.map([UserDao, PlanDao, ProgramDao, CategoryDao, TransactionDao], 
+            function(dao) {
+                return dao.remove({ user_id : id })
+                        .then(function () {
+                            messageSuccess = messageSuccess + ' / ' + dao;
                         })
                         .catch(function (err) {
-                            ResponseService.fail(res, 'Remove failed', err.message);  
+                            messageError = messageError + ' / ' + err.message;
                         });
-            },
-            Promise.resolve());
+            })                                  
+        .then(function() {
+            ResponseService.success(res, 'Remove', {
+                success : messageSuccess,
+                error   : messageError
+            });                 
+        })        
+        .catch(function (err) {
+            ResponseService.fail(res, 'Remove failed', err.message);  
+        });
     },
 
     // Get all users
@@ -69,13 +90,13 @@ module.exports = {
     },
 
     // Get one user by id
-    getOne    : function (req, res) {
+    getOne    : function (req, res, id) {
 
-        var input = {
-            id : req.decoded.id
+        var filters = {
+            id : id
         };
 
-        UserDao.getOne(input)
+        UserDao.getOne(filters)
             .then(function(user) {
                 ResponseService.success(res, 'Find success', user);
             })

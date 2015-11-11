@@ -7,15 +7,15 @@ var UserPlugin = require(global.__plugin + '/UserPlugin');
 
 // Schema
 var ProgramSchema = new Schema({
-	_id           :  Number,
-	_category     : {
-		type     : Schema.Types.ObjectId,
+	_id       : Number,
+	_category : {
+		type     : Number,
 		ref      : 'Category',
 		required : true
 	},
 	budget       : Number,
-	_plan        : {
-		type     : Schema.Types.ObjectId,
+	_plan     : {
+		type     : Number,
 		ref      : 'Plan',
 		required : true
 	}

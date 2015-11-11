@@ -10,12 +10,12 @@ module.exports = function (router) {
 
 		// Get one user
 		.get(function (req, res) {
-			UserService.getOne(req, res);
+			UserService.getOne(req, res, req.decoded.id);
 		})
 
 		// Update one user
 		.put(function (req, res) {
-			UserService.update(req, res);
+			UserService.update(req, res, req.decoded.id);
 		})
 
 		// Delete one user

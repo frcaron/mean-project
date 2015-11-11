@@ -6,7 +6,7 @@ var DatePlugin = require(global.__plugin + '/DatePlugin');
 
 // Schema
 var TypeCategorySchema = new Schema({
-	_id     : Number,
+	_id    : Number,
 	type   : {
 		type     : String,
 		required : true

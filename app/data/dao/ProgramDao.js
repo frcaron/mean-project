@@ -5,115 +5,144 @@ var CountersModel = require(global.__model + '/CountersModel');
 
 function create (input) {
 
-		var program = new ProgramModel();
-		var promise = CountersModel.getNextSequence('program_id')
-			.then(function (seq){
+	var program = new ProgramModel();
+	var promise = CountersModel.getNextSequence('program_id')
+		.then(function (seq){
 
-				program._id        = seq;
-				program._plan      = input.plan_id;
-				program._category  = input.category_id;
-				if( input.budget ) {
-					program.budget = input.budget;
-				}
-				program._user      = input.user_id;
+			program._id        = seq;
+			program._plan      = input.plan_id;
+			program._category  = input.category_id;
+			if( input.budget ) {
+				program.budget = input.budget;
+			}
+			program._user      = input.user_id;
 
-				return program.saveAsync();
-			})
-			.then(function () {
-				return Promise.resolve(program);
-			})
-			.catch(function (err) {
-				if (err.code === 11000) {
-					throw new Error('Program already exist');
-				} else {
-					throw err;
-				}
-			});
+			return program.saveAsync();
+		})
+		.then(function () {
+			return Promise.resolve(program);
+		})
+		.catch(function (err) {
+			if (err.code === 11000) {
+				err = new Error('Program already exist');
+			} 
+			return Promise.reject(err);
+		});
 
-		return promise;
+	return promise;
 }
 
-function update (id, input) {
+function update (input) {
 
-		var output;
-		var promise = getOne(id, input.user_id)
-			.then(function (program) {
-				if( input.plan_id ) {
-					program._plan     = input.plan_id;
-				}
-				if( input.category_id ) {
-					program._category = input.category_id;
-				}
-				if( input.budget ) {
-					program.budget    = input.budget;
-				}
-				output = program;
-				return program.saveAsync();
-			})
-			.then(function () {
-				Promise.resolve(output);
-			})
-			.catch(function (err) {
-				throw err;
-			});
+	var output;
+	var promise = getOne(input)
+		.then(function (program) {
+			if( input.plan_id ) {
+				program._plan     = input.plan_id;
+			}
+			if( input.category_id ) {
+				program._category = input.category_id;
+			}
+			if( input.budget ) {
+				program.budget    = input.budget;
+			}
+			output = program;
+			return program.saveAsync();
+		})
+		.then(function () {
+			return Promise.resolve(output);
+		})
+		.catch(function (err) {
+			if (err.code === 11000) {
+				err = new Error('User already exist');
+			}
+			return Promise.reject(err);
+		});
 
-		return promise;
+	return promise;
 }
 
-function remove (id, user_id) {
+function remove (filters) {
 
-		var promise = getOne(id, user_id)
-			.then(function (program){
-				return program.removeAsync();
-			})
-			.catch(function (err) {
-				throw err;
+	var promise;
+	if(filters.id) {
+		if(filters.user_id) {
+			promise = ProgramModel.removeAsync({ 
+				_id   : filters.id,
+				_user : filters.user_id
 			});
 
-		return promise;
-}
+		} else {
+			promise = ProgramModel.removeAsync({ _id : filters.id });
 
-function getAll (user_id) {
-
-		var promise = ProgramModel.findAsync({
-						_user : user_id
-					})
-			.then(function (programs) {
-				Promise.resolve(programs);
-			})
-			.catch(function (err) {
-				throw err;
-			});
-
-		return promise;
-}
-
-function getOne (id, user_id) {
-	
-		var promise;
-		if(user_id) {
-			promise = ProgramModel.findByIdAsync({
-						_id   : id,
-						_user : user_id
-					});
-		} else  {
-			promise = ProgramModel.findByIdAsync({
-						_id : id
-					});
 		}
+	} else if(filters.user_id) {
+		promise = ProgramModel.removeAsync({ _user : filters.user_id });
 			
-		promise
-			.then(function (program) {
-				if (!program) {
-					throw new Error('Program not found');
-				}
-				Promise.resolve(program);
-			})
-			.catch(function (err) {
-				throw err;
-			});
+	} else {
+		return Promise.reject(new Error('Filters missing'));
+	}
 
-		return promise;
+	var promiseEnd = promise
+		.catch(function (err) {
+			return Promise.reject(err);
+		});
+
+	return promiseEnd;
+}
+
+function getAll (filters) {
+
+	var promise;
+	if(filters.user_id) {
+		promise = ProgramModel.findAsync({
+					_user : filters.user_id
+				});
+
+	} else {
+		return Promise.reject(new Error('Filters missing'));
+	}
+
+	var promiseEnd = promise
+		.then(function (programs) {
+			return Promise.resolve(programs);
+		})
+		.catch(function (err) {
+			return Promise.reject(err);
+		});
+
+	return promiseEnd;
+}
+
+function getOne (filters) {
+	
+	var promise;
+	if(filters.id) {
+		if(filters.user_id) {
+			promise = ProgramModel.findOneAsync({
+						_id   : filters.id,
+						_user : filters.user_id
+					});
+
+		} else  {
+			promise = ProgramModel.findByIdAsync(filters.id);				
+		}
+	} else {
+		return Promise.reject(new Error('Filters missing'));
+	}
+
+	var promiseEnd = promise
+		.then(function (program) {
+			if (!program ) {
+				throw new Error('Program not found');
+			}
+			return Promise.resolve(program);
+		})
+		.catch(function (err) {
+			return Promise.reject(err);
+		});
+
+	return promiseEnd;
 }
 
 module.exports = {
@@ -121,19 +150,19 @@ module.exports = {
 		return create(input);
 	},
 
-	update : function (id, input) {
-		return update(id, input);
+	update : function (input) {
+		return update(input);
 	},
 
-	remove : function (id, user_id) {
-		return remove(id, user_id);
+	remove : function (filters) {
+		return remove(filters);
 	},
 
-	getAll : function (user_id) {
-		return getAll(user_id);
+	getAll : function (filters) {
+		return getAll(filters);
 	},
 
-	getOne : function (id, user_id) {
-		return getOne(id, user_id);
+	getOne : function (filters) {
+		return getOne(filters);
 	}
 };

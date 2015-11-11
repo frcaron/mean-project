@@ -5,109 +5,138 @@ var CountersModel = require(global.__model + '/CountersModel');
 
 function create (input) {
 
-		var plan = new PlanModel();
-		var promise = CountersModel.getNextSequence('plan_id')
-			.then(function (seq){
+	var plan = new PlanModel();
+	var promise = CountersModel.getNextSequence('plan_id')
+		.then(function (seq){
 
-				plan._id   = seq;
+			plan._id   = seq;
+			plan.month = input.month;
+			plan.year  = input.year;
+			plan._user = input.user_id;
+
+			return plan.saveAsync();
+		})
+		.then(function () {
+			return Promise.resolve(plan);
+		})
+		.catch(function (err) {
+			if (err.code === 11000) {
+				err = new Error('Plan already exist');
+			} 
+			return Promise.reject(err);
+		});
+
+	return promise;
+}
+
+function update (input) {
+
+	var output;
+	var promise = getOne(input)
+		.then(function (plan) {
+			if ( input.month ) { 
 				plan.month = input.month;
+			}
+			if ( input.year ) { 
 				plan.year  = input.year;
-				plan._user = input.user_id;
+			}
+			output = plan;
+			return plan.saveAsync();
+		})
+		.then(function () {
+			return Promise.resolve(output);
+		})
+		.catch(function (err) {
+			if (err.code === 11000) {
+				err = new Error('User already exist');
+			}
+			return Promise.reject(err);
+		});
 
-				return plan.saveAsync();
-			})
-			.then(function () {
-				return Promise.resolve(plan);
-			})
-			.catch(function (err) {
-				if (err.code === 11000) {
-					throw new Error('Plan already exist');
-				} else {
-					throw err;
-				}
-			});
-
-		return promise;
+	return promise;
 }
 
-function update (id, input) {
+function remove (filters) {
 
-		var output;
-		var promise = getOne(id, input.user_id)
-			.then(function (plan) {
-				if ( input.month ) { 
-					plan.month = input.month;
-				}
-				if ( input.year ) { 
-					plan.year  = input.year;
-				}
-				output = plan;
-				return plan.saveAsync();
-			})
-			.then(function () {
-				Promise.resolve(output);
-			})
-			.catch(function (err) {
-				throw err;
+	var promise;
+	if(filters.id) {
+		if(filters.user_id) {
+			promise = PlanModel.removeAsync({ 
+				_id   : filters.id,
+				_user : filters.user_id
 			});
 
-		return promise;
-}
+		} else {
+			promise = PlanModel.removeAsync({ _id : filters.id });
 
-function remove (id, user_id) {
-
-		var promise = getOne(id, user_id)
-			.then(function (plan){
-				return plan.removeAsync();
-			})
-			.catch(function (err) {
-				throw err;
-			});
-
-		return promise;
-}
-
-function getAll (user_id) {
-
-		var promise = PlanModel.findAsync({
-						_user : user_id
-					})
-			.then(function (plans) {
-				Promise.resolve(plans);
-			})
-			.catch(function (err) {
-				throw err;
-			});
-
-		return promise;
-}
-
-function getOne (id, user_id) {
-
-		var promise;
-		if(user_id) {
-			promise = PlanModel.findByIdAsync({
-						_id   : id,
-						_user : user_id
-					});
-		} else  {
-			promise = PlanModel.findByIdAsync({
-						_id : id
-					});
 		}
+	} else if(filters.user_id) {
+		promise = PlanModel.removeAsync({ _user : filters.user_id });
 			
-		promise
-			.then(function (plan) {
-				if (!plan) {
-					throw new Error('Plan not found');
-				}
-				Promise.resolve(plan);
-			})
-			.catch(function (err) {
-				throw err;
-			});
+	} else {
+		return Promise.reject(new Error('Filters missing'));
+	}
 
-		return promise;
+	var promiseEnd = promise
+		.catch(function (err) {
+			return Promise.reject(err);
+		});
+
+	return promiseEnd;
+}
+
+function getAll (filters) {
+
+	var promise;
+	if(filters.user_id) {
+		promise = PlanModel.findAsync({
+						_user : filters.user_id
+					});
+
+	} else {
+		return Promise.reject(new Error('Filters missin'));
+	}
+
+	var promiseEnd = promise
+		.then(function (plans) {
+			return Promise.resolve(plans);
+		})
+		.catch(function (err) {
+			return Promise.reject(err);
+		});
+
+	return promiseEnd;
+}
+
+function getOne (filters) {
+
+	var promise;
+	if(filters.id) {
+		if(filters.user_id) {
+			promise = PlanModel.findOneAsync({
+						_id   : filters.id,
+						_user : filters.user_id
+					});
+
+		} else  {
+			promise = PlanModel.findByIdAsync(filters.id);
+		}
+	} else {
+		return Promise.reject(new Error('Filters missing)'));
+	}
+		
+	var promiseEnd = promise
+		.then(function (plan) {
+			if (!plan) {
+				throw new Error('Plan not found');
+			}
+			return Promise.resolve(plan);
+		})
+		.catch(function (err) {
+			return Promise.reject(err);
+		});
+
+	return promiseEnd;
 }
 
 module.exports = {
@@ -115,19 +144,19 @@ module.exports = {
 		return create(input);
 	},
 
-	update : function (id, input) {
-		return update(id, input);
+	update : function (input) {
+		return update(input);
 	},
 
-	remove : function (id, user_id) {
-		return remove(id, user_id);
+	remove : function (filters) {
+		return remove(filters);
 	},
 
-	getAll : function (user_id) {
-		return getAll(user_id);
+	getAll : function (filters) {
+		return getAll(filters);
 	},
 
-	getOne : function (id, user_id) {
-		return getOne(id, user_id);
+	getOne : function (filters) {
+		return getOne(filters);
 	}
 };

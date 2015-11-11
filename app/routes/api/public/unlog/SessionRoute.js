@@ -13,9 +13,9 @@ module.exports = function (router) {
 		.post(function (req, res) {
 
 			// Validation
-			if (!req.body.username) {
+			if (!req.body.email) {
 				return ResponseService.fail(res, 'Authentication failed',
-					'Param "username" missing');
+					'Param "email" missing');
 			}
 			if (!req.body.password) {
 				return ResponseService.fail(res, 'Authentication failed',

@@ -1,46 +1,31 @@
-// Inject application
-var jwt = require('jsonwebtoken');
-var tokenConfig = require(global.__config + '/token');
-
-// Inject models
-var UserModel = require(global.__model + '/UserModel');
-
-// Inject services
-var responseService = require(global.__service + '/ResponseService');
+// Inject
+var Jwt = require('jsonwebtoken');
+var TokenConfig = require(global.__config + '/token');
+var ResponseService = require(global.__service + '/ResponseService');
+var UserDao = require(global.__dao + '/UserDao');
 
 module.exports = {
 
 	// Authenticate user
 	login : function (req, res) {
+		UserDao.validatePassword(req.body.email, req.body.password)
+			.then(function (user){
 
-		// Query find user by username
-		UserModel.findOne({
-			username : req.body.username
-		}).select('_id name username password admin').exec(function (err, user) {
-			if (err) {
-				return responseService.fail(res, 'Authentication failed', err.message);
-			}
-			if (!user) {
-				return responseService.fail(res, 'Authentication failed', 'User not found');
-			}
+				// Generate token
+				var token = Jwt.sign({
+					id        : user._id,
+					surname   : user.surname,
+					firstname : user.firstname,
+					email     : user.email,
+					admin     : user.admin
+				}, TokenConfig.secret, {
+					expiresMinutes : 1440
+				});
 
-			var validPassword = user.comparePassword(req.body.password);
-			if (!validPassword) {
-				return responseService.fail(res, 'Authentication failed', 'Wrong password');
-			}
-
-			// Generate token
-			var token = jwt.sign({
-				id        : user._id,
-				surname   : user.surname,
-				firstname : user.firstname,
-				email     : user.email,
-				admin     : user.admin
-			}, tokenConfig.secret, {
-				expiresMinutes : 1440
+				return ResponseService.success(res, 'Authentication success', token);
+			})
+			.catch(function (err) {
+				return ResponseService.fail(res, 'Authentication failed', err.message);
 			});
-
-			return responseService.success(res, 'Authentication success', token);
-		});
 	}
 };

@@ -5,106 +5,108 @@ var CountersModel     = require(global.__model + '/CountersModel');
 
 function create (input) {
 
-		var typeCategory = new TypeCategoryModel();
-		var promise = CountersModel.getNextSequence('type_category_id')
-			.then(function (seq){
+	var typeCategory = new TypeCategoryModel();
+	var promise = CountersModel.getNextSequence('type_category_id')
+		.then(function (seq){
 
-				typeCategory._id    = seq;
-				typeCategory.type   = input.type;
-				if( input.active ) {
-					typeCategory.active = input.active;
-				}
+			typeCategory._id  = seq;
+			typeCategory.type = input.type;
+			if( input.active !== undefined ) {
+				typeCategory.active = input.active;
+			}
 
-				return typeCategory.saveAsync();
-			})
-			.then(function () {
-				return Promise.resolve(typeCategory);
-			})
-			.catch(function (err) {
-				if (err.code === 11000) {
-					throw new Error('Type Category already exist');
-				} else {
-					throw err;
-				}
-			});
+			return typeCategory.saveAsync();
+		})
+		.then(function () {
+			return Promise.resolve(typeCategory);
+		})
+		.catch(function (err) {
+			if (err.code === 11000) {
+				err = new Error('Type Category already exist');
+			}
+			return Promise.reject(err);
+		});
 
-		return promise;
+	return promise;
 }
 
 function update (input) {
 
-		var filters = {
-			type : input.type
-		};
+	var output;
+	var promise = getOne(input)
+		.then(function (typeCategory) {
+			if( input.type ) {
+				typeCategory.type   = input.type;
+			}
+			if( input.active !== undefined ) {
+				typeCategory.active = input.active;
+			}
+			output = typeCategory;
+			return typeCategory.saveAsync();
+		})
+		.then(function () {
+			return Promise.resolve(output);
+		})
+		.catch(function (err) {
+			if (err.code === 11000) {
+				err = new Error('User already exist');
+			}
+			return Promise.reject(err);
+		});
 
-		var output;
-		var promise = getOne(filters)
-			.then(function (typeCategory) {
-				if( input.type ) {
-					typeCategory.type   = input.type;
-				}
-				if( input.active ) {
-					typeCategory.active = input.active;
-				}
-				output = typeCategory;
-				return typeCategory.saveAsync();
-			})
-			.then(function () {
-				Promise.resolve(output);
-			})
-			.catch(function (err) {
-				throw err;
-			});
-
-		return promise;
+	return promise;
 }
 
 function getAll (filters) {
 
-		var promise;
-		if(filters.active) {
-			promise = TypeCategoryModel.findAsync({
-						active : filters.active
-					});
-		} else {
-			promise = TypeCategoryModel.findAsync();
-		}
+	var promise;
+	if(filters.active) {
+		promise = TypeCategoryModel.findAsync({
+					active : filters.active
+				});
 
-		promise
-			.then(function (typeCategories) {
-				Promise.resolve(typeCategories);
-			})
-			.catch(function (err) {
-				throw err;
-			});
+	} else {
+		promise = TypeCategoryModel.findAsync();
+	}
 
-		return promise;
+	var promiseEnd = promise
+		.then(function (typeCategories) {
+			return Promise.resolve(typeCategories);
+		})
+		.catch(function (err) {
+			return Promise.reject(err);
+		});
+
+	return promiseEnd;
 }
 
 function getOne (filters) {
 	
-		var promise;
-		if(filters.id) {
-			promise = TypeCategoryModel.findByIdAsync(filters.id);
-			
-		} else if(filters.type) {
-			promise = TypeCategoryModel.findAsync({
-						type : filters.type
-					});
-		}
+	var promise;
+	if(filters.id) {
+		promise = TypeCategoryModel.findByIdAsync(filters.id);
 
-		promise
-			.then(function (typeCategory) {
-				if (!typeCategory) {
-					throw new Error('Type Category not found');
-				}
-				Promise.resolve(typeCategory);
-			})
-			.catch(function (err) {
-				throw err;
-			});
+	} else if(filters.type) {
+		promise = TypeCategoryModel.findOneAsync({
+					type : filters.type
+				});
 
-		return promise;
+	} else {
+		return Promise.reject(new Error('Filters missing'));
+	}
+
+	var promiseEnd = promise
+		.then(function (typeCategory) {
+			if (!typeCategory) {
+				throw new Error('Type Category not found');
+			}
+			return Promise.resolve(typeCategory);
+		})
+		.catch(function (err) {
+			return Promise.reject(err);
+		});
+
+	return promiseEnd;
 }
 
 module.exports = {

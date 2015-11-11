@@ -49,8 +49,7 @@ UserSchema.methods.comparePassword = function (password) {
 };
 
 // MiddleWare
-UserSchema.pre('save', function (next) {
-
+UserSchema.pre('save', function (next) { 
 	var user = this;
 
 	if (!user.isModified('password')) {

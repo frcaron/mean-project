@@ -5,115 +5,148 @@ var CountersModel = require(global.__model + '/CountersModel');
 
 function create (input) {
 
-		var category = new CategoryModel();
-		var promise = CountersModel.getNextSequence('category_id')
-			.then(function (seq){
+	var category = new CategoryModel();
+	var promise = CountersModel.getNextSequence('category_id')
+		.then(function (seq){
 
-				category._id    = seq;
+			category._id    = seq;
+			category.name   = input.name;
+			category._type   = input.type_id;
+			if( input.active !== undefined ) {
+				category.active = input.active;
+			}
+			category._user  = input.user_id;
+
+			return category.saveAsync();
+		})
+		.then(function () {
+			return Promise.resolve(category);
+		})
+		.catch(function (err) {
+			if (err.code === 11000) {
+				err = new Error('Category already exist');
+			}
+			return Promise.reject(err);
+		});
+
+	return promise;
+}
+
+function update (input) {
+
+	var output;
+	var promise = getOne(input)
+		.then(function (category) {
+			if( input.name ) {
 				category.name   = input.name;
+			}
+			if( input.type ) {
 				category.type   = input.type;
-				if( input.active ) {
-					category.active = input.active;
-				}
-				category._user  = input.user_id;
+			}
+			if( input.active !== undefined ) {
+				category.active = input.active;
+			}
+			output = category;
+			return category.saveAsync();
+		})
+		.then(function () {
+			return Promise.resolve(output);
+		})
+		.catch(function (err) {
+			if (err.code === 11000) {
+				err = new Error('User already exist');
+			}
+			return Promise.reject(err);
+		});
 
-				return category.saveAsync();
-			})
-			.then(function () {
-				return Promise.resolve(category);
-			})
-			.catch(function (err) {
-				if (err.code === 11000) {
-					throw new Error('Category already exist');
-				} else {
-					throw err;
-				}
-			});
-
-		return promise;
+	return promise;
 }
 
-function update (id, input) {
+function remove (filters) {
 
-		var output;
-		var promise = getOne(id, input.user_id)
-			.then(function (category) {
-				if( input.name ) {
-					category.name   = input.name;
-				}
-				if( input.type ) {
-					category.type   = input.type;
-				}
-				if( input.active ) {
-					category.active = input.active;
-				}
-				output = category;
-				return category.saveAsync();
-			})
-			.then(function () {
-				Promise.resolve(output);
-			})
-			.catch(function (err) {
-				throw err;
+	var promise;
+	if(filters.id) {
+		if(filters.user_id) {
+			promise = CategoryModel.removeAsync({ 
+				_id   : filters.id,
+				_user : filters.user_id
 			});
 
-		return promise;
+		} else {
+			promise = CategoryModel.removeAsync({ _id : filters.id });
+
+		}
+	} else if(filters.user_id) {
+		promise = CategoryModel.removeAsync({ _user : filters.user_id });
+			
+	} else {
+		return Promise.reject(new Error('Filters missing'));
+	}
+
+	var promiseEnd = promise
+		.catch(function (err) {
+			return Promise.reject(err);
+		});
+
+	return promiseEnd;
 }
 
-function remove (id, user_id) {
+function getAll (filters) {
 
-		var promise = getOne(id, user_id)
-			.then(function (category){
-				return category.removeAsync();
-			})
-			.catch(function (err) {
-				throw err;
-			});
+	var promise;
+	if(filters.user_id) {
+		promise = CategoryModel.findAsync({
+					_user : filters.user_id
+				});
+	} else {
+		return Promise.reject(new Error('Filters missing'));
+	}
 
-		return promise;
+	var promiseEnd = promise
+		.then(function (categories) {
+			return Promise.resolve(categories);
+		})
+		.catch(function (err) {
+			return Promise.reject(err);
+		});
+
+	return promiseEnd;
 }
 
-function getAll (user_id) {
+function getOne (filters) {
 
-		var promise = CategoryModel.findAsync({
-						_user : user_id
-					})
-			.then(function (categories) {
-				Promise.resolve(categories);
-			})
-			.catch(function (err) {
-				throw err;
-			});
-
-		return promise;
-}
-
-function getOne (id, user_id) {
-	
-		var promise;
-		if(user_id) {
-			promise = CategoryModel.findByIdAsync({
-						_id   : id,
-						_user : user_id
+	var promise;
+	if(filters.id) {
+		if(filters.user_id) {
+			promise = CategoryModel.findOneAsync({
+						_id   : filters.id,
+						_user : filters.user_id
 					});
 		} else  {
-			promise = CategoryModel.findByIdAsync({
-						_id : id
-					});
-		}
-			
-		promise
-			.then(function (category) {
-				if (!category) {
-					throw new Error('Category not found');
-				}
-				Promise.resolve(category);
-			})
-			.catch(function (err) {
-				throw err;
-			});
+			promise = CategoryModel.findByIdAsync(filters.id);
+		}	
+	} else if(filters.type && filters.user_id) {
+		promise = CategoryModel.findOneAsync({
+			_type : filters.type,
+			_user : filters.user_id
+		});
+		
+	} else {
+		return Promise.reject(new Error('Filters missing'));
+	}
+		
+	var promiseEnd = promise
+		.then(function (category) {
+			if (!category) {
+				throw new Error('Category not found');
+			}
+			return Promise.resolve(category);
+		})
+		.catch(function (err) {
+			return Promise.reject(err);
+		});
 
-		return promise;
+	return promiseEnd;
 }
 
 module.exports = {
@@ -121,19 +154,19 @@ module.exports = {
 		return create(input);
 	},
 
-	update : function (id, input) {
-		return update(id, input);
+	update : function (input) {
+		return update(input);
 	},
 
-	remove : function (id, user_id) {
-		return remove(id, user_id);
+	remove : function (filters) {
+		return remove(filters);
 	},
 
-	getAll : function (user_id) {
-		return getAll(user_id);
+	getAll : function (filters) {
+		return getAll(filters);
 	},
 
-	getOne : function (id, user_id) {
-		return getOne(id, user_id);
+	getOne : function (filters) {
+		return getOne(filters);
 	}
 };

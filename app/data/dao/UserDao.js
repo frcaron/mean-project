@@ -14,7 +14,7 @@ function create (input) {
 			user.firstname = input.firstname;
 			user.email     = input.email;
 			user.password  = input.password;
-			if ( input.admin ) {
+			if ( input.admin !== undefined ) {
 				user.admin = input.admin;
 			}
 
@@ -25,10 +25,9 @@ function create (input) {
 		})
 		.catch(function (err) {
 			if (err.code === 11000) {
-				throw new Error('User already exist');
-			} else {
-				throw err;
+				err = new Error('User already exist');
 			}
+			return Promise.reject(err);
 		});
 
 	return promise;
@@ -36,12 +35,8 @@ function create (input) {
 
 function update (input) {
 
-	var filters = {
-		id : input.id 
-	};
-
 	var output;
-	var promise = getOne(filters)
+	var promise = getOne(input)
 		.then(function (user) {
 			if ( input.surname ) { 
 				user.surname   = input.surname;
@@ -55,34 +50,33 @@ function update (input) {
 			if ( input.password ) { 
 				user.password  = input.password;
 			}
-			if ( input.admin ) { 
+			if ( input.admin !== undefined ) { 
 				user.admin     = input.admin;
 			}
 			output = user;
 			return user.saveAsync();
 		})
 		.then(function () {
-			Promise.resolve(output);
+			return Promise.resolve(output);
 		})
 		.catch(function (err) {
-			throw err;
+			if (err.code === 11000) {
+				err = new Error('User already exist');
+			}
+			return Promise.reject(err);
 		});
 
-		return promise;
+	return promise;
 }
 
-function remove (id) {
-
-	var filters = {
-		id : id 
-	};
+function remove (filters) {
 
 	var promise = getOne(filters)
 		.then(function(user){
 			return user.removeAsync();
 		})
 		.catch(function (err) {
-			throw err;
+			return Promise.reject(err);
 		});
 
 	return promise;
@@ -92,10 +86,10 @@ function getAll () {
 
 	var promise = UserModel.findAsync()
 		.then(function (users) {
-			Promise.resolve(users);
+			return Promise.resolve(users);
 		})
 		.catch(function (err) {
-			throw err;
+			return Promise.reject(err);
 		});
 
 	return promise;
@@ -104,47 +98,81 @@ function getAll () {
 function getOne (filters) {
 	
 	var promise;
-	if(filters.id) {
-		promise = UserModel.findByIdAsync(filters.id);
+	var id = filters.id || filters.user_id;
+	if(id) {
+		promise = UserModel.findByIdAsync(id);
 
 	} else if(filters.email) {
-		promise = UserModel.findAsync({
+		promise = UserModel.findOneAsync({
 					email : filters.email
 				});
+
+	} else {
+		return Promise.reject(new Error('Filters missing'));
 	}
 
-	promise
+	var promiseEnd = promise
 		.then(function (user) {
 			if (!user) {
 				throw new Error('User not found');
 			}
-			Promise.resolve(user);
+			return Promise.resolve(user);
 		})
 		.catch(function (err) {
-			throw err;
+			return Promise.reject(err);
 		});
 
-	return promise;
+	return promiseEnd;
+}
+
+function validatePassword (log, pass) {
+
+	var promise = UserModel.findOne({
+		email : log
+	})
+	.select('_id, surname firstname email password admin')
+	.then(function(user) {
+		if(!user) {
+			throw new Error('User not found');
+		}
+
+		var validPassword = user.comparePassword(pass);
+
+		if (!validPassword) {
+			throw new Error('Wrong password');
+		}
+
+		return Promise.resolve(user);
+	})
+	.then(undefined, function (err){
+		return Promise.reject(err);
+	});
+
+	return Promise.resolve(promise);
 }
 
 module.exports = {
-	create : function (input) {
+	create           : function (input) {
 		return create(input);
 	},
 
-	update : function (input) {
+	update           : function (input) {
 		return update(input);
 	},
 
-	remove : function (id) {
-		return remove(id);
+	remove           : function (filters) {
+		return remove(filters);
 	},
 
-	getAll : function () {
+	getAll           : function () {
 		return getAll();
 	},
 
-	getOne : function (filters) {
+	getOne           : function (filters) {
 		return getOne(filters);
+	},
+
+	validatePassword : function (log, pass) {
+		return validatePassword(log, pass);
 	}
 };
