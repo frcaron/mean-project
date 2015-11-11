@@ -61,7 +61,7 @@ module.exports = {
 					.then(function (category) {
 						var inputProgram = {
 							category_id : category._id,
-							plan_id     : planTmp._id,
+							plan_id     : plan._id,
 							user_id     : req.decoded.id
 						};
 
