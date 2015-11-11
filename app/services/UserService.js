@@ -1,6 +1,6 @@
 // Inject
 var Promise         = require('bluebird');
-var responseService = require(global.__service + '/ResponseService');
+var ResponseService = require(global.__service + '/ResponseService');
 var UserDao         = require(global.__dao + '/UserDao');
 var PlanDao         = require(global.__dao + '/PlanDao');
 var ProgramDao      = require(global.__dao + '/ProgramDao');
@@ -14,10 +14,10 @@ module.exports = {
 
         UserDao.create(req.body)
             .then(function(user) {
-                responseService.success(res, 'Add success', user._id);
+                ResponseService.success(res, 'Add success', user);
             })
             .catch(function(err) {
-                responseService.fail(res, 'Add failed', err.message);
+                ResponseService.fail(res, 'Add failed', err.message);
             });
 
     },
@@ -25,12 +25,15 @@ module.exports = {
     // Update one user
     update    : function (req, res) {
 
-        UserDao.update(req.decoded.id, req.body)
-            .then(function() {
-                responseService.success(res, 'Update success');
+        var input = req.body;
+        input.id  = req.decoded.id;
+
+        UserDao.update(input)
+            .then(function(user) {
+                ResponseService.success(res, 'Update success', user);
             })
             .catch(function(err) {
-                responseService.fail(res, 'Update failed', err.message);
+                ResponseService.fail(res, 'Update failed', err.message);
             });
     },
 
@@ -41,13 +44,13 @@ module.exports = {
             function(sequence, dao) {
                 return sequence                           
                         .then(function() {
-                             return dao.remove(id);
+                            return dao.remove(id);
                         })                           
                         .then(function() {
-                            responseService.success(res, 'Remove success');
+                            ResponseService.success(res, 'Remove success');
                         })
                         .catch(function (err) {
-                            responseService.fail(res, 'Remove failed', err.message);  
+                            ResponseService.fail(res, 'Remove failed', err.message);  
                         });
             },
             Promise.resolve());
@@ -58,37 +61,43 @@ module.exports = {
 
         UserDao.getAll()
             .then(function(users) {
-                responseService.success(res, 'Find success', users);
+                ResponseService.success(res, 'Find success', users);
             })
             .catch(function(err) {
-                responseService.fail(res, 'Find failed', err.message);
+                ResponseService.fail(res, 'Find failed', err.message);
             });
     },
 
     // Get one user by id
     getOne    : function (req, res) {
 
-        UserDao.getOne(req.decoded.id)
+        var input = {
+            id : req.decoded.id
+        };
+
+        UserDao.getOne(input)
             .then(function(user) {
-                responseService.success(res, 'Find success', user);
+                ResponseService.success(res, 'Find success', user);
             })
             .catch(function(err) {
-                responseService.fail(res, 'Find failed', err.message);
+                ResponseService.fail(res, 'Find failed', err.message);
             });
     },
 
     // Set permission
     giveAdmin : function (req, res) {
 
-        var user;
-        user.admin = true;
+        var input = {
+            id    : req.decoded.id,
+            admin : true
+        };
 
-        UserDao.update(req.params.user_id, user)
+        UserDao.update(input)
             .then(function() {
-                responseService.success(res, 'Give permission success');
+                ResponseService.success(res, 'Give permission success');
             })
             .catch(function(err) {
-                responseService.fail(res, 'Give permission failed', err.message);
+                ResponseService.fail(res, 'Give permission failed', err.message);
             });
     }
 };

@@ -1,9 +1,9 @@
 // Inject 
-var express  = require('express');
+var Express  = require('express');
 
-var adminRouter = express.Router();
-var publicRouter   = express.Router();
-var basicRouter = express.Router();
+var adminRouter = Express.Router();
+var publicRouter   = Express.Router();
+var basicRouter = Express.Router();
 
 require('./route.api.admin')(adminRouter);
 require('./route.api.public')(publicRouter);

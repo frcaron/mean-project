@@ -31,10 +31,14 @@ function create (input) {
 		return promise;
 }
 
-function update (id, input) {
+function update (input) {
+
+		var filters = {
+			type : input.type
+		};
 
 		var output;
-		var promise = getOne(id, input.user_id)
+		var promise = getOne(filters)
 			.then(function (typeCategory) {
 				if( input.type ) {
 					typeCategory.type   = input.type;
@@ -55,22 +59,18 @@ function update (id, input) {
 		return promise;
 }
 
-function remove (id) {
+function getAll (filters) {
 
-		var promise = getOne(id)
-			.then(function (typeCategory){
-				return typeCategory.removeAsync();
-			})
-			.catch(function (err) {
-				throw err;
-			});
+		var promise;
+		if(filters.active) {
+			promise = TypeCategoryModel.findAsync({
+						active : filters.active
+					});
+		} else {
+			promise = TypeCategoryModel.findAsync();
+		}
 
-		return promise;
-}
-
-function getAll () {
-
-		var promise = TypeCategoryModel.findAsync()
+		promise
 			.then(function (typeCategories) {
 				Promise.resolve(typeCategories);
 			})
@@ -81,11 +81,19 @@ function getAll () {
 		return promise;
 }
 
-function getOne (id) {
+function getOne (filters) {
 	
-		var promise = TypeCategoryModel.findByIdAsync({
-						_id : id
-					})
+		var promise;
+		if(filters.id) {
+			promise = TypeCategoryModel.findByIdAsync(filters.id);
+			
+		} else if(filters.type) {
+			promise = TypeCategoryModel.findAsync({
+						type : filters.type
+					});
+		}
+
+		promise
 			.then(function (typeCategory) {
 				if (!typeCategory) {
 					throw new Error('Type Category not found');
@@ -104,19 +112,15 @@ module.exports = {
 		return create(input);
 	},
 
-	update : function (id, input) {
-		return update(id, input);
+	update : function (input) {
+		return update(input);
 	},
 
-	remove : function (id) {
-		return remove(id);
+	getAll : function (filters) {
+		return getAll(filters);
 	},
 
-	getAll : function () {
-		return getAll();
-	},
-
-	getOne : function (id) {
-		return getOne(id);
+	getOne : function (filters) {
+		return getOne(filters);
 	}
 };

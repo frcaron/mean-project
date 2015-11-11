@@ -1,6 +1,6 @@
 //Inject 
-var responseService = require(global.__service + '/ResponseService');
-var sessionService  = require(global.__service + '/SessionService');
+var ResponseService = require(global.__service + '/ResponseService');
+var SessionService  = require(global.__service + '/SessionService');
 
 // Properties
 var api_prefix = '/authenticate';
@@ -14,14 +14,14 @@ module.exports = function (router) {
 
 			// Validation
 			if (!req.body.username) {
-				return responseService.fail(res, 'Authentication failed',
+				return ResponseService.fail(res, 'Authentication failed',
 					'Param "username" missing');
 			}
 			if (!req.body.password) {
-				return responseService.fail(res, 'Authentication failed',
+				return ResponseService.fail(res, 'Authentication failed',
 					'Param "password" missing');
 			}
 
-			sessionService.login(req, res);
+			SessionService.login(req, res);
 		});
 };

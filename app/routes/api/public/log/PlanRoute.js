@@ -1,7 +1,7 @@
 //Inject
-var responseService = require(global.__service + '/ResponseService');
-var planService     = require(global.__service + '/PlanService');
-var programService  = require(global.__service + '/ProgramService');
+var ResponseService = require(global.__service + '/ResponseService');
+var PlanService     = require(global.__service + '/PlanService');
+var ProgramService  = require(global.__service + '/ProgramService');
 
 // Inject properties
 var api_prefix = '/plans';
@@ -12,7 +12,7 @@ module.exports = function (router) {
 
 		// Get all plans
 		.get(function (req, res) {
-			planService.allByU(req, res);
+			PlanService.allByU(req, res);
 		})
 
 		// Create one plan
@@ -20,29 +20,29 @@ module.exports = function (router) {
 
 			// Validation
 			if (!req.body.month) {
-				return responseService.fail(res, 'Add failed', 'Param "month" missing');
+				return ResponseService.fail(res, 'Add failed', 'Param "month" missing');
 			}
 			if (!req.body.year) {
-				return responseService.fail(res, 'Add failed', 'Param "year" missing');
+				return ResponseService.fail(res, 'Add failed', 'Param "year" missing');
 			}
 
 			// TODO create typeCategory Unknow (1fois pour l'appli)
 			// TODO creat category Unknow (1 fois par user)
 
-			planService.create(req, res);
+			PlanService.create(req, res);
 		});
 
 	router.route(api_prefix + '/:plan_id')
 
 		// Get one program
 		.get(function (req, res) {
-			planService.getById(req, res);
+			PlanService.getById(req, res);
 		});
 
 	router.route(api_prefix + '/:plan_id/programs')
 
 		// Get all programs by plan
 		.get(function (req, res) {
-			programService.allByPlanU(req, res);
+			ProgramService.allByPlanU(req, res);
 		});
 };

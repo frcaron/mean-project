@@ -1,122 +1,79 @@
-// Inject models
-var TypeCategoryModel = require(global.__model + '/TypeCategoryModel');
-
-// Inject services
-var responseService = require(global.__service + '/ResponseService');
+// Inject
+var ResponseService = require(global.__service + '/ResponseService');
+var TypeCategoryDao = require(global.__model + '/TypeCategoryDao');
 
 module.exports = {
 
 	// Create one type category
 	create    : function (req, res) {
 
-		var typeCategory = new TypeCategoryModel();
+		var input = req.body;
 
-		typeCategory.type = req.body.type;
-
-		var promise = typeCategory.saveAsync();
-
-		promise
-			.then(function () {
-				responseService.success(res, 'Add success', typeCategory._id);
+		TypeCategoryDao.create(input)
+			.then(function (typeCategory){
+				ResponseService.success(res, 'Add success', typeCategory);
 			})
-
-			.catch(function (err) {
-				responseService.fail(res, 'Add failed', err.message);
+			.catch(function (err){
+				ResponseService.fail(res, 'Add failed', err.message);
 			});
 	},
 
 	// Update one type category
 	update    : function (req, res) {
 
-		var promise = TypeCategoryModel.findByIdAsync(req.params.type_category_id);
+		var input = req.body;
 
-		promise
+		TypeCategoryDao.update(input)
 			.then(function (typeCategory) {
-
-				if (!typeCategory) {
-					throw new Error('Type category not found');
-				}
-
-				if (req.body.type) {
-					typeCategory.type = req.body.type;
-				}
-				if (req.body.visible) {
-					typeCategory.visible = req.body.visible;
-				}
-
-				return typeCategory.saveAsync();
+				ResponseService.success(res, 'Update success', typeCategory);
 			})
-
-			.then(function () {
-				responseService.success(res, 'Update success');
-			})
-
 			.catch(function (err) {
-				responseService.fail(res, 'Update failed', err.message);
-			});
-	},
-
-	// Remove one type category
-	remove    : function (req, res) {
-
-		var promise = TypeCategoryModel.removeAsync({
-			_id : req.params.type_category_id
-		});
-
-		promise
-			.then(function () {
-				responseService.success(res, 'Remove success');
-			})
-
-			.catch(function (err) {
-				responseService.fail(res, 'Remove failed', err.message);
+				ResponseService.fail(res, 'Update failed', err.message);
 			});
 	},
 
 	// Get all type category
 	all       : function (req, res) {
 
-		var promise = TypeCategoryModel.findAsync();
-
-		promise
+		TypeCategoryDao.getAll()
 			.then(function (typeCategories) {
-				responseService.success(res, 'Find success', typeCategories);
+				ResponseService.success(res, 'Find success', typeCategories);
 			})
-
 			.catch(function (err) {
-				responseService.fail(res, 'Find failed', err.message);
+				ResponseService.fail(res, 'Find failed', err.message);
 			});
 	},
 
 	// Get all type category active
 	allActive : function (req, res) {
 
-		var promise = TypeCategoryModel.findAsync({
+		var filters = {
 			active : true
-		});
+		};
 
-		promise
+		TypeCategoryDao.getAll(filters)
 			.then(function (typeCategories) {
-				responseService.success(res, 'Find success', typeCategories);
+				ResponseService.success(res, 'Find success', typeCategories);
 			})
-
 			.catch(function (err) {
-				responseService.fail(res, 'Find failed', err.message);
+				ResponseService.fail(res, 'Find failed', err.message);
 			});
 	},
 
 	// Get one type category by id
-	getById   : function (req, res) {
+	getById    : function (req, res) {
 
-		var promise = TypeCategoryModel.findByIdAsync(req.params.type_category_id);
+		var filters = {
+			id : req.params.type_category_id
+		};
 
-		promise
+		TypeCategoryDao.getOne(filters)
 			.then(function (typeCategory) {
-				responseService.success(res, 'Find success', typeCategory);
+				ResponseService.success(res, 'Find success', typeCategory);
 			})
 
 			.catch(function (err) {
-				responseService.fail(res, 'Find failed', err.message);
+				ResponseService.fail(res, 'Find failed', err.message);
 			});
 	}
 };

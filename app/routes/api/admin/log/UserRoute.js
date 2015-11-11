@@ -1,6 +1,6 @@
 //Inject
-var responseService = require(global.__service + '/ResponseService');
-var userService     = require(global.__service + '/UserService');
+var ResponseService = require(global.__service + '/ResponseService');
+var UserService     = require(global.__service + '/UserService');
 
 // Properties
 var api_prefix = '/users';
@@ -11,7 +11,7 @@ module.exports = function (router) {
 
 		// Get all users
 		.get(function (req, res) {
-			userService.getAll(req, res);
+			UserService.getAll(req, res);
 		});
 
 	router.route(api_prefix + '/:user_id')
@@ -20,14 +20,14 @@ module.exports = function (router) {
 		.put(function (req, res) {
 
 			if (!req.params.user_id) {
-				return responseService.fail(res, 'Give permission failed', 'Param "user_id" missing');
+				return ResponseService.fail(res, 'Give permission failed', 'Param "user_id" missing');
 			}
 
-			userService.giveAdmin(req, res);
+			UserService.giveAdmin(req, res);
 		})
 
 		// Delete one user
 		.delete(function (req, res) {
-			userService.remove(req, res, req.params.user_id);
+			UserService.remove(req, res, req.params.user_id);
 		});
 };

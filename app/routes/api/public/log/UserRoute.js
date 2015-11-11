@@ -1,5 +1,5 @@
 //Inject 
-var userService     = require(global.__service + '/UserService');
+var UserService     = require(global.__service + '/UserService');
 
 // Properties
 var api_prefix = '/users';
@@ -10,16 +10,16 @@ module.exports = function (router) {
 
 		// Get one user
 		.get(function (req, res) {
-			userService.getOne(req, res);
+			UserService.getOne(req, res);
 		})
 
 		// Update one user
 		.put(function (req, res) {
-			userService.update(req, res);
+			UserService.update(req, res);
 		})
 
 		// Delete one user
 		.delete(function (req, res) {
-			userService.remove(req, res, req.decoded.id);
+			UserService.remove(req, res, req.decoded.id);
 		});
 };

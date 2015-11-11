@@ -1,6 +1,6 @@
 // Inject 
-var jwt             = require('jsonwebtoken');
-var tokenConfig     = require(global.__config + '/token');
+var Jwt             = require('jsonwebtoken');
+var TokenConfig     = require(global.__config + '/token');
 
 module.exports = function (router) {
 
@@ -18,7 +18,7 @@ module.exports = function (router) {
 		var token = req.body.token || req.param('token') || req.headers[ 'x-access-token' ];
 
 		if (token) {
-			jwt.verify(token, tokenConfig.secret, function (err, decoded) {
+			Jwt.verify(token, TokenConfig.secret, function (err, decoded) {
 				if (!err) {
 					req.decoded = decoded;
 				}

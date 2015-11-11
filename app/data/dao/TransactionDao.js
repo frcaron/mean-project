@@ -92,18 +92,19 @@ function getAll (user_id) {
 		return promise;
 }
 
-function getOne (id, user_id) {
+function getOne (filters) {
 	
 		var promise;
-		if(user_id) {
-			promise = TransactionModel.findByIdAsync({
-						_id   : id,
-						_user : user_id
-					});
-		} else  {
-			promise = TransactionModel.findByIdAsync({
-						_id : id
-					});
+		if(filters.id) {
+			if(filters.user_id) {
+				promise = TransactionModel.findByIdAsync({
+							_id   : filters.id,
+							_user : filters.user_id
+						});
+				
+			} else {
+				promise = TransactionModel.findByIdAsync(filters.id);
+			}
 		}
 			
 		promise
@@ -133,11 +134,11 @@ module.exports = {
 		return remove(id, user_id);
 	},
 
-	getAll : function (user_id) {
-		return getAll(user_id);
+	getAll : function (filters) {
+		return getAll(filters);
 	},
 
-	getOne : function (id, user_id) {
-		return getOne(id, user_id);
+	getOne : function (filters) {
+		return getOne(filters);
 	}
 };

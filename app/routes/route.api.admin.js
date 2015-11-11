@@ -1,7 +1,7 @@
 // Inject
-var jwt             = require('jsonwebtoken');
-var tokenConfig     = require(global.__config + '/token');
-var responseService = require(global.__service + '/ResponseService');
+var Jwt             = require('jsonwebtoken');
+var TokenConfig     = require(global.__config + '/token');
+var ResponseService = require(global.__service + '/ResponseService');
 
 module.exports = function (router) {
 
@@ -12,7 +12,7 @@ module.exports = function (router) {
 	// Validate param user_id
 	router.param('user_id', function (req, res, next, user_id) {
 		if (!user_id) {
-			return responseService.fail(res, 'Request validation failed', 'Param "user_id" missing');
+			return ResponseService.fail(res, 'Request validation failed', 'Param "user_id" missing');
 		}
 		next();
 	});
@@ -20,7 +20,7 @@ module.exports = function (router) {
 	// Validate param type_category_id
 	router.param('type_category_id', function (req, res, next, type_category_id) {
 		if (!type_category_id) {
-			return responseService.fail(res, 'Request validation failed', 'Param "type_category_id" missing');
+			return ResponseService.fail(res, 'Request validation failed', 'Param "type_category_id" missing');
 		}
 		next();
 	});
@@ -41,14 +41,14 @@ module.exports = function (router) {
 		var token = req.body.token || req.param('token') || req.headers[ 'x-access-token' ];
 
 		if (token) {
-			jwt.verify(token, tokenConfig.secret, function (err, decoded) {
+			Jwt.verify(token, TokenConfig.secret, function (err, decoded) {
 				if (err) {
-					return responseService.fail(res, 'Session error', 'Session expired', 403);
+					return ResponseService.fail(res, 'Session error', 'Session expired', 403);
 				}
 
 				// Admin access
 				if (!decoded.admin) {
-					return responseService.fail(res, 'Session error', 'Permission refused', 403);
+					return ResponseService.fail(res, 'Session error', 'Permission refused', 403);
 				}
 
 				// Follow token
@@ -57,7 +57,7 @@ module.exports = function (router) {
 				next();
 			});
 		} else {
-			return responseService.fail(res, 'Session error', 'No session', 403);
+			return ResponseService.fail(res, 'Session error', 'No session', 403);
 		}
 	});
 

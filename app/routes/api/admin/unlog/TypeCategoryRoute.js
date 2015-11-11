@@ -1,5 +1,5 @@
 // Inject
-var typeCategoryService = require(global.__service + '/TypeCategoryService');
+var TypeCategoryService = require(global.__service + '/TypeCategoryService');
 
 // Propeties
 var api_prefix = '/typecategories';
@@ -10,20 +10,20 @@ module.exports = function (router) {
 
 		// Get all type category
 		.get(function (req, res) {
-			typeCategoryService.all(req, res);
+			TypeCategoryService.all(req, res);
 		});
 
 	router.route(api_prefix + '/active')
 
 		// Get all type category active
 		.get(function (req, res) {
-			typeCategoryService.allActive(req, res);
+			TypeCategoryService.allActive(req, res);
 		});
 
 	router.route(api_prefix + '/:type_category_id')
 
 		// Get one type category
 		.get(function (req, res) {
-			typeCategoryService.getById(req, res);
+			TypeCategoryService.getById(req, res);
 		});
 };
