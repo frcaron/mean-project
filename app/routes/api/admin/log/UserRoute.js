@@ -1,3 +1,5 @@
+"use strict";
+
 //Inject
 var UserService     = require(global.__service + '/UserService');
 

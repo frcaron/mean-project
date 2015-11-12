@@ -1,3 +1,5 @@
+"use strict";
+
 // Inject models
 var CategoryModel = require(global.__model + '/CategoryModel');
 var TypeCategoryModel = require(global.__model + '/TypeCategoryModel');

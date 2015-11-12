@@ -1,3 +1,5 @@
+"use strict";
+
 // Inject
 var TypeCategoryService = require(global.__service + '/TypeCategoryService');
 

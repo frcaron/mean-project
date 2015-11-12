@@ -6,26 +6,26 @@ var Favicon      = require('serve-favicon');
 var Morgan       = require('morgan');
 var CookieParser = require('cookie-parser');
 var BodyParser   = require('body-parser');
-var Promise      = require('bluebird');
-var Mongoose     = Promise.promisifyAll(require('mongoose'));
+var BPromise      = require('bluebird');
+var Mongoose     = BPromise.promisifyAll(require('mongoose'));
 
 var app = Express();
 
 // Configuration =============================================
 
-//app.use(Favicon(__dirname + '/public/favicon.ico'));
+// app.use(Favicon(__dirname + '/public/favicon.ico'));
 app.use(Morgan('dev'));
 app.use(BodyParser.json());
 app.use(BodyParser.urlencoded({ extended : true }));
 app.use(BodyParser.json({ type : 'application/vnd.api+json' }));
 app.use(CookieParser());
-app.use(express.static(Path.join(__dirname, 'public')));
+app.use(Express.static(Path.join(__dirname, 'public')));
 
-Promise.config({
-    warnings        : false,
-    longStackTraces : false,
-    cancellation    : false
-});
+// BPromise.config({
+//     warnings        : false,
+//     longStackTraces : false,
+//     cancellation    : false
+// });
 
 // Global variable ===========================================
 

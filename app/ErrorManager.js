@@ -1,3 +1,5 @@
+"use strict";
+
 // Inject
 var Util = require('util');
 
@@ -8,10 +10,10 @@ var programmerError = function (message) {
 };
 
 module.exports = {
-	DuplicateError : programmerError(message),
-	NoResultError  : programmerError(message),
-	ParamsError    : programmerError(message),
-	LoginError     : programmerError(message),
+	DuplicateError : programmerError,
+	NoResultError  : programmerError,
+	ParamsError    : programmerError,
+	LoginError     : programmerError
 };
 
-Util.inherits(programmerErrorr, Error);
+Util.inherits(programmerError, Error);

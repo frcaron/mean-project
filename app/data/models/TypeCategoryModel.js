@@ -1,7 +1,9 @@
+"use strict";
+
 // Inject application
-var Promise = require('bluebird');
-var mongoose = Promise.promisifyAll(require('mongoose'));
-var Schema = mongoose.Schema;
+var BPromise   = require('bluebird');
+var mongoose   = BPromise.promisifyAll(require('mongoose'));
+var Schema     = mongoose.Schema;
 var DatePlugin = require(global.__plugin + '/DatePlugin');
 
 // Schema

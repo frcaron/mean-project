@@ -1,6 +1,8 @@
+"use strict";
+
 // Inject
-var Promise           = require('bluebird');
-var ErrorManager      = require(global.__app) + '/ErrorManager');
+var BPromise          = require('bluebird');
+var ErrorManager      = require(global.__app + '/ErrorManager');
 var TypeCategoryModel = require(global.__model + '/TypeCategoryModel');
 var CountersModel     = require(global.__model + '/CountersModel');
 
@@ -25,7 +27,7 @@ function create (input) {
 			return typeCategory.saveAsync();
 		})
 		.then(function () {
-			return Promise.resolve(typeCategory);
+			return BPromise.resolve(typeCategory);
 		})
 		.catch(function (err) {
 			if (err.code === 11000) {
@@ -60,7 +62,7 @@ function update (input) {
 			return typeCategory.saveAsync();
 		})
 		.then(function () {
-			return Promise.resolve(output);
+			return BPromise.resolve(output);
 		})
 		.catch(function (err) {
 			if (err.code === 11000) {
@@ -119,7 +121,7 @@ function getOne (filters) {
 				});
 
 	} else {
-		promise = Promise.reject(new ErrorManager.ParamsError('Filters missing'));
+		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
 
 	var promiseEnd = promise
@@ -127,7 +129,7 @@ function getOne (filters) {
 			if (!typeCategory) {
 				throw new ErrorManager.NoResultError('Type Category not found');
 			}
-			return Promise.resolve(typeCategory);
+			return BPromise.resolve(typeCategory);
 		})
 		.catch(function (err) {
 			throw err;

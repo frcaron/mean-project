@@ -1,5 +1,7 @@
+"use strict";
+
 // Inject
-var Promise         = require('bluebird');
+var BPromise        = require('bluebird');
 var ResponseService = require(global.__service + '/ResponseService');
 var UserDao         = require(global.__dao + '/UserDao');
 var PlanDao         = require(global.__dao + '/PlanDao');
@@ -56,7 +58,7 @@ module.exports = {
 
         var messageSuccess;
         var messageError;
-        Promise.map([UserDao, PlanDao, ProgramDao, CategoryDao, TransactionDao], 
+        BPromise.map([UserDao, PlanDao, ProgramDao, CategoryDao, TransactionDao], 
             function(dao) {
                 return dao.remove({ user_id : user_id })
                         .then(function () {

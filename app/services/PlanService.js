@@ -1,6 +1,7 @@
+"use strict";
+
 // Inject
-var Promise         = require('bluebird');
-var ErrorManager    = require(global.__app) + '/ErrorManager');
+var ErrorManager    = require(global.__app + '/ErrorManager');
 var ResponseService = require(global.__service + '/ResponseService');
 var PlanDao         = require(global.__dao + '/PlanDao');
 var ProgramDao      = require(global.__dao + '/ProgramDao');

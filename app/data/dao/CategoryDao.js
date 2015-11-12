@@ -1,6 +1,8 @@
+"use strict";
+
 // Inject
-var Promise       = require('bluebird');
-var ErrorManager  = require(global.__app) + '/ErrorManager');
+var BPromise      = require('bluebird');
+var ErrorManager  = require(global.__app + '/ErrorManager');
 var CategoryModel = require(global.__model + '/CategoryModel');
 var CountersModel = require(global.__model + '/CountersModel');
 
@@ -16,18 +18,18 @@ function create (input) {
 	var promise = CountersModel.getNextSequence('category_id')
 		.then(function (seq){
 
-			category._id    = seq;
-			category.name   = input.name;
-			category._type   = input.type_id;
+			category._id   = seq;
+			category.name  = input.name;
+			category._type = input.type_id;
 			if( input.active !== undefined ) {
 				category.active = input.active;
 			}
-			category._user  = input.user_id;
+			category._user = input.user_id;
 
 			return category.saveAsync();
 		})
 		.then(function () {
-			return Promise.resolve(category);
+			return BPromise.resolve(category);
 		})
 		.catch(function (err) {
 			if (err.code === 11000) {
@@ -65,7 +67,7 @@ function update (input) {
 			return category.saveAsync();
 		})
 		.then(function () {
-			return Promise.resolve(output);
+			return BPromise.resolve(output);
 		})
 		.catch(function (err) {
 			if (err.code === 11000) {
@@ -104,7 +106,7 @@ function remove (filters) {
 		promise = CategoryModel.removeAsync({ _user : filters.user_id });
 			
 	} else {
-		promise = Promise.reject(new ErrorManager.ParamsError('Filters missing'));
+		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
 
 	var promiseEnd = promise
@@ -129,7 +131,7 @@ function getAll (filters) {
 					_user : filters.user_id
 				});
 	} else {
-		promise = Promise.reject(new ErrorManager.ParamsError('Filters missing'));
+		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
 
 	var promiseEnd = promise
@@ -168,7 +170,7 @@ function getOne (filters) {
 		});
 		
 	} else {
-		promise = Promise.reject(new ErrorManager.ParamsError('Filters missing'));
+		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
 		
 	var promiseEnd = promise
@@ -176,7 +178,7 @@ function getOne (filters) {
 			if (!category) {
 				throw new ErrorManager.NoResultError('Category not found');
 			}
-			return Promise.resolve(category);
+			return BPromise.resolve(category);
 		})
 		.catch(function (err) {
 			throw err;

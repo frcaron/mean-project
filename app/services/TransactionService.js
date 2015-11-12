@@ -1,6 +1,8 @@
+"use strict";
+
 // Inject application
-var Promise = require('bluebird');
-var moment = require('moment');
+var BPromise = require('bluebird');
+var moment   = require('moment');
 
 // Inject models
 var PlanModel = require(global.__model + '/PlanModel');
@@ -224,7 +226,7 @@ module.exports = {
 					});
 				});
 
-				Promise.all(result)
+				BPromise.all(result)
 					.then(function (transactions) {
 						return TransactionModel.findAsync({ _id : { $in : transactions } });
 					})

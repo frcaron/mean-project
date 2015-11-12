@@ -1,6 +1,8 @@
+"use strict";
+
 // Inject
-var Promise       = require('bluebird');
-var ErrorManager  = require(global.__app) + '/ErrorManager');
+var BPromise      = require('bluebird');
+var ErrorManager  = require(global.__app + '/ErrorManager');
 var PlanModel     = require(global.__model + '/PlanModel');
 var CountersModel = require(global.__model + '/CountersModel');
 
@@ -24,11 +26,11 @@ function create (input) {
 			return plan.saveAsync();
 		})
 		.then(function () {
-			return Promise.resolve(plan);
+			return BPromise.resolve(plan);
 		})
 		.catch(function (err) {
 			if (err.code === 11000) {
-				throw new ErrorManager.DuplicateError('User already exist');
+				throw new ErrorManager.DuplicateError('Plan already exist');
 			} else {
 				throw err;
 			}
@@ -59,11 +61,11 @@ function update (input) {
 			return plan.saveAsync();
 		})
 		.then(function () {
-			return Promise.resolve(output);
+			return BPromise.resolve(output);
 		})
 		.catch(function (err) {
 			if (err.code === 11000) {
-				throw new ErrorManager.DuplicateError('User already exist');
+				throw new ErrorManager.DuplicateError('Plan already exist');
 			} else {
 				throw err;
 			}
@@ -98,7 +100,7 @@ function remove (filters) {
 		promise = PlanModel.removeAsync({ _user : filters.user_id });
 			
 	} else {
-		promise = Promise.reject(new ErrorManager.ParamsError('Filters missing'));
+		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
 
 	var promiseEnd = promise
@@ -124,7 +126,7 @@ function getAll (filters) {
 					});
 
 	} else {
-		promise = Promise.reject(new ErrorManager.ParamsError('Filters missin'));
+		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missin'));
 	}
 
 	var promiseEnd = promise
@@ -157,7 +159,7 @@ function getOne (filters) {
 			promise = PlanModel.findByIdAsync(filters.id);
 		}
 	} else {
-		promise = Promise.reject(new ErrorManager.ParamsError('Filters missing)'));
+		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing)'));
 	}
 		
 	var promiseEnd = promise
@@ -165,7 +167,7 @@ function getOne (filters) {
 			if (!plan) {
 				throw new ErrorManager.NoResultError('Plan not found');
 			}
-			return Promise.resolve(plan);
+			return BPromise.resolve(plan);
 		})
 		.catch(function (err) {
 			throw err;

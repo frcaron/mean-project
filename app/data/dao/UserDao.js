@@ -1,6 +1,8 @@
+"use strict";
+
 // Inject
-var Promise       = require('bluebird');
-var ErrorManager  = require(global.__app) + '/ErrorManager');
+var BPromise      = require('bluebird');
+var ErrorManager  = require(global.__app + '/ErrorManager');
 var UserModel     = require(global.__model + '/UserModel');
 var CountersModel = require(global.__model + '/CountersModel');
 
@@ -28,7 +30,7 @@ function create (input) {
 			return user.saveAsync();
 		})
 		.then(function () {
-			return Promise.resolve(user);
+			return BPromise.resolve(user);
 		})
 		.catch(function (err) {
 			if (err.code === 11000) {
@@ -72,7 +74,7 @@ function update (input) {
 			return user.saveAsync();
 		})
 		.then(function () {
-			return Promise.resolve(output);
+			return BPromise.resolve(output);
 		})
 		.catch(function (err) {
 			if (err.code === 11000) {
@@ -114,7 +116,7 @@ function getAll () {
 
 	var promise = UserModel.findAsync()
 		.then(function (users) {
-			return Promise.resolve(users);
+			return BPromise.resolve(users);
 		})
 		.catch(function (err) {
 			throw err;
@@ -144,7 +146,7 @@ function getOne (filters) {
 				});
 
 	} else {
-		promise = Promise.reject(new ErrorManager.ParamsError('Filters missing'));
+		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
 
 	var promiseEnd = promise
@@ -152,7 +154,7 @@ function getOne (filters) {
 			if (!user) {
 				throw new ErrorManager.NoResultError('User not found');
 			}
-			return Promise.resolve(user);
+			return BPromise.resolve(user);
 		})
 		.catch(function (err) {
 			throw err;
@@ -186,13 +188,13 @@ function validatePassword (log, pass) {
 			throw new ErrorManager.LoginError('Wrong password');
 		}
 
-		return Promise.resolve(user);
+		return BPromise.resolve(user);
 	})
 	.then(undefined, function (err){
 		throw err;
 	});
 
-	return Promise.resolve(promise);
+	return BPromise.resolve(promise);
 }
 
 module.exports = {

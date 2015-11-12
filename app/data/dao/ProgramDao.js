@@ -1,6 +1,8 @@
+"use strict";
+
 // Inject
-var Promise       = require('bluebird');
-var ErrorManager  = require(global.__app) + '/ErrorManager');
+var BPromise      = require('bluebird');
+var ErrorManager  = require(global.__app + '/ErrorManager');
 var ProgramModel  = require(global.__model + '/ProgramModel');
 var CountersModel = require(global.__model + '/CountersModel');
 
@@ -27,7 +29,7 @@ function create (input) {
 			return program.saveAsync();
 		})
 		.then(function () {
-			return Promise.resolve(program);
+			return BPromise.resolve(program);
 		})
 		.catch(function (err) {
 			if (err.code === 11000) {
@@ -65,7 +67,7 @@ function update (input) {
 			return program.saveAsync();
 		})
 		.then(function () {
-			return Promise.resolve(output);
+			return BPromise.resolve(output);
 		})
 		.catch(function (err) {
 			if (err.code === 11000) {
@@ -104,7 +106,7 @@ function remove (filters) {
 		promise = ProgramModel.removeAsync({ _user : filters.user_id });
 			
 	} else {
-		promise = Promise.reject(new ErrorManager.ParamsError('Filters missing'));
+		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
 
 	var promiseEnd = promise
@@ -130,7 +132,7 @@ function getAll (filters) {
 				});
 
 	} else {
-		promise = Promise.reject(new ErrorManager.ParamsError('Filters missing'));
+		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
 
 	var promiseEnd = promise
@@ -163,7 +165,7 @@ function getOne (filters) {
 			promise = ProgramModel.findByIdAsync(filters.id);				
 		}
 	} else {
-		promise = Promise.reject(new ErrorManager.ParamsError('Filters missing'));
+		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
 
 	var promiseEnd = promise
@@ -171,7 +173,7 @@ function getOne (filters) {
 			if (!program ) {
 				throw new ErrorManager.NoResultError('Program not found');
 			}
-			return Promise.resolve(program);
+			return BPromise.resolve(program);
 		})
 		.catch(function (err) {
 			throw err;

@@ -1,3 +1,5 @@
+"use strict";
+
 // Inject models
 var PlanModel = require(global.__model + '/PlanModel');
 var ProgramModel = require(global.__model + '/ProgramModel');

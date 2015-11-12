@@ -1,3 +1,5 @@
+"use strict";
+
 // Inject applicatif
 var Bcrypt              = require('bcrypt-nodejs');
 var Jwt                 = require('jsonwebtoken');

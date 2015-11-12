@@ -1,6 +1,8 @@
+"use strict";
+
 // Inject application
-var Promise  = require('bluebird');
-var Mongoose = Promise.promisifyAll(require('mongoose'));
+var BPromise = require('bluebird');
+var Mongoose = BPromise.promisifyAll(require('mongoose'));
 var Schema   = Mongoose.Schema;
 
 // Schema
@@ -30,7 +32,7 @@ module.exports = {
 					upsert : true
 					})
 				.then(function(ret) {
-					return Promise.resolve(ret.seq);
+					return BPromise.resolve(ret.seq);
 				});
 	}
 };

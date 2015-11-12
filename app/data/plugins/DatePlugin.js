@@ -1,3 +1,5 @@
+"use strict";
+
 module.exports = function (schema) {
 	schema.add({
 		created_date : Date,

@@ -1,3 +1,5 @@
+"use strict";
+
 // Inject 
 var Express  = require('express');
 

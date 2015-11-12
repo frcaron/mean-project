@@ -1,3 +1,5 @@
+"use strict";
+
 // Inject
 var CategoryService    = require(global.__service + '/CategoryService');
 var TransactionService = require(global.__service + '/TransactionService');

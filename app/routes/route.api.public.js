@@ -1,3 +1,5 @@
+"use strict";
+
 // Inject 
 var Jwt             = require('jsonwebtoken');
 var TokenConfig     = require(global.__config + '/token');
