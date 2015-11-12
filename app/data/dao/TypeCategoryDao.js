@@ -1,8 +1,15 @@
 // Inject
 var Promise           = require('bluebird');
+var ErrorManager      = require(global.__app) + '/ErrorManager');
 var TypeCategoryModel = require(global.__model + '/TypeCategoryModel');
 var CountersModel     = require(global.__model + '/CountersModel');
 
+/**
+ * @param  {Json} input 		Data to create
+ * @return {TypeCategoryModel} 	Object created
+ * @throws {DuplicateError} 	If index model is not unique
+ * @throws {Error} 				If an other error is met
+ */
 function create (input) {
 
 	var typeCategory = new TypeCategoryModel();
@@ -22,14 +29,22 @@ function create (input) {
 		})
 		.catch(function (err) {
 			if (err.code === 11000) {
-				err = new Error('Type Category already exist');
+				throw new ErrorManager.DuplicateError('Type Category already exist');
+			} else {
+				throw err;
 			}
-			return Promise.reject(err);
 		});
 
 	return promise;
 }
 
+/** 
+ * @param  {Json} input 		Data to update
+ * @return {TypeCategoryModel} 	Object updated
+ * @throws {DuplicateError} 	If index model is not unique
+ * @throws {NoResultError} 		If id doesn't exist
+ * @throws {Error} 				If an other error is met
+ */
 function update (input) {
 
 	var output;
@@ -49,14 +64,21 @@ function update (input) {
 		})
 		.catch(function (err) {
 			if (err.code === 11000) {
-				err = new Error('User already exist');
+				throw new ErrorManager.DuplicateError('Type Category already exist');
+			} else {
+				throw err;
 			}
-			return Promise.reject(err);
 		});
 
 	return promise;
 }
 
+/**
+ * @param {Json} Filters 		Keys : 	- active
+ * 										- empty
+ * @return {TypeCategoryModel}	List of object found
+ * @throws {Error} 				If anything error is met
+ */
 function getAll (filters) {
 
 	var promise;
@@ -70,16 +92,21 @@ function getAll (filters) {
 	}
 
 	var promiseEnd = promise
-		.then(function (typeCategories) {
-			return Promise.resolve(typeCategories);
-		})
 		.catch(function (err) {
-			return Promise.reject(err);
+			throw err;
 		});
 
 	return promiseEnd;
 }
 
+/**
+ * @param  {Json} filters 		Keys : 	- id
+ * 										- type
+ * @return {TypeCategoryModel}	Object found
+ * @throws {ParamsError} 		If params given are wrong
+ * @throws {NoResultError} 		If no result found
+ * @throws {Error} 				If an other error is met
+ */
 function getOne (filters) {
 	
 	var promise;
@@ -92,18 +119,18 @@ function getOne (filters) {
 				});
 
 	} else {
-		return Promise.reject(new Error('Filters missing'));
+		promise = Promise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
 
 	var promiseEnd = promise
 		.then(function (typeCategory) {
 			if (!typeCategory) {
-				throw new Error('Type Category not found');
+				throw new ErrorManager.NoResultError('Type Category not found');
 			}
 			return Promise.resolve(typeCategory);
 		})
 		.catch(function (err) {
-			return Promise.reject(err);
+			throw err;
 		});
 
 	return promiseEnd;

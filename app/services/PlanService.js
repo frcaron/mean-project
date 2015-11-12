@@ -1,5 +1,6 @@
 // Inject
 var Promise         = require('bluebird');
+var ErrorManager    = require(global.__app) + '/ErrorManager');
 var ResponseService = require(global.__service + '/ResponseService');
 var PlanDao         = require(global.__dao + '/PlanDao');
 var ProgramDao      = require(global.__dao + '/ProgramDao');
@@ -24,10 +25,7 @@ module.exports = {
 				planTmp = plan;
 
 				return TypeCategoryDao.getOne({ type : 'unknow' })
-					.then(function (typeCategory) {
-						return Promise.resolve(typeCategory);
-
-					}, function () {
+					.catch(ErrorManager.NoResultError, function () {
 						var inputTypeCategory = {					
 							type   : 'unknow',
 							active : false
@@ -45,10 +43,7 @@ module.exports = {
 
 						return CategoryDao.getOne(filtersCategory);
 					})
-					.then(function (category) {				
-						return Promise.resolve(category);
-
-					}, function () {
+					.catch(ErrorManager.NoResultError, function () {
 						var inputCategory = {
 							name    : 'unknow',
 							type_id : typeCategoryTmp._id,

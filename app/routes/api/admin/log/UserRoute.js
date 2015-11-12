@@ -29,4 +29,17 @@ module.exports = function (router) {
 		.delete(function (req, res) {
 			UserService.remove(req, res, req.params.user_id);
 		});
+
+	router.route(api_prefix + '/:user_id/rules')
+
+		// Manage permission
+		.put(function (req, res) {
+
+			// Validation
+			if (!req.body.admin === undefined ) {
+				return ResponseService.fail(res, 'Manage failed', 'Param "admin" missing');
+			}
+
+			UserService.managePermission(req, res, req.params.user_id);
+		});
 };

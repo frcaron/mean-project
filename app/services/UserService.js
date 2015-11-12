@@ -10,7 +10,7 @@ var TransactionDao  = require(global.__dao + '/TransactionDao');
 module.exports = {
 
     // Create one user
-    create    : function (req, res) {
+    create           : function (req, res) {
 
         var input = {
             firstname : req.body.firstname,
@@ -31,10 +31,10 @@ module.exports = {
     },
 
     // Update one user
-    update    : function (req, res, id) {
+    update           : function (req, res, user_id) {
 
         var input = {
-            id        : id,
+            id        : user_id,
             firstname : req.body.firstname,
             surname   : req.body.surname,
             email     : req.body.email,
@@ -52,13 +52,13 @@ module.exports = {
     },
 
     // Remove one user
-    remove    : function (req, res, id) {
+    remove           : function (req, res, user_id) {
 
         var messageSuccess;
         var messageError;
         Promise.map([UserDao, PlanDao, ProgramDao, CategoryDao, TransactionDao], 
             function(dao) {
-                return dao.remove({ user_id : id })
+                return dao.remove({ user_id : user_id })
                         .then(function () {
                             messageSuccess = messageSuccess + ' / ' + dao;
                         })
@@ -78,7 +78,7 @@ module.exports = {
     },
 
     // Get all users
-    getAll    : function (req, res) {
+    getAll           : function (req, res) {
 
         UserDao.getAll()
             .then(function(users) {
@@ -90,10 +90,10 @@ module.exports = {
     },
 
     // Get one user by id
-    getOne    : function (req, res, id) {
+    getOne           : function (req, res, user_id) {
 
         var filters = {
-            id : id
+            id : user_id
         };
 
         UserDao.getOne(filters)
@@ -106,11 +106,11 @@ module.exports = {
     },
 
     // Set permission
-    giveAdmin : function (req, res) {
+    managePermission : function (req, res, user_id) {
 
         var input = {
-            id    : req.decoded.id,
-            admin : true
+            id    : user_id,
+            admin : req.body.admin
         };
 
         UserDao.update(input)

@@ -38,7 +38,7 @@ module.exports = function (router) {
 	// Token verification
 	router.use(function (req, res, next) {
 
-		var token = req.body.token || req.params.token || req.headers[ 'x-access-token' ];
+		var token = req.body.token || req.params.token || req.query.token || req.headers[ 'x-access-token' ];
 
 		if (token) {
 			Jwt.verify(token, TokenConfig.secret, function (err, decoded) {

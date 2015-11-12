@@ -1,25 +1,31 @@
 // Set up ====================================================
 
-var express      = require('express');
-var path         = require('path');
-var favicon      = require('serve-favicon');
-var morgan       = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser   = require('body-parser');
+var Express      = require('express');
+var Path         = require('path');
+var Favicon      = require('serve-favicon');
+var Morgan       = require('morgan');
+var CookieParser = require('cookie-parser');
+var BodyParser   = require('body-parser');
 var Promise      = require('bluebird');
-var mongoose     = Promise.promisifyAll(require('mongoose'));
+var Mongoose     = Promise.promisifyAll(require('mongoose'));
 
-var app = express();
+var app = Express();
 
 // Configuration =============================================
 
-//app.use(favicon(__dirname + '/public/favicon.ico'));
-app.use(morgan('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended : true }));
-app.use(bodyParser.json({ type : 'application/vnd.api+json' }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+//app.use(Favicon(__dirname + '/public/favicon.ico'));
+app.use(Morgan('dev'));
+app.use(BodyParser.json());
+app.use(BodyParser.urlencoded({ extended : true }));
+app.use(BodyParser.json({ type : 'application/vnd.api+json' }));
+app.use(CookieParser());
+app.use(express.static(Path.join(__dirname, 'public')));
+
+Promise.config({
+    warnings        : false,
+    longStackTraces : false,
+    cancellation    : false
+});
 
 // Global variable ===========================================
 
@@ -35,7 +41,7 @@ global.__service 	= __dirname + '/app/services';
 // DataBase ==================================================
 
 var database = require(global.__config + '/database');
-mongoose.connect(database.url);
+Mongoose.connect(database.url);
 
 // Routers ===================================================
 

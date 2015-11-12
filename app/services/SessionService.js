@@ -1,8 +1,8 @@
 // Inject
-var Jwt = require('jsonwebtoken');
-var TokenConfig = require(global.__config + '/token');
+var Jwt             = require('jsonwebtoken');
+var TokenConfig     = require(global.__config + '/token');
 var ResponseService = require(global.__service + '/ResponseService');
-var UserDao = require(global.__dao + '/UserDao');
+var UserDao         = require(global.__dao + '/UserDao');
 
 module.exports = {
 

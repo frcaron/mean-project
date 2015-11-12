@@ -1,8 +1,15 @@
 // Inject
 var Promise       = require('bluebird');
+var ErrorManager  = require(global.__app) + '/ErrorManager');
 var UserModel     = require(global.__model + '/UserModel');
 var CountersModel = require(global.__model + '/CountersModel');
 
+/**
+ * @param  {Json} input 	Data to create
+ * @return {UserModel} 		Object created
+ * @throws {DuplicateError} If index model is not unique
+ * @throws {Error} 			If an other error is met
+ */
 function create (input) {
 
 	var user = new UserModel();
@@ -25,14 +32,22 @@ function create (input) {
 		})
 		.catch(function (err) {
 			if (err.code === 11000) {
-				err = new Error('User already exist');
+				throw new ErrorManager.DuplicateError('User already exist');
+			} else {
+				throw err;
 			}
-			return Promise.reject(err);
 		});
 
 	return promise;
 }
 
+/** 
+ * @param  {Json} input 	Data to update
+ * @return {UserModel} 		Object updated
+ * @throws {DuplicateError} If index model is not unique
+ * @throws {NoResultError} 	If id doesn't exist
+ * @throws {Error} 			If an other error is met
+ */
 function update (input) {
 
 	var output;
@@ -61,14 +76,23 @@ function update (input) {
 		})
 		.catch(function (err) {
 			if (err.code === 11000) {
-				err = new Error('User already exist');
+				throw new ErrorManager.DuplicateError('User already exist');
+			} else {
+				throw err;
 			}
-			return Promise.reject(err);
 		});
 
 	return promise;
 }
 
+/**
+ * @param  {Json} filters 	Keys : 	- id [user_id]
+ * 									- email
+ * @return {} 
+ * @throws {ParamsError} 	If params given are wrong
+ * @throws {NoResultError} 	If no result found
+ * @throws {Error} 			If an other error is met
+ */
 function remove (filters) {
 
 	var promise = getOne(filters)
@@ -76,12 +100,16 @@ function remove (filters) {
 			return user.removeAsync();
 		})
 		.catch(function (err) {
-			return Promise.reject(err);
+			throw err;
 		});
 
 	return promise;
 }
 
+/**
+ * @return {UserModel}	List of object found
+ * @throws {Error} 		If an other error is met
+ */
 function getAll () {
 
 	var promise = UserModel.findAsync()
@@ -89,12 +117,20 @@ function getAll () {
 			return Promise.resolve(users);
 		})
 		.catch(function (err) {
-			return Promise.reject(err);
+			throw err;
 		});
 
 	return promise;
 }
 
+/**
+ * @param  {Json} filters 	Keys : 	- id [user_id]
+ * 									- email
+ * @return {UserModel}		Object found
+ * @throws {ParamsError} 	If params given are wrong
+ * @throws {NoResultError} 	If no result found
+ * @throws {Error} 			If an other error is met
+ */
 function getOne (filters) {
 	
 	var promise;
@@ -108,23 +144,31 @@ function getOne (filters) {
 				});
 
 	} else {
-		return Promise.reject(new Error('Filters missing'));
+		promise = Promise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
 
 	var promiseEnd = promise
 		.then(function (user) {
 			if (!user) {
-				throw new Error('User not found');
+				throw new ErrorManager.NoResultError('User not found');
 			}
 			return Promise.resolve(user);
 		})
 		.catch(function (err) {
-			return Promise.reject(err);
+			throw err;
 		});
 
 	return promiseEnd;
 }
 
+/**
+ * @param  {String} log 	Login
+ * @param  {String} pass 	Password
+ * @return {UserModel}		Object found
+ * @throws {NoResultError} 	If no result found
+ * @throws {LoginError} 	If login failed
+ * @throws {Error} 			If an other error is met
+ */
 function validatePassword (log, pass) {
 
 	var promise = UserModel.findOne({
@@ -133,19 +177,19 @@ function validatePassword (log, pass) {
 	.select('_id, surname firstname email password admin')
 	.then(function(user) {
 		if(!user) {
-			throw new Error('User not found');
+			throw new ErrorManager.NoResultError('User not found');
 		}
 
 		var validPassword = user.comparePassword(pass);
 
 		if (!validPassword) {
-			throw new Error('Wrong password');
+			throw new ErrorManager.LoginError('Wrong password');
 		}
 
 		return Promise.resolve(user);
 	})
 	.then(undefined, function (err){
-		return Promise.reject(err);
+		throw err;
 	});
 
 	return Promise.resolve(promise);
