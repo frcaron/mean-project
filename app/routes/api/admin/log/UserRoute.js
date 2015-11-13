@@ -1,6 +1,8 @@
 "use strict";
 
 //Inject
+var Logger          = require(global.__app + '/LoggerManager');
+var ResponseService = require(global.__service + '/ResponseService');
 var UserService     = require(global.__service + '/UserService');
 
 // Properties
@@ -37,9 +39,15 @@ module.exports = function (router) {
 		// Manage permission
 		.put(function (req, res) {
 
+			Logger.debug('Admin#UserRoute#put [validation]');
+			Logger.debug('-- req.body.admin : ' + req.body.admin);
+
 			// Validation
-			if (!req.body.admin === undefined ) {
-				return ResponseService.fail(res, 'Manage failed', 'Param "admin" missing');
+			if ( req.body.admin === undefined ) {
+				return ResponseService.fail(res, {
+							message : 'Give permission', 
+							reason  : 'Param "admin" missing'
+						});
 			}
 
 			UserService.managePermission(req, res, req.params.user_id);

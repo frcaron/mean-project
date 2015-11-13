@@ -1,6 +1,7 @@
 "use strict";
 
 //Inject
+var Logger          = require(global.__app + '/LoggerManager');
 var ResponseService = require(global.__service + '/ResponseService');
 var CategoryService = require(global.__service + '/CategoryService');
 
@@ -19,12 +20,22 @@ module.exports = function (router) {
 		// Create one category
 		.post(function (req, res) {
 
+			Logger.debug('Public#CategoryRoute#post [validation]');
+			Logger.debug('-- req.body.name              : ' + req.body.name);
+			Logger.debug('-- req.query.type_category_id : ' + req.query.type_category_id);
+
 			// Validation
 			if (!req.body.name) {
-				return ResponseService.fail(res, 'Add failed', 'Param "name" msing');
+				return ResponseService.fail(res, {
+							message : 'Add', 
+							reason  : 'Param "name" missing'
+						});
 			}
 			if (!req.query.type_category_id) {
-				return ResponseService.fail(res, 'Add failed', 'Param "type_category_id" missing');
+				return ResponseService.fail(res, {
+							message : 'Add', 
+							reason  : 'Param "type_category_id" missing'
+						});
 			}
 
 			CategoryService.create(req, res);

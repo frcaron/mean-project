@@ -2,6 +2,7 @@
 
 // Inject
 var ErrorManager    = require(global.__app + '/ErrorManager');
+var Logger          = require(global.__app + '/LoggerManager');
 var ResponseService = require(global.__service + '/ResponseService');
 var PlanDao         = require(global.__dao + '/PlanDao');
 var ProgramDao      = require(global.__dao + '/ProgramDao');
@@ -12,6 +13,8 @@ module.exports = {
 
 	// Create one plan
 	create  : function (req, res) {
+
+		Logger.debug('PlanService#create - [start]');
 
 		var planTmp, typeCategoryTmp;
 
@@ -69,15 +72,23 @@ module.exports = {
 					});
 			})
 			.then(function () {
-				ResponseService.success(res, 'Add success', planTmp);
+				ResponseService.success(res, 'Add plan', planTmp);
 			})
 			.catch(function (err) {
-				ResponseService.fail(res, 'Add failed', err.message);
+                Logger.error('PlanService#create | ' + err.message);
+
+                ResponseService.fail(res, {
+                    message : 'Add plan'
+                });
 			});
+
+		Logger.debug('PlanService#create - [end]');
 	},
 
 	// Get plans by user
 	allByU  : function (req, res) {
+
+		Logger.debug('PlanService#allByU - [start]');
 
 		var filters = {
 			user_id : req.decoded.id
@@ -85,15 +96,23 @@ module.exports = {
 
 		PlanDao.getAll(filters)
 			.then(function (plans) {
-				ResponseService.success(res, 'Find success', plans);
+				ResponseService.success(res, 'Get all plans', plans);
 			})
 			.catch(function (err) {
-				ResponseService.fail(res, 'Find failed', err.message);
+                Logger.error('PlanService#allByU | ' + err.message);
+
+                ResponseService.fail(res, {
+                    message : 'Get all plans'
+                });
 			});
+
+		Logger.debug('PlanService#allByU - [end]');
 	},
 
 	// Get one plan by id
 	getById : function (req, res) {
+
+		Logger.debug('PlanService#getBy [start]');
 
 		var filters = {
 			id      : req.params.plan_id,
@@ -102,10 +121,16 @@ module.exports = {
 
 		PlanDao.getOne(filters)
 			.then(function (plan) {
-				ResponseService.success(res, 'Find success', plan);
+				ResponseService.success(res, 'Get plan', plan);
 			})
 			.catch(function (err) {
-				ResponseService.fail(res, 'Find failed', err.message);
+                Logger.error('PlanService#getBy | ' + err.message);
+
+                ResponseService.fail(res, {
+                    message : 'Get plan'
+                });
 			});
+				
+		Logger.debug('PlanService#getBy [end]');
 	}
 };

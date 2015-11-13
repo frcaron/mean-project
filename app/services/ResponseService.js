@@ -3,29 +3,26 @@
 module.exports = {
 
 	// Fail response
-	fail    : function (res, message, detail, code) {
-		if (!code) {
-			code = 500;
-		}
-		return res.status(code).json({
+	fail    : function (res, options) {
+		return res.status(options.code_http || 500).json({
 			success : false,
-			message : message,
-			detail  : detail
+			message : '[Fail] ' + options.message,
+			reason  :  options.reason
 		});
 	},
 
 	// Success response
-	success : function (res, message, result) {
-		if (result) {
+	success : function (res, options) {
+		if (options.result) {
 			return res.status(200).json({
 				success : true,
-				message : message,
-				result  : result
+				message : '[Success] ' + options.message,
+				result  : options.result
 			});
 		} else {
 			return res.status(200).json({
 				success : true,
-				message : message
+				message : '[Success] ' + options.message
 			});
 		}
 	}

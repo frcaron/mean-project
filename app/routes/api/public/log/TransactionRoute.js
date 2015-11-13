@@ -1,6 +1,7 @@
 "use strict";
 
 //Inject
+var Logger             = require(global.__app + '/LoggerManager');
 var ResponseService    = require(global.__service + '/ResponseService');
 var TransactionService = require(global.__service + '/TransactionService');
 
@@ -14,15 +15,29 @@ module.exports = function (router) {
 		// Create one transaction
 		.post(function (req, res) {
 
+			Logger.debug('Public#TransactionRoute#post [validation]');
+			Logger.debug('-- req.body.date         : ' + req.body.date);
+			Logger.debug('-- req.body.sum          : ' + req.body.sum);
+			Logger.debug('-- req.query.category_id : ' + req.query.category_id);
+
 			// Validation
 			if (!req.body.date) {
-				return ResponseService.fail(res, 'Add failed', 'Param "date" missing');
+				return ResponseService.fail(res, {
+							message : 'Add', 
+							reason  : 'Param "date" missing'
+						});
 			}
 			if (!req.body.sum) {
-				return ResponseService.fail(res, 'Add failed', 'Param "sum" missing');
+				return ResponseService.fail(res, {
+							message : 'Add', 
+							reason  : 'Param "sum" missing'
+						});
 			}
 			if (!req.query.category_id) {
-				return ResponseService.fail(res, 'Add failed', 'Param "category_id" missing');
+				return ResponseService.fail(res, {
+							message : 'Add', 
+							reason  : 'Param "category_id" missing'
+						});
 			}
 
 			TransactionService.create(req, res);
@@ -38,12 +53,22 @@ module.exports = function (router) {
 		// Update one transaction
 		.put(function (req, res) {
 
+			Logger.debug('Public#TransactionRoute#put [validation]');
+			Logger.debug('-- req.body.date         : ' + req.body.date);
+			Logger.debug('-- req.query.category_id : ' + req.query.category_id);
+
 			// Validation
 			if (!req.body.date) {
-				return ResponseService.fail(res, 'Update failed', 'Param "date" missing');
+				return ResponseService.fail(res, {
+							message : 'Add', 
+							reason  : 'Param "date" missing'
+						});
 			}
 			if (!req.query.category_id) {
-				return ResponseService.fail(res, 'Update failed', 'Param "category_id" missing');
+				return ResponseService.fail(res, {
+							message : 'Add', 
+							reason  : 'Param "category_id" missing'
+						});
 			}
 
 			TransactionService.update(req, res);

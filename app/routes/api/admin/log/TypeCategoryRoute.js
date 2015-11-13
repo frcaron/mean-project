@@ -1,6 +1,7 @@
 "use strict";
 
 // Inject
+var Logger              = require(global.__app + '/LoggerManager');
 var ResponseService     = require(global.__service + '/ResponseService');
 var TypeCategoryService = require(global.__service + '/TypeCategoryService');
 
@@ -14,9 +15,15 @@ module.exports = function (router) {
 		// Create type category
 		.post(function (req, res) {
 
+			Logger.debug('Admin#TypeCategoryRoute#post [validation]');
+			Logger.debug('-- req.body.type : ' + req.body.type);
+
 			// Validation
 			if (!req.body.type) {
-				return ResponseService.fail(res, 'Add failed', 'Param "type" missing');
+				return ResponseService.fail(res, {
+							message : 'Add', 
+							reason  : 'Param "type" missing'
+						});
 			}
 
 			TypeCategoryService.create(req, res);

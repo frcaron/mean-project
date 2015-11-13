@@ -2,6 +2,7 @@
 
 // Inject
 var BPromise      = require('bluebird');
+var Logger        = require(global.__app + '/LoggerManager');
 var ErrorManager  = require(global.__app + '/ErrorManager');
 var UserModel     = require(global.__model + '/UserModel');
 var CountersModel = require(global.__model + '/CountersModel');
@@ -13,6 +14,8 @@ var CountersModel = require(global.__model + '/CountersModel');
  * @throws {Error} 			If an other error is met
  */
 function create (input) {
+	
+	Logger.debug('UserDao#create [start]');
 
 	var user = new UserModel();
 	var promise = CountersModel.getNextSequence('user_id')
@@ -33,12 +36,16 @@ function create (input) {
 			return BPromise.resolve(user);
 		})
 		.catch(function (err) {
+			Logger.error('UserDao#create | ' + err.message);
+
 			if (err.code === 11000) {
 				throw new ErrorManager.DuplicateError('User already exist');
 			} else {
 				throw err;
 			}
 		});
+
+	Logger.debug('UserDao#create [end]');
 
 	return promise;
 }
@@ -51,6 +58,8 @@ function create (input) {
  * @throws {Error} 			If an other error is met
  */
 function update (input) {
+
+	Logger.debug('UserDao#update [start]');
 
 	var output;
 	var promise = getOne(input)
@@ -77,12 +86,16 @@ function update (input) {
 			return BPromise.resolve(output);
 		})
 		.catch(function (err) {
+			Logger.error('UserDao#update | ' + err.message);
+
 			if (err.code === 11000) {
 				throw new ErrorManager.DuplicateError('User already exist');
 			} else {
 				throw err;
 			}
 		});
+
+	Logger.debug('UserDao#update [end]');
 
 	return promise;
 }
@@ -97,13 +110,19 @@ function update (input) {
  */
 function remove (filters) {
 
+	Logger.debug('UserDao#remove [start]');
+
 	var promise = getOne(filters)
 		.then(function(user){
 			return user.removeAsync();
 		})
 		.catch(function (err) {
+			Logger.error('UserDao#remove | ' + err.message);
+
 			throw err;
 		});
+
+	Logger.debug('UserDao#remove [end]');
 
 	return promise;
 }
@@ -114,13 +133,19 @@ function remove (filters) {
  */
 function getAll () {
 
+	Logger.debug('UserDao#getAll [start]');
+
 	var promise = UserModel.findAsync()
 		.then(function (users) {
 			return BPromise.resolve(users);
 		})
 		.catch(function (err) {
+			Logger.error('UserDao#getAll | ' + err.message);
+
 			throw err;
 		});
+
+	Logger.debug('UserDao#getAll [end]');
 
 	return promise;
 }
@@ -134,6 +159,8 @@ function getAll () {
  * @throws {Error} 			If an other error is met
  */
 function getOne (filters) {
+
+	Logger.debug('UserDao#getOne [start]');
 	
 	var promise;
 	var id = filters.id || filters.user_id;
@@ -157,8 +184,12 @@ function getOne (filters) {
 			return BPromise.resolve(user);
 		})
 		.catch(function (err) {
+			Logger.error('UserDao#getOne | ' + err.message);
+
 			throw err;
 		});
+
+	Logger.debug('UserDao#getOne [end]');
 
 	return promiseEnd;
 }
@@ -172,6 +203,8 @@ function getOne (filters) {
  * @throws {Error} 			If an other error is met
  */
 function validatePassword (log, pass) {
+
+	Logger.debug('UserDao#validatePassword [start]');
 
 	var promise = UserModel.findOne({
 		email : log
@@ -191,33 +224,33 @@ function validatePassword (log, pass) {
 		return BPromise.resolve(user);
 	})
 	.then(undefined, function (err){
+		Logger.error('UserDao#validatePassword | ' + err.message);
+
 		throw err;
 	});
+
+	Logger.debug('UserDao#validatePassword [end]');
 
 	return BPromise.resolve(promise);
 }
 
 module.exports = {
+	name             : 'UserDao',
 	create           : function (input) {
 		return create(input);
 	},
-
 	update           : function (input) {
 		return update(input);
 	},
-
 	remove           : function (filters) {
 		return remove(filters);
 	},
-
 	getAll           : function () {
 		return getAll();
 	},
-
 	getOne           : function (filters) {
 		return getOne(filters);
 	},
-
 	validatePassword : function (log, pass) {
 		return validatePassword(log, pass);
 	}

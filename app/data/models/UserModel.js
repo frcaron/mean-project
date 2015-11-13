@@ -1,12 +1,12 @@
 "use strict";
 
 // Inject 
-var BPromise      = require('bluebird');
-var Mongoose      = BPromise.promisifyAll(require('mongoose'));
-var Bcrypt        = require('bcrypt-nodejs');
-var DatePlugin    = require(global.__plugin + '/DatePlugin');
+var BPromise   = require('bluebird');
+var Mongoose   = BPromise.promisifyAll(require('mongoose'));
+var Bcrypt     = require('bcrypt-nodejs');
+var DatePlugin = require(global.__plugin + '/DatePlugin');
 
-var Schema        = Mongoose.Schema;
+var Schema     = Mongoose.Schema;
 
 // Schema
 var UserSchema = new Schema({

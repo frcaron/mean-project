@@ -2,6 +2,7 @@
 
 // Inject
 var BPromise         = require('bluebird');
+var Logger           = require(global.__app + '/LoggerManager');
 var ErrorManager     = require(global.__app + '/ErrorManager');
 var TransactionModel = require(global.__model + '/TransactionModel');
 var CountersModel    = require(global.__model + '/CountersModel');
@@ -13,6 +14,8 @@ var CountersModel    = require(global.__model + '/CountersModel');
  * @throws {Error} 				If an other error is met
  */
 function create (input) {
+
+	Logger.debug('TransactionDao#create [start]');
 
 	var transaction = new TransactionModel();
 	var promise = CountersModel.getNextSequence('transaction_id')
@@ -33,12 +36,16 @@ function create (input) {
 			return BPromise.resolve(transaction);
 		})
 		.catch(function (err) {
+			Logger.error('TransactionDao#create | ' + err.message);
+
 			if (err.code === 11000) {
 				throw new ErrorManager.DuplicateError('Transaction already exist');
 			} else {
 				throw err;
 			}
 		});
+
+	Logger.debug('TransactionDao#create [end]');
 
 	return promise;
 }
@@ -51,6 +58,8 @@ function create (input) {
  * @throws {Error} 				If an other error is met
  */
 function update (input) {
+
+	Logger.debug('TransactionDao#update [start]');
 
 	var output;
 	var promise = getOne(input)
@@ -74,12 +83,16 @@ function update (input) {
 			return BPromise.resolve(output);
 		})
 		.catch(function (err) {
+			Logger.error('TransactionDao#update | ' + err.message);
+
 			if (err.code === 11000) {
 				throw new ErrorManager.DuplicateError('Transaction already exist');
 			} else {
 				throw err;
 			}
 		});
+
+	Logger.debug('TransactionDao#update [end]');
 
 	return promise;
 }
@@ -93,6 +106,8 @@ function update (input) {
  * @throws {Error} 			If an other error is met
  */
 function remove (filters) {
+
+	Logger.debug('TransactionDao#remove [start]');
 
 	var promise;
 	if(filters.id) {
@@ -115,8 +130,12 @@ function remove (filters) {
 
 	var promiseEnd = promise
 		.catch(function (err) {
+			Logger.error('TransactionDao#remove | ' + err.message);
+
 			throw err;
 		});
+
+	Logger.debug('TransactionDao#remove [end]');
 
 	return promiseEnd;
 }
@@ -128,6 +147,8 @@ function remove (filters) {
  * @throws {Error} 				If an other error is met
  */
 function getAll (filters) {
+
+	Logger.debug('TransactionDao#getAll [start]');
 
 	var promise;
 	if(filters.user_id) {
@@ -141,8 +162,12 @@ function getAll (filters) {
 
 	var promiseEnd = promise
 		.catch(function (err) {
+			Logger.error('TransactionDao#getAll | ' + err.message);
+
 			throw err;
 		});
+
+	Logger.debug('TransactionDao#getAll [end]');
 
 	return promiseEnd;
 }
@@ -156,6 +181,8 @@ function getAll (filters) {
  * @throws {Error} 				If an other error is met
  */
 function getOne (filters) {
+
+	Logger.debug('TransactionDao#getOne [Start]');
 	
 	var promise;
 	if(filters.id) {
@@ -180,29 +207,30 @@ function getOne (filters) {
 			return BPromise.resolve(transaction);
 		})
 		.catch(function (err) {
+			Logger.error('TransactionDao#getOne | ' + err.message);
+
 			throw err;
 		});
+
+	Logger.debug('TransactionDao#getOne [end]');
 
 	return promiseEnd;
 }
 
 module.exports = {
+	name   : 'TransactionDao',
 	create : function (input) {
 		return create(input);
 	},
-
 	update : function (input) {
 		return update(input);
 	},
-
 	remove : function (filters) {
 		return remove(filters);
 	},
-
 	getAll : function (filters) {
 		return getAll(filters);
 	},
-
 	getOne : function (filters) {
 		return getOne(filters);
 	}

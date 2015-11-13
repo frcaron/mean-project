@@ -2,6 +2,7 @@
 
 // Inject
 var BPromise      = require('bluebird');
+var Logger        = require(global.__app + '/LoggerManager');
 var ErrorManager  = require(global.__app + '/ErrorManager');
 var CategoryModel = require(global.__model + '/CategoryModel');
 var CountersModel = require(global.__model + '/CountersModel');
@@ -13,6 +14,8 @@ var CountersModel = require(global.__model + '/CountersModel');
  * @throws {Error} 			If an other error is met
  */
 function create (input) {
+
+	Logger.debug('CategoryDao#create [Start]');
 
 	var category = new CategoryModel();
 	var promise = CountersModel.getNextSequence('category_id')
@@ -32,12 +35,16 @@ function create (input) {
 			return BPromise.resolve(category);
 		})
 		.catch(function (err) {
+			Logger.error('CategoryDao#create | ' + err.message);
+
 			if (err.code === 11000) {
 				throw new ErrorManager.DuplicateError('Category already exist');
 			} else {
 				throw err;
 			}
 		});
+
+	Logger.debug('CategoryDao#create [end]');
 
 	return promise;
 }
@@ -50,6 +57,8 @@ function create (input) {
  * @throws {Error} 			If an other error is met
  */
 function update (input) {
+
+	Logger.debug('CategoryDao#update [Start]');
 
 	var output;
 	var promise = getOne(input)
@@ -70,12 +79,16 @@ function update (input) {
 			return BPromise.resolve(output);
 		})
 		.catch(function (err) {
+			Logger.error('CategoryDao#update | ' + err.message);
+
 			if (err.code === 11000) {
 				throw new ErrorManager.DuplicateError('Category already exist');
 			} else {
 				throw err;
 			}
 		});
+
+	Logger.debug('CategoryDao#update [end]');
 
 	return promise;
 }
@@ -89,6 +102,8 @@ function update (input) {
  * @throws {Error} 			If an other error is met
  */
 function remove (filters) {
+
+	Logger.debug('CategoryDao#remove [Start]');
 
 	var promise;
 	if(filters.id) {
@@ -111,8 +126,12 @@ function remove (filters) {
 
 	var promiseEnd = promise
 		.catch(function (err) {
+			Logger.error('CategoryDao#remove | ' + err.message);
+
 			throw err;
 		});
+
+	Logger.debug('CategoryDao#remove [end]');
 
 	return promiseEnd;
 }
@@ -125,6 +144,8 @@ function remove (filters) {
  */
 function getAll (filters) {
 
+	Logger.debug('CategoryDao#getAll [Start]');
+
 	var promise;
 	if(filters.user_id) {
 		promise = CategoryModel.findAsync({
@@ -136,8 +157,12 @@ function getAll (filters) {
 
 	var promiseEnd = promise
 		.catch(function (err) {
+			Logger.error('CategoryDao#getAll | ' + err.message);
+
 			throw err;
 		});
+
+	Logger.debug('CategoryDao#getAll [end]');
 
 	return promiseEnd;
 }
@@ -152,6 +177,8 @@ function getAll (filters) {
  * @throws {Error} 			If an other error is met
  */
 function getOne (filters) {
+
+	Logger.debug('CategoryDao#getOne [Start]');
 
 	var promise;
 	if(filters.id) {
@@ -181,29 +208,30 @@ function getOne (filters) {
 			return BPromise.resolve(category);
 		})
 		.catch(function (err) {
+			Logger.error('CategoryDao#getOne | ' + err.message);
+
 			throw err;
 		});
+
+	Logger.debug('CategoryDao#getOne [end]');
 
 	return promiseEnd;
 }
 
 module.exports = {
+	name   : 'CategoryDao',
 	create : function (input) {
 		return create(input);
 	},
-
 	update : function (input) {
 		return update(input);
 	},
-
 	remove : function (filters) {
 		return remove(filters);
 	},
-
 	getAll : function (filters) {
 		return getAll(filters);
 	},
-
 	getOne : function (filters) {
 		return getOne(filters);
 	}

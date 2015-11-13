@@ -1,5 +1,3 @@
-"use strict";
-
 module.exports = {
 	// TODO hide data log base
 	url : 'mongodb://localhost/mean-project'

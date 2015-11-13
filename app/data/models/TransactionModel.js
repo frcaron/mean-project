@@ -3,9 +3,10 @@
 // Inject application
 var BPromise   = require('bluebird');
 var Mongoose   = BPromise.promisifyAll(require('mongoose'));
-var Schema     = Mongoose.Schema;
 var datePlugin = require(global.__plugin + '/DatePlugin');
 var userPlugin = require(global.__plugin + '/UserPlugin');
+
+var Schema     = Mongoose.Schema;
 
 // Schema
 var TransactionSchema = new Schema({

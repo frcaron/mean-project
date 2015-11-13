@@ -3,8 +3,9 @@
 // Inject application
 var BPromise   = require('bluebird');
 var mongoose   = BPromise.promisifyAll(require('mongoose'));
-var Schema     = mongoose.Schema;
 var DatePlugin = require(global.__plugin + '/DatePlugin');
+
+var Schema     = mongoose.Schema;
 
 // Schema
 var TypeCategorySchema = new Schema({

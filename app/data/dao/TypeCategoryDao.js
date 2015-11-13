@@ -2,6 +2,7 @@
 
 // Inject
 var BPromise          = require('bluebird');
+var Logger            = require(global.__app + '/LoggerManager');
 var ErrorManager      = require(global.__app + '/ErrorManager');
 var TypeCategoryModel = require(global.__model + '/TypeCategoryModel');
 var CountersModel     = require(global.__model + '/CountersModel');
@@ -13,6 +14,8 @@ var CountersModel     = require(global.__model + '/CountersModel');
  * @throws {Error} 				If an other error is met
  */
 function create (input) {
+
+	Logger.debug('TypeCategoryDao#create [start]');
 
 	var typeCategory = new TypeCategoryModel();
 	var promise = CountersModel.getNextSequence('type_category_id')
@@ -30,12 +33,16 @@ function create (input) {
 			return BPromise.resolve(typeCategory);
 		})
 		.catch(function (err) {
+			Logger.error('TypeCategoryDao#create | ' + err.message);
+
 			if (err.code === 11000) {
 				throw new ErrorManager.DuplicateError('Type Category already exist');
 			} else {
 				throw err;
 			}
 		});
+
+	Logger.debug('TypeCategoryDao#create [end]');
 
 	return promise;
 }
@@ -48,6 +55,8 @@ function create (input) {
  * @throws {Error} 				If an other error is met
  */
 function update (input) {
+
+	Logger.debug('TypeCategoryDao#update [start]');
 
 	var output;
 	var promise = getOne(input)
@@ -65,12 +74,16 @@ function update (input) {
 			return BPromise.resolve(output);
 		})
 		.catch(function (err) {
+			Logger.error('TypeCategoryDao#update | ' + err.message);
+
 			if (err.code === 11000) {
 				throw new ErrorManager.DuplicateError('Type Category already exist');
 			} else {
 				throw err;
 			}
 		});
+
+	Logger.debug('TypeCategoryDao#update [end]');
 
 	return promise;
 }
@@ -82,6 +95,8 @@ function update (input) {
  * @throws {Error} 				If anything error is met
  */
 function getAll (filters) {
+
+	Logger.debug('TypeCategoryDao#getAll [start]');
 
 	var promise;
 	if(filters.active) {
@@ -95,8 +110,12 @@ function getAll (filters) {
 
 	var promiseEnd = promise
 		.catch(function (err) {
+			Logger.error('TypeCategoryDao#getAll | ' + err.message);
+
 			throw err;
 		});
+
+	Logger.debug('TypeCategoryDao#getAll [end]');
 
 	return promiseEnd;
 }
@@ -110,6 +129,8 @@ function getAll (filters) {
  * @throws {Error} 				If an other error is met
  */
 function getOne (filters) {
+
+	Logger.debug('TypeCategoryDao#getOne [start]');
 	
 	var promise;
 	if(filters.id) {
@@ -132,25 +153,27 @@ function getOne (filters) {
 			return BPromise.resolve(typeCategory);
 		})
 		.catch(function (err) {
+			Logger.error('TypeCategoryDao#getOne | ' + err.message);
+
 			throw err;
 		});
+
+	Logger.debug('TypeCategoryDao#getOne [end]');
 
 	return promiseEnd;
 }
 
 module.exports = {
+	name   : 'TypeCategoryDao',
 	create : function (input) {
 		return create(input);
 	},
-
 	update : function (input) {
 		return update(input);
 	},
-
 	getAll : function (filters) {
 		return getAll(filters);
 	},
-
 	getOne : function (filters) {
 		return getOne(filters);
 	}

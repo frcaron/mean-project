@@ -2,6 +2,7 @@
 
 // Inject
 var BPromise      = require('bluebird');
+var Logger        = require(global.__app + '/LoggerManager');
 var ErrorManager  = require(global.__app + '/ErrorManager');
 var ProgramModel  = require(global.__model + '/ProgramModel');
 var CountersModel = require(global.__model + '/CountersModel');
@@ -13,6 +14,8 @@ var CountersModel = require(global.__model + '/CountersModel');
  * @throws {Error} 			If an other error is met
  */
 function create (input) {
+
+	Logger.debug('ProgramDao#create [Start]');
 
 	var program = new ProgramModel();
 	var promise = CountersModel.getNextSequence('program_id')
@@ -32,12 +35,16 @@ function create (input) {
 			return BPromise.resolve(program);
 		})
 		.catch(function (err) {
+			Logger.error('ProgramDao#create | ' + err.message);
+
 			if (err.code === 11000) {
 				throw new ErrorManager.DuplicateError('Program already exist');
 			} else {
 				throw err;
 			}
 		});
+
+	Logger.debug('ProgramDao#create [end]');
 
 	return promise;
 }
@@ -50,6 +57,8 @@ function create (input) {
  * @throws {Error} 			If an other error is met
  */
 function update (input) {
+
+	Logger.debug('ProgramDao#update [Start]');
 
 	var output;
 	var promise = getOne(input)
@@ -70,12 +79,16 @@ function update (input) {
 			return BPromise.resolve(output);
 		})
 		.catch(function (err) {
+			Logger.error('ProgramDao#update | ' + err.message);
+
 			if (err.code === 11000) {
 				throw new ErrorManager.DuplicateError('Program already exist');
 			} else {
 				throw err;
 			}
 		});
+
+	Logger.debug('ProgramDao#update [end]');
 
 	return promise;
 }
@@ -89,6 +102,8 @@ function update (input) {
  * @throws {Error} 			If an other error is met
  */
 function remove (filters) {
+
+	Logger.debug('ProgramDao#remove [Start]');
 
 	var promise;
 	if(filters.id) {
@@ -111,8 +126,12 @@ function remove (filters) {
 
 	var promiseEnd = promise
 		.catch(function (err) {
+			Logger.error('ProgramDao#remove | ' + err.message);
+
 			throw err;
 		});
+
+	Logger.debug('ProgramDao#remove [end]');
 
 	return promiseEnd;
 }
@@ -124,6 +143,8 @@ function remove (filters) {
  * @throws {Error} 			If an other error is met
  */
 function getAll (filters) {
+
+	Logger.debug('ProgramDao#getAll [Start]');
 
 	var promise;
 	if(filters.user_id) {
@@ -137,8 +158,12 @@ function getAll (filters) {
 
 	var promiseEnd = promise
 		.catch(function (err) {
+			Logger.error('ProgramDao#getAll | ' + err.message);
+
 			throw err;
 		});
+
+	Logger.debug('ProgramDao#getAll [end]');
 
 	return promiseEnd;
 }
@@ -152,6 +177,8 @@ function getAll (filters) {
  * @throws {Error} 			If an other error is met
  */
 function getOne (filters) {
+
+	Logger.debug('ProgramDao#getOne [Start]');
 	
 	var promise;
 	if(filters.id) {
@@ -176,29 +203,30 @@ function getOne (filters) {
 			return BPromise.resolve(program);
 		})
 		.catch(function (err) {
+			Logger.error('ProgramDao#getOne | ' + err.message);
+
 			throw err;
 		});
+
+	Logger.debug('ProgramDao#getOne [end]');
 
 	return promiseEnd;
 }
 
 module.exports = {
+	name   : 'ProgramDao',
 	create : function (input) {
 		return create(input);
 	},
-
 	update : function (input) {
 		return update(input);
 	},
-
 	remove : function (filters) {
 		return remove(filters);
 	},
-
 	getAll : function (filters) {
 		return getAll(filters);
 	},
-
 	getOne : function (filters) {
 		return getOne(filters);
 	}

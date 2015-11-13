@@ -1,6 +1,7 @@
 "use strict";
 
 //Inject
+var Logger             = require(global.__app + '/LoggerManager');
 var ResponseService    = require(global.__service + '/ResponseService');
 var ProgramService     = require(global.__service + '/ProgramService');
 var TransactionService = require(global.__service + '/TransactionService');
@@ -15,12 +16,22 @@ module.exports = function (router) {
 		// Create one program
 		.post(function (req, res) {
 
+			Logger.debug('Public#ProgramRoute#post [validation]');
+			Logger.debug('-- req.query.category_id 	: ' + req.query.category_id);
+			Logger.debug('-- req.query.plan_id 		: ' + req.query.plan_id);
+
 			// Validation
 			if (!req.query.category_id) {
-				return ResponseService.fail(res, 'Add failed', 'Param "category_id" missing');
+				return ResponseService.fail(res, {
+							message : 'Add', 
+							reason  : 'Param "category_id" missing'
+						});
 			}
 			if (!req.query.plan_id) {
-				return ResponseService.fail(res, 'Add failed', 'Param "plan_id" missing');
+				return ResponseService.fail(res, {
+							message : 'Add', 
+							reason  : 'Param "plan_id" missing'
+						});
 			}
 
 			ProgramService.create(req, res);

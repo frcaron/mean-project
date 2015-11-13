@@ -3,6 +3,7 @@
 // Inject
 var Jwt             = require('jsonwebtoken');
 var TokenConfig     = require(global.__config + '/token');
+var Logger          = require(global.__app + '/LoggerManager');
 var ResponseService = require(global.__service + '/ResponseService');
 var UserDao         = require(global.__dao + '/UserDao');
 
