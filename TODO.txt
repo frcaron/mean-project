@@ -1,3 +1,2 @@
-Logger
 Validation email
 Mapping retour pour cacher les champs de base
