@@ -2,13 +2,9 @@
 	"folders":
 	[
 		{
-			"folder_exclude_patterns":
-			[
-				".idea"
-			],
+			"folder_exclude_patterns": [],
 			"file_exclude_patterns":
 			[
-				".gitignore",
 				".jshintrc",
 				"api-skeleton.xls"
 			],
