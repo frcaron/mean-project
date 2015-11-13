@@ -72,7 +72,10 @@ module.exports = {
 					});
 			})
 			.then(function () {
-				ResponseService.success(res, 'Add plan', planTmp);
+				ResponseService.success(res, { 
+					message : 'Add plan', 
+					result  : planTmp
+				});
 			})
 			.catch(function (err) {
                 Logger.error('PlanService#create | ' + err.message);
@@ -96,7 +99,10 @@ module.exports = {
 
 		PlanDao.getAll(filters)
 			.then(function (plans) {
-				ResponseService.success(res, 'Get all plans', plans);
+				ResponseService.success(res, {
+					message : 'Get all plans',
+					result  : plans
+				});
 			})
 			.catch(function (err) {
                 Logger.error('PlanService#allByU | ' + err.message);
@@ -121,7 +127,10 @@ module.exports = {
 
 		PlanDao.getOne(filters)
 			.then(function (plan) {
-				ResponseService.success(res, 'Get plan', plan);
+				ResponseService.success(res, {
+					message : 'Get plan', 
+					result  : plan
+				});
 			})
 			.catch(function (err) {
                 Logger.error('PlanService#getBy | ' + err.message);

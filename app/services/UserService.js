@@ -27,7 +27,10 @@ module.exports = {
 
         UserDao.create(input)
             .then(function(user) {
-                ResponseService.success(res, 'Add user', user);
+                ResponseService.success(res, {
+                    message :'Add user', 
+                    result  : user 
+                });
             })
             .catch(function(err) {
                 Logger.error('UserService#create / ' + err.message);
@@ -56,7 +59,10 @@ module.exports = {
 
         UserDao.update(input)
             .then(function(user) {
-                ResponseService.success(res, 'Update user', user);
+                ResponseService.success(res, {
+                    message : 'Update user', 
+                    result  : user
+                });
             })
             .catch(function(err) {
                 Logger.error('UserService#update / ' + err.message);
@@ -86,7 +92,10 @@ module.exports = {
                         });
             })                                  
         .then(function() {
-            ResponseService.success(res, 'Remove user', msg.toString());                 
+            ResponseService.success(res, {
+                    message : 'Remove user', 
+                    result  : msg.toString()
+                });                 
         })        
         .catch(function (err) { 
             Logger.error('UserService#remove / ' + err.message);
@@ -106,7 +115,10 @@ module.exports = {
 
         UserDao.getAll()
             .then(function(users) {
-                ResponseService.success(res, 'Get all uses', users);
+                ResponseService.success(res, {
+                    message : 'Get all users', 
+                    result  : users
+                });
             })
             .catch(function(err) {
                 Logger.error('UserService#getAll / ' + err.message);
@@ -130,7 +142,10 @@ module.exports = {
 
         UserDao.getOne(filters)
             .then(function(user) {
-                ResponseService.success(res, 'Get user', user);
+                ResponseService.success(res, {
+                    message : 'Get user', 
+                    result  : user
+                });
             })
             .catch(function(err) {
                 Logger.error('UserService#getOne / ' + err.message);
@@ -155,7 +170,9 @@ module.exports = {
 
         UserDao.update(input)
             .then(function() {
-                ResponseService.success(res, 'Give rights');
+                ResponseService.success(res, {
+                    message : 'Give rights'
+                });
             })
             .catch(function(err) {
                 Logger.error('UserService#managePermission / ' + err.message);
