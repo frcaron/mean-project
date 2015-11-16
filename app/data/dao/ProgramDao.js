@@ -15,7 +15,7 @@ var CountersModel = require(global.__model + '/CountersModel');
  */
 function create (input) {
 
-	Logger.debug('ProgramDao#create [Start]');
+	Logger.debug('ProgramDao#create [start]');
 
 	var program = new ProgramModel();
 	var promise = CountersModel.getNextSequence('program_id')
@@ -58,7 +58,7 @@ function create (input) {
  */
 function update (input) {
 
-	Logger.debug('ProgramDao#update [Start]');
+	Logger.debug('ProgramDao#update [start]');
 
 	var output;
 	var promise = getOne(input)
@@ -103,7 +103,7 @@ function update (input) {
  */
 function remove (filters) {
 
-	Logger.debug('ProgramDao#remove [Start]');
+	Logger.debug('ProgramDao#remove [start]');
 
 	var promise;
 	if(filters.id) {
@@ -144,7 +144,7 @@ function remove (filters) {
  */
 function getAll (filters) {
 
-	Logger.debug('ProgramDao#getAll [Start]');
+	Logger.debug('ProgramDao#getAll [start]');
 
 	var promise;
 	if(filters.user_id) {
@@ -178,7 +178,7 @@ function getAll (filters) {
  */
 function getOne (filters) {
 
-	Logger.debug('ProgramDao#getOne [Start]');
+	Logger.debug('ProgramDao#getOne [start]');
 	
 	var promise;
 	if(filters.id) {

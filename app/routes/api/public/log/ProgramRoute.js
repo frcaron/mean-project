@@ -16,18 +16,21 @@ module.exports = function (router) {
 		// Create one program
 		.post(function (req, res) {
 
+			let category_id = req.body.category_id || req.query.category_id;
+			let plan_id     = req.body.plan_id || req.query.plan_id;
+
 			Logger.debug('Public#ProgramRoute#post [validation]');
-			Logger.debug('-- req.query.category_id 	: ' + req.query.category_id);
-			Logger.debug('-- req.query.plan_id 		: ' + req.query.plan_id);
+			Logger.debug('-- req.query.category_id 	: ' + category_id);
+			Logger.debug('-- req.query.plan_id 		: ' + plan_id);
 
 			// Validation
-			if (!req.query.category_id) {
+			if (!category_id) {
 				return ResponseService.fail(res, {
 							message : 'Add', 
 							reason  : 'Param "category_id" missing'
 						});
 			}
-			if (!req.query.plan_id) {
+			if (!plan_id) {
 				return ResponseService.fail(res, {
 							message : 'Add', 
 							reason  : 'Param "plan_id" missing'

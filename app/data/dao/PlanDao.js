@@ -15,7 +15,7 @@ var CountersModel = require(global.__model + '/CountersModel');
  */
 function create (input) {
 
-	Logger.debug('PlanDao#create [Start]');
+	Logger.debug('PlanDao#create [start]');
 
 	var plan = new PlanModel();
 	var promise = CountersModel.getNextSequence('plan_id')
@@ -55,7 +55,7 @@ function create (input) {
  */
 function update (input) {
 
-	Logger.debug('PlanDao#update [Start]');
+	Logger.debug('PlanDao#update [start]');
 
 	var output;
 	var promise = getOne(input)
@@ -97,7 +97,7 @@ function update (input) {
  */
 function remove (filters) {
 
-	Logger.debug('PlanDao#remove [Start]');
+	Logger.debug('PlanDao#remove [start]');
 
 	var promise;
 	if(filters.id) {
@@ -138,7 +138,7 @@ function remove (filters) {
  */
 function getAll (filters) {
 
-	Logger.debug('PlanDao#getAll [Start]');
+	Logger.debug('PlanDao#getAll [start]');
 
 	var promise;
 	if(filters.user_id) {
@@ -172,7 +172,7 @@ function getAll (filters) {
  */
 function getOne (filters) {
 
-	Logger.debug('PlanDao#getOne [Start]');
+	Logger.debug('PlanDao#getOne [start]');
 
 	var promise;
 	if(filters.id) {

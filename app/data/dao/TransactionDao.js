@@ -182,7 +182,7 @@ function getAll (filters) {
  */
 function getOne (filters) {
 
-	Logger.debug('TransactionDao#getOne [Start]');
+	Logger.debug('TransactionDao#getOne [start]');
 	
 	var promise;
 	if(filters.id) {

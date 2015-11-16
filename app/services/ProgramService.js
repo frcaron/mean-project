@@ -1,124 +1,109 @@
 "use strict";
 
-// Inject models
-var PlanModel = require(global.__model + '/PlanModel');
-var ProgramModel = require(global.__model + '/ProgramModel');
-var CategoryModel = require(global.__model + '/CategoryModel');
-
-// Inject services
-var responseService = require(global.__service + '/ResponseService');
+// Inject
+var ErrorManager    = require(global.__app + '/ErrorManager');
+var Logger          = require(global.__app + '/LoggerManager');
+var ResponseService = require(global.__service + '/ResponseService');
+var PlanDao         = require(global.__dao + '/PlanDao');
+var ProgramDao      = require(global.__dao + '/ProgramDao');
+var CategoryDao     = require(global.__dao + '/CategoryDao');
 
 module.exports = {
 
 	// Create one program
 	create     : function (req, res) {
 
-		var program = new ProgramModel();
+		Logger.debug('ProgramService#create - [start]');
 
-		var promise = CategoryModel.findByIdAsync(req.query.category_id, '_id');
+		let input = {
+			_category : req.body.category_id || req.query.category_id,
+			budget    : req.body.budget,
+			_plan     : req.body.plan_id || req.query.plan_id,
+			_user     : req.decoded.id
+		};
 
-		promise
-			.then(function (category) {
-
-				if (!category) {
-					throw new Error('Category id invalid');
-				}
-
-				return PlanModel.findByIdAsync(req.query.plan_id, '_id');
-			})
-
-			.then(function (plan) {
-
-				if (!plan) {
-					throw new Error('Plan id invalid');
-				}
-
-				program.category = req.query.category_id;
-				if (req.body.sum) {
-				program.sum      = req.body.sum;
-				}
-				program._plan    = req.query.plan_id;
-				program._user    = req.decoded.id;
-
-				return program.saveAsync();
-			})
-
+		CategoryDao.getOne({ id : input._category, user_id : input._user })
 			.then(function () {
-
-				program.addLinkPlan();
-				program.addLinkCategory();
-
-				responseService.success(res, 'Add success', program._id);
+				return PlanDao.getOne({ id : input._plan, user_id : input._user });
 			})
-
+			.then(function () {
+				return ProgramDao.create(input);
+			})
+			.then(function (program) {
+				ResponseService.success(res, {
+					message : 'Add program',
+					result  : program
+				});
+			})
 			.catch(function (err) {
+                Logger.error('ProgramService#create | ' + err.message);
 
-				// Rollback
-				if (program._id) {
-					program.removeLinkPlan();
-					program.removeLinkCategory();
-					ProgramModel.remove({ _id : program._id }).exec();
-				}
-
-				responseService.fail(res, 'Add failed', err.message);
+				ResponseService.fail(res, {
+					message : 'Add program',
+				});
 			});
+
+		Logger.debug('ProgramService#create - [end]');
 	},
 
 	// Update one program
 	update     : function (req, res) {
 
-		var promise = ProgramModel.findOneAsync({
-			_id   : req.params.program_id,
-			_user : req.decoded.id
-		});
+		Logger.debug('ProgramService#update - [start]');
 
-		promise
-			.then(function (program) {
+		let input = {
+			_id       : req.params.program_id,
+			_category : req.body.category_id || req.query.category_id,
+			budget    : req.body.budget,
+			_user     : req.decoded.id
+		};
 
-				if (!program) {
-					throw new Error('Program not found');
-				}
-				if (req.body.sum) {
-					program.sum = req.body.sum;
-				}
-
-				return program.saveAsync();
-			})
-
+		CategoryDao.getOne({ id : input._category, user_id : input._user })
 			.then(function () {
-				responseService.success(res, 'Update success');
+				return ProgramDao.update(input);
 			})
-
+			.then(function (program) {
+				ResponseService.success(res, {
+					message : 'Update program',
+					result  : program 
+				});
+			})
 			.catch(function (err) {
-				responseService.fail(res, 'Update failed', err.message);
+                Logger.error('ProgramService#update | ' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Update program',
+				});
 			});
+
+		Logger.debug('ProgramService#update - [end]');
 	},
 
 	// Remove one program
 	remove     : function (req, res) {
 
-		var promise = ProgramModel.findOneAndRemoveAsync({
+		Logger.debug('ProgramService#remove - [start]');
+
+		var filters = {
 			_id   : req.params.program_id,
 			_user : req.decoded.id
-		});
+		};
 
-		promise
-			.then(function (program) {
-
-				if (!program) {
-					throw new Error('Program not found');
-				}
-
-				program.removeLinkPlan();
-				program.removeLinkCategory();
-				program.resetLinkTransaction();
-
-				responseService.success(res, 'Remove success');
+		ProgramDao.remove(filters)
+			.then(function () {
+				ResponseService.success(res, {
+					message : 'Remove program'
+				});
 			})
-
 			.catch(function (err) {
-				responseService.fail(res, 'Remove failed', err.message);
+                Logger.error('ProgramService#update | ' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Remove program'
+				});
 			});
+
+		Logger.debug('ProgramService#remove - [end]');
 	},
 
 	// Get programs by plan

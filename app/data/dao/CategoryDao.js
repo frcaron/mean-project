@@ -15,7 +15,7 @@ var CountersModel = require(global.__model + '/CountersModel');
  */
 function create (input) {
 
-	Logger.debug('CategoryDao#create [Start]');
+	Logger.debug('CategoryDao#create [start]');
 
 	var category = new CategoryModel();
 	var promise = CountersModel.getNextSequence('category_id')
@@ -58,7 +58,7 @@ function create (input) {
  */
 function update (input) {
 
-	Logger.debug('CategoryDao#update [Start]');
+	Logger.debug('CategoryDao#update [start]');
 
 	var output;
 	var promise = getOne(input)
@@ -103,7 +103,7 @@ function update (input) {
  */
 function remove (filters) {
 
-	Logger.debug('CategoryDao#remove [Start]');
+	Logger.debug('CategoryDao#remove [start]');
 
 	var promise;
 	if(filters.id) {
@@ -144,7 +144,7 @@ function remove (filters) {
  */
 function getAll (filters) {
 
-	Logger.debug('CategoryDao#getAll [Start]');
+	Logger.debug('CategoryDao#getAll [start]');
 
 	var promise;
 	if(filters.user_id) {
@@ -178,7 +178,7 @@ function getAll (filters) {
  */
 function getOne (filters) {
 
-	Logger.debug('CategoryDao#getOne [Start]');
+	Logger.debug('CategoryDao#getOne [start]');
 
 	var promise;
 	if(filters.id) {
@@ -189,6 +189,7 @@ function getOne (filters) {
 					});
 		} else  {
 			promise = CategoryModel.findByIdAsync(filters.id);
+
 		}	
 	} else if(filters.type && filters.user_id) {
 		promise = CategoryModel.findOneAsync({
