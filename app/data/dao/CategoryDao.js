@@ -16,6 +16,7 @@ var CountersModel = require(global.__model + '/CountersModel');
 function create (input) {
 
 	Logger.debug('CategoryDao#create [start]');
+	Logger.debug('-- input : ' + input);
 
 	var category = new CategoryModel();
 	var promise = CountersModel.getNextSequence('category_id')
@@ -51,30 +52,44 @@ function create (input) {
 
 /** 
  * @param  {Json} input 	Data to update
+ * @param  {Json} filters 	Keys : 	- 
+ *                         			- 
  * @return {CategoryModel} 	Object updated
  * @throws {DuplicateError} If index model is not unique
  * @throws {NoResultError} 	If id doesn't exist
  * @throws {Error} 			If an other error is met
  */
-function update (input) {
+function update (input, filters) {
 
 	Logger.debug('CategoryDao#update [start]');
+	Logger.debug('-- input   : ' + input);
+	Logger.debug('-- filters : ' + filters);
 
-	var output;
-	var promise = getOne(input)
-		.then(function (category) {
-			if( input.name ) {
-				category.name   = input.name;
-			}
-			if( input.type ) {
-				category.type   = input.type;
-			}
-			if( input.active !== undefined ) {
-				category.active = input.active;
-			}
-			output = category;
-			return category.saveAsync();
-		})
+	var promise, output;
+	if(filters) {
+		// TODO
+		promise = CategoryModel.update();
+	} else {
+		promise = getOne({ 
+				id      : input._id,
+				user_id : input._user
+			})
+			.then(function (category) {
+				if( input.name ) {
+					category.name   = input.name;
+				}
+				if( input._type ) {
+					category._type  = input._type;
+				}
+				if( input.active !== undefined ) {
+					category.active = input.active;
+				}
+				output = category;
+				return category.saveAsync();
+			});
+	}
+
+	var promiseEnd = promise 
 		.then(function () {
 			return BPromise.resolve(output);
 		})
@@ -90,11 +105,11 @@ function update (input) {
 
 	Logger.debug('CategoryDao#update [end]');
 
-	return promise;
+	return promiseEnd;
 }
 
 /**
- * @param  {Json} filters 	Keys : 	- id
+ * @param  {Json} filters 	Keys : 	- user_id
  * 									- id / user_id
  * @return {CategoryModel}	Object found
  * @throws {ParamsError} 	If params given are wrong
@@ -104,22 +119,20 @@ function update (input) {
 function remove (filters) {
 
 	Logger.debug('CategoryDao#remove [start]');
+	Logger.debug('-- filters : ' + filters);
 
 	var promise;
-	if(filters.id) {
-		if(filters.user_id) {
+	if(filters.user_id) {
+		if(filters.id) {		
 			promise = CategoryModel.removeAsync({ 
 				_id   : filters.id,
 				_user : filters.user_id
 			});
 
 		} else {
-			promise = CategoryModel.removeAsync({ _id : filters.id });
+			promise = CategoryModel.removeAsync({ _user : filters.user_id });
 
 		}
-	} else if(filters.user_id) {
-		promise = CategoryModel.removeAsync({ _user : filters.user_id });
-			
 	} else {
 		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
@@ -137,7 +150,8 @@ function remove (filters) {
 }
 
 /**
- * @param  {Json} filters 	Keys : - user_id
+ * @param  {Json} filters 	Keys :  - user_id
+ *                         			- type / user_id
  * @return {CategoryModel}	List of object found
  * @throws {ParamsError} 	If params given are wrong
  * @throws {Error} 			If an other error is met
@@ -145,12 +159,20 @@ function remove (filters) {
 function getAll (filters) {
 
 	Logger.debug('CategoryDao#getAll [start]');
+	Logger.debug('-- filters : ' + filters);
 
 	var promise;
 	if(filters.user_id) {
-		promise = CategoryModel.findAsync({
-					_user : filters.user_id
-				});
+		if(filters.type) {
+			promise = CategoryModel.findAsync({
+						_type : filters.type,
+						_user : filters.user_id
+					});
+		} else {	
+			promise = CategoryModel.findAsync({
+						_user : filters.user_id
+					});
+		}  
 	} else {
 		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
@@ -168,8 +190,7 @@ function getAll (filters) {
 }
 
 /**
- * @param  {Json} filters 	Keys : 	- id
- * 									- id / user_id
+ * @param  {Json} filters 	Keys : 	- id / user_id
  * 									- type / user_id
  * @return {CategoryModel}	Object found
  * @throws {ParamsError} 	If params given are wrong
@@ -179,24 +200,23 @@ function getAll (filters) {
 function getOne (filters) {
 
 	Logger.debug('CategoryDao#getOne [start]');
+	Logger.debug('-- filters : ' + filters);
 
 	var promise;
-	if(filters.id) {
-		if(filters.user_id) {
+	if(filters.user_id) {
+		if(filters.id) {		
 			promise = CategoryModel.findOneAsync({
 						_id   : filters.id,
 						_user : filters.user_id
 					});
-		} else  {
-			promise = CategoryModel.findByIdAsync(filters.id);
-
-		}	
-	} else if(filters.type && filters.user_id) {
-		promise = CategoryModel.findOneAsync({
-			_type : filters.type,
-			_user : filters.user_id
-		});
-		
+		} else if(filters.type) {
+			promise = CategoryModel.findOneAsync({
+				_type : filters.type,
+				_user : filters.user_id
+			});
+		} else {
+			promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
+		}
 	} else {
 		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
@@ -224,8 +244,8 @@ module.exports = {
 	create : function (input) {
 		return create(input);
 	},
-	update : function (input) {
-		return update(input);
+	update : function (input, filters) {
+		return update(input, filters);
 	},
 	remove : function (filters) {
 		return remove(filters);

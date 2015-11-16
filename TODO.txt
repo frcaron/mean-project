@@ -1,2 +1,5 @@
 Validation email
 Mapping retour pour cacher les champs de base
+
+TransactionService = 3 todos
+CategoryService    = all

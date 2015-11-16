@@ -16,19 +16,20 @@ var CountersModel    = require(global.__model + '/CountersModel');
 function create (input) {
 
 	Logger.debug('TransactionDao#create [start]');
+	Logger.debug('-- input : ' + input);
 
 	var transaction = new TransactionModel();
 	var promise = CountersModel.getNextSequence('transaction_id')
 		.then(function (seq){
 
 			transaction._id      = seq;
-			transaction.date     = input.date;
 			transaction.sum      = input.sum;
 			if( input.comment ) {
 				transaction.comment = input.comment;
 			}
+			transaction.date     = input.date;
 			transaction._program = input._program;
-			transaction._user    = input.user_id;
+			transaction._user    = input._user;
 
 			return transaction.saveAsync();
 		})
@@ -52,33 +53,47 @@ function create (input) {
 
 /** 
  * @param  {Json} input 		Data to update
+ * @param  {Json} filters 		keys : 	- 
+ *                          			- 
  * @return {TransactionModel} 	Object updated
  * @throws {DuplicateError} 	If index model is not unique
  * @throws {NoResultError} 		If id doesn't exist
  * @throws {Error} 				If an other error is met
  */
-function update (input) {
+function update (input, filters) {
 
 	Logger.debug('TransactionDao#update [start]');
+	Logger.debug('-- input   : ' + input);
+	Logger.debug('-- filters : ' + filters);
 
-	var output;
-	var promise = getOne(input)
-		.then(function (transaction) {
-			if( input.date ) {
-				transaction.date     = input.date;
-			}
-			if( input.sum ) {
-				transaction.sum      = input.sum;
-			}
-			if( input.comment ) {
-				transaction.comment  = input.comment;
-			}
-			if( input.program_id ) {
-				transaction._program = input.program_id;
-			}
-			output = transaction;
-			return transaction.saveAsync();
-		})
+	var promise, output;
+	if(filters) {
+		// TODO
+		promise = TransactionModel.update();
+	} else {
+		promise = getOne({ 
+				id      : input._id,
+				user_id : input._user
+			})
+			.then(function (transaction) {
+				if( input.date ) {
+					transaction.date     = input.date;
+				}
+				if( input.sum ) {
+					transaction.sum      = input.sum;
+				}
+				if( input.comment ) {
+					transaction.comment  = input.comment;
+				}
+				if( input.program_id ) {
+					transaction._program = input._program;
+				}
+				output = transaction;
+				return transaction.saveAsync();
+			});
+	}
+
+	var promiseEnd = promise
 		.then(function () {
 			return BPromise.resolve(output);
 		})
@@ -94,12 +109,11 @@ function update (input) {
 
 	Logger.debug('TransactionDao#update [end]');
 
-	return promise;
+	return promiseEnd;
 }
 
 /**
- * @param  {Json} filters 	Keys : 	- id
- * 									- user_id 
+ * @param  {Json} filters 	Keys : 	- user_id 
  * 									- id / user_id
  * @return {} 
  * @throws {ParamsError} 	If params given are wrong
@@ -108,22 +122,19 @@ function update (input) {
 function remove (filters) {
 
 	Logger.debug('TransactionDao#remove [start]');
+	Logger.debug('-- filters : ' + filters);
 
 	var promise;
-	if(filters.id) {
-		if(filters.user_id) {
+	if(filters.user_id) {
+		if(filters.id) {		
 			promise = TransactionModel.removeAsync({ 
 				_id   : filters.id,
 				_user : filters.user_id
 			});
 
 		} else {
-			promise = TransactionModel.removeAsync({ _id : filters.id });
-
+			promise = TransactionModel.removeAsync({ _user : filters.user_id });
 		}
-	} else if(filters.user_id) {
-		promise = TransactionModel.removeAsync({ _user : filters.user_id });
-			
 	} else {
 		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
@@ -141,7 +152,8 @@ function remove (filters) {
 }
 
 /**
- * @param  {Json} filters 		Keys : - user_id
+ * @param  {Json} filters 		Keys : 	- user_id
+ *                          			- program_id / user_id
  * @return {TransactionModel}	List of object found
  * @throws {ParamsError} 		If params given are wrong
  * @throws {Error} 				If an other error is met
@@ -149,13 +161,20 @@ function remove (filters) {
 function getAll (filters) {
 
 	Logger.debug('TransactionDao#getAll [start]');
+	Logger.debug('-- filters : ' + filters);
 
 	var promise;
 	if(filters.user_id) {
-		promise = TransactionModel.findAsync({
-					_user : filters.user_id
-				});
-
+		if(filters.program_id) {
+			promise = TransactionModel.findAsync({
+						_program : filters.program_id,
+						_user    : filters.user_id
+					});
+		} else {
+			promise = TransactionModel.findAsync({
+						_user : filters.user_id
+					});
+		}
 	} else {
 		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
@@ -173,8 +192,7 @@ function getAll (filters) {
 }
 
 /**
- * @param  {Json} filters 		Keys : 	- id
- * 										- id / user_id
+ * @param  {Json} filters 		Keys : 	- id / user_id
  * @return {TransactionModel}	Object found
  * @throws {ParamsError} 		If params given are wrong
  * @throws {NoResultError} 		If no result found
@@ -183,17 +201,18 @@ function getAll (filters) {
 function getOne (filters) {
 
 	Logger.debug('TransactionDao#getOne [start]');
+	Logger.debug('-- filters : ' + filters);
 	
 	var promise;
-	if(filters.id) {
-		if(filters.user_id) {
+	if(filters.user_id) {
+		if(filters.id) {		
 			promise = TransactionModel.findOneAsync({
 						_id   : filters.id,
 						_user : filters.user_id
 					});
 
 		} else {
-			promise = TransactionModel.findByIdAsync(filters.id);
+			promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 		}
 	} else {
 		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
@@ -222,8 +241,8 @@ module.exports = {
 	create : function (input) {
 		return create(input);
 	},
-	update : function (input) {
-		return update(input);
+	update : function (input, filters) {
+		return update(input, filters);
 	},
 	remove : function (filters) {
 		return remove(filters);

@@ -1,76 +1,42 @@
 "use strict";
 
-// Inject application
-var BPromise = require('bluebird');
-var moment   = require('moment');
+// Inject
+var BPromise        = require('bluebird');
+var ErrorManager    = require(global.__app + '/ErrorManager');
+var Logger          = require(global.__app + '/LoggerManager');
+var ResponseService = require(global.__service_trans + '/ResponseService');
+var PlanDao         = require(global.__dao + '/PlanDao');
+var ProgramDao      = require(global.__dao + '/ProgramDao');
+var TransactionDao  = require(global.__dao + '/TransactionDao');
+var CategoryDao     = require(global.__dao + '/CategoryDao');
 
-// Inject models
-var PlanModel = require(global.__model + '/PlanModel');
-var ProgramModel = require(global.__model + '/ProgramModel');
-var TransactionModel = require(global.__model + '/TransactionModel');
-var CategoryModel = require(global.__model + '/CategoryModel');
+function findProgramForTransaction(transaction, category_id) {	
+	var date_split = transaction.date.split('/');
 
-// Inject services
-var responseService = require(global.__service + '/ResponseService');
-
-// Save transaction and update link
-function changeProgram(transaction, user_id, category_id, date) {
-
-	console.log(transaction)
-	console.log(user_id)
-	console.log(category_id)
-	console.log(date)
-
-
-	var promise = CategoryModel.findOneAsync({
-		_id   : category_id,
-		_user : user_id
-	});
-
-	return promise
-		.then(function (category) {
-
-			if (!category) {
-				throw new Error('Category not found'); // TODO create category
-			}
-
-			var date_split = date.split('/');
-
-			return PlanModel.findOne({
-				_user : user_id,
-				month : date_split[ 1 ],
-				year  : date_split[ 2 ]
-			}).populate('programs', '_id category').execAsync();
+	return PlanDao.getOne({
+			user_id : transaction._user,
+			month   : date_split[ 1 ],
+			year    : date_split[ 2 ]
 		})
-
+		.catch(ErrorManager.NoResultError, function (err) {
+			// TODO reflexion api ou user ?
+			// si api use service transversal
+			throw err;
+		})
 		.then(function (plan) {
-
-			if (!plan) {
-				throw new Error('Plan not found'); // TOTO create plan
-			}
-
-			return ProgramModel.findOneAsync({
-				_plan    : plan._id,
-				category : category_id
-			});
+			return  ProgramDao.getOne({
+						_plan     : plan._id,
+						_category : category_id,
+						_user     : transaction._user
+					});
 		})
-
+		.catch(ErrorManager.NoResultError, function (err) {
+			// TODO reflexion api ou user ?
+			throw err;
+		})
 		.then(function (program) {
-
-			if (!program) {
-				throw new Error('Program not found'); //TODO create program
-			}
-
 			transaction._program = program._id;
-
-			return transaction.saveAsync();
-		})
-
-		.then(function () {
-
-			transaction.addLinkProgram();
-
-			return transaction._id;
+			return BPromise.resolve(transaction);
 		});
 }
 
@@ -79,142 +45,119 @@ module.exports = {
 	// Create one transaction
 	create             : function (req, res) {
 
-		var transaction = new TransactionModel();
+		Logger.debug('TransactionService#create - [start]');
 
-		
-		var m = moment(req.body.date, "DD/MM/YYYY");
-		if(m.isValid()) {
-			transaction.date = m.toDate();
-		} else {
-			throw new Error('Date is not valid');
-		}
-		transaction.sum = req.body.sum;
-		if (req.body.comment) {
-		transaction.comment = req.body.comment;
-		}
-		transaction._user = req.decoded.id;
+		var input = {
+			date     : req.body.date,
+			sum      : req.body.sum,
+			comment  : req.body.comment,
+			_program : req.body.category_id || req.query.category_id,
+			_user    : req.decoded.id
+		};
+		var category_id = req.body.category_id ||req.query.category_id;
 
-		console.log(transaction);
-
-		var promise = changeProgram(
-			transaction,
-			req.decoded.id,
-			req.query.category_id,
-			m.toDate());
-
-		promise
-			.then(function (id) {
-				responseService.success(res, 'Add success', id);
+		findProgramForTransaction(input, category_id)
+			.then(function(transaction) {
+				return TransactionDao.create(transaction);
+			})		
+			.then(function (transaction) {
+				ResponseService.success(res, {
+					message : 'Add transaction', 
+					result  : transaction
+				});
 			})
-
 			.catch(function (err) {
+				Logger.error('TransactionService#create | ' + err.message);
 
-				if(transaction._id) {
-					transaction.removeLinkProgram();
-					TransactionModel.remove({ _id : transaction._id }).execAsync();
-				}
-
-				responseService.fail(res, 'Add failed', err.message);
+				ResponseService.fail(res, {
+					message : 'Add transaction'
+				});
 			});
+
+		Logger.debug('TransactionService#create - [end]');
 	},
 
 	// Update one transaction
 	update             : function (req, res) {
 
-		var promise = TransactionModel.findOne({
-			_id   : req.params.transaction_id,
-			_user : req.decoded.id
-		}).populate('_program', 'category').execAsync();
+		Logger.debug('TransactionService#update - [start]');
 
-		promise
+		TransactionDao.getOne({
+				id      : req.params.transaction_id,
+				user_id : req.decoded.id
+			})
 			.then(function (transaction) {
 
-				if (!transaction) {
-					throw new Error('Transaction not found');
+				if (req.body.date) {
+					transaction.date    = req.body.date;
 				}
-
-				var newDate = moment(req.body.date, "DD/MM/YYYY");
-				var lastDate = moment(transaction.date, "DD/MM/YYYY");
-				if(newDate.isValid()) {
-					if (!newDate.equals(lastDate)) {
-						transaction.date = newDate.toDate();
-					}
-				} else {
-					throw new Error('Date is not valid');
-				}
-				console.log('1')
 				if (req.body.sum) {
-					transaction.sum = req.body.sum;
+					transaction.sum     = req.body.sum;
 				}
-				console.log('2')
 				if (req.body.comment) {
 					transaction.comment = req.body.comment;
 				}
-				console.log('3')
-				if (!req.query.category_id.equals(transaction._program.category) ||
-					!newDate.equals(lastDate)) {
-					transaction.removeLinkProgram();
-				}
-
-				console.log('pre save');
-				transaction.save();
-				console.log('post save');
-
-				if (transaction.isModified('_program')) {
-					return changeProgram(
-						transaction,
-						req.decoded.id,
-						req.query.category_id,
-						m.toDate());
-				}
+				var category_id = req.body.category_id || req.query.category_id;
+			
+				return  findProgramForTransaction(transaction, category_id);
 			})
-
-			.then(function () {
-				responseService.success(res, 'Update success');
+			.then(function (transaction) {
+				return TransactionDao.update(transaction);
 			})
-
+			.then(function (transaction) {
+				ResponseService.success(res, {
+					message : 'Update transaction', 
+					result  : transaction
+				});
+			})
 			.catch(function (err) {
-				responseService.fail(res, 'Update failed', err.message);
+				Logger.error('TransactionService#update | ' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Update transaction'
+				});
 			});
+
+		Logger.debug('TransactionService#update - [end]');
 	},
 
 	// Remove one transaction
 	remove             : function (req, res) {
 
-		var promise = TransactionModel.findOneAndRemoveAsync({
-			_id   : req.params.transaction_id,
-			_user : req.decoded.id
-		});
+		Logger.debug('TransactionService#remove - [start]');
 
-		promise
-			.then(function (transaction) {
-
-				if (!transaction) {
-					throw new Error('Transaction not found');
-				}
-
-				transaction.removeLinkProgram();
-
-				responseService.success(res, 'Remove success');
+		TransactionDao({ 
+				id      : req.params.transaction_id,
+				user_id : req.decoded.id
 			})
-
+			.then(function () {
+				ResponseService.success(res, {
+					message : 'Remove transaction'
+				});
+			})
 			.catch(function (err) {
-				responseService.fail(res, 'Remove failed', err.message);
+				Logger.error('TransactionService#remove | ' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Remove failed'
+				});
 			});
+
+		Logger.debug('TransactionService#remove - [end]');
 	},
 
 	// Get transactions by type category
 	allByTypeCategoryU : function (req, res) {
 
-		var promise = CategoryModel
-			.findAsync({ type : req.params.type_category_id })
-			.populate('_programs', 'transactions');
+		// TODO
 
-		promise
+		CategoryDao.getAll({
+				type    : req.params.type_category_id,
+				user_id : req.decoded.id
+			})
 			.then(function (categories) {
-
-				if (!categories) {
-					throw new Error('Transaction not found');
+				if (categories.length === 0) {
+					throw new Error('Transactions not found');
 				}
 
 				var result = [];
@@ -246,43 +189,59 @@ module.exports = {
 			})
 
 			.catch(function (err) {
-				responseService.fail(res, 'Find failed', err.message);
+				ResponseService.fail(res, 'Find failed', err.message);
 			});
 	},
 
 	// Get transactions by program
 	allByProgramU      : function (req, res) {
 
-		var promise = TransactionModel.findAsync({
-			_user    : req.decoded.id,
-			_program : req.params.program_id
-		});
+		Logger.debug('TransactionService#allByProgramU - [start]');
 
-		promise
-			.then(function (transactions) {
-				responseService.success(res, 'Find success', transactions);
+		TransactionDao.getAll({
+				program_id : req.params.program_id,
+				user_id    : req.decoded.id
 			})
-
+			.then(function (transactions) {
+				ResponseService.success(res, {
+					message : 'Get all transactions by program', 
+					result  : transactions
+				});
+			})
 			.catch(function (err) {
-				responseService.fail(res, 'Find failed', err.message);
+				Logger.error('TransactionService#allByProgramU | ' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Get all transactions by program'
+					});
 			});
+
+		Logger.debug('TransactionService#allByProgramU - [end]');
 	},
 
 	// Get one transaction by id
 	getByIdU           : function (req, res) {
 
-		var promise = TransactionModel.findOneAsync({
-			_id   : req.params.transaction_id,
-			_user : req.decoded.id
-		});
+		Logger.debug('TransactionService#getByIdU - [start]');
 
-		promise
-			.then(function (transaction) {
-				responseService.success(res, 'Find success', transaction);
+		TransactionDao.getOne({
+				id    : req.params.transaction_id,
+				_user : req.decoded.id
 			})
-
+			.then(function (transaction) {
+				ResponseService.success(res, {
+					message : 'Get transaction', 
+					result  : transaction,
+				});
+			})
 			.catch(function (err) {
-				responseService.fail(res, 'Find failed', err.message);
+				Logger.error('TransactionService#getByIdU | ' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Get transaction'
+				});
 			});
+
+		Logger.debug('TransactionService#getByIdU - [end]');
 	}
 };

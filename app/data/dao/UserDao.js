@@ -16,6 +16,7 @@ var CountersModel = require(global.__model + '/CountersModel');
 function create (input) {
 	
 	Logger.debug('UserDao#create [start]');
+	Logger.debug('-- input : ' + input);
 
 	var user = new UserModel();
 	var promise = CountersModel.getNextSequence('user_id')
@@ -60,9 +61,10 @@ function create (input) {
 function update (input) {
 
 	Logger.debug('UserDao#update [start]');
+	Logger.debug('-- input : ' + input);
 
 	var output;
-	var promise = getOne(input)
+	var promise = getOne({ id : input._id })
 		.then(function (user) {
 			if ( input.surname ) { 
 				user.surname   = input.surname;
@@ -111,6 +113,7 @@ function update (input) {
 function remove (filters) {
 
 	Logger.debug('UserDao#remove [start]');
+	Logger.debug('-- filters : ' + filters);
 
 	var promise = getOne(filters)
 		.then(function(user){
@@ -161,6 +164,7 @@ function getAll () {
 function getOne (filters) {
 
 	Logger.debug('UserDao#getOne [start]');
+	Logger.debug('-- filters : ' + filters);
 	
 	var promise;
 	var id = filters.id || filters.user_id;

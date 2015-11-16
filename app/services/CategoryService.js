@@ -5,7 +5,7 @@ var CategoryModel = require(global.__model + '/CategoryModel');
 var TypeCategoryModel = require(global.__model + '/TypeCategoryModel');
 
 // Inject services
-var responseService = require(global.__service + '/ResponseService');
+var ResponseService = require(global.__service_trans + '/ResponseService');
 
 module.exports = {
 

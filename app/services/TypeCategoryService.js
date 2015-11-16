@@ -1,7 +1,8 @@
 "use strict";
 
 // Inject
-var ResponseService = require(global.__service + '/ResponseService');
+var Logger          = require(global.__app + '/LoggerManager');
+var ResponseService = require(global.__service_trans + '/ResponseService');
 var TypeCategoryDao = require(global.__dao + '/TypeCategoryDao');
 
 module.exports = {
@@ -9,73 +10,125 @@ module.exports = {
 	// Create one type category
 	create    : function (req, res) {
 
-		var input = req.body;
+		Logger.debug('TypeCategoryService#create - [start]');
+
+		var input = {
+			type   : req.body.type,
+			active : req.body.active
+		};
 
 		TypeCategoryDao.create(input)
 			.then(function (typeCategory){
-				ResponseService.success(res, 'Add success', typeCategory);
+				ResponseService.success(res, {
+					message : 'Add type category', 
+					result  : typeCategory
+				});
 			})
 			.catch(function (err){
-				ResponseService.fail(res, 'Add failed', err.message);
+				Logger.error('TypeCategoryService#create | ' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Add type category'
+				});
 			});
+
+		Logger.debug('TypeCategoryService#create - [end]');
 	},
 
 	// Update one type category
 	update    : function (req, res) {
 
-		var input = req.body;
+		Logger.debug('TypeCategoryService#update - [start]');
+
+		var input = {
+			type   : req.body.type,
+			active : req.body.active
+		};
 
 		TypeCategoryDao.update(input)
 			.then(function (typeCategory) {
-				ResponseService.success(res, 'Update success', typeCategory);
+				ResponseService.success(res, {
+					message : 'Update type category', 
+					result 	: typeCategory
+				});
 			})
 			.catch(function (err) {
-				ResponseService.fail(res, 'Update failed', err.message);
+				Logger.error('TypeCategoryService#update | ' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Update type category'
+				});
 			});
+
+		Logger.debug('TypeCategoryService#update - [end]');
 	},
 
 	// Get all type category
 	all       : function (req, res) {
 
+		Logger.debug('TypeCategoryService#all - [start]');
+
 		TypeCategoryDao.getAll()
 			.then(function (typeCategories) {
-				ResponseService.success(res, 'Find success', typeCategories);
+				ResponseService.success(res, {
+					message : 'Get all categories', 
+					result  : typeCategories
+				});
 			})
 			.catch(function (err) {
-				ResponseService.fail(res, 'Find failed', err.message);
+				Logger.error('TypeCategoryService#all | ' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Get all categories'
+				});
 			});
+
+		Logger.debug('TypeCategoryService#all - [end]');
 	},
 
 	// Get all type category active
 	allActive : function (req, res) {
 
-		var filters = {
-			active : true
-		};
+		Logger.debug('TypeCategoryService#allActive - [start]');
 
-		TypeCategoryDao.getAll(filters)
+		TypeCategoryDao.getAll({ active : true })
 			.then(function (typeCategories) {
-				ResponseService.success(res, 'Find success', typeCategories);
+				ResponseService.success(res, {
+					message : 'Get all type categories active', 
+					result  : typeCategories
+				});
 			})
 			.catch(function (err) {
-				ResponseService.fail(res, 'Find failed', err.message);
+				Logger.error('TypeCategoryService#allActive | ' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Get all type categories active'
+				});
 			});
+
+		Logger.debug('TypeCategoryService#allActive - [end]');
 	},
 
 	// Get one type category by id
 	getById    : function (req, res) {
 
-		var filters = {
-			id : req.params.type_category_id
-		};
+		Logger.debug('TypeCategoryService#getById - [start]');
 
-		TypeCategoryDao.getOne(filters)
+		TypeCategoryDao.getOne({ id : req.params.type_category_id })
 			.then(function (typeCategory) {
-				ResponseService.success(res, 'Find success', typeCategory);
+				ResponseService.success(res, {
+					message : 'Get type category', 
+					result  : typeCategory
+				});
 			})
-
 			.catch(function (err) {
-				ResponseService.fail(res, 'Find failed', err.message);
+				Logger.error('TypeCategoryService#getById | ' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Get type category'
+				});
 			});
+
+		Logger.debug('TypeCategoryService#getById - [end]');
 	}
 };

@@ -1,7 +1,7 @@
 "use strict";
 
 //Inject
-var ResponseService = require(global.__service + '/ResponseService');
+var ResponseService = require(global.__service_trans + '/ResponseService');
 
 // Properties
 var api_prefix = '/me';

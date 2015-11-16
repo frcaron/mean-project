@@ -4,7 +4,7 @@
 var Jwt             = require('jsonwebtoken');
 var TokenConfig     = require(global.__config + '/token');
 var Logger          = require(global.__app + '/LoggerManager');
-var ResponseService = require(global.__service + '/ResponseService');
+var ResponseService = require(global.__service_trans + '/ResponseService');
 
 module.exports = function (router) {
 

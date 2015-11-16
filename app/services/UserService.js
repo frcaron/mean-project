@@ -3,7 +3,7 @@
 // Inject
 var BPromise        = require('bluebird');
 var Logger          = require(global.__app + '/LoggerManager');
-var ResponseService = require(global.__service + '/ResponseService');
+var ResponseService = require(global.__service_trans + '/ResponseService');
 var UserDao         = require(global.__dao + '/UserDao');
 var PlanDao         = require(global.__dao + '/PlanDao');
 var ProgramDao      = require(global.__dao + '/ProgramDao');
@@ -49,7 +49,7 @@ module.exports = {
         Logger.debug('UserService#update - [start]');
 
         var input = {
-            id        : user_id,
+            _id       : user_id,
             firstname : req.body.firstname,
             surname   : req.body.surname,
             email     : req.body.email,
@@ -136,11 +136,9 @@ module.exports = {
 
         Logger.debug('UserService#getOne - [start]');
 
-        var filters = {
-            id : user_id
-        };
-
-        UserDao.getOne(filters)
+        UserDao.getOne({
+                id : user_id
+            })
             .then(function(user) {
                 ResponseService.success(res, {
                     message : 'Get user', 
@@ -164,7 +162,7 @@ module.exports = {
         Logger.debug('UserService#managePermission - [start]');
 
         var input = {
-            id    : user_id,
+            _id    : user_id,
             admin : req.body.admin
         };
 

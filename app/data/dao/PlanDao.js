@@ -16,6 +16,7 @@ var CountersModel = require(global.__model + '/CountersModel');
 function create (input) {
 
 	Logger.debug('PlanDao#create [start]');
+	Logger.debug('-- input : ' + input);
 
 	var plan = new PlanModel();
 	var promise = CountersModel.getNextSequence('plan_id')
@@ -24,7 +25,7 @@ function create (input) {
 			plan._id   = seq;
 			plan.month = input.month;
 			plan.year  = input.year;
-			plan._user = input.user_id;
+			plan._user = input._user;
 
 			return plan.saveAsync();
 		})
@@ -48,27 +49,41 @@ function create (input) {
 
 /** 
  * @param  {Json} input 	Data to update
+ * @param  {Json} filters 	keys : 	- 
+ *                         			- 
  * @return {PlanModel} 		Object updated
  * @throws {DuplicateError} If index model is not unique
  * @throws {NoResultError} 	If id doesn't exist
  * @throws {Error} 			If an other error is met
  */
-function update (input) {
+function update (input, filters) {
 
 	Logger.debug('PlanDao#update [start]');
+	Logger.debug('-- input   : ' + input);
+	Logger.debug('-- filters : ' + filters);
 
-	var output;
-	var promise = getOne(input)
-		.then(function (plan) {
-			if ( input.month ) { 
-				plan.month = input.month;
-			}
-			if ( input.year ) { 
-				plan.year  = input.year;
-			}
-			output = plan;
-			return plan.saveAsync();
-		})
+	var promise, output;
+	if(filters) {
+		// TODO
+		promise = PlanModel.udpate();
+	} else {
+		promise = getOne({ 
+				id      : input._id,
+				user_id : input._user
+			})
+			.then(function (plan) {
+				if ( input.month ) { 
+					plan.month = input.month;
+				}
+				if ( input.year ) { 
+					plan.year  = input.year;
+				}
+				output = plan;
+				return plan.saveAsync();
+			});
+	}
+
+	var promiseEnd = promise
 		.then(function () {
 			return BPromise.resolve(output);
 		})
@@ -84,12 +99,11 @@ function update (input) {
 
 	Logger.debug('PlanDao#update [end]');
 
-	return promise;
+	return promiseEnd;
 }
 
 /**
- * @param  {Json} filters 	Keys : 	- id
- * 									- user_id 
+ * @param  {Json} filters 	Keys : 	- user_id 
  * 									- id / user_id
  * @return {} 
  * @throws {ParamsError} 	If params given are wrong
@@ -98,22 +112,19 @@ function update (input) {
 function remove (filters) {
 
 	Logger.debug('PlanDao#remove [start]');
+	Logger.debug('-- filters : ' + filters);
 
 	var promise;
-	if(filters.id) {
-		if(filters.user_id) {
+	if(filters.user_id) {
+		if(filters.id) {		
 			promise = PlanModel.removeAsync({ 
 				_id   : filters.id,
 				_user : filters.user_id
 			});
 
 		} else {
-			promise = PlanModel.removeAsync({ _id : filters.id });
-
-		}
-	} else if(filters.user_id) {
-		promise = PlanModel.removeAsync({ _user : filters.user_id });
-			
+			promise = PlanModel.removeAsync({ _user : filters.user_id });
+		}			
 	} else {
 		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
@@ -139,6 +150,7 @@ function remove (filters) {
 function getAll (filters) {
 
 	Logger.debug('PlanDao#getAll [start]');
+	Logger.debug('-- filters : ' + filters);
 
 	var promise;
 	if(filters.user_id) {
@@ -147,7 +159,7 @@ function getAll (filters) {
 					});
 
 	} else {
-		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missin'));
+		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
 
 	var promiseEnd = promise
@@ -163,8 +175,8 @@ function getAll (filters) {
 }
 
 /**
- * @param  {Json} filters 	Keys : 	- id
- * 									- id / user_id
+ * @param  {Json} filters 	Keys : 	- id / user_id
+ * 									- month / year / user_id 									
  * @return {PlanModel}		Object found
  * @throws {ParamsError} 	If params given are wrong
  * @throws {NoResultError} 	If no result found
@@ -173,17 +185,24 @@ function getAll (filters) {
 function getOne (filters) {
 
 	Logger.debug('PlanDao#getOne [start]');
+	Logger.debug('-- filters : ' + filters);
 
 	var promise;
-	if(filters.id) {
-		if(filters.user_id) {
+	if(filters.user_id) {
+		if(filters.id) {
 			promise = PlanModel.findOneAsync({
 						_id   : filters.id,
 						_user : filters.user_id
 					});
 
-		} else  {
-			promise = PlanModel.findByIdAsync(filters.id);
+		} else if(filters.month && filters.year) {			
+			promise = PlanModel.findOneAsync({
+						month : filters.month,
+						year  : filters.year,
+						_user : filters.user_id
+					});
+		} else {
+			promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing)'));
 		}
 	} else {
 		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing)'));
@@ -212,8 +231,8 @@ module.exports = {
 	create : function (input) {
 		return create(input);
 	},
-	update : function (input) {
-		return update(input);
+	update : function (input, filters) {
+		return update(input, filters);
 	},
 	remove : function (filters) {
 		return remove(filters);

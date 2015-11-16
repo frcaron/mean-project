@@ -16,6 +16,7 @@ var CountersModel     = require(global.__model + '/CountersModel');
 function create (input) {
 
 	Logger.debug('TypeCategoryDao#create [start]');
+	Logger.debug('-- input : ' + input);
 
 	var typeCategory = new TypeCategoryModel();
 	var promise = CountersModel.getNextSequence('type_category_id')
@@ -57,6 +58,7 @@ function create (input) {
 function update (input) {
 
 	Logger.debug('TypeCategoryDao#update [start]');
+	Logger.debug('-- input : ' + input);
 
 	var output;
 	var promise = getOne(input)
@@ -97,9 +99,10 @@ function update (input) {
 function getAll (filters) {
 
 	Logger.debug('TypeCategoryDao#getAll [start]');
+	Logger.debug('-- filters : ' + filters);
 
 	var promise;
-	if(filters.active) {
+	if(filters.active !== undefined) {
 		promise = TypeCategoryModel.findAsync({
 					active : filters.active
 				});
@@ -131,6 +134,7 @@ function getAll (filters) {
 function getOne (filters) {
 
 	Logger.debug('TypeCategoryDao#getOne [start]');
+	Logger.debug('-- filters : ' + filters);
 	
 	var promise;
 	if(filters.id) {

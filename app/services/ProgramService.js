@@ -1,9 +1,8 @@
 "use strict";
 
 // Inject
-var ErrorManager    = require(global.__app + '/ErrorManager');
 var Logger          = require(global.__app + '/LoggerManager');
-var ResponseService = require(global.__service + '/ResponseService');
+var ResponseService = require(global.__service_trans + '/ResponseService');
 var PlanDao         = require(global.__dao + '/PlanDao');
 var ProgramDao      = require(global.__dao + '/ProgramDao');
 var CategoryDao     = require(global.__dao + '/CategoryDao');
@@ -15,16 +14,22 @@ module.exports = {
 
 		Logger.debug('ProgramService#create - [start]');
 
-		let input = {
+		var input = {
 			_category : req.body.category_id || req.query.category_id,
 			budget    : req.body.budget,
 			_plan     : req.body.plan_id || req.query.plan_id,
 			_user     : req.decoded.id
 		};
 
-		CategoryDao.getOne({ id : input._category, user_id : input._user })
+		CategoryDao.getOne({ 
+				id      : input._category,
+				user_id : input._user
+			})
 			.then(function () {
-				return PlanDao.getOne({ id : input._plan, user_id : input._user });
+				return PlanDao.getOne({ 
+							id      : input._plan,
+							user_id : input._user
+						});
 			})
 			.then(function () {
 				return ProgramDao.create(input);
@@ -51,14 +56,17 @@ module.exports = {
 
 		Logger.debug('ProgramService#update - [start]');
 
-		let input = {
+		var input = {
 			_id       : req.params.program_id,
 			_category : req.body.category_id || req.query.category_id,
 			budget    : req.body.budget,
 			_user     : req.decoded.id
 		};
 
-		CategoryDao.getOne({ id : input._category, user_id : input._user })
+		CategoryDao.getOne({ 
+				id      : input._category,
+				user_id : input._user
+			})
 			.then(function () {
 				return ProgramDao.update(input);
 			})
@@ -84,12 +92,10 @@ module.exports = {
 
 		Logger.debug('ProgramService#remove - [start]');
 
-		var filters = {
-			_id   : req.params.program_id,
-			_user : req.decoded.id
-		};
-
-		ProgramDao.remove(filters)
+		ProgramDao.remove({
+				_id   : req.params.program_id,
+				_user : req.decoded.id
+			})
 			.then(function () {
 				ResponseService.success(res, {
 					message : 'Remove program'
@@ -109,40 +115,52 @@ module.exports = {
 	// Get programs by plan
 	allByPlanU : function (req, res) {
 
-		var promise = ProgramModel.findAsync({
-			_user : req.decoded.id,
-			_plan : req.params.plan_id
-		});
+		Logger.debug('ProgramService#allByPlanU - [start]');
 
-		promise
-			.then(function (programs) {
-				responseService.success(res, 'Find success', programs);
+		ProgramDao.getAll({
+				plan_id : req.params.plan_id,
+				user_id : req.decoded.id
 			})
-
+			.then(function (programs) {
+				ResponseService.success(res, {
+					message : 'Find success',
+					resutl  : programs
+				});
+			})
 			.catch(function (err) {
-				responseService.fail(res, 'Find failed', err.message);
+				Logger.error('ProgramService#allByPlanU | ' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Get all programs'
+				});
 			});
+
+		Logger.debug('ProgramService#allByPlanU - [end]');
 	},
 
 	// Get one program by id
 	getByIdU   : function (req, res) {
 
-		var promise = ProgramModel.findOneAsync({
-			_id   : req.params.program_id,
-			_user : req.decoded.id
-		});
+		Logger.debug('ProgramService#getByIdU - [start]');
 
-		promise
-			.then(function (program) {
-
-				if (!program) {
-					throw new Error('Program not found');
-				}
-				responseService.success(res, 'Find success', program);
+		ProgramDao.getOne({
+				id      : req.params.program_id,
+				user_id : req.decoded.id
 			})
-
+			.then(function (program) {
+				ResponseService.success(res, {
+					message : 'Get program', 
+					result  : program
+				});
+			})
 			.catch(function (err) {
-				responseService.fail(res, 'Find failed', err.message);
+				Logger.error('ProgramService#getByIdU | ' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Get program'
+				});
 			});
+
+		Logger.debug('ProgramService#getByIdU - [end]');
 	}
 };

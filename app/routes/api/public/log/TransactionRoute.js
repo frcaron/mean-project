@@ -1,6 +1,7 @@
 "use strict";
 
 //Inject
+var Moment             = require('moment');
 var Logger             = require(global.__app + '/LoggerManager');
 var ResponseService    = require(global.__service + '/ResponseService');
 var TransactionService = require(global.__service + '/TransactionService');
@@ -40,6 +41,16 @@ module.exports = function (router) {
 						});
 			}
 
+			var moment = Moment(req.body.date, "DD/MM/YYYY");
+			if(!moment.isValid()) {
+				ResponseService.fail(res, {
+						message : 'Add',
+						reason  : 'Date is not valid'
+					});
+			} else {
+				req.body.date = moment.toDate();
+			}
+
 			TransactionService.create(req, res);
 		});
 
@@ -69,6 +80,16 @@ module.exports = function (router) {
 							message : 'Add', 
 							reason  : 'Param "category_id" missing'
 						});
+			}
+
+			var moment = Moment(req.body.date, "DD/MM/YYYY");
+			if(!moment.isValid()) {
+				ResponseService.fail(res, {
+						message : 'Add',
+						reason  : 'Date is not valid'
+					});
+			} else {
+				req.body.date = moment.toDate();
 			}
 
 			TransactionService.update(req, res);
