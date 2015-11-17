@@ -10,7 +10,7 @@ var CategoryDao     = require(global.__dao + '/CategoryDao');
 module.exports = {
 
 	// Create one program
-	create     : function (req, res) {
+	create         : function (req, res) {
 
 		Logger.debug('ProgramService#create - [start]');
 
@@ -52,9 +52,11 @@ module.exports = {
 	},
 
 	// Update one program
-	update     : function (req, res) {
+	update         : function (req, res) {
 
 		Logger.debug('ProgramService#update - [start]');
+
+		// TODO update avec category du même type obligatoire !
 
 		let input = {
 			_id       : req.params.program_id,
@@ -88,9 +90,11 @@ module.exports = {
 	},
 
 	// Remove one program
-	remove     : function (req, res) {
+	remove         : function (req, res) {
 
 		Logger.debug('ProgramService#remove - [start]');
+
+		// TODO impact
 
 		ProgramDao.remove({
 				id      : req.params.program_id,
@@ -113,15 +117,14 @@ module.exports = {
 	},
 
 	// Get programs by plan
-	all        : function (req, res) {
+	allByPlanTypeU : function (req, res) {
 
 		Logger.debug('ProgramService#allByPlanU - [start]');
 
 		let type_category_id = req.body.type_category_id || req.query.type_category_id;
-		if(type_category_id) {
-			// TODO type_category_id
-			// get list categories id
-		}
+		// TODO type_category_id
+		// get list categories id
+		
 
 		ProgramDao.getAll({
 				plan_id : req.params.plan_id,
@@ -145,7 +148,7 @@ module.exports = {
 	},
 
 	// Get one program by id
-	getByIdU   : function (req, res) {
+	getByIdU       : function (req, res) {
 
 		Logger.debug('ProgramService#getByIdU - [start]');
 

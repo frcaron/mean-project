@@ -12,11 +12,6 @@ module.exports = function (router) {
 
 	router.route(api_prefix)
 
-		// Get all categories user
-		.get(function (req, res) {
-			CategoryService.allByU(req, res);
-		})
-
 		// Create one category
 		.post(function (req, res) {
 
@@ -41,13 +36,6 @@ module.exports = function (router) {
 			}
 
 			CategoryService.create(req, res);
-		});
-
-	router.route(api_prefix + '/active')
-
-		// Get all categories user
-		.get(function (req, res) {
-			CategoryService.allActiveByU(req, res);
 		});
 
 	router.route(api_prefix + '/:category_id')

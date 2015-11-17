@@ -1,5 +1,6 @@
 Validation email
 Mapping retour pour cacher les champs de base
+Connection facebook
 
 TransactionService = 3 todos
 update multiple

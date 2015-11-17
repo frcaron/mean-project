@@ -16,13 +16,13 @@ module.exports = function (router) {
 		.post(function (req, res) {
 
 			Logger.debug('Admin#TypeCategoryRoute#post [validation]');
-			Logger.debug('-- req.body.type : ' + req.body.type);
+			Logger.debug('-- req.body.name : ' + req.body.name);
 
 			// Validation
-			if (!req.body.type) {
+			if (!req.body.name) {
 				return ResponseService.fail(res, {
 							message : 'Add', 
-							reason  : 'Param "type" missing'
+							reason  : 'Param "name" missing'
 						});
 			}
 
@@ -34,10 +34,5 @@ module.exports = function (router) {
 		// Update one type category
 		.put(function (req, res) {
 			TypeCategoryService.update(req, res);
-		})
-
-		// Delete one type category
-		.delete(function (req, res) {
-			TypeCategoryService.remove(req, res);
 		});
 };

@@ -23,6 +23,8 @@ module.exports = {
 			_user : req.decoded.id
 		};
 
+		// TODO 1 cat par type cat
+
 		PlanDao.create(inputPlan)
 			.then(function (plan) {
 				planTmp = plan;

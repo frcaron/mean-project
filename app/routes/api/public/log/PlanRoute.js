@@ -53,6 +53,20 @@ module.exports = function (router) {
 
 		// Get all programs
 		.get(function (req, res) {
-			ProgramService.all(req, res);
+
+			let type_category_id = req.body.type_category_id || req.query.type_category_id;
+
+			Logger.debug('Public#PlanRoute#get [validation]');
+			Logger.debug('-- type_category_id : ' + type_category_id);
+
+			// Validation
+			if (!type_category_id) {
+				return ResponseService.fail(res, {
+							message : 'Get programs by plan and type category', 
+							reason  : 'Param "type_category_id" missing'
+						});
+			}
+
+			ProgramService.allByPlanTypeU(req, res);
 		});
 };

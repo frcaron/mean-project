@@ -10,13 +10,9 @@ var Schema     = mongoose.Schema;
 // Schema
 var TypeCategorySchema = new Schema({
 	_id    : Number,
-	type   : {
+	name   : {
 		type     : String,
 		required : true
-	},
-	active : {
-		type    : Boolean,
-		default : true
 	}
 });
 
@@ -25,7 +21,7 @@ TypeCategorySchema.plugin(DatePlugin);
 
 // Index
 TypeCategorySchema.index({
-	type   : 1
+	name   : 1
 }, {
 	unique : true
 });

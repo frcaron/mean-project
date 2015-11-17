@@ -23,10 +23,7 @@ function create (input) {
 		.then(function (seq){
 
 			typeCategory._id  = seq;
-			typeCategory.type = input.type;
-			if( input.active !== undefined ) {
-				typeCategory.active = input.active;
-			}
+			typeCategory.name = input.name;
 
 			return typeCategory.saveAsync();
 		})
@@ -63,12 +60,10 @@ function update (input) {
 	var output;
 	var promise = getOne(input)
 		.then(function (typeCategory) {
-			if( input.type ) {
-				typeCategory.type   = input.type;
+			if( input.name ) {
+				typeCategory.name = input.name;
 			}
-			if( input.active !== undefined ) {
-				typeCategory.active = input.active;
-			}
+
 			output = typeCategory;
 			return typeCategory.saveAsync();
 		})
@@ -91,27 +86,14 @@ function update (input) {
 }
 
 /**
- * @param {Json} Filters 		Keys : 	- active
- * 										- empty
  * @return {TypeCategoryModel}	List of object found
  * @throws {Error} 				If anything error is met
  */
-function getAll (filters) {
+function getAll () {
 
 	Logger.debug('TypeCategoryDao#getAll [start]');
-	Logger.debug('-- filters : ' + filters);
 
-	var promise;
-	if(filters.active !== undefined) {
-		promise = TypeCategoryModel.findAsync({
-					active : filters.active
-				});
-
-	} else {
-		promise = TypeCategoryModel.findAsync();
-	}
-
-	var promiseEnd = promise
+	let promise = TypeCategoryModel.findAsync()
 		.catch(function (err) {
 			Logger.error('TypeCategoryDao#getAll | ' + err.message);
 
@@ -120,12 +102,11 @@ function getAll (filters) {
 
 	Logger.debug('TypeCategoryDao#getAll [end]');
 
-	return promiseEnd;
+	return promise;
 }
 
 /**
  * @param  {Json} filters 		Keys : 	- id
- * 										- type
  * @return {TypeCategoryModel}	Object found
  * @throws {ParamsError} 		If params given are wrong
  * @throws {NoResultError} 		If no result found
@@ -136,20 +117,15 @@ function getOne (filters) {
 	Logger.debug('TypeCategoryDao#getOne [start]');
 	Logger.debug('-- filters : ' + filters);
 	
-	var promise;
+	let promise;
 	if(filters.id) {
 		promise = TypeCategoryModel.findByIdAsync(filters.id);
-
-	} else if(filters.type) {
-		promise = TypeCategoryModel.findOneAsync({
-					type : filters.type
-				});
 
 	} else {
 		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
 
-	var promiseEnd = promise
+	let promiseEnd = promise
 		.then(function (typeCategory) {
 			if (!typeCategory) {
 				throw new ErrorManager.NoResultError('Type Category not found');
@@ -175,8 +151,8 @@ module.exports = {
 	update : function (input) {
 		return update(input);
 	},
-	getAll : function (filters) {
-		return getAll(filters);
+	getAll : function () {
+		return getAll();
 	},
 	getOne : function (filters) {
 		return getOne(filters);

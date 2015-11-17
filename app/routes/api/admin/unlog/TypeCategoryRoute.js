@@ -15,13 +15,6 @@ module.exports = function (router) {
 			TypeCategoryService.all(req, res);
 		});
 
-	router.route(api_prefix + '/active')
-
-		// Get all type category active
-		.get(function (req, res) {
-			TypeCategoryService.allActive(req, res);
-		});
-
 	router.route(api_prefix + '/:type_category_id')
 
 		// Get one type category

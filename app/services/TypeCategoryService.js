@@ -13,8 +13,7 @@ module.exports = {
 		Logger.debug('TypeCategoryService#create - [start]');
 
 		let input = {
-			type   : req.body.type,
-			active : req.body.active
+			type   : req.body.name
 		};
 
 		TypeCategoryDao.create(input)
@@ -41,8 +40,7 @@ module.exports = {
 		Logger.debug('TypeCategoryService#update - [start]');
 
 		let input = {
-			type   : req.body.type,
-			active : req.body.active
+			type   : req.body.name
 		};
 
 		TypeCategoryDao.update(input)
@@ -84,29 +82,6 @@ module.exports = {
 			});
 
 		Logger.debug('TypeCategoryService#all - [end]');
-	},
-
-	// Get all type category active
-	allActive : function (req, res) {
-
-		Logger.debug('TypeCategoryService#allActive - [start]');
-
-		TypeCategoryDao.getAll({ active : true })
-			.then(function (typeCategories) {
-				ResponseService.success(res, {
-					message : 'Get all type categories active', 
-					result  : typeCategories
-				});
-			})
-			.catch(function (err) {
-				Logger.error('TypeCategoryService#allActive | ' + err.message);
-
-				ResponseService.fail(res, {
-					message : 'Get all type categories active'
-				});
-			});
-
-		Logger.debug('TypeCategoryService#allActive - [end]');
 	},
 
 	// Get one type category by id
