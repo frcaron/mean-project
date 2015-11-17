@@ -1,175 +1,206 @@
 "use strict";
 
-// Inject models
-var CategoryModel = require(global.__model + '/CategoryModel');
-var TypeCategoryModel = require(global.__model + '/TypeCategoryModel');
-
-// Inject services
+// Inject
+var Logger          = require(global.__app + '/LoggerManager');
 var ResponseService = require(global.__service_trans + '/ResponseService');
+var CategoryDao     = require(global.__dao + '/CategoryDao');
+var TypeCategoryDao = require(global.__dao + '/TypeCategoryDao');
 
 module.exports = {
 
 	// Create one category
-	create             : function (req, res) {
+	create                   : function (req, res) {
 
-		var category = new CategoryModel();
+		Logger.debug('CategoryService#create - [start]');
 
-		var promise = TypeCategoryModel.findByIdAsync(req.query.type_category_id, '_id');
+		let type_category_id = req.body.type_category_id ||req.query.type_category_id;
 
-		promise
+		TypeCategoryDao.getOne({ id : type_category_id })
 			.then(function (typeCategory) {
 
-				if (!typeCategory) {
-					throw new Error('Type category id invalid');
-				}
+				let input = {
+					name :  req.body.name,
+					_type : typeCategory._id,
+					_user : req.decoded.id
+				};
 
-				category.name  = req.body.name;
-				category.type  = req.query.type_category_id;
-				category._user = req.decoded.id;
-
-				return category.saveAsync();
+				return CategoryDao.create(input);
 			})
-
-			.then(function () {
-				responseService.success(res, 'Add success', category._id);
+			.then(function (category) {
+				ResponseService.success(res, {
+					message : 'Add category',
+					result  : category
+				});
 			})
-
 			.catch(function (err) {
-				if(category._id) {
-					CategoryModel.remove({ _id : category._id }).exec();
-				}
-				responseService.fail(res, 'Add failed', err.message);
+				Logger.error('CategoryService#create |' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Add category'
+				});
 			});
+
+		Logger.debug('CategoryService#create - [end]');
 	},
 
 	// Update one category
-	update             : function (req, res) {
+	update                   : function (req, res) {
 
-		var promise = CategoryModel.findOneAsync({
-			_id   : req.params.category_id,
-			_user : req.decoded.id
-		});
+		Logger.debug('CategoryService#update - [start]');
 
-		promise
+		let input = {
+			_id    : req.params.category_id,
+			name   : req.body.name,
+			_type  : req.body.type_category_id ||req.query.type_category_id,
+			active : req.body.active,
+			_user  : req.decoded.id
+		};
+
+		CategoryDao.update(input)
 			.then(function (category) {
-
-				if (!category) {
-					throw new Error('Category not found');
-				}
-
-				if (req.body.name) {
-					category.name = req.body.name;
-				}
-
-				return category.saveAsync();
+				ResponseService.success(res, {
+					message : 'Update category',
+					result  : category
+				});
 			})
-
-			.then(function () {
-				responseService.success(res, 'Update success');
-			})
-
 			.catch(function (err) {
-				responseService.fail(res, 'Update failed', err.message);
+				Logger.error('CategoryService#update |' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Update category'
+				});
 			});
+
+		Logger.debug('CategoryService#update - [end]');
 	},
 
-	// Remove one category
-	remove             : function (req, res) {
+	// Desactivate one category
+	desactivate              : function (req, res) {
 
-		var promise = CategoryModel.findOneAsync({
-			_id   : req.params.category_id,
+		Logger.debug('CategoryService#desactivate - [start]');
+
+		let input = {
+			_id    : req.params.category_id,
+			active : false,
 			_user : req.decoded.id
-		});
+		};
 
-		promise
-			.then(function (category) {
-				if (!category) {
-					throw new Error('Category not found');
-				}
-
-				category.active = false;
-
-				return category.saveAsync();
-			})
-
+		CategoryDao.update(input)
 			.then(function () {
-				responseService.success(res, 'Remove success');
+				ResponseService.success(res, {
+					message : 'Desactivate category'
+				});
 			})
-
 			.catch(function (err) {
-				responseService.fail(res, 'Remove failed', err.message);
+				Logger.error('CategoryService#desactivate |' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Desactivate category'
+				});
 			});
+
+		Logger.debug('CategoryService#desactivate - [end]');
 	},
 
 	// Get categories by user
-	allByU             : function (req, res) {
+	allByU                   : function (req, res) {
 
-		var promise = CategoryModel.findAsync({
-			_user : req.decoded.id
-		});
+		Logger.debug('CategoryService#allByU - [start]');
 
-		promise
+		CategoryDao.getAll({ user_id : req.decoded.id })
 			.then(function (categories) {
-				responseService.success(res, 'Find success', categories);
+				ResponseService.success(res, {
+					message : 'Get all categories',
+					result  : categories
+				});
 			})
-
 			.catch(function (err) {
-				responseService.fail(res, 'Find failed', err.message);
+				Logger.error('CategoryService#allByU |' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Get all categories'
+				});
 			});
+
+		Logger.debug('CategoryService#allByU - [end]');
 	},
 
 	// Get active categories by user
-	allActiveByU       : function (req, res) {
+	allActiveByU             : function (req, res) {
 
-		var promise = CategoryModel.findAsync({
-			_user  : req.decoded.id,
-			active : true
-		});
+		Logger.debug('CategoryService#allActiveByU - [start]');
 
-		promise
-			.then(function (categories) {
-				responseService.success(res, 'Find success', categories);
+		CategoryDao.getAll({
+				active  : true,
+				user_id : req.decoded.id
 			})
-
+			.then(function (categories) {
+				ResponseService.success(res, {
+					message : 'Get all categories active',
+					result  : categories
+				});
+			})
 			.catch(function (err) {
-				responseService.fail(res, 'Find failed', err.message);
+				Logger.error('CategoryService#allActiveByU |' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Get all categories active'
+				});
 			});
+
+		Logger.debug('CategoryService#allActiveByU - [end]');
 	},
 
-	// Get categories by type category
-	allByTypeCategoryU : function (req, res) {
+	// Get active categories by type category
+	allActiveByTypeCategoryU : function (req, res) {
 
-		var promise = CategoryModel.findAsync({
-			_user  : req.decoded.id,
-			type   : req.params.type_category_id,
-			active : true
-		});
+		Logger.debug('CategoryService#allActiveByTypeCategoryU - [start]');
 
-		promise
-			.then(function (categories) {
-				responseService.success(res, 'Find success', categories);
+		CategoryDao.getAll({
+				active  : true,
+				type_id : req.params.type_category_id,
+				user_id : req.decoded.id
 			})
-
+			.then(function (categories) {
+				ResponseService.success(res, {
+					message : 'Get all categories active by type category', 
+					result  : categories
+				});
+			})
 			.catch(function (err) {
-				responseService.fail(res, 'Find failed', err.message);
+				Logger.error('CategoryService#allActiveByTypeCategoryU | ' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Get all categories active by type category'
+				});
 			});
+
+		Logger.debug('CategoryService#allActiveByTypeCategoryU - [end]');
 	},
 
 	// Get one category by id
-	getByIdU           : function (req, res) {
+	getByIdU                 : function (req, res) {
 
-		var promise = CategoryModel.findOneAsync({
-			_id   : req.params.category_id,
-			_user : req.decoded.id
-		});
+		Logger.debug('CategoryService#getByIdU - [start]');
 
-		promise
-			.then(function (category) {
-				responseService.success(res, 'Find success', category);
+		CategoryDao.getOne({
+				id      : req.params.category_id,
+				user_id : req.decoded.id
 			})
-
+			.then(function (category) {
+				ResponseService.success(res, {
+					message : 'Get category', 
+					result  : category
+				});
+			})
 			.catch(function (err) {
-				responseService.fail(res, 'Find failed', err.message);
+				Logger.error('CategoryService#getByIdU |' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Get category'
+				});
 			});
+
+		Logger.debug('CategoryService#getByIdU - [end]');
 	}
 };

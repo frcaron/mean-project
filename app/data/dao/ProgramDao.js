@@ -145,7 +145,9 @@ function remove (filters) {
 }
 
 /**
- * @param  {Json} filters 	Keys : - user_id
+ * @param  {Json} filters 	Keys : 	- user_id
+ *                         			- plan_id
+ *                         			- categories_id
  * @return {ProgramModel}	List of object found
  * @throws {ParamsError} 	If params given are wrong
  * @throws {Error} 			If an other error is met
@@ -155,17 +157,30 @@ function getAll (filters) {
 	Logger.debug('ProgramDao#getAll [start]');
 	Logger.debug('-- filters : ' + filters);
 
-	var promise;
+	let promise;
 	if(filters.plan_id && filters.user_id) {
-		promise = ProgramModel.findAsync({
-					_plan : filters.plan_id,
-					_user : filters.user_id
-				});
+		if(filters.categories_id) {
+			if(filters.categories_id.length > 0) {
+				promise = ProgramModel.findAsync({
+							_category : { $in : filters.categories_id },
+							_plan     : filters.plan_id,
+							_user     : filters.user_id
+						});
+			} else {
+				promise = BPromise.reject(
+					new ErrorManager.ParamsError('Filters missing "categories_id"'));
+			}
+		} else {
+			promise = ProgramModel.findAsync({
+						_plan : filters.plan_id,
+						_user : filters.user_id
+					});
+		}
 	} else {
 		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
 
-	var promiseEnd = promise
+	let promiseEnd = promise
 		.catch(function (err) {
 			Logger.error('ProgramDao#getAll | ' + err.message);
 

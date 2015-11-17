@@ -17,7 +17,7 @@ module.exports = {
 
         Logger.debug('UserService#create - [start]');
 
-        var input = {
+        let input = {
             firstname : req.body.firstname,
             surname   : req.body.surname,
             email     : req.body.email,
@@ -48,7 +48,7 @@ module.exports = {
 
         Logger.debug('UserService#update - [start]');
 
-        var input = {
+        let input = {
             _id       : user_id,
             firstname : req.body.firstname,
             surname   : req.body.surname,
@@ -80,7 +80,7 @@ module.exports = {
 
         Logger.debug('UserService#remove - [start]');
 
-        var msg = [];
+        let msg = [];
         BPromise.map([UserDao, PlanDao, ProgramDao, CategoryDao, TransactionDao], 
             function(dao) {
                 return dao.remove({ user_id : user_id })
@@ -161,7 +161,7 @@ module.exports = {
 
         Logger.debug('UserService#managePermission - [start]');
 
-        var input = {
+        let input = {
             _id    : user_id,
             admin : req.body.admin
         };

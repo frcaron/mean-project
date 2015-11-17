@@ -18,7 +18,7 @@ module.exports = {
 			.then(function (user){
 
 				// Generate token
-				var token = Jwt.sign({
+				let token = Jwt.sign({
 					id        : user._id,
 					surname   : user.surname,
 					firstname : user.firstname,

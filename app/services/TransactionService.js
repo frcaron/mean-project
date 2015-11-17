@@ -10,7 +10,7 @@ var ProgramDao      = require(global.__dao + '/ProgramDao');
 var TransactionDao  = require(global.__dao + '/TransactionDao');
 var CategoryDao     = require(global.__dao + '/CategoryDao');
 
-function findProgramForTransaction(transaction, category_id) {	
+function fulfillProgram(transaction, category_id) {	
 	var date_split = transaction.date.split('/');
 
 	return PlanDao.getOne({
@@ -47,16 +47,15 @@ module.exports = {
 
 		Logger.debug('TransactionService#create - [start]');
 
-		var input = {
+		let input = {
 			date     : req.body.date,
 			sum      : req.body.sum,
 			comment  : req.body.comment,
-			_program : req.body.category_id || req.query.category_id,
 			_user    : req.decoded.id
 		};
-		var category_id = req.body.category_id ||req.query.category_id;
+		let category_id = req.body.category_id || req.query.category_id;
 
-		findProgramForTransaction(input, category_id)
+		fulfillProgram(input, category_id)
 			.then(function(transaction) {
 				return TransactionDao.create(transaction);
 			})		
@@ -82,25 +81,17 @@ module.exports = {
 
 		Logger.debug('TransactionService#update - [start]');
 
-		TransactionDao.getOne({
-				id      : req.params.transaction_id,
-				user_id : req.decoded.id
-			})
-			.then(function (transaction) {
+		let input = {
+			_id     : req.params.transaction_id,
+			date    : req.body.date,
+			sum     : req.body.sum,
+			comment : req.body.comment,
+			_user   : req.decoded.id
+		};
 
-				if (req.body.date) {
-					transaction.date    = req.body.date;
-				}
-				if (req.body.sum) {
-					transaction.sum     = req.body.sum;
-				}
-				if (req.body.comment) {
-					transaction.comment = req.body.comment;
-				}
-				var category_id = req.body.category_id || req.query.category_id;
+		let category_id = req.body.category_id || req.query.category_id;
 			
-				return  findProgramForTransaction(transaction, category_id);
-			})
+		fulfillProgram(input, category_id)
 			.then(function (transaction) {
 				return TransactionDao.update(transaction);
 			})
@@ -126,7 +117,7 @@ module.exports = {
 
 		Logger.debug('TransactionService#remove - [start]');
 
-		TransactionDao({ 
+		TransactionDao.remove({ 
 				id      : req.params.transaction_id,
 				user_id : req.decoded.id
 			})
@@ -152,7 +143,7 @@ module.exports = {
 		// TODO
 
 		CategoryDao.getAll({
-				type    : req.params.type_category_id,
+				type_id : req.params.type_category_id,
 				user_id : req.decoded.id
 			})
 			.then(function (categories) {

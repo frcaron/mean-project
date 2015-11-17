@@ -12,7 +12,7 @@ module.exports = {
 
 		Logger.debug('TypeCategoryService#create - [start]');
 
-		var input = {
+		let input = {
 			type   : req.body.type,
 			active : req.body.active
 		};
@@ -40,7 +40,7 @@ module.exports = {
 
 		Logger.debug('TypeCategoryService#update - [start]');
 
-		var input = {
+		let input = {
 			type   : req.body.type,
 			active : req.body.active
 		};

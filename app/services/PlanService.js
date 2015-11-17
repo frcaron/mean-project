@@ -16,8 +16,8 @@ module.exports = {
 
 		Logger.debug('PlanService#create - [start]');
 
-		var planTmp, typeCategoryTmp;
-		var inputPlan = {
+		let planTmp, typeCategoryTmp;
+		let inputPlan = {
 			month : req.body.month,
 			year  : req.body.year,
 			_user : req.decoded.id
@@ -29,36 +29,41 @@ module.exports = {
 
 				return TypeCategoryDao.getOne({ type : 'unknow' })
 					.catch(ErrorManager.NoResultError, function () {
-						var inputTypeCategory = {					
+						
+						let input = {					
 							type   : 'unknow',
 							active : false
 						};
 
-						return TypeCategoryDao.create(inputTypeCategory);
+						return TypeCategoryDao.create(input);
 					})
 					.then(function (typeCategory) {
 						typeCategoryTmp = typeCategory;
 						return CategoryDao.getOne({
-									type    : typeCategory._id,
+									type_id : typeCategory._id,
 									user_id : req.decoded.id
 								});
 					})
 					.catch(ErrorManager.NoResultError, function () {
-						var inputCategory = {
+						
+						let input = {
 							name   : 'unknow',
 							_type  : typeCategoryTmp._id,
 							_user  : req.decoded.id,
 							active : false
 						};
-						return CategoryDao.create(inputCategory);
+
+						return CategoryDao.create(input);
 					})
 					.then(function (category) {
-						var inputProgram = {
+
+						let input = {
 							_category : category._id,
 							_plan     : plan._id,
 							_user     : req.decoded.id
 						};
-						return ProgramDao.create(inputProgram);
+
+						return ProgramDao.create(input);
 					})
 					.catch(function (err) {
 						PlanDao.remove({ id : planTmp._id });

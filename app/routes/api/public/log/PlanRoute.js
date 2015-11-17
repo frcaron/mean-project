@@ -51,8 +51,8 @@ module.exports = function (router) {
 
 	router.route(api_prefix + '/:plan_id/programs')
 
-		// Get all programs by plan
+		// Get all programs
 		.get(function (req, res) {
-			ProgramService.allByPlanU(req, res);
+			ProgramService.all(req, res);
 		});
 };

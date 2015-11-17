@@ -151,7 +151,8 @@ function remove (filters) {
 
 /**
  * @param  {Json} filters 	Keys :  - user_id
- *                         			- type / user_id
+ *                         			- type_id
+ *                         			- active
  * @return {CategoryModel}	List of object found
  * @throws {ParamsError} 	If params given are wrong
  * @throws {Error} 			If an other error is met
@@ -161,23 +162,21 @@ function getAll (filters) {
 	Logger.debug('CategoryDao#getAll [start]');
 	Logger.debug('-- filters : ' + filters);
 
-	var promise;
+	let promise;
 	if(filters.user_id) {
-		if(filters.type) {
-			promise = CategoryModel.findAsync({
-						_type : filters.type,
-						_user : filters.user_id
-					});
-		} else {	
-			promise = CategoryModel.findAsync({
-						_user : filters.user_id
-					});
-		}  
+
+		let query = {
+			_type  : filters.type_id,
+			active : filters.active,
+			_user  : filters.user_id
+		};
+
+		promise = CategoryModel.findAsync(query);
 	} else {
 		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
 
-	var promiseEnd = promise
+	let promiseEnd = promise
 		.catch(function (err) {
 			Logger.error('CategoryDao#getAll | ' + err.message);
 
@@ -190,8 +189,9 @@ function getAll (filters) {
 }
 
 /**
- * @param  {Json} filters 	Keys : 	- id / user_id
- * 									- type / user_id
+ * @param  {Json} filters 	Keys : 	- id
+ * 									- type_id
+ * 									- user_id
  * @return {CategoryModel}	Object found
  * @throws {ParamsError} 	If params given are wrong
  * @throws {NoResultError} 	If no result found
@@ -206,14 +206,14 @@ function getOne (filters) {
 	if(filters.user_id) {
 		if(filters.id) {		
 			promise = CategoryModel.findOneAsync({
-						_id   : filters.id,
-						_user : filters.user_id
-					});
-		} else if(filters.type) {
+							_id   : filters.id,
+							_user : filters.user_id
+						});
+		} else if(filters.type_id) {
 			promise = CategoryModel.findOneAsync({
-				_type : filters.type,
-				_user : filters.user_id
-			});
+							_type : filters.type_id,
+							_user : filters.user_id
+						});
 		} else {
 			promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 		}

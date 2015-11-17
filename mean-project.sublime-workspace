@@ -4,6 +4,74 @@
 		"selected_items":
 		[
 			[
+				"catego",
+				"categories_id"
+			],
+			[
+				"categ",
+				"categories_id"
+			],
+			[
+				"tran",
+				"transactions"
+			],
+			[
+				"type",
+				"type_category_id"
+			],
+			[
+				"pro",
+				"program_id"
+			],
+			[
+				"get",
+				"getAll"
+			],
+			[
+				"Tran",
+				"TransactionDao"
+			],
+			[
+				"transa",
+				"transaction_id"
+			],
+			[
+				"user",
+				"user_id"
+			],
+			[
+				"categor",
+				"category_id"
+			],
+			[
+				"filters",
+				"filters"
+			],
+			[
+				"u",
+				"update"
+			],
+			[
+				"res",
+				"resolve"
+			],
+			[
+				"_",
+				"_plan"
+			],
+			[
+				"plan",
+				"plan_id"
+			],
+			[
+				"User",
+				"UserDao"
+			],
+			[
+				"err",
+				"error"
+			],
+			[
 				"th",
 				"throws	@throws"
 			],
@@ -20,16 +88,8 @@
 				"categoryNew"
 			],
 			[
-				"categ",
-				"categoryNew"
-			],
-			[
 				"cat",
 				"categoryNew"
-			],
-			[
-				"type",
-				"typeCategory"
 			],
 			[
 				"sav",
@@ -60,10 +120,6 @@
 				"execAsync"
 			],
 			[
-				"pro",
-				"programUnknow"
-			],
-			[
 				"pr",
 				"programService"
 			],
@@ -76,26 +132,58 @@
 	"buffers":
 	[
 		{
-			"file": "app/data/dao/PlanDao.js",
+			"file": "app/services/CategoryService.js",
 			"settings":
 			{
-				"buffer_size": 4160,
+				"buffer_size": 4978,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "/C/App/SublimeText3/Data/Packages/User/SublimeLinter.sublime-settings",
+			"file": "app/services/TransactionService.js",
 			"settings":
 			{
-				"buffer_size": 1239,
-				"line_ending": "Unix"
+				"buffer_size": 5954,
+				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "app/services/PlanService.js",
+			"file": "app/services/ProgramService.js",
 			"settings":
 			{
-				"buffer_size": 2670,
+				"buffer_size": 4055,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "TODO.txt",
+			"settings":
+			{
+				"buffer_size": 143,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "app/routes/api/public/log/PlanRoute.js",
+			"settings":
+			{
+				"buffer_size": 1346,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "app/data/dao/ProgramDao.js",
+			"settings":
+			{
+				"buffer_size": 6093,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "app/routes/api/public/log/TypeCategoryRoute.js",
+			"settings":
+			{
+				"buffer_size": 654,
 				"line_ending": "Windows"
 			}
 		}
@@ -107,13 +195,69 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 242.0,
-		"last_filter": "status",
+		"height": 173.0,
+		"last_filter": "quic",
 		"selected_items":
 		[
 			[
+				"quic",
+				"Git: Quick Commit"
+			],
+			[
+				"stat",
+				"Git: Status"
+			],
+			[
+				"git quic",
+				"Git: Quick Add"
+			],
+			[
+				"commit",
+				"Git: Amend Commit"
+			],
+			[
+				"git",
+				"Git: Commit"
+			],
+			[
+				"push",
+				"Git: Push"
+			],
+			[
+				"commi",
+				"Git: Commit"
+			],
+			[
 				"status",
 				"Git: Status"
+			],
+			[
+				"q",
+				"Git: Quick Commit"
+			],
+			[
+				"com",
+				"Git: Commit"
+			],
+			[
+				"qui",
+				"Git: Quick Add"
+			],
+			[
+				"gommit",
+				"Git: Commit"
+			],
+			[
+				"remote",
+				"Git: Remote"
+			],
+			[
+				"add",
+				"Git: Quick Add"
+			],
+			[
+				"sublimeLinter",
+				"SublimeLinter: Enable Linter"
 			],
 			[
 				"install",
@@ -130,10 +274,6 @@
 			[
 				"rem",
 				"Package Control: Remove Package"
-			],
-			[
-				"push",
-				"Git: Push"
 			],
 			[
 				"remove",
@@ -180,10 +320,6 @@
 				"Git: Push Current Branch"
 			],
 			[
-				"stat",
-				"Git: Status"
-			],
-			[
 				"qu",
 				"Git: Quick Status"
 			],
@@ -220,10 +356,6 @@
 				"Git: Fetch"
 			],
 			[
-				"qui",
-				"Git: Quick Commit"
-			],
-			[
 				"git p",
 				"Git: Push Current Branch"
 			],
@@ -242,10 +374,6 @@
 			[
 				"a",
 				"Git: Add Remote"
-			],
-			[
-				"git",
-				"Git: Switch Repo"
 			],
 			[
 				"p",
@@ -277,10 +405,6 @@
 			],
 			[
 				"remot",
-				"Git: Remote"
-			],
-			[
-				"remote",
 				"Git: Remote"
 			],
 			[
@@ -338,57 +462,76 @@
 		"/C/App/Workspace/mean-project/app/data/models",
 		"/C/App/Workspace/mean-project/app/routes",
 		"/C/App/Workspace/mean-project/app/routes/api",
-		"/C/App/Workspace/mean-project/app/routes/api/admin",
-		"/C/App/Workspace/mean-project/app/routes/api/admin/log",
-		"/C/App/Workspace/mean-project/app/routes/api/admin/unlog",
 		"/C/App/Workspace/mean-project/app/routes/api/public",
 		"/C/App/Workspace/mean-project/app/routes/api/public/log",
-		"/C/App/Workspace/mean-project/app/routes/api/public/unlog",
-		"/C/App/Workspace/mean-project/app/services"
+		"/C/App/Workspace/mean-project/app/services",
+		"/C/App/Workspace/mean-project/node_modules/bluebird/js"
 	],
 	"file_history":
 	[
-		"/C/App/Workspace/mean-project/app/ErrorManager.js",
-		"/C/App/Workspace/mean-project/app/data/dao/PlanDao.js",
-		"/C/App/Workspace/mean-project/app/routes/route.api.admin.js",
-		"/C/App/Workspace/mean-project/app/data/dao/UserDao.js",
-		"/C/App/Workspace/mean-project/app/routes/api/public/unlog/UserRoute.js",
-		"/C/App/Workspace/mean-project/app/routes/api/public/unlog/SessionRoute.js",
-		"/C/App/Workspace/mean-project/app/routes/api/public/log/UserRoute.js",
-		"/C/App/Workspace/mean-project/app/routes/api/admin/log/TypeCategoryRoute.js",
-		"/C/App/Workspace/mean-project/app/routes/api/public/log/TypeCategoryRoute.js",
-		"/C/App/Workspace/mean-project/app/routes/api/public/log/TransactionRoute.js",
 		"/C/App/Workspace/mean-project/app/routes/api/public/log/ProgramRoute.js",
-		"/C/App/Workspace/mean-project/app/routes/api/public/log/PlanRoute.js",
-		"/C/App/Workspace/mean-project/app/routes/api/public/log/MeRoute.js",
-		"/C/App/Workspace/mean-project/app/routes/api/public/log/CategoryRoute.js",
-		"/C/App/Workspace/mean-project/app/routes/api/admin/unlog/TypeCategoryRoute.js",
-		"/C/App/Workspace/mean-project/app/routes/api/admin/log/UserRoute.js",
-		"/C/App/Workspace/mean-project/app/services/PlanService.js",
+		"/C/App/Workspace/mean-project/app/data/models/ProgramModel.js",
+		"/C/App/Workspace/mean-project/app/routes/api/public/log/TransactionRoute.js",
 		"/C/App/Workspace/mean-project/app/services/UserService.js",
+		"/C/App/Workspace/mean-project/app/services/CategoryService.js",
+		"/C/App/Workspace/mean-project/app/routes/api/public/log/TypeCategoryRoute.js",
+		"/C/App/Workspace/mean-project/app/services/PlanService.js",
+		"/C/App/Workspace/mean-project/app/services/ProgramService.js",
+		"/C/App/Workspace/mean-project/app/services/TransactionService.js",
+		"/C/App/Workspace/mean-project/app/data/dao/CategoryDao.js",
+		"/C/App/Workspace/mean-project/app/services/TypeCategoryService.js",
+		"/C/App/Workspace/mean-project/app/routes/api/public/log/CategoryRoute.js",
+		"/C/App/Workspace/mean-project/app/routes/api/public/log/PlanRoute.js",
+		"/C/App/Workspace/mean-project/TODO.txt",
 		"/C/App/Workspace/mean-project/app/services/SessionService.js",
+		"/C/App/Workspace/mean-project/app/data/models/CategoryModel.js",
+		"/C/App/Workspace/mean-project/app/ErrorManager.js",
+		"/C/App/Workspace/mean-project/app/routes/api/public/log/MeRoute.js",
+		"/C/App/Workspace/mean-project/app/routes/api/public/log/UserRoute.js",
+		"/C/App/Workspace/mean-project/app/routes/api/public/unlog/SessionRoute.js",
+		"/C/App/Workspace/mean-project/app/routes/api/public/unlog/UserRoute.js",
+		"/C/App/Workspace/mean-project/app/routes/api/admin/unlog/TypeCategoryRoute.js",
+		"/C/App/Workspace/mean-project/app/routes/api/admin/log/TypeCategoryRoute.js",
+		"/C/App/Workspace/mean-project/app/routes/api/admin/log/UserRoute.js",
+		"/C/App/Workspace/mean-project/README.md",
+		"/C/App/Workspace/mean-project/package.json",
+		"/C/App/Workspace/mean-project/mean-project.sublime-project",
+		"/C/App/Workspace/mean-project/app.js",
+		"/C/App/Workspace/mean-project/app/services/ResponseService.js",
+		"/C/App/Workspace/mean-project/app/routes/route.api.admin.js",
 		"/C/App/Workspace/mean-project/app/routes/route.api.public.js",
 		"/C/App/Workspace/mean-project/app/routes/route.basic.js",
-		"/C/App/Workspace/mean-project/app/data/models/UserModel.js",
-		"/C/App/Workspace/mean-project/bin/www",
-		"/C/App/Workspace/mean-project/config/database.js",
-		"/C/App/Workspace/mean-project/app/services/ProgramService.js",
-		"/C/App/Workspace/mean-project/app.js",
-		"/C/App/Workspace/mean-project/app/data/dao/CategoryDao.js",
+		"/C/App/Workspace/mean-project/app/data/dao/ProgramDao.js",
 		"/C/App/Workspace/mean-project/app/data/dao/TransactionDao.js",
-		"/C/App/Workspace/mean-project/mean-project.sublime-project",
-		"/C/App/Workspace/mean-project/config/token.js",
-		"/C/App/Workspace/mean-project/package.json",
+		"/C/App/Workspace/mean-project/app/data/dao/PlanDao.js",
+		"/C/App/Workspace/mean-project/app/data/dao/TypeCategoryDao.js",
+		"/C/App/Workspace/mean-project/app/data/dao/UserDao.js",
 		"/C/App/Workspace/mean-project/app/data/models/CountersModel.js",
+		"/C/App/Workspace/mean-project/config/database.js",
+		"/C/App/Workspace/mean-project/app/LoggerManager.js",
+		"/C/App/Workspace/mean-project/config/logger.js",
 		"/C/App/Workspace/mean-project/app/routes/routes.js",
 		"/C/App/Workspace/mean-project/app/Injector.js",
-		"/C/App/Workspace/mean-project/app/data/dao/ProgramDao.js",
-		"/C/App/Workspace/mean-project/app/data/dao/TypeCategoryDao.js",
+		"/C/App/Workspace/mean-project/config/token.js",
+		"/C/App/Workspace/mean-project/node_modules/bluebird/js/main/errors.js",
+		"/C/App/Workspace/mean-project/node_modules/bluebird/js/main/some.js",
+		"/C/App/Workspace/mean-project/node_modules/bluebird/js/browser/bluebird.js",
+		"/C/App/Workspace/mean-project/node_modules/bluebird/js/main/queue.js",
+		"/C/App/Workspace/mean-project/node_modules/bluebird/js/main/promisify.js",
+		"/C/App/Workspace/mean-project/node_modules/bluebird/js/main/promise_array.js",
+		"/C/App/Workspace/mean-project/node_modules/bluebird/js/main/catch_filter.js",
+		"/C/App/Workspace/mean-project/node_modules/bluebird/js/main/cancel.js",
+		"/C/App/Workspace/mean-project/node_modules/bluebird/js/main/async.js",
+		"/C/App/Workspace/mean-project/node_modules/bluebird/js/main/bluebird.js",
+		"/C/App/Workspace/mean-project/app/data/models/UserModel.js",
+		"/C/App/Workspace/mean-project/app/data/models/TypeCategoryModel.js",
+		"/C/App/Workspace/mean-project/app/data/models/TransactionModel.js",
 		"/C/App/Workspace/mean-project/app/data/models/PlanModel.js",
-		"/C/App/SublimeText3/Data/Packages/DocBlockr/Base File.sublime-settings",
+		"/C/App/Workspace/mean-project/.gitignore_global",
+		"/C/App/Workspace/mean-project/.gitignore",
 		"/C/App/SublimeText3/Data/Packages/User/SublimeLinter.sublime-settings",
-		"/C/App/Workspace/mean-project/app/data/models/CategoryModel.js",
-		"/C/App/Workspace/mean-project/app/data/models/ProgramModel.js",
+		"/C/App/Workspace/mean-project/bin/www",
+		"/C/App/SublimeText3/Data/Packages/DocBlockr/Base File.sublime-settings",
 		"/C/App/Workspace/mean-project/npm-debug.log",
 		"/C/App/Workspace/mean-project/app/routes/api/log/MeRoute.js",
 		"/C/App/Workspace/mean-project/app/routes/route.api.js",
@@ -405,8 +548,6 @@
 		"/C/App/Workspace/mean-project/app/routes/api/log/UserRoute.js",
 		"/C/App/Workspace/mean-project/app/routes/api/unlog/UserRoute.js",
 		"/C/App/SublimeText3/Data/Packages/User/Context.sublime-menu",
-		"/C/App/Workspace/mean-project/app/data/models/TypeCategoryModel.js",
-		"/C/App/Workspace/mean-project/app/data/models/TransactionModel.js",
 		"/C/App/Workspace/mean-project/app/routes/admin/unlog/typecategory.js",
 		"/C/App/SublimeText3/Data/Packages/User/JavascriptBeautify.sublime-settings",
 		"/C/App/SublimeText3/Data/Packages/Javascript Beautify/JavascriptBeautify.sublime-settings",
@@ -424,19 +565,16 @@
 		"/C/App/Workspace/mean-project/app/routes/api/log/plan.js",
 		"/C/App/Workspace/mean-project/app/models/CategoryModel.js",
 		"/C/App/Workspace/mean-project/app/models/UserModel.js",
-		"/C/App/Workspace/mean-project/app/services/CategoryService.js",
 		"/C/App/Workspace/mean-project/app/models/ProgramModel.js",
 		"/C/App/Workspace/mean-project/app/routes/api/unlog/user.js",
 		"/C/App/Workspace/mean-project/app/routes/admin/unlog/user.js",
 		"/C/App/Workspace/mean-project/app/routes/api/log/me.js",
-		"/C/App/Workspace/mean-project/app/services/ResponseService.js",
 		"/C/App/Workspace/mean-project/app/models/TypeCategoryModel.js",
 		"/C/App/Workspace/mean-project/app/models/TransactionModel.js",
 		"/C/App/Workspace/mean-project/app/models/PlanModel.js",
 		"/C/App/Workspace/mean-project/app/models/CountersModel.js",
 		"/C/App/Workspace/mean-project/app/plugins/DatePlugin.js",
 		"/C/App/Workspace/mean-project/app/plugins/UserPlugin.js",
-		"/C/App/Workspace/mean-project/app/services/TransactionService.js",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/api/log/transaction.js",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/models/TransactionModel.js",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/services/ProgramService.js",
@@ -458,24 +596,7 @@
 		"/C/Documents and Settings/Administrateur/Application Data/Sublime Text 3/Packages/SublimeLinter/Default (Windows).sublime-keymap",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/services/UserService.js",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/api/log/program.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/api/log/plan.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/api/log/category.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/node_modules/body-parser/node_modules/iconv-lite/encodings/sbcs-data-generated.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/mean-project.sublime-project",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/node_modules/bluebird/js/main/captured_trace.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/node_modules/bluebird/changelog.md",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/admin/unlog/typecategory.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/services/TypeCategoryService.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/admin/log/typecategory.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/route.admin.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/models/UserModel.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/admin/log/user.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/route.api.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/api/log/user.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/api/unlog/session.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/api/unlog/user.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/route.basic.js"
+		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/api/log/program.js"
 	],
 	"find":
 	{
@@ -483,9 +604,14 @@
 	},
 	"find_in_files":
 	{
-		"height": 0.0,
+		"height": 90.0,
 		"where_history":
 		[
+			"C:\\App\\Workspace\\mean-project\\app\\routes",
+			"C:\\App\\Workspace\\mean-project\\app\\services",
+			"C:\\App\\Workspace\\mean-project\\app\\routes",
+			"C:\\App\\Workspace\\mean-project\\app\\services",
+			"C:\\App\\Workspace\\mean-project\\node_modules\\bluebird"
 		]
 	},
 	"find_state":
@@ -493,6 +619,17 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"var ResponseService = require(global.__service + '/ResponseService');",
+			"__service",
+			"var ResponseService = require(global.__service + '/ResponseService');",
+			"remove",
+			"m",
+			"var",
+			"input",
+			"[start]",
+			"\"",
+			"ProgramDao",
+			"AggregateError",
 			"filters",
 			"customError",
 			"reject",
@@ -564,6 +701,8 @@
 		"regex": false,
 		"replace_history":
 		[
+			"var ResponseService = require(global.__service_trans + '/ResponseService');",
+			"C:\\App\\Workspace\\mean-project\nvar ResponseService = require(global.__service_trans + '/ResponseService');"
 		],
 		"reverse": false,
 		"show_context": true,
@@ -574,24 +713,53 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 2,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "app/data/dao/PlanDao.js",
+					"file": "app/services/CategoryService.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4160,
+						"buffer_size": 4978,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								251,
-								251
+								4188,
+								4188
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": -0.0,
+						"translation.y": 2070.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "app/services/TransactionService.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5954,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4843,
+								4843
 							]
 						],
 						"settings":
@@ -600,56 +768,142 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 2385.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 1,
-					"file": "/C/App/SublimeText3/Data/Packages/User/SublimeLinter.sublime-settings",
+					"buffer": 2,
+					"file": "app/services/ProgramService.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1239,
+						"buffer_size": 4055,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								623,
-								623
+								2724,
+								2724
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1845.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
 					"type": "text"
 				},
 				{
-					"buffer": 2,
-					"file": "app/services/PlanService.js",
+					"buffer": 3,
+					"file": "TODO.txt",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2670,
+						"buffer_size": 143,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								541,
-								541
+								143,
+								143
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "app/routes/api/public/log/PlanRoute.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1346,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1275,
+								1275
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 405.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "app/data/dao/ProgramDao.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6093,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4002,
+								4002
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2205.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "app/routes/api/public/log/TypeCategoryRoute.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 654,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								448,
+								448
 							]
 						],
 						"settings":
@@ -661,7 +915,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 6,
 					"type": "text"
 				}
 			]

@@ -20,9 +20,11 @@ module.exports = function (router) {
 		// Create one category
 		.post(function (req, res) {
 
+			let type_category_id = req.body.type_category_id || req.query.type_category_id;
+
 			Logger.debug('Public#CategoryRoute#post [validation]');
 			Logger.debug('-- req.body.name              : ' + req.body.name);
-			Logger.debug('-- req.query.type_category_id : ' + req.query.type_category_id);
+			Logger.debug('-- req.query.type_category_id : ' + type_category_id);
 
 			// Validation
 			if (!req.body.name) {
@@ -31,7 +33,7 @@ module.exports = function (router) {
 							reason  : 'Param "name" missing'
 						});
 			}
-			if (!req.query.type_category_id) {
+			if (!type_category_id) {
 				return ResponseService.fail(res, {
 							message : 'Add', 
 							reason  : 'Param "type_category_id" missing'
@@ -62,6 +64,6 @@ module.exports = function (router) {
 
 		// Delete one category
 		.delete(function (req, res) {
-			CategoryService.remove(req, res);
+			CategoryService.desactivate(req, res);
 		});
 };

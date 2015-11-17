@@ -14,7 +14,7 @@ module.exports = {
 
 		Logger.debug('ProgramService#create - [start]');
 
-		var input = {
+		let input = {
 			_category : req.body.category_id || req.query.category_id,
 			budget    : req.body.budget,
 			_plan     : req.body.plan_id || req.query.plan_id,
@@ -56,7 +56,7 @@ module.exports = {
 
 		Logger.debug('ProgramService#update - [start]');
 
-		var input = {
+		let input = {
 			_id       : req.params.program_id,
 			_category : req.body.category_id || req.query.category_id,
 			budget    : req.body.budget,
@@ -93,8 +93,8 @@ module.exports = {
 		Logger.debug('ProgramService#remove - [start]');
 
 		ProgramDao.remove({
-				_id   : req.params.program_id,
-				_user : req.decoded.id
+				id      : req.params.program_id,
+				user_id : req.decoded.id
 			})
 			.then(function () {
 				ResponseService.success(res, {
@@ -113,9 +113,15 @@ module.exports = {
 	},
 
 	// Get programs by plan
-	allByPlanU : function (req, res) {
+	all        : function (req, res) {
 
 		Logger.debug('ProgramService#allByPlanU - [start]');
+
+		let type_category_id = req.body.type_category_id || req.query.type_category_id;
+		if(type_category_id) {
+			// TODO type_category_id
+			// get list categories id
+		}
 
 		ProgramDao.getAll({
 				plan_id : req.params.plan_id,
@@ -123,7 +129,7 @@ module.exports = {
 			})
 			.then(function (programs) {
 				ResponseService.success(res, {
-					message : 'Find success',
+					message : 'Get all programs by plan and type category',
 					resutl  : programs
 				});
 			})
@@ -131,7 +137,7 @@ module.exports = {
 				Logger.error('ProgramService#allByPlanU | ' + err.message);
 
 				ResponseService.fail(res, {
-					message : 'Get all programs'
+					message : 'Get all programs by plan and type category'
 				});
 			});
 

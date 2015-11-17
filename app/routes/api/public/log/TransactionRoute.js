@@ -16,10 +16,12 @@ module.exports = function (router) {
 		// Create one transaction
 		.post(function (req, res) {
 
+			let category_id = req.body.category_id ||req.query.category_id;
+
 			Logger.debug('Public#TransactionRoute#post [validation]');
 			Logger.debug('-- req.body.date         : ' + req.body.date);
 			Logger.debug('-- req.body.sum          : ' + req.body.sum);
-			Logger.debug('-- req.query.category_id : ' + req.query.category_id);
+			Logger.debug('-- req.query.category_id : ' + category_id);
 
 			// Validation
 			if (!req.body.date) {
@@ -34,7 +36,7 @@ module.exports = function (router) {
 							reason  : 'Param "sum" missing'
 						});
 			}
-			if (!req.query.category_id) {
+			if (!category_id) {
 				return ResponseService.fail(res, {
 							message : 'Add', 
 							reason  : 'Param "category_id" missing'
@@ -64,9 +66,11 @@ module.exports = function (router) {
 		// Update one transaction
 		.put(function (req, res) {
 
+			let category_id = req.body.category_id ||req.query.category_id;
+
 			Logger.debug('Public#TransactionRoute#put [validation]');
 			Logger.debug('-- req.body.date         : ' + req.body.date);
-			Logger.debug('-- req.query.category_id : ' + req.query.category_id);
+			Logger.debug('-- req.query.category_id : ' + category_id);
 
 			// Validation
 			if (!req.body.date) {
@@ -75,7 +79,7 @@ module.exports = function (router) {
 							reason  : 'Param "date" missing'
 						});
 			}
-			if (!req.query.category_id) {
+			if (!category_id) {
 				return ResponseService.fail(res, {
 							message : 'Add', 
 							reason  : 'Param "category_id" missing'
