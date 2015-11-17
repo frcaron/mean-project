@@ -11,7 +11,7 @@ var TransactionDao  = require(global.__dao + '/TransactionDao');
 var CategoryDao     = require(global.__dao + '/CategoryDao');
 
 function fulfillProgram(transaction, category_id) {	
-	var date_split = transaction.date.split('/');
+	let date_split = transaction.date.split('/');
 
 	return PlanDao.getOne({
 			user_id : transaction._user,
@@ -43,7 +43,7 @@ function fulfillProgram(transaction, category_id) {
 module.exports = {
 
 	// Create one transaction
-	create             : function (req, res) {
+	create        : function (req, res) {
 
 		Logger.debug('TransactionService#create - [start]');
 
@@ -77,7 +77,7 @@ module.exports = {
 	},
 
 	// Update one transaction
-	update             : function (req, res) {
+	update        : function (req, res) {
 
 		Logger.debug('TransactionService#update - [start]');
 
@@ -113,7 +113,7 @@ module.exports = {
 	},
 
 	// Remove one transaction
-	remove             : function (req, res) {
+	remove        : function (req, res) {
 
 		Logger.debug('TransactionService#remove - [start]');
 
@@ -138,7 +138,7 @@ module.exports = {
 	},
 
 	// Get transactions by type category
-	allByTypeCategoryU : function (req, res) {
+	allByTypeCatU : function (req, res) {
 
 		// TODO
 
@@ -185,7 +185,7 @@ module.exports = {
 	},
 
 	// Get transactions by program
-	allByProgramU      : function (req, res) {
+	allByProgramU : function (req, res) {
 
 		Logger.debug('TransactionService#allByProgramU - [start]');
 
@@ -211,7 +211,7 @@ module.exports = {
 	},
 
 	// Get one transaction by id
-	getByIdU           : function (req, res) {
+	getByIdU      : function (req, res) {
 
 		Logger.debug('TransactionService#getByIdU - [start]');
 

@@ -2,7 +2,7 @@
 
 //Inject
 var Logger             = require(global.__app + '/LoggerManager');
-var ResponseService    = require(global.__service + '/ResponseService');
+var ResponseService    = require(global.__service_trans + '/ResponseService');
 var ProgramService     = require(global.__service + '/ProgramService');
 var TransactionService = require(global.__service + '/TransactionService');
 
@@ -12,6 +12,33 @@ var api_prefix = '/programs';
 module.exports = function (router) {
 
 	router.route(api_prefix)
+
+		// Get all programs
+		.get(function (req, res) {
+
+			let plan_id          = req.body.plan_id || req.query.plan_id;
+			let type_category_id = req.body.type_category_id || req.query.type_category_id;
+
+			Logger.debug('Public#PlanRoute#get [validation]');
+			Logger.debug('-- plan_id          : ' + plan_id);
+			Logger.debug('-- type_category_id : ' + type_category_id);
+
+			// Validation
+			if (!plan_id) {
+				return ResponseService.fail(res, {
+							message : 'Get programs by plan and type category', 
+							reason  : 'Param "plan_id" missing'
+						});
+			}
+			if (!type_category_id) {
+				return ResponseService.fail(res, {
+							message : 'Get programs by plan and type category', 
+							reason  : 'Param "type_category_id" missing'
+						});
+			}
+
+			ProgramService.allByPlanTypeU(req, res);
+		})
 
 		// Create one program
 		.post(function (req, res) {

@@ -13,13 +13,13 @@ module.exports = function (router) {
 
 		// Get all categories by type category
 		.get(function (req, res) {
-			CategoryService.allByTypeCategoryU(req, res);
+			CategoryService.allByTypeCatU(req, res);
 		});
 
 	router.route(api_prefix + '/:type_category_id/transactions')
 
 		// Get all transaction by type transactions
 		.get(function (req, res) {
-			TransactionService.allByTypeCategoryU(req, res);
+			TransactionService.allByTypeCatU(req, res);
 		});
 };

@@ -16,7 +16,7 @@ var CountersModel = require(global.__model + '/CountersModel');
 function create (input) {
 
 	Logger.debug('PlanDao#create [start]');
-	Logger.debug('-- input : ' + input);
+	Logger.debug('-- input : ' + JSON.stringify(input));
 
 	var plan = new PlanModel();
 	var promise = CountersModel.getNextSequence('plan_id')
@@ -59,8 +59,8 @@ function create (input) {
 function update (input, filters) {
 
 	Logger.debug('PlanDao#update [start]');
-	Logger.debug('-- input   : ' + input);
-	Logger.debug('-- filters : ' + filters);
+	Logger.debug('-- input   : ' + JSON.stringify(input));
+	Logger.debug('-- filters : ' + JSON.stringify(filters));
 
 	var promise, output;
 	if(filters) {
@@ -112,7 +112,7 @@ function update (input, filters) {
 function remove (filters) {
 
 	Logger.debug('PlanDao#remove [start]');
-	Logger.debug('-- filters : ' + filters);
+	Logger.debug('-- filters : ' + JSON.stringify(filters));
 
 	var promise;
 	if(filters.user_id) {
@@ -150,7 +150,7 @@ function remove (filters) {
 function getAll (filters) {
 
 	Logger.debug('PlanDao#getAll [start]');
-	Logger.debug('-- filters : ' + filters);
+	Logger.debug('-- filters : ' + JSON.stringify(filters));
 
 	var promise;
 	if(filters.user_id) {
@@ -185,7 +185,7 @@ function getAll (filters) {
 function getOne (filters) {
 
 	Logger.debug('PlanDao#getOne [start]');
-	Logger.debug('-- filters : ' + filters);
+	Logger.debug('-- filters : ' + JSON.stringify(filters));
 
 	var promise;
 	if(filters.user_id) {

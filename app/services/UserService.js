@@ -9,6 +9,7 @@ var PlanDao         = require(global.__dao + '/PlanDao');
 var ProgramDao      = require(global.__dao + '/ProgramDao');
 var CategoryDao     = require(global.__dao + '/CategoryDao');
 var TransactionDao  = require(global.__dao + '/TransactionDao');
+var TypeCategoryDao = require(global.__dao + '/TypeCategoryDao');
 
 module.exports = {
 
@@ -17,7 +18,7 @@ module.exports = {
 
         Logger.debug('UserService#create - [start]');
 
-        let input = {
+        let inputUser = {
             firstname : req.body.firstname,
             surname   : req.body.surname,
             email     : req.body.email,
@@ -25,15 +26,37 @@ module.exports = {
             admin     : req.body.admin // TODO delete after test
         };
 
-        UserDao.create(input)
-            .then(function(user) {
+        UserDao.create(inputUser)
+            .then(function (user) {
+                return TypeCategoryDao.getAll()
+                    .then(function (typeCategories) {
+                        return BPromise.map(typeCategories, function (typeCategory) {
+
+                                let inputCategory = {
+                                    name   : 'Autres',
+                                    _type  : typeCategory._id,
+                                    active : false,
+                                    _user  : user._id
+                                };
+                                return CategoryDao.create(inputCategory);
+                            });
+                    })
+                    .then(function() {
+                        return BPromise.resolve(user);
+                    })
+                    .catch(function (err) {
+                        UserDao.remove({ id : user._id });
+                        throw err;
+                    });
+            })
+            .then(function (user) {
                 ResponseService.success(res, {
                     message :'Add user', 
                     result  : user 
                 });
             })
-            .catch(function(err) {
-                Logger.error('UserService#create / ' + err.message);
+            .catch(function (err) {
+                Logger.error('UserService#create | ' + err.message);
 
                 ResponseService.fail(res, {
                     message : 'Add user'
@@ -58,14 +81,14 @@ module.exports = {
         };
 
         UserDao.update(input)
-            .then(function(user) {
+            .then(function (user) {
                 ResponseService.success(res, {
                     message : 'Update user', 
                     result  : user
                 });
             })
-            .catch(function(err) {
-                Logger.error('UserService#update / ' + err.message);
+            .catch(function (err) {
+                Logger.error('UserService#update | ' + err.message);
 
                 ResponseService.fail(res, {
                     message : 'Update user'
@@ -98,7 +121,7 @@ module.exports = {
                 });                 
         })        
         .catch(function (err) { 
-            Logger.error('UserService#remove / ' + err.message);
+            Logger.error('UserService#remove | ' + err.message);
 
             ResponseService.fail(res, {
                 message : 'Remove user'
@@ -121,7 +144,7 @@ module.exports = {
                 });
             })
             .catch(function(err) {
-                Logger.error('UserService#getAll / ' + err.message);
+                Logger.error('UserService#getAll | ' + err.message);
 
                 ResponseService.fail(res, {
                     message : 'Get all users'
@@ -146,7 +169,7 @@ module.exports = {
                 });
             })
             .catch(function(err) {
-                Logger.error('UserService#getOne / ' + err.message);
+                Logger.error('UserService#getOne | ' + err.message);
 
                 ResponseService.fail(res, {
                     message : 'Get user'
@@ -173,7 +196,7 @@ module.exports = {
                 });
             })
             .catch(function(err) {
-                Logger.error('UserService#managePermission / ' + err.message);
+                Logger.error('UserService#managePermission |Ò ' + err.message);
 
                 ResponseService.fail(res, {
                     message : 'Give rights'

@@ -2,7 +2,7 @@
 
 // Inject
 var Logger              = require(global.__app + '/LoggerManager');
-var ResponseService     = require(global.__service + '/ResponseService');
+var ResponseService     = require(global.__service_trans + '/ResponseService');
 var TypeCategoryService = require(global.__service + '/TypeCategoryService');
 
 // Properties

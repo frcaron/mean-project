@@ -1,13 +1,12 @@
 "use strict";
 
 // Inject
-var ErrorManager    = require(global.__app + '/ErrorManager');
+var BPromise        = require('bluebird');
 var Logger          = require(global.__app + '/LoggerManager');
 var ResponseService = require(global.__service_trans + '/ResponseService');
 var PlanDao         = require(global.__dao + '/PlanDao');
 var ProgramDao      = require(global.__dao + '/ProgramDao');
 var CategoryDao     = require(global.__dao + '/CategoryDao');
-var TypeCategoryDao = require(global.__dao + '/TypeCategoryDao');
 
 module.exports = {
 
@@ -16,66 +15,41 @@ module.exports = {
 
 		Logger.debug('PlanService#create - [start]');
 
-		let planTmp, typeCategoryTmp;
 		let inputPlan = {
 			month : req.body.month,
 			year  : req.body.year,
 			_user : req.decoded.id
 		};
 
-		// TODO 1 cat par type cat
-
 		PlanDao.create(inputPlan)
 			.then(function (plan) {
-				planTmp = plan;
-
-				return TypeCategoryDao.getOne({ type : 'unknow' })
-					.catch(ErrorManager.NoResultError, function () {
-						
-						let input = {					
-							type   : 'unknow',
-							active : false
-						};
-
-						return TypeCategoryDao.create(input);
+				return CategoryDao.getAll({ 
+						active  : false,
+						user_id : req.decoded.id
 					})
-					.then(function (typeCategory) {
-						typeCategoryTmp = typeCategory;
-						return CategoryDao.getOne({
-									type_id : typeCategory._id,
-									user_id : req.decoded.id
-								});
+					.then(function (categories) {
+						return BPromise.map(categories, function (category) {
+							
+							let inputProgram = {
+								_category : category._id,
+								_plan     : plan._id
+							};
+
+							return ProgramDao.create(inputProgram);
+						});
 					})
-					.catch(ErrorManager.NoResultError, function () {
-						
-						let input = {
-							name   : 'unknow',
-							_type  : typeCategoryTmp._id,
-							_user  : req.decoded.id,
-							active : false
-						};
-
-						return CategoryDao.create(input);
-					})
-					.then(function (category) {
-
-						let input = {
-							_category : category._id,
-							_plan     : plan._id,
-							_user     : req.decoded.id
-						};
-
-						return ProgramDao.create(input);
+					.then(function () {
+						return BPromise.resolve(plan);
 					})
 					.catch(function (err) {
-						PlanDao.remove({ id : planTmp._id });
+						PlanDao.remove({ id : plan._id });
 						throw err;
 					});
 			})
-			.then(function () {
+			.then(function (plan) {
 				ResponseService.success(res, { 
 					message : 'Add plan', 
-					result  : planTmp
+					result  : plan
 				});
 			})
 			.catch(function (err) {

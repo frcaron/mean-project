@@ -79,7 +79,7 @@ module.exports = {
 		// TODO 
 		// Suppression des programs lié
 
-		Logger.debug('CategoryService#desactivate - [start]');
+		Logger.debug('CategoryService#delete - [start]');
 
 		let input = {
 			_id    : req.params.category_id,
@@ -94,25 +94,33 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-				Logger.error('CategoryService#desactivate |' + err.message);
+				Logger.error('CategoryService#delete |' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Desactivate category'
 				});
 			});
 
-		Logger.debug('CategoryService#desactivate - [end]');
+		Logger.debug('CategoryService#delete - [end]');
+	},
+
+	allByTypeCatUNoUse : function (req, res) {
+
+		Logger.debug('CategoryService#allByTypeCatUNoUse - [start]');
+
+		let plan_id          = req.body.plan_id || req.query.plan_id;
+		let type_category_id = req.body.type_category_id || req.query.type_category_id;
+
+		Logger.debug('CategoryService#allByTypeCatUNoUse - [end]');
 	},
 
 	// Get active categories by type category
-	allByTypeCategoryU : function (req, res) {
+	allByTypeCatU      : function (req, res) {
 
 		Logger.debug('CategoryService#allActiveByTypeCategoryU - [start]');
 
-		let active = req.body.active !== undefined ? req.body.active : true;
-
 		CategoryDao.getAll({
-				active  : active,
+				active  : req.body.active,
 				type_id : req.params.type_category_id,
 				user_id : req.decoded.id
 			})

@@ -1,7 +1,7 @@
 "use strict";
 
 //Inject 
-var UserService     = require(global.__service + '/UserService');
+var UserService = require(global.__service + '/UserService');
 
 // Properties
 var api_prefix = '/users';

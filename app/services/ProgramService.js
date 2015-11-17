@@ -1,6 +1,7 @@
 "use strict";
 
 // Inject
+var BPromise        = require('bluebird');
 var Logger          = require(global.__app + '/LoggerManager');
 var ResponseService = require(global.__service_trans + '/ResponseService');
 var PlanDao         = require(global.__dao + '/PlanDao');
@@ -121,28 +122,39 @@ module.exports = {
 
 		Logger.debug('ProgramService#allByPlanU - [start]');
 
+		let plan_id          = req.body.plan_id || req.query.plan_id;
 		let type_category_id = req.body.type_category_id || req.query.type_category_id;
-		// TODO type_category_id
-		// get list categories id
-		
 
-		ProgramDao.getAll({
-				plan_id : req.params.plan_id,
-				user_id : req.decoded.id
-			})
-			.then(function (programs) {
-				ResponseService.success(res, {
-					message : 'Get all programs by plan and type category',
-					resutl  : programs
+		CategoryDao.getAll({
+			type_id : type_category_id,
+			user_id : req.decoded.id
+		})
+		.then(function (categories) {			
+			let categories_id = {};
+			return BPromise.map(categories, function (category) {
+					categories_id.push(category._id);
+				}) 
+				.then(function () {
+					return ProgramDao.getAll({
+								categories_id : categories_id,
+								plan_id       : plan_id,
+								user_id       : req.decoded.id
+							});
 				});
-			})
-			.catch(function (err) {
-				Logger.error('ProgramService#allByPlanU | ' + err.message);
-
-				ResponseService.fail(res, {
-					message : 'Get all programs by plan and type category'
-				});
+		})
+		.then(function (programs) {
+			ResponseService.success(res, {
+				message : 'Get all programs by plan and type category',
+				resutl  : programs
 			});
+		})
+		.catch(function (err) {
+			Logger.error('ProgramService#allByPlanU | ' + err.message);
+
+			ResponseService.fail(res, {
+				message : 'Get all programs by plan and type category'
+			});
+		});
 
 		Logger.debug('ProgramService#allByPlanU - [end]');
 	},

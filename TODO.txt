@@ -1,7 +1,11 @@
-Validation email
-Mapping retour pour cacher les champs de base
-Connection facebook
-
+TODO :
+Logger start end
 TransactionService = 3 todos
 update multiple
-ProgramService getprogram add type
+WS get categories supprimer les catégories déjà utilisé
+
+Evol :
+Validation email utilisateur
+Connection via facebook
+Category impossible à supprimer mais désactivé
+Mapping des objets retour pour cacher les champs en base (sécurité)

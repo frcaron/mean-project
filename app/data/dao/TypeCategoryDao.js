@@ -16,7 +16,7 @@ var CountersModel     = require(global.__model + '/CountersModel');
 function create (input) {
 
 	Logger.debug('TypeCategoryDao#create [start]');
-	Logger.debug('-- input : ' + input);
+	Logger.debug('-- input : ' + JSON.stringify(input));
 
 	var typeCategory = new TypeCategoryModel();
 	var promise = CountersModel.getNextSequence('type_category_id')
@@ -55,7 +55,7 @@ function create (input) {
 function update (input) {
 
 	Logger.debug('TypeCategoryDao#update [start]');
-	Logger.debug('-- input : ' + input);
+	Logger.debug('-- input : ' + JSON.stringify(input));
 
 	var output;
 	var promise = getOne(input)
@@ -115,7 +115,7 @@ function getAll () {
 function getOne (filters) {
 
 	Logger.debug('TypeCategoryDao#getOne [start]');
-	Logger.debug('-- filters : ' + filters);
+	Logger.debug('-- filters : ' + JSON.stringify(filters));
 	
 	let promise;
 	if(filters.id) {

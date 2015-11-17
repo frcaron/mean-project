@@ -12,14 +12,41 @@ module.exports = function (router) {
 
 	router.route(api_prefix)
 
+		// Get categories by type category no exist
+		.get(function (req, res) {
+
+			let plan_id          = req.body.plan_id || req.query.plan_id;
+			let type_category_id = req.body.type_category_id || req.query.type_category_id;
+
+			Logger.debug('Public#CategoryRoute#post [validation]');
+			Logger.debug('-- plan_id          : ' + plan_id);
+			Logger.debug('-- type_category_id : ' + type_category_id);
+
+			// Validation
+			if (!plan_id) {
+				return ResponseService.fail(res, {
+							message : 'Add', 
+							reason  : 'Param "plan_id" missing'
+						});
+			}
+			if (!type_category_id) {
+				return ResponseService.fail(res, {
+							message : 'Add', 
+							reason  : 'Param "type_category_id" missing'
+						});
+			}
+
+			CategoryService.allByTypeCatUNoUse(req, res);
+		})
+
 		// Create one category
 		.post(function (req, res) {
 
 			let type_category_id = req.body.type_category_id || req.query.type_category_id;
 
 			Logger.debug('Public#CategoryRoute#post [validation]');
-			Logger.debug('-- req.body.name              : ' + req.body.name);
-			Logger.debug('-- req.query.type_category_id : ' + type_category_id);
+			Logger.debug('-- req.body.name    : ' + req.body.name);
+			Logger.debug('-- type_category_id : ' + type_category_id);
 
 			// Validation
 			if (!req.body.name) {
