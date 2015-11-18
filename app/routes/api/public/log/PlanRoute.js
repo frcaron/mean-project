@@ -20,9 +20,9 @@ module.exports = function (router) {
 		// Create one plan
 		.post(function (req, res) {
 
-			Logger.debug('[WSP-VALID] PlanRoute#post');
-			Logger.debug('-- req.body.month : ' + req.body.month);
-			Logger.debug('-- req.body.year  : ' + req.body.year);
+			Logger.debug('[WSP - VALID] PlanRoute#post');
+			Logger.debug('              -- req.body.month : ' + req.body.month);
+			Logger.debug('              -- req.body.year  : ' + req.body.year);
 
 			// Validation
 			if (!req.body.month) {

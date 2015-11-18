@@ -15,7 +15,7 @@ module.exports = function (router) {
 	// Validate param plan_id
 	router.param('plan_id', function (req, res, next, plan_id) {
 
-		Logger.debug('[WSP-VALID] "plan_id" : ' + plan_id);
+		Logger.debug('[WSP - VALID] "plan_id" : ' + plan_id);
 
 		if (!plan_id) {
 			return ResponseService.fail(res, {
@@ -29,7 +29,7 @@ module.exports = function (router) {
 	// Validate param program_id
 	router.param('program_id', function (req, res, next, program_id) {
 
-		Logger.debug('[WSP-VALID] "program_id" : ' + program_id);
+		Logger.debug('[WSP - VALID] "program_id" : ' + program_id);
 
 		if (!program_id) {
 			return ResponseService.fail(res, {
@@ -43,7 +43,7 @@ module.exports = function (router) {
 	// Validate param transaction_id
 	router.param('transaction_id', function (req, res, next, transaction_id) {
 
-		Logger.debug('[WSP-VALID] "transaction_id" : ' + transaction_id);
+		Logger.debug('[WSP - VALID] "transaction_id" : ' + transaction_id);
 
 		if (!transaction_id) {
 			return ResponseService.fail(res, {
@@ -57,7 +57,7 @@ module.exports = function (router) {
 	// Validate param category_id
 	router.param('category_id', function (req, res, next, category_id) {
 
-		Logger.debug('[WSP-VALID] "category_id" : ' + category_id);
+		Logger.debug('[WSP - VALID] "category_id" : ' + category_id);
 
 		if (!category_id) {
 			return ResponseService.fail(res, {
@@ -71,7 +71,7 @@ module.exports = function (router) {
 	// Validate param type_category_id
 	router.param('type_category_id', function (req, res, next, type_category_id) {
 
-		Logger.debug('[WSP-VALID] "type_category_id" : ' + type_category_id);
+		Logger.debug('[WSP - VALID] "type_category_id" : ' + type_category_id);
 
 		if (!type_category_id) {
 			return ResponseService.fail(res, {
@@ -98,8 +98,8 @@ module.exports = function (router) {
 
 		let token = req.body.token || req.params.token ||  req.query.token || req.headers[ 'x-access-token' ];
 
-		Logger.debug('[WSP-START] MiddleWare');
-		Logger.debug('-- token : ' + token);
+		Logger.debug('[WSP - START] MiddleWare');
+		Logger.debug('              -- token : ' + token);
 
 		if (token) {
 			Jwt.verify(token, TokenConfig.secret, function (err, decoded) {
@@ -114,8 +114,8 @@ module.exports = function (router) {
 				// Follow token
 				req.decoded = decoded;
 
-				Logger.debug('[WSP - END] MiddleWare');	
-				Logger.debug('-- token : ' + JSON.stringify(decoded));
+				Logger.debug('[WSP -   END] MiddleWare');	
+				Logger.debug('              -- token : ' + JSON.stringify(decoded));
 
 				return next();
 			});

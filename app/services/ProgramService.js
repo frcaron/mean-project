@@ -15,7 +15,7 @@ module.exports = {
 	// Create one program
 	create         : function (req, res) {
 
-		Logger.debug('[SER-START] ProgramService#create');
+		Logger.debug('[SER - START] ProgramService#create');
 
 		let input = {
 			category_id : req.body.category_id || req.query.category_id,
@@ -32,21 +32,21 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-				Logger.debug('[SER-CATCH] ProgramService#create');
-				Logger.error('-- message : ' + err.message);
+				Logger.debug('[SER - CATCH] ProgramService#create');
+				Logger.error('              -- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Add program',
 				});
 			});
 
-		Logger.debug('[SER - END] ProgramService#create');
+		Logger.debug('[SER -   END] ProgramService#create');
 	},
 
 	// Update one program
 	update         : function (req, res) {
 
-		Logger.debug('[SER-START] ProgramService#update');
+		Logger.debug('[SER - START] ProgramService#update');
 
 		let category_id = req.body.category_id || req.query.category_id;
 
@@ -99,21 +99,21 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-				Logger.debug('[SER-CATCH] ProgramService#update');
-				Logger.error('-- message : ' + err.message);
+				Logger.debug('[SER - CATCH] ProgramService#update');
+				Logger.error('              -- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Update program',
 				});
 			});
 
-		Logger.debug('[SER - END] ProgramService#update');
+		Logger.debug('[SER -   END] ProgramService#update');
 	},
 
 	// Remove one program
 	remove         : function (req, res) {
 
-		Logger.debug('[SER-START] ProgramService#remove');
+		Logger.debug('[SER - START] ProgramService#remove');
 		
 		ProgramDao.getOne({ 
 				id : req.params.program_id,
@@ -159,21 +159,21 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-				Logger.debug('[SER-CATCH] ProgramService#update');
-				Logger.error('-- message : ' + err.message);
+				Logger.debug('[SER - CATCH] ProgramService#update');
+				Logger.error('              -- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Remove program'
 				});
 			});
 
-		Logger.debug('[SER - END] ProgramService#remove');
+		Logger.debug('[SER -   END] ProgramService#remove');
 	},
 
 	// Get programs by plan
 	allByPlanTypeU : function (req, res) {
 
-		Logger.debug('[SER-START] ProgramService#allByPlanU');
+		Logger.debug('[SER - START] ProgramService#allByPlanU');
 
 		let plan_id          = req.body.plan_id || req.query.plan_id;
 		let type_category_id = req.body.type_category_id || req.query.type_category_id;
@@ -202,21 +202,21 @@ module.exports = {
 			});
 		})
 		.catch(function (err) {
-			Logger.debug('[SER-CATCH] ProgramService#allByPlanU');
-			Logger.error('-- message : ' + err.message);
+			Logger.debug('[SER - CATCH] ProgramService#allByPlanU');
+			Logger.error('              -- message : ' + err.message);
 
 			ResponseService.fail(res, {
 				message : 'Get all programs by plan and type category'
 			});
 		});
 
-		Logger.debug('[SER - END] ProgramService#allByPlanU');
+		Logger.debug('[SER -   END] ProgramService#allByPlanU');
 	},
 
 	// Get one program by id
 	getByIdU       : function (req, res) {
 
-		Logger.debug('[SER-START] ProgramService#getByIdU');
+		Logger.debug('[SER - START] ProgramService#getByIdU');
 
 		ProgramDao.getOne({
 				id      : req.params.program_id,
@@ -229,14 +229,14 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-				Logger.debug('[SER-CATCH] ProgramService#getByIdU');
-				Logger.error('-- message : ' + err.message);
+				Logger.debug('[SER - CATCH] ProgramService#getByIdU');
+				Logger.error('              -- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Get program'
 				});
 			});
 
-		Logger.debug('[SER - END] ProgramService#getByIdU');
+		Logger.debug('[SER -   END] ProgramService#getByIdU');
 	}
 };

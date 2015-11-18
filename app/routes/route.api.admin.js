@@ -15,7 +15,7 @@ module.exports = function (router) {
 	// Validate param user_id
 	router.param('user_id', function (req, res, next, user_id) {
 
-		Logger.debug('[WSA-VALID] "user_id" : ' + user_id);
+		Logger.debug('[WSA - VALID] "user_id" : ' + user_id);
 
 		if (!user_id) {
 			return ResponseService.fail(res, {
@@ -29,7 +29,7 @@ module.exports = function (router) {
 	// Validate param type_category_id
 	router.param('type_category_id', function (req, res, next, type_category_id) {
 
-		Logger.debug('[WSA-VALID] "type_category_id" : ' + type_category_id);
+		Logger.debug('[WSA - VALID] "type_category_id" : ' + type_category_id);
 
 		if (!type_category_id) {
 			return ResponseService.fail(res, {
@@ -55,8 +55,8 @@ module.exports = function (router) {
 
 		let token = req.body.token || req.params.token || req.query.token || req.headers[ 'x-access-token' ];
 
-		Logger.debug('[WSA-START] MiddleWare');
-		Logger.debug('-- token : ' + token);
+		Logger.debug('[WSA - START] MiddleWare');
+		Logger.debug('              -- token : ' + token);
 
 		if (token) {
 			Jwt.verify(token, TokenConfig.secret, function (err, decoded) {
@@ -80,8 +80,8 @@ module.exports = function (router) {
 				// Follow token
 				req.decoded = decoded;
 
-				Logger.debug('[WSA - END] MiddleWare');	
-				Logger.debug('-- token : ' + JSON.stringify(decoded));
+				Logger.debug('[WSA -   END] MiddleWare');	
+				Logger.debug('              -- token : ' + JSON.stringify(decoded));
 
 				return next();
 			});

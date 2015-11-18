@@ -11,7 +11,7 @@ module.exports = {
 	// Create one category
 	create             : function (req, res) {
 
-		Logger.debug('[SER-START] CategoryService#create');
+		Logger.debug('[SER - START] CategoryService#create');
 
 		let type_category_id = req.body.type_category_id || req.query.type_category_id;
 
@@ -33,21 +33,21 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-				Logger.debug('[SER-CATCH] CategoryService#create');
-				Logger.error('-- message : ' + err.message);
+				Logger.debug('[SER - CATCH] CategoryService#create');
+				Logger.error('              -- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Add category'
 				});
 			});
 
-		Logger.debug('[SER - END] CategoryService#create');
+		Logger.debug('[SER -   END] CategoryService#create');
 	},
 
 	// Update one category
 	update             : function (req, res) {
 
-		Logger.debug('[SER-START] CategoryService#update');
+		Logger.debug('[SER - START] CategoryService#update');
 
 		let input = {
 			id               : req.params.category_id,
@@ -64,15 +64,15 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-				Logger.debug('[SER-CATCH] CategoryService#update');
-				Logger.error('-- message : ' + err.message);
+				Logger.debug('[SER - CATCH] CategoryService#update');
+				Logger.error('              -- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Update category'
 				});
 			});
 
-		Logger.debug('[SER - END] CategoryService#update');
+		Logger.debug('[SER -   END] CategoryService#update');
 	},
 
 	// Desactivate one category
@@ -81,7 +81,7 @@ module.exports = {
 		// TODO 
 		// Suppression des programs lié
 
-		Logger.debug('[SER-START] CategoryService#remove');
+		Logger.debug('[SER - START] CategoryService#remove');
 
 		let input = {
 			id      : req.params.category_id,
@@ -96,31 +96,31 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-				Logger.debug('[SER-CATCH] CategoryService#remove');
-				Logger.error('-- message : ' + err.message);
+				Logger.debug('[SER - CATCH] CategoryService#remove');
+				Logger.error('              -- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Desactivate category'
 				});
 			});
 
-		Logger.debug('[SER - END] CategoryService#remove');
+		Logger.debug('[SER -   END] CategoryService#remove');
 	},
 
 	allByTypeCatUNoUse : function (req, res) {
 
-		Logger.debug('[SER-START] CategoryService#allByTypeCatUNoUse');
+		Logger.debug('[SER - START] CategoryService#allByTypeCatUNoUse');
 
 		let plan_id          = req.body.plan_id || req.query.plan_id;
 		let type_category_id = req.body.type_category_id || req.query.type_category_id;
 
-		Logger.debug('[SER - END] CategoryService#allByTypeCatUNoUse');
+		Logger.debug('[SER -   END] CategoryService#allByTypeCatUNoUse');
 	},
 
 	// Get active categories by type category
 	allByTypeCatU      : function (req, res) {
 
-		Logger.debug('[SER-START] CategoryService#allActiveByTypeCategoryU');
+		Logger.debug('[SER - START] CategoryService#allActiveByTypeCategoryU');
 
 		CategoryDao.getAll({
 				active  : req.body.active,
@@ -134,21 +134,21 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-				Logger.debug('[SER-CATCH] CategoryService#allActiveByTypeCategoryU');
-				Logger.error('-- message : ' + err.message);
+				Logger.debug('[SER - CATCH] CategoryService#allActiveByTypeCategoryU');
+				Logger.error('              -- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Get all categories active by type category'
 				});
 			});
 
-		Logger.debug('[SER - END] CategoryService#allActiveByTypeCategoryU');
+		Logger.debug('[SER -   END] CategoryService#allActiveByTypeCategoryU');
 	},
 
 	// Get one category by id
 	getByIdU           : function (req, res) {
 
-		Logger.debug('[SER-START] CategoryService#getByIdU');
+		Logger.debug('[SER - START] CategoryService#getByIdU');
 
 		CategoryDao.getOne({
 				id      : req.params.category_id,
@@ -161,14 +161,14 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-				Logger.debug('[SER-CATCH] CategoryService#getByIdU');
-				Logger.error('-- message : ' + err.message);
+				Logger.debug('[SER - CATCH] CategoryService#getByIdU');
+				Logger.error('              -- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Get category'
 				});
 			});
 
-		Logger.debug('[SER - END] CategoryService#getByIdU');
+		Logger.debug('[SER -   END] CategoryService#getByIdU');
 	}
 };

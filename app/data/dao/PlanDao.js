@@ -15,8 +15,8 @@ var CountersModel = require(global.__model + '/CountersModel');
  */
 function create (input) {
 
-	Logger.debug('[DAO-START] PlanDao#create');
-	Logger.debug('-- input : ' + JSON.stringify(input));
+	Logger.debug('[DAO - START] PlanDao#create');
+	Logger.debug('              -- input : ' + JSON.stringify(input));
 
 	let plan = new PlanModel();
 	let promise = CountersModel.getNextSequence('plan_id')
@@ -33,8 +33,8 @@ function create (input) {
 			return BPromise.resolve(plan);
 		})
 		.catch(function (err) {
-			Logger.debug('[DAO-CATCH] PlanDao#create');
-			Logger.error('-- message : ' + err.message);
+			Logger.debug('[DAO - CATCH] PlanDao#create');
+			Logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
 				throw new ErrorManager.DuplicateError('Plan already exist');
@@ -43,7 +43,7 @@ function create (input) {
 			}
 		});
 
-	Logger.debug('[DAO - END] PlanDao#create');
+	Logger.debug('[DAO -   END] PlanDao#create');
 
 	return promise;
 }
@@ -58,9 +58,9 @@ function create (input) {
  */
 function update (input, filters) {
 
-	Logger.debug('[DAO-START] PlanDao#update');
-	Logger.debug('-- input   : ' + JSON.stringify(input));
-	Logger.debug('-- filters : ' + JSON.stringify(filters));
+	Logger.debug('[DAO - START] PlanDao#update');
+	Logger.debug('              -- input   : ' + JSON.stringify(input));
+	Logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise;
 	if(filters) {
@@ -89,8 +89,8 @@ function update (input, filters) {
 			return BPromise.resolve(plan);
 		})
 		.catch(function (err) {
-			Logger.debug('[DAO-CATCH] PlanDao#update');
-			Logger.error('-- message : ' + err.message);
+			Logger.debug('[DAO - CATCH] PlanDao#update');
+			Logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
 				throw new ErrorManager.DuplicateError('Plan already exist');
@@ -99,7 +99,7 @@ function update (input, filters) {
 			}
 		});
 
-	Logger.debug('[DAO - END] PlanDao#update');
+	Logger.debug('[DAO -   END] PlanDao#update');
 
 	return promiseEnd;
 }
@@ -113,8 +113,8 @@ function update (input, filters) {
  */
 function remove (filters) {
 
-	Logger.debug('[DAO-START] PlanDao#remove');
-	Logger.debug('-- filters : ' + JSON.stringify(filters));
+	Logger.debug('[DAO - START] PlanDao#remove');
+	Logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise;
 	if(filters.user_id) {
@@ -134,13 +134,13 @@ function remove (filters) {
 
 	let promiseEnd = promise
 		.catch(function (err) {
-			Logger.debug('[DAO-CATCH] PlanDao#remove');
-			Logger.error('-- message : ' + err.message);
+			Logger.debug('[DAO - CATCH] PlanDao#remove');
+			Logger.error('              -- message : ' + err.message);
 
 			throw err;
 		});
 
-	Logger.debug('[DAO - END] PlanDao#remove');
+	Logger.debug('[DAO -   END] PlanDao#remove');
 
 	return promiseEnd;
 }
@@ -153,8 +153,8 @@ function remove (filters) {
  */
 function getAll (filters) {
 
-	Logger.debug('[DAO-START] PlanDao#getAll');
-	Logger.debug('-- filters : ' + JSON.stringify(filters));
+	Logger.debug('[DAO - START] PlanDao#getAll');
+	Logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise;
 	if(filters.user_id) {
@@ -168,13 +168,13 @@ function getAll (filters) {
 
 	let promiseEnd = promise
 		.catch(function (err) {
-			Logger.debug('[DAO-CATCH] PlanDao#getAll');
-			Logger.error('-- message : ' + err.message);
+			Logger.debug('[DAO - CATCH] PlanDao#getAll');
+			Logger.error('              -- message : ' + err.message);
 
 			throw err;
 		});
 
-	Logger.debug('[DAO - END] PlanDao#getAll');
+	Logger.debug('[DAO -   END] PlanDao#getAll');
 
 	return promiseEnd;
 }
@@ -189,8 +189,8 @@ function getAll (filters) {
  */
 function getOne (filters) {
 
-	Logger.debug('[DAO-START] PlanDao#getOne');
-	Logger.debug('-- filters : ' + JSON.stringify(filters));
+	Logger.debug('[DAO - START] PlanDao#getOne');
+	Logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise;
 	if(filters.user_id) {
@@ -221,13 +221,13 @@ function getOne (filters) {
 			return BPromise.resolve(plan);
 		})
 		.catch(function (err) {
-			Logger.debug('[DAO-CATCH] PlanDao#getOne');
-			Logger.error('-- message : ' + err.message);
+			Logger.debug('[DAO - CATCH] PlanDao#getOne');
+			Logger.error('              -- message : ' + err.message);
 
 			throw err;
 		});
 
-	Logger.debug('[DAO - END] PlanDao#getOne');
+	Logger.debug('[DAO -   END] PlanDao#getOne');
 
 	return promiseEnd;
 }

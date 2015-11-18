@@ -16,14 +16,6 @@ module.exports = function (schema) {
 		if (!this.created_date) {
 			this.created_date = currentDate;
 		}
-
-		return next();
-	});
-
-	schema.pre('update', function (next) {
-
-		this.updated_date = new Date();
-
 		return next();
 	});
 };

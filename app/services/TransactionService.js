@@ -46,7 +46,7 @@ module.exports = {
 	// Create one transaction
 	create        : function (req, res) {
 
-		Logger.debug('[SER-START] TransactionService#create');
+		Logger.debug('[SER - START] TransactionService#create');
 
 		let input = {
 			date    : req.body.date,
@@ -67,21 +67,21 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-				Logger.debug('[SER-CATCH] TransactionService#create');
-				Logger.error('-- message : ' + err.message);
+				Logger.debug('[SER - CATCH] TransactionService#create');
+				Logger.error('              -- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Add transaction'
 				});
 			});
 
-		Logger.debug('[SER - END] TransactionService#create');
+		Logger.debug('[SER -   END] TransactionService#create');
 	},
 
 	// Update one transaction
 	update        : function (req, res) {
 
-		Logger.debug('[SER-START] TransactionService#update');
+		Logger.debug('[SER - START] TransactionService#update');
 
 		let input = {
 			id      : req.params.transaction_id,
@@ -103,21 +103,21 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-				Logger.debug('[SER-CATCH] TransactionService#update');
-				Logger.error('-- message : ' + err.message);
+				Logger.debug('[SER - CATCH] TransactionService#update');
+				Logger.error('              -- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Update transaction'
 				});
 			});
 
-		Logger.debug('[SER - END] TransactionService#update');
+		Logger.debug('[SER -   END] TransactionService#update');
 	},
 
 	// Remove one transaction
 	remove        : function (req, res) {
 
-		Logger.debug('[SER-START] TransactionService#remove');
+		Logger.debug('[SER - START] TransactionService#remove');
 
 		TransactionDao.remove({ 
 				id      : req.params.transaction_id,
@@ -129,15 +129,15 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-				Logger.debug('[SER-CATCH] TransactionService#remove');
-				Logger.error('-- message : ' + err.message);
+				Logger.debug('[SER - CATCH] TransactionService#remove');
+				Logger.error('              -- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Remove failed'
 				});
 			});
 
-		Logger.debug('[SER - END] TransactionService#remove');
+		Logger.debug('[SER -   END] TransactionService#remove');
 	},
 
 	// Get transactions by type category
@@ -190,7 +190,7 @@ module.exports = {
 	// Get transactions by program
 	allByProgramU : function (req, res) {
 
-		Logger.debug('[SER-START] TransactionService#allByProgramU');
+		Logger.debug('[SER - START] TransactionService#allByProgramU');
 
 		TransactionDao.getAll({
 				program_id : req.params.program_id,
@@ -203,21 +203,21 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-				Logger.debug('[SER-CATCH] TransactionService#allByProgramU');
-				Logger.error('-- message : ' + err.message);
+				Logger.debug('[SER - CATCH] TransactionService#allByProgramU');
+				Logger.error('              -- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Get all transactions by program'
 					});
 			});
 
-		Logger.debug('[SER - END] TransactionService#allByProgramU');
+		Logger.debug('[SER -   END] TransactionService#allByProgramU');
 	},
 
 	// Get one transaction by id
 	getByIdU      : function (req, res) {
 
-		Logger.debug('[SER-START] TransactionService#getByIdU');
+		Logger.debug('[SER - START] TransactionService#getByIdU');
 
 		TransactionDao.getOne({
 				id    : req.params.transaction_id,
@@ -230,14 +230,14 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-				Logger.debug('[SER-CATCH] TransactionService#getByIdU');
-				Logger.error('-- message : ' + err.message);
+				Logger.debug('[SER - CATCH] TransactionService#getByIdU');
+				Logger.error('              -- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Get transaction'
 				});
 			});
 
-		Logger.debug('[SER - END] TransactionService#getByIdU');
+		Logger.debug('[SER -   END] TransactionService#getByIdU');
 	}
 };

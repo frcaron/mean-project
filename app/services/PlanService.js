@@ -14,7 +14,7 @@ module.exports = {
 	// Create one plan
 	create  : function (req, res) {
 
-		Logger.debug('[SER-START] PlanService#create');
+		Logger.debug('[SER - START] PlanService#create');
 
 		let input = {
 			month   : req.body.month,
@@ -30,21 +30,21 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-				Logger.debug('[SER-CATCH] PlanService#create');
-				Logger.error('-- message : ' + err.message);
+				Logger.debug('[SER - CATCH] PlanService#create');
+				Logger.error('              -- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Add plan'
 				});
 			});
 
-		Logger.debug('[SER - END] PlanService#create');
+		Logger.debug('[SER -   END] PlanService#create');
 	},
 
 	// Delete plan user
 	remove  : function (req, res) {
 
-		Logger.debug('[SER-START] PlanService#remove');
+		Logger.debug('[SER - START] PlanService#remove');
 
 		let msg = [];
 		BPromise.map([PlanDao, ProgramDao, TransactionDao], 
@@ -67,21 +67,21 @@ module.exports = {
 				});                 
 		})        
 		.catch(function (err) { 
-			Logger.debug('[SER-CATCH] PlanService#remove');
-			Logger.error('-- message : ' + err.message);
+			Logger.debug('[SER - CATCH] PlanService#remove');
+			Logger.error('              -- message : ' + err.message);
 
 			ResponseService.fail(res, {
 				message : 'Remove plan'
 			});
 		});
 
-		Logger.debug('[SER - END] PlanService#remove');
+		Logger.debug('[SER -   END] PlanService#remove');
 	},
 
 	// Get plans by user
 	allByU  : function (req, res) {
 
-		Logger.debug('[SER-START] PlanService#allByU');
+		Logger.debug('[SER - START] PlanService#allByU');
 
 		PlanDao.getAll({ user_id : req.decoded.id })
 			.then(function (plans) {
@@ -91,21 +91,21 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-				Logger.debug('[SER-CATCH] PlanService#allByU');
-				Logger.error('-- message : ' + err.message);
+				Logger.debug('[SER - CATCH] PlanService#allByU');
+				Logger.error('              -- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Get all plans'
 				});
 			});
 
-		Logger.debug('[SER - END] PlanService#allByU');
+		Logger.debug('[SER -   END] PlanService#allByU');
 	},
 
 	// Get one plan by id
 	getById : function (req, res) {
 
-		Logger.debug('[SER-START] PlanService#getById');
+		Logger.debug('[SER - START] PlanService#getById');
 
 		PlanDao.getOne({
 				id      : req.params.plan_id,
@@ -118,14 +118,14 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-				Logger.debug('[SER-CATCH] PlanService#getById');
-				Logger.error('-- message : ' + err.message);
+				Logger.debug('[SER - CATCH] PlanService#getById');
+				Logger.error('              -- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Get plan'
 				});
 			});
 				
-		Logger.debug('[SER - END] PlanService#getById');
+		Logger.debug('[SER -   END] PlanService#getById');
 	}
 };

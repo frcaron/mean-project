@@ -1,6 +1,6 @@
 "use strict";
 
-var Debug = require('debug')('MeanProject');
+// Inject
 var app = require('../app');
 
 app.set('port', process.env.PORT || 3000);

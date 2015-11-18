@@ -21,8 +21,8 @@ module.exports = function (router) {
 
 		let token = req.body.token || req.params.token ||  req.query.token || req.headers[ 'x-access-token' ];
 
-		Logger.debug('[WSB-START] MiddleWare');
-		Logger.debug('-- token : ' + token);
+		Logger.debug('[WSB - START] MiddleWare');
+		Logger.debug('              -- token : ' + token);
 
 		if (token) {
 			Jwt.verify(token, TokenConfig.secret, function (err, decoded) {
@@ -37,8 +37,8 @@ module.exports = function (router) {
 				// Follow token
 				req.decoded = decoded;
 
-				Logger.debug('[WSB - END] MiddleWare');	
-				Logger.debug('-- token : ' + JSON.stringify(decoded));	
+				Logger.debug('[WSB -   END] MiddleWare');	
+				Logger.debug('              -- token : ' + JSON.stringify(decoded));	
 
 				return next();
 			});

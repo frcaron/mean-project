@@ -21,12 +21,6 @@ app.use(BodyParser.json({ type : 'application/vnd.api+json' }));
 app.use(CookieParser());
 app.use(Express.static(Path.join(__dirname, 'public')));
 
-// BPromise.config({
-//     warnings        : false,
-//     longStackTraces : false,
-//     cancellation    : false
-// });
-
 // Global variable ===========================================
 
 global.__base          = __dirname + '/';

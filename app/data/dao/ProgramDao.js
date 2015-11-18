@@ -15,8 +15,8 @@ var CountersModel = require(global.__model + '/CountersModel');
  */
 function create (input) {
 
-	Logger.debug('[DAO-START] ProgramDao#create');
-	Logger.debug('-- input : ' + JSON.stringify(input));
+	Logger.debug('[DAO - START] ProgramDao#create');
+	Logger.debug('              -- input : ' + JSON.stringify(input));
 	
 	let program = new ProgramModel();
 	let promise = CountersModel.getNextSequence('program_id')
@@ -36,8 +36,8 @@ function create (input) {
 			return BPromise.resolve(program);
 		})
 		.catch(function (err) {
-			Logger.debug('[DAO-CATCH] ProgramDao#create');
-			Logger.error('-- message : ' + err.message);
+			Logger.debug('[DAO - CATCH] ProgramDao#create');
+			Logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
 				throw new ErrorManager.DuplicateError('Program already exist');
@@ -46,7 +46,7 @@ function create (input) {
 			}
 		});
 
-	Logger.debug('[DAO - END] ProgramDao#create');
+	Logger.debug('[DAO -   END] ProgramDao#create');
 
 	return promise;
 }
@@ -61,9 +61,9 @@ function create (input) {
  */
 function update (input, filters) {
 
-	Logger.debug('[DAO-START] ProgramDao#update');
-	Logger.debug('-- input   : ' + JSON.stringify(input));
-	Logger.debug('-- filters : ' + JSON.stringify(filters));
+	Logger.debug('[DAO - START] ProgramDao#update');
+	Logger.debug('              -- input   : ' + JSON.stringify(input));
+	Logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise;
 	if (filters) {
@@ -92,8 +92,8 @@ function update (input, filters) {
 			return BPromise.resolve(program);
 		})
 		.catch(function (err) {
-			Logger.debug('[DAO-CATCH] ProgramDao#update');
-			Logger.error('-- message : ' + err.message);
+			Logger.debug('[DAO - CATCH] ProgramDao#update');
+			Logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
 				throw new ErrorManager.DuplicateError('Program already exist');
@@ -102,7 +102,7 @@ function update (input, filters) {
 			}
 		});
 
-	Logger.debug('[DAO - END] ProgramDao#update');
+	Logger.debug('[DAO -   END] ProgramDao#update');
 
 	return promiseEnd;
 }
@@ -117,8 +117,8 @@ function update (input, filters) {
  */
 function remove (filters) {
 
-	Logger.debug('[DAO-START] ProgramDao#remove');
-	Logger.debug('-- filters : ' + JSON.stringify(filters));
+	Logger.debug('[DAO - START] ProgramDao#remove');
+	Logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise;
 	if(filters.user_id) {
@@ -143,13 +143,13 @@ function remove (filters) {
 
 	let promiseEnd = promise
 		.catch(function (err) {
-			Logger.debug('[DAO-CATCH] ProgramDao#remove');
-			Logger.error('-- message : ' + err.message);
+			Logger.debug('[DAO - CATCH] ProgramDao#remove');
+			Logger.error('              -- message : ' + err.message);
 
 			throw err;
 		});
 
-	Logger.debug('[DAO - END] ProgramDao#remove');
+	Logger.debug('[DAO -   END] ProgramDao#remove');
 
 	return promiseEnd;
 }
@@ -164,8 +164,8 @@ function remove (filters) {
  */
 function getAll (filters) {
 
-	Logger.debug('[DAO-START] ProgramDao#getAll');
-	Logger.debug('-- filters : ' + JSON.stringify(filters));
+	Logger.debug('[DAO - START] ProgramDao#getAll');
+	Logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise;
 	if(filters.plan_id && filters.user_id) {
@@ -192,13 +192,13 @@ function getAll (filters) {
 
 	let promiseEnd = promise
 		.catch(function (err) {
-			Logger.debug('[DAO-CATCH] ProgramDao#getAll');
-			Logger.error('-- message : ' + err.message);
+			Logger.debug('[DAO - CATCH] ProgramDao#getAll');
+			Logger.error('              -- message : ' + err.message);
 
 			throw err;
 		});
 
-	Logger.debug('[DAO - END] ProgramDao#getAll');
+	Logger.debug('[DAO -   END] ProgramDao#getAll');
 
 	return promiseEnd;
 }
@@ -215,8 +215,8 @@ function getAll (filters) {
  */
 function getOne (filters) {
 
-	Logger.debug('[DAO-START] ProgramDao#getOne');
-	Logger.debug('-- filters : ' + JSON.stringify(filters));
+	Logger.debug('[DAO - START] ProgramDao#getOne');
+	Logger.debug('              -- filters : ' + JSON.stringify(filters));
 	
 	let promise;
 	if(filters.user_id) {
@@ -248,13 +248,13 @@ function getOne (filters) {
 			return BPromise.resolve(program);
 		})
 		.catch(function (err) {
-			Logger.debug('[DAO-CATCH] ProgramDao#getOne');
-			Logger.error('-- message : ' + err.message);
+			Logger.debug('[DAO - CATCH] ProgramDao#getOne');
+			Logger.error('              -- message : ' + err.message);
 
 			throw err;
 		});
 
-	Logger.debug('[DAO - END] ProgramDao#getOne');
+	Logger.debug('[DAO -   END] ProgramDao#getOne');
 
 	return promiseEnd;
 }

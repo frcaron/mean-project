@@ -12,7 +12,7 @@ module.exports = {
 	// Authenticate user
 	login : function (req, res) {
 
-		Logger.debug('[SER-START] SessionService#login');
+		Logger.debug('[SER - START] SessionService#login');
 
 		UserDao.validatePassword(req.body.email, req.body.password)
 			.then(function (user){
@@ -34,14 +34,14 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-				Logger.debug('[SER-CATCH] SessionService#login');
-				Logger.error('-- message : ' + err.message);
+				Logger.debug('[SER - CATCH] SessionService#login');
+				Logger.error('              -- message : ' + err.message);
 
 				return ResponseService.fail(res, {
 					message : 'Authentication'
 				});
 			});
 
-		Logger.debug('[SER - END] SessionService#login');
+		Logger.debug('[SER -   END] SessionService#login');
 	}
 };

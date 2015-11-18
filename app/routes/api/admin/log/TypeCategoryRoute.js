@@ -15,8 +15,8 @@ module.exports = function (router) {
 		// Create type category
 		.post(function (req, res) {
 
-			Logger.debug('[WSA-VALID] TypeCategoryRoute#post');
-			Logger.debug('-- req.body.name : ' + req.body.name);
+			Logger.debug('[WSA - VALID] TypeCategoryRoute#post');
+			Logger.debug('              -- req.body.name : ' + req.body.name);
 
 			// Validation
 			if (!req.body.name) {

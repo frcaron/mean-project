@@ -15,8 +15,8 @@ var CountersModel     = require(global.__model + '/CountersModel');
  */
 function create (input) {
 
-	Logger.debug('[DAO-START] TypeCategoryDao#create');
-	Logger.debug('-- input : ' + JSON.stringify(input));
+	Logger.debug('[DAO - START] TypeCategoryDao#create');
+	Logger.debug('              -- input : ' + JSON.stringify(input));
 
 	let typeCategory = new TypeCategoryModel();
 	let promise = CountersModel.getNextSequence('type_category_id')
@@ -31,8 +31,8 @@ function create (input) {
 			return BPromise.resolve(typeCategory);
 		})
 		.catch(function (err) {
-			Logger.debug('[DAO-CATCH] TypeCategoryDao#create');
-			Logger.error('-- message : ' + err.message);
+			Logger.debug('[DAO - CATCH] TypeCategoryDao#create');
+			Logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
 				throw new ErrorManager.DuplicateError('Type Category already exist');
@@ -41,7 +41,7 @@ function create (input) {
 			}
 		});
 
-	Logger.debug('[DAO - END] TypeCategoryDao#create');
+	Logger.debug('[DAO -   END] TypeCategoryDao#create');
 
 	return promise;
 }
@@ -55,8 +55,8 @@ function create (input) {
  */
 function update (input) {
 
-	Logger.debug('[DAO-START] TypeCategoryDao#update');
-	Logger.debug('-- input : ' + JSON.stringify(input));
+	Logger.debug('[DAO - START] TypeCategoryDao#update');
+	Logger.debug('              -- input : ' + JSON.stringify(input));
 
 	let promise = getOne({ id : input.id })
 		.then(function (typeCategory) {
@@ -72,8 +72,8 @@ function update (input) {
 			return BPromise.resolve(typeCategory);
 		})
 		.catch(function (err) {
-			Logger.debug('[DAO-CATCH] TypeCategoryDao#update');
-			Logger.error('-- message : ' + err.message);
+			Logger.debug('[DAO - CATCH] TypeCategoryDao#update');
+			Logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
 				throw new ErrorManager.DuplicateError('Type Category already exist');
@@ -82,7 +82,7 @@ function update (input) {
 			}
 		});
 
-	Logger.debug('[DAO - END] TypeCategoryDao#update');
+	Logger.debug('[DAO -   END] TypeCategoryDao#update');
 
 	return promise;
 }
@@ -93,17 +93,17 @@ function update (input) {
  */
 function getAll () {
 
-	Logger.debug('[DAO-START] TypeCategoryDao#getAll [start]');
+	Logger.debug('[DAO - START] TypeCategoryDao#getAll [start]');
 
 	let promise = TypeCategoryModel.findAsync()
 		.catch(function (err) {
-			Logger.debug('[DAO-CATCH] TypeCategoryDao#getAll');
-			Logger.error('-- message : ' + err.message);
+			Logger.debug('[DAO - CATCH] TypeCategoryDao#getAll');
+			Logger.error('              -- message : ' + err.message);
 
 			throw err;
 		});
 
-	Logger.debug('[DAO - END] TypeCategoryDao#getAll');
+	Logger.debug('[DAO -   END] TypeCategoryDao#getAll');
 
 	return promise;
 }
@@ -117,8 +117,8 @@ function getAll () {
  */
 function getOne (filters) {
 
-	Logger.debug('[DAO-START] TypeCategoryDao#getOne');
-	Logger.debug('-- filters : ' + JSON.stringify(filters));
+	Logger.debug('[DAO - START] TypeCategoryDao#getOne');
+	Logger.debug('              -- filters : ' + JSON.stringify(filters));
 	
 	let promise;
 	if(filters.id) {
@@ -136,13 +136,13 @@ function getOne (filters) {
 			return BPromise.resolve(typeCategory);
 		})
 		.catch(function (err) {
-			Logger.debug('[DAO-CATCH] TypeCategoryDao#getOne');
-			Logger.error('-- message : ' + err.message);
+			Logger.debug('[DAO - CATCH] TypeCategoryDao#getOne');
+			Logger.error('              -- message : ' + err.message);
 
 			throw err;
 		});
 
-	Logger.debug('[DAO - END] TypeCategoryDao#getOne');
+	Logger.debug('[DAO -   END] TypeCategoryDao#getOne');
 
 	return promiseEnd;
 }

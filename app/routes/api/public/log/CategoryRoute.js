@@ -18,9 +18,9 @@ module.exports = function (router) {
 			let plan_id          = req.body.plan_id || req.query.plan_id;
 			let type_category_id = req.body.type_category_id || req.query.type_category_id;
 
-			Logger.debug('[WSP-VALID] CategoryRoute#post');
-			Logger.debug('-- plan_id          : ' + plan_id);
-			Logger.debug('-- type_category_id : ' + type_category_id);
+			Logger.debug('[WSP - VALID] CategoryRoute#post');
+			Logger.debug('              -- plan_id          : ' + plan_id);
+			Logger.debug('              -- type_category_id : ' + type_category_id);
 
 			// Validation
 			if (!plan_id) {
@@ -44,9 +44,9 @@ module.exports = function (router) {
 
 			let type_category_id = req.body.type_category_id || req.query.type_category_id;
 
-			Logger.debug('[WSP-VALID] CategoryRoute#post');
-			Logger.debug('-- req.body.name    : ' + req.body.name);
-			Logger.debug('-- type_category_id : ' + type_category_id);
+			Logger.debug('[WSP - VALID] CategoryRoute#post');
+			Logger.debug('              -- req.body.name    : ' + req.body.name);
+			Logger.debug('              -- type_category_id : ' + type_category_id);
 
 			// Validation
 			if (!req.body.name) {

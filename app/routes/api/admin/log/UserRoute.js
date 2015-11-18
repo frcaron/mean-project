@@ -39,8 +39,8 @@ module.exports = function (router) {
 		// Manage permission
 		.put(function (req, res) {
 
-			Logger.debug('[WSA-VALID] UserRoute#put');
-			Logger.debug('-- req.body.admin : ' + req.body.admin);
+			Logger.debug('[WSA - VALID] UserRoute#put');
+			Logger.debug('              -- req.body.admin : ' + req.body.admin);
 
 			// Validation
 			if ( req.body.admin === undefined ) {

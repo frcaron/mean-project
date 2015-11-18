@@ -18,10 +18,10 @@ module.exports = function (router) {
 
 			let category_id = req.body.category_id ||req.query.category_id;
 
-			Logger.debug('[WSP-VALID] TransactionRoute#post');
-			Logger.debug('-- req.body.date         : ' + req.body.date);
-			Logger.debug('-- req.body.sum          : ' + req.body.sum);
-			Logger.debug('-- req.query.category_id : ' + category_id);
+			Logger.debug('[WSP - VALID] TransactionRoute#post');
+			Logger.debug('              -- req.body.date         : ' + req.body.date);
+			Logger.debug('              -- req.body.sum          : ' + req.body.sum);
+			Logger.debug('              -- req.query.category_id : ' + category_id);
 
 			// Validation
 			if (!req.body.date) {
@@ -68,9 +68,9 @@ module.exports = function (router) {
 
 			let category_id = req.body.category_id ||req.query.category_id;
 
-			Logger.debug('[WSP-VALID] TransactionRoute#put');
-			Logger.debug('-- req.body.date         : ' + req.body.date);
-			Logger.debug('-- req.query.category_id : ' + category_id);
+			Logger.debug('[WSP - VALID] TransactionRoute#put');
+			Logger.debug('              -- req.body.date         : ' + req.body.date);
+			Logger.debug('              -- req.query.category_id : ' + category_id);
 
 			// Validation
 			if (!req.body.date) {
