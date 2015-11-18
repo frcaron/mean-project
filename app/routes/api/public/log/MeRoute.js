@@ -1,7 +1,7 @@
 "use strict";
 
 //Inject
-var ResponseService = require(global.__service_trans + '/ResponseService');
+var ResponseService = require(global.__service_share + '/ResponseService');
 
 // Properties
 var api_prefix = '/me';
@@ -12,6 +12,9 @@ module.exports = function (router) {
 
 		// User token information
 		.get(function (req, res) {
-			return ResponseService.success(res, 'Get success', req.decoded);
+			return ResponseService.success(res, {
+				message : 'Get success', 
+				result  : req.decoded
+			});
 		});
 };

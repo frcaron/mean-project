@@ -15,20 +15,20 @@ var CountersModel = require(global.__model + '/CountersModel');
  */
 function create (input) {
 
-	Logger.debug('ProgramDao#create [start]');
+	Logger.debug('[DAO-START] ProgramDao#create');
 	Logger.debug('-- input : ' + JSON.stringify(input));
 	
-	var program = new ProgramModel();
-	var promise = CountersModel.getNextSequence('program_id')
+	let program = new ProgramModel();
+	let promise = CountersModel.getNextSequence('program_id')
 		.then(function (seq){
 
 			program._id        = seq;
-			program._plan      = input._plan;
-			program._category  = input._category;
+			program._plan      = input.plan_id;
+			program._category  = input.category_id;
 			if( input.budget ) {
 				program.budget = input.budget;
 			}
-			program._user      = input._user;
+			program._user      = input.user_id;
 
 			return program.saveAsync();
 		})
@@ -36,7 +36,8 @@ function create (input) {
 			return BPromise.resolve(program);
 		})
 		.catch(function (err) {
-			Logger.error('ProgramDao#create | ' + err.message);
+			Logger.debug('[DAO-CATCH] ProgramDao#create');
+			Logger.error('-- message : ' + err.message);
 
 			if (err.code === 11000) {
 				throw new ErrorManager.DuplicateError('Program already exist');
@@ -45,15 +46,14 @@ function create (input) {
 			}
 		});
 
-	Logger.debug('ProgramDao#create [end]');
+	Logger.debug('[DAO - END] ProgramDao#create');
 
 	return promise;
 }
 
 /** 
  * @param  {Json} input 	Data to update
- * @param  {Json} filters 	keys : 	- 
- *                         			- 
+ * @param  {Json} filters 	keys : 	- NO
  * @return {ProgramModel} 	Object updated
  * @throws {DuplicateError} If index model is not unique
  * @throws {NoResultError} 	If id doesn't exist
@@ -61,37 +61,39 @@ function create (input) {
  */
 function update (input, filters) {
 
-	Logger.debug('ProgramDao#update [start]');
+	Logger.debug('[DAO-START] ProgramDao#update');
 	Logger.debug('-- input   : ' + JSON.stringify(input));
 	Logger.debug('-- filters : ' + JSON.stringify(filters));
 
-	var promise,output;
+	let promise;
 	if (filters) {
-		// TODO
-		promise = ProgramModel.update();
+		promise = BPromise.reject(new ErrorManager.ParamsError('Filters forbidden'));
 	} else {
 		promise = getOne({ 
-				id      : input._id,
-				user_id : input._user
+				id      : input.id,
+				user_id : input.user_id
 			})
 			.then(function (program) {
 				if( input.category_id ) {
-					program._category = input._category;
+					program._category = input.category_id;
 				}
 				if( input.budget ) {
 					program.budget    = input.budget;
 				}
-				output = program;
-				return program.saveAsync();
+				return program.saveAsync()
+					.then(function () {
+						return BPromise.resolve(program);
+					});
 			});
 	}
 
-	var promiseEnd = promise
-		.then(function () {
-			return BPromise.resolve(output);
+	let promiseEnd = promise
+		.then(function (program) {
+			return BPromise.resolve(program);
 		})
 		.catch(function (err) {
-			Logger.error('ProgramDao#update | ' + err.message);
+			Logger.debug('[DAO-CATCH] ProgramDao#update');
+			Logger.error('-- message : ' + err.message);
 
 			if (err.code === 11000) {
 				throw new ErrorManager.DuplicateError('Program already exist');
@@ -100,28 +102,35 @@ function update (input, filters) {
 			}
 		});
 
-	Logger.debug('ProgramDao#update [end]');
+	Logger.debug('[DAO - END] ProgramDao#update');
 
 	return promiseEnd;
 }
 
 /**
- * @param  {Json} filters 	Keys : 	- user_id 
- * 									- id / user_id
+ * @param  {Json} filters 	Keys : 	- id 
+ * 									- user_id
+ * 									- plan_id
  * @return {} 
  * @throws {ParamsError} 	If params given are wrong
  * @throws {Error} 			If an other error is met
  */
 function remove (filters) {
 
-	Logger.debug('ProgramDao#remove [start]');
+	Logger.debug('[DAO-START] ProgramDao#remove');
 	Logger.debug('-- filters : ' + JSON.stringify(filters));
 
-	var promise;
+	let promise;
 	if(filters.user_id) {
 		if(filters.id) {		
 			promise = ProgramModel.removeAsync({ 
 				_id   : filters.id,
+				_user : filters.user_id
+			});
+
+		} else if(filters.plan_id) {		
+			promise = ProgramModel.removeAsync({ 
+				_plan : filters.plan_id,
 				_user : filters.user_id
 			});
 
@@ -132,14 +141,15 @@ function remove (filters) {
 		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
 
-	var promiseEnd = promise
+	let promiseEnd = promise
 		.catch(function (err) {
-			Logger.error('ProgramDao#remove | ' + err.message);
+			Logger.debug('[DAO-CATCH] ProgramDao#remove');
+			Logger.error('-- message : ' + err.message);
 
 			throw err;
 		});
 
-	Logger.debug('ProgramDao#remove [end]');
+	Logger.debug('[DAO - END] ProgramDao#remove');
 
 	return promiseEnd;
 }
@@ -154,7 +164,7 @@ function remove (filters) {
  */
 function getAll (filters) {
 
-	Logger.debug('ProgramDao#getAll [start]');
+	Logger.debug('[DAO-START] ProgramDao#getAll');
 	Logger.debug('-- filters : ' + JSON.stringify(filters));
 
 	let promise;
@@ -182,18 +192,22 @@ function getAll (filters) {
 
 	let promiseEnd = promise
 		.catch(function (err) {
-			Logger.error('ProgramDao#getAll | ' + err.message);
+			Logger.debug('[DAO-CATCH] ProgramDao#getAll');
+			Logger.error('-- message : ' + err.message);
 
 			throw err;
 		});
 
-	Logger.debug('ProgramDao#getAll [end]');
+	Logger.debug('[DAO - END] ProgramDao#getAll');
 
 	return promiseEnd;
 }
 
 /**
- * @param  {Json} filters 	Keys : 	- id / user_id
+ * @param  {Json} filters 	Keys : 	- id
+ *                         			- user_id
+ *                         			- category_id
+ *                         			- plan_id
  * @return {ProgramModel}	Object found
  * @throws {ParamsError} 	If params given are wrong
  * @throws {NoResultError} 	If no result found
@@ -201,15 +215,22 @@ function getAll (filters) {
  */
 function getOne (filters) {
 
-	Logger.debug('ProgramDao#getOne [start]');
+	Logger.debug('[DAO-START] ProgramDao#getOne');
 	Logger.debug('-- filters : ' + JSON.stringify(filters));
 	
-	var promise;
+	let promise;
 	if(filters.user_id) {
-		if(filters.id) {		
+		if(filters.id) {
 			promise = ProgramModel.findOneAsync({
 						_id   : filters.id,
 						_user : filters.user_id
+					});
+
+		} else if(filters.category_id && filters.plan_id) {
+			promise = ProgramModel.findOneAsync({
+						_category : filters.category_id,
+						_plan     : filters.plan_id,
+						_user     : filters.user_id
 					});
 
 		} else  {
@@ -219,7 +240,7 @@ function getOne (filters) {
 		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
 
-	var promiseEnd = promise
+	let promiseEnd = promise
 		.then(function (program) {
 			if (!program ) {
 				throw new ErrorManager.NoResultError('Program not found');
@@ -227,12 +248,13 @@ function getOne (filters) {
 			return BPromise.resolve(program);
 		})
 		.catch(function (err) {
-			Logger.error('ProgramDao#getOne | ' + err.message);
+			Logger.debug('[DAO-CATCH] ProgramDao#getOne');
+			Logger.error('-- message : ' + err.message);
 
 			throw err;
 		});
 
-	Logger.debug('ProgramDao#getOne [end]');
+	Logger.debug('[DAO - END] ProgramDao#getOne');
 
 	return promiseEnd;
 }

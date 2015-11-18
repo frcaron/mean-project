@@ -3,7 +3,7 @@
 // Inject
 var BPromise        = require('bluebird');
 var Logger          = require(global.__app + '/LoggerManager');
-var ResponseService = require(global.__service_trans + '/ResponseService');
+var ResponseService = require(global.__service_share + '/ResponseService');
 var UserDao         = require(global.__dao + '/UserDao');
 var PlanDao         = require(global.__dao + '/PlanDao');
 var ProgramDao      = require(global.__dao + '/ProgramDao');
@@ -16,7 +16,7 @@ module.exports = {
     // Create one user
     create           : function (req, res) {
 
-        Logger.debug('UserService#create - [start]');
+        Logger.debug('[SER-START] UserService#create');
 
         let inputUser = {
             firstname : req.body.firstname,
@@ -33,10 +33,10 @@ module.exports = {
                         return BPromise.map(typeCategories, function (typeCategory) {
 
                                 let inputCategory = {
-                                    name   : 'Autres',
-                                    _type  : typeCategory._id,
-                                    active : false,
-                                    _user  : user._id
+                                    name             : 'Autres',
+                                    type_category_id : typeCategory._id,
+                                    active           : false,
+                                    user_id          : user._id
                                 };
                                 return CategoryDao.create(inputCategory);
                             });
@@ -56,23 +56,24 @@ module.exports = {
                 });
             })
             .catch(function (err) {
-                Logger.error('UserService#create | ' + err.message);
+                Logger.debug('[SER-CATCH] UserService#create');
+                Logger.error('-- message : ' + err.message);
 
                 ResponseService.fail(res, {
                     message : 'Add user'
                 });
             });
 
-        Logger.debug('UserService#create - [end]');
+        Logger.debug('[SER - END] UserService#create');
     },
 
     // Update one user
     update           : function (req, res, user_id) {
 
-        Logger.debug('UserService#update - [start]');
+        Logger.debug('[SER-START] UserService#update');
 
         let input = {
-            _id       : user_id,
+            id        : user_id,
             firstname : req.body.firstname,
             surname   : req.body.surname,
             email     : req.body.email,
@@ -88,20 +89,21 @@ module.exports = {
                 });
             })
             .catch(function (err) {
-                Logger.error('UserService#update | ' + err.message);
+                Logger.debug('[SER-CATCH] UserService#update');
+                Logger.error('-- message : ' + err.message);
 
                 ResponseService.fail(res, {
                     message : 'Update user'
                 });
             });
 
-        Logger.debug('UserService#update - [end]');
+        Logger.debug('[SER - END] UserService#update');
     },
 
     // Remove one user
     remove           : function (req, res, user_id) {
 
-        Logger.debug('UserService#remove - [start]');
+        Logger.debug('[SER-START] UserService#remove');
 
         let msg = [];
         BPromise.map([UserDao, PlanDao, ProgramDao, CategoryDao, TransactionDao], 
@@ -121,20 +123,21 @@ module.exports = {
                 });                 
         })        
         .catch(function (err) { 
-            Logger.error('UserService#remove | ' + err.message);
+            Logger.debug('[SER-CATCH] UserService#remove');
+            Logger.error('-- message : ' + err.message);
 
             ResponseService.fail(res, {
                 message : 'Remove user'
             });
         });
 
-        Logger.debug('UserService#remove - [end]');
+        Logger.debug('[SER - END] UserService#remove');
     },
 
     // Get all users
-    getAll           : function (req, res) {
+    all              : function (req, res) {
 
-        Logger.debug('UserService#getAll - [start]');
+        Logger.debug('[SER-START] UserService#getAll');
 
         UserDao.getAll()
             .then(function(users) {
@@ -144,20 +147,21 @@ module.exports = {
                 });
             })
             .catch(function(err) {
-                Logger.error('UserService#getAll | ' + err.message);
+                Logger.debug('[SER-CATCH] UserService#getAll');
+                Logger.error('-- message : ' + err.message);
 
                 ResponseService.fail(res, {
                     message : 'Get all users'
                 });
             });
 
-        Logger.debug('UserService#getAll - [end]');
+        Logger.debug('[SER - END] UserService#getAll');
     },
 
     // Get one user by id
-    getOne           : function (req, res, user_id) {
+    getById          : function (req, res, user_id) {
 
-        Logger.debug('UserService#getOne - [start]');
+        Logger.debug('[SER-START] UserService#getOne');
 
         UserDao.getOne({
                 id : user_id
@@ -169,20 +173,21 @@ module.exports = {
                 });
             })
             .catch(function(err) {
-                Logger.error('UserService#getOne | ' + err.message);
+                Logger.debug('[SER-CATCH] UserService#getOne');
+                Logger.error('-- message : ' + err.message);
 
                 ResponseService.fail(res, {
                     message : 'Get user'
                 });
             });
 
-        Logger.debug('UserService#getOne - [end]');
+        Logger.debug('[SER - END] UserService#getOne');
     },
 
     // Set permission
     managePermission : function (req, res, user_id) {
 
-        Logger.debug('UserService#managePermission - [start]');
+        Logger.debug('[SER-START] UserService#managePermission');
 
         let input = {
             _id    : user_id,
@@ -196,13 +201,14 @@ module.exports = {
                 });
             })
             .catch(function(err) {
-                Logger.error('UserService#managePermission |Ò ' + err.message);
+                Logger.debug('[SER-CATCH] UserService#managePermission');
+                Logger.error('-- message : ' + err.message);
 
                 ResponseService.fail(res, {
                     message : 'Give rights'
                 });
             });
 
-        Logger.debug('UserService#managePermission - [end]');
+        Logger.debug('[SER - END] UserService#managePermission');
     }
 };

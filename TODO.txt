@@ -1,7 +1,4 @@
 TODO :
-Logger start end
-TransactionService = 3 todos
-update multiple
 WS get categories supprimer les catégories déjà utilisé
 
 Evol :
@@ -9,3 +6,5 @@ Validation email utilisateur
 Connection via facebook
 Category impossible à supprimer mais désactivé
 Mapping des objets retour pour cacher les champs en base (sécurité)
+Code retour pour identifier les erreurs (traitement côté IHM)
+Authentification

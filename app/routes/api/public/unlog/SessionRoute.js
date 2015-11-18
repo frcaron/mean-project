@@ -2,7 +2,7 @@
 
 //Inject 
 var Logger          = require(global.__app + '/LoggerManager');
-var ResponseService = require(global.__service_trans + '/ResponseService');
+var ResponseService = require(global.__service_share + '/ResponseService');
 var SessionService  = require(global.__service + '/SessionService');
 
 // Properties
@@ -15,7 +15,7 @@ module.exports = function (router) {
 		// Get all type category
 		.post(function (req, res) {
 
-			Logger.debug('Public#SessionRoute#post [validation]');
+			Logger.debug('[WSP-VALID] SessionRoute#post');
 			Logger.debug('-- req.body.email    : ' + req.body.email);
 			Logger.debug('-- req.body.password : ' + req.body.password);
 

@@ -4,7 +4,7 @@
 var Jwt             = require('jsonwebtoken');
 var TokenConfig     = require(global.__config + '/token');
 var Logger          = require(global.__app + '/LoggerManager');
-var ResponseService = require(global.__service_trans + '/ResponseService');
+var ResponseService = require(global.__service_share + '/ResponseService');
 
 module.exports = function (router) {
 
@@ -15,7 +15,7 @@ module.exports = function (router) {
 	// Validate param user_id
 	router.param('user_id', function (req, res, next, user_id) {
 
-		Logger.debug('ExpressValidation Admin "user_id" : ' + user_id);
+		Logger.debug('[WSA-VALID] "user_id" : ' + user_id);
 
 		if (!user_id) {
 			return ResponseService.fail(res, {
@@ -29,7 +29,7 @@ module.exports = function (router) {
 	// Validate param type_category_id
 	router.param('type_category_id', function (req, res, next, type_category_id) {
 
-		Logger.debug('ExpressValidation Admin "type_category_id" : ' + type_category_id);
+		Logger.debug('[WSA-VALID] "type_category_id" : ' + type_category_id);
 
 		if (!type_category_id) {
 			return ResponseService.fail(res, {
@@ -55,7 +55,8 @@ module.exports = function (router) {
 
 		var token = req.body.token || req.params.token || req.query.token || req.headers[ 'x-access-token' ];
 
-		Logger.debug('ExpressMiddleWare Admin [start] | token : ' + token);
+		Logger.debug('[WSA-START] MiddleWare');
+		Logger.debug('-- token : ' + token);
 
 		if (token) {
 			Jwt.verify(token, TokenConfig.secret, function (err, decoded) {
@@ -79,7 +80,8 @@ module.exports = function (router) {
 				// Follow token
 				req.decoded = decoded;
 
-				Logger.debug('ExpressMiddleWare Admin [end] | token : ' + decoded);	
+				Logger.debug('[WSA - END] MiddleWare');	
+				Logger.debug('-- token : ' + decoded);
 
 				return next();
 			});

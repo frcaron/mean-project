@@ -2,7 +2,7 @@
 
 //Inject
 var Logger          = require(global.__app + '/LoggerManager');
-var ResponseService = require(global.__service_trans + '/ResponseService');
+var ResponseService = require(global.__service_share + '/ResponseService');
 var PlanService     = require(global.__service + '/PlanService');
 
 // Properties
@@ -20,7 +20,7 @@ module.exports = function (router) {
 		// Create one plan
 		.post(function (req, res) {
 
-			Logger.debug('Public#PlanRoute#post [validation]');
+			Logger.debug('[WSP-VALID] PlanRoute#post');
 			Logger.debug('-- req.body.month : ' + req.body.month);
 			Logger.debug('-- req.body.year  : ' + req.body.year);
 
@@ -46,5 +46,10 @@ module.exports = function (router) {
 		// Get one program
 		.get(function (req, res) {
 			PlanService.getById(req, res);
+		})
+
+		// Delete one plan
+		.delete(function (req , res) {
+			PlanService.remove(req, res);
 		});
 };

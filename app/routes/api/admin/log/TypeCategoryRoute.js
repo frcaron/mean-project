@@ -2,7 +2,7 @@
 
 // Inject
 var Logger              = require(global.__app + '/LoggerManager');
-var ResponseService     = require(global.__service_trans + '/ResponseService');
+var ResponseService     = require(global.__service_share + '/ResponseService');
 var TypeCategoryService = require(global.__service + '/TypeCategoryService');
 
 // Properties
@@ -15,7 +15,7 @@ module.exports = function (router) {
 		// Create type category
 		.post(function (req, res) {
 
-			Logger.debug('Admin#TypeCategoryRoute#post [validation]');
+			Logger.debug('[WSA-VALID] TypeCategoryRoute#post');
 			Logger.debug('-- req.body.name : ' + req.body.name);
 
 			// Validation

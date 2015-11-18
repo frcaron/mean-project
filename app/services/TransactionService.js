@@ -4,39 +4,40 @@
 var BPromise        = require('bluebird');
 var ErrorManager    = require(global.__app + '/ErrorManager');
 var Logger          = require(global.__app + '/LoggerManager');
-var ResponseService = require(global.__service_trans + '/ResponseService');
+var ResponseService = require(global.__service_share + '/ResponseService');
+var BudgetService   = require(global.__service_share + '/BudgetService');
 var PlanDao         = require(global.__dao + '/PlanDao');
 var ProgramDao      = require(global.__dao + '/ProgramDao');
 var TransactionDao  = require(global.__dao + '/TransactionDao');
 var CategoryDao     = require(global.__dao + '/CategoryDao');
 
-function fulfillProgram(transaction, category_id) {	
-	let date_split = transaction.date.split('/');
+function fulfillProgram(input, category_id) {	
+	
+	let date_split = input.date.split('/');
+	let inputPlan = {
+		month   : date_split[ 1 ],
+		year    : date_split[ 2 ],
+		user_id : input.user_id
+	};
 
-	return PlanDao.getOne({
-			user_id : transaction._user,
-			month   : date_split[ 1 ],
-			year    : date_split[ 2 ]
-		})
-		.catch(ErrorManager.NoResultError, function (err) {
-			// TODO reflexion api ou user ?
-			// si api use service transversal
-			throw err;
+	return PlanDao.getOne(inputPlan)
+		.catch(ErrorManager.NoResultError, function () {			
+			return BudgetService.createPlan(inputPlan);
 		})
 		.then(function (plan) {
-			return  ProgramDao.getOne({
-						_plan     : plan._id,
-						_category : category_id,
-						_user     : transaction._user
-					});
-		})
-		.catch(ErrorManager.NoResultError, function (err) {
-			// TODO reflexion api ou user ?
-			throw err;
-		})
+			let inputProgram = {
+				plan_id     : plan._id,
+				category_id : category_id,
+				user_id     : input.user_id
+			};
+			return ProgramDao.getOne(inputProgram)
+				.catch(ErrorManager.NoResultError, function () {		
+					return BudgetService.createProgram(inputProgram);
+				});
+			})		
 		.then(function (program) {
-			transaction._program = program._id;
-			return BPromise.resolve(transaction);
+			input.program_id = program._id;
+			return BPromise.resolve(input);
 		});
 }
 
@@ -45,13 +46,13 @@ module.exports = {
 	// Create one transaction
 	create        : function (req, res) {
 
-		Logger.debug('TransactionService#create - [start]');
+		Logger.debug('[SER-START] TransactionService#create');
 
 		let input = {
-			date     : req.body.date,
-			sum      : req.body.sum,
-			comment  : req.body.comment,
-			_user    : req.decoded.id
+			date    : req.body.date,
+			sum     : req.body.sum,
+			comment : req.body.comment,
+			user_id : req.decoded.id
 		};
 		let category_id = req.body.category_id || req.query.category_id;
 
@@ -66,29 +67,29 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-				Logger.error('TransactionService#create | ' + err.message);
+				Logger.debug('[SER-CATCH] TransactionService#create');
+                Logger.error('-- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Add transaction'
 				});
 			});
 
-		Logger.debug('TransactionService#create - [end]');
+		Logger.debug('[SER - END] TransactionService#create');
 	},
 
 	// Update one transaction
 	update        : function (req, res) {
 
-		Logger.debug('TransactionService#update - [start]');
+		Logger.debug('[SER-START] TransactionService#update');
 
 		let input = {
-			_id     : req.params.transaction_id,
+			id      : req.params.transaction_id,
 			date    : req.body.date,
 			sum     : req.body.sum,
 			comment : req.body.comment,
-			_user   : req.decoded.id
+			user_id : req.decoded.id
 		};
-
 		let category_id = req.body.category_id || req.query.category_id;
 			
 		fulfillProgram(input, category_id)
@@ -102,20 +103,21 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-				Logger.error('TransactionService#update | ' + err.message);
+				Logger.debug('[SER-CATCH] TransactionService#update');
+                Logger.error('-- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Update transaction'
 				});
 			});
 
-		Logger.debug('TransactionService#update - [end]');
+		Logger.debug('[SER - END] TransactionService#update');
 	},
 
 	// Remove one transaction
 	remove        : function (req, res) {
 
-		Logger.debug('TransactionService#remove - [start]');
+		Logger.debug('[SER-START] TransactionService#remove');
 
 		TransactionDao.remove({ 
 				id      : req.params.transaction_id,
@@ -127,14 +129,15 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-				Logger.error('TransactionService#remove | ' + err.message);
+				Logger.debug('[SER-CATCH] TransactionService#remove');
+                Logger.error('-- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Remove failed'
 				});
 			});
 
-		Logger.debug('TransactionService#remove - [end]');
+		Logger.debug('[SER - END] TransactionService#remove');
 	},
 
 	// Get transactions by type category
@@ -187,7 +190,7 @@ module.exports = {
 	// Get transactions by program
 	allByProgramU : function (req, res) {
 
-		Logger.debug('TransactionService#allByProgramU - [start]');
+		Logger.debug('[SER-START] TransactionService#allByProgramU');
 
 		TransactionDao.getAll({
 				program_id : req.params.program_id,
@@ -200,20 +203,21 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-				Logger.error('TransactionService#allByProgramU | ' + err.message);
+				Logger.debug('[SER-CATCH] TransactionService#allByProgramU');
+                Logger.error('-- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Get all transactions by program'
 					});
 			});
 
-		Logger.debug('TransactionService#allByProgramU - [end]');
+		Logger.debug('[SER - END] TransactionService#allByProgramU');
 	},
 
 	// Get one transaction by id
 	getByIdU      : function (req, res) {
 
-		Logger.debug('TransactionService#getByIdU - [start]');
+		Logger.debug('[SER-START] TransactionService#getByIdU');
 
 		TransactionDao.getOne({
 				id    : req.params.transaction_id,
@@ -226,13 +230,14 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-				Logger.error('TransactionService#getByIdU | ' + err.message);
+				Logger.debug('[SER-CATCH] TransactionService#getByIdU');
+                Logger.error('-- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Get transaction'
 				});
 			});
 
-		Logger.debug('TransactionService#getByIdU - [end]');
+		Logger.debug('[SER - END] TransactionService#getByIdU');
 	}
 };

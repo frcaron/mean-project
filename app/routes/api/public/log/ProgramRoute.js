@@ -2,7 +2,7 @@
 
 //Inject
 var Logger             = require(global.__app + '/LoggerManager');
-var ResponseService    = require(global.__service_trans + '/ResponseService');
+var ResponseService    = require(global.__service_share + '/ResponseService');
 var ProgramService     = require(global.__service + '/ProgramService');
 var TransactionService = require(global.__service + '/TransactionService');
 
@@ -19,7 +19,7 @@ module.exports = function (router) {
 			let plan_id          = req.body.plan_id || req.query.plan_id;
 			let type_category_id = req.body.type_category_id || req.query.type_category_id;
 
-			Logger.debug('Public#PlanRoute#get [validation]');
+			Logger.debug('[WSP-VALID] PlanRoute#get');
 			Logger.debug('-- plan_id          : ' + plan_id);
 			Logger.debug('-- type_category_id : ' + type_category_id);
 
@@ -46,7 +46,7 @@ module.exports = function (router) {
 			let category_id = req.body.category_id || req.query.category_id;
 			let plan_id     = req.body.plan_id || req.query.plan_id;
 
-			Logger.debug('Public#ProgramRoute#post [validation]');
+			Logger.debug('[WSP-VALID] ProgramRoute#post');
 			Logger.debug('-- req.query.category_id 	: ' + category_id);
 			Logger.debug('-- req.query.plan_id 		: ' + plan_id);
 

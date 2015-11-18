@@ -4,7 +4,7 @@
 var Jwt             = require('jsonwebtoken');
 var TokenConfig     = require(global.__config + '/token');
 var Logger          = require(global.__app + '/LoggerManager');
-var ResponseService = require(global.__service_trans + '/ResponseService');
+var ResponseService = require(global.__service_share + '/ResponseService');
 var UserDao         = require(global.__dao + '/UserDao');
 
 module.exports = {
@@ -12,7 +12,7 @@ module.exports = {
 	// Authenticate user
 	login : function (req, res) {
 
-		Logger.debug('SessionService#login - [start]');
+		Logger.debug('[SER-START] SessionService#login');
 
 		UserDao.validatePassword(req.body.email, req.body.password)
 			.then(function (user){
@@ -34,13 +34,14 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-				Logger.debug('SessionService#login | ' + err.message);
+				Logger.debug('[SER-CATCH] SessionService#login');
+                Logger.error('-- message : ' + err.message);
 
 				return ResponseService.fail(res, {
 					message : 'Authentication'
 				});
 			});
 
-		Logger.debug('SessionService#login - [end]');
+		Logger.debug('[SER - END] SessionService#login');
 	}
 };

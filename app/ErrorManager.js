@@ -13,7 +13,8 @@ module.exports = {
 	DuplicateError : programmerError,
 	NoResultError  : programmerError,
 	ParamsError    : programmerError,
-	LoginError     : programmerError
+	LoginError     : programmerError,
+	MetierError    : programmerError
 };
 
 Util.inherits(programmerError, Error);

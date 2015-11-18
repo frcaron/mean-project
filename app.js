@@ -37,7 +37,7 @@ global.__plugin        = __dirname + '/app/data/plugins';
 global.__dao           = __dirname + '/app/data/dao';
 global.__route         = __dirname + '/app/routes';
 global.__service       = __dirname + '/app/services';
-global.__service_trans = __dirname + '/app/services/transversal';
+global.__service_share = __dirname + '/app/services/share';
 
 // DataBase ==================================================
 

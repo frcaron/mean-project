@@ -15,11 +15,11 @@ var CountersModel    = require(global.__model + '/CountersModel');
  */
 function create (input) {
 
-	Logger.debug('TransactionDao#create [start]');
+	Logger.debug('[DAO-START] TransactionDao#create');
 	Logger.debug('-- input : ' + JSON.stringify(input));
 
-	var transaction = new TransactionModel();
-	var promise = CountersModel.getNextSequence('transaction_id')
+	let transaction = new TransactionModel();
+	let promise = CountersModel.getNextSequence('transaction_id')
 		.then(function (seq){
 
 			transaction._id      = seq;
@@ -28,8 +28,8 @@ function create (input) {
 				transaction.comment = input.comment;
 			}
 			transaction.date     = input.date;
-			transaction._program = input._program;
-			transaction._user    = input._user;
+			transaction._program = input.program_id;
+			transaction._user    = input.user_id;
 
 			return transaction.saveAsync();
 		})
@@ -37,7 +37,8 @@ function create (input) {
 			return BPromise.resolve(transaction);
 		})
 		.catch(function (err) {
-			Logger.error('TransactionDao#create | ' + err.message);
+			Logger.debug('[DAO-CATCH] TransactionDao#create');
+			Logger.error('-- message : ' + err.message);
 
 			if (err.code === 11000) {
 				throw new ErrorManager.DuplicateError('Transaction already exist');
@@ -46,15 +47,15 @@ function create (input) {
 			}
 		});
 
-	Logger.debug('TransactionDao#create [end]');
+	Logger.debug('[DAO - END] TransactionDao#create');
 
 	return promise;
 }
 
 /** 
  * @param  {Json} input 		Data to update
- * @param  {Json} filters 		keys : 	- 
- *                          			- 
+ * @param  {Json} filters 		keys : 	- program_id
+ *                          			- user_id
  * @return {TransactionModel} 	Object updated
  * @throws {DuplicateError} 	If index model is not unique
  * @throws {NoResultError} 		If id doesn't exist
@@ -62,18 +63,30 @@ function create (input) {
  */
 function update (input, filters) {
 
-	Logger.debug('TransactionDao#update [start]');
+	Logger.debug('[DAO-START] TransactionDao#update');
 	Logger.debug('-- input   : ' + JSON.stringify(input));
 	Logger.debug('-- filters : ' + JSON.stringify(filters));
 
-	var promise, output;
+	let promise;
 	if(filters) {
-		// TODO
-		promise = TransactionModel.update();
+		if(filters.user_id && filters.program_id) {
+			promise = TransactionModel.updateAsync({
+					_program : filters.program_id,
+					_user    : filters.user_id
+				},{
+					_program : input.program_id
+				})
+				.then(function () {
+					BPromise.resolve(undefined);
+				});
+
+		} else {
+			promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
+		}
 	} else {
 		promise = getOne({ 
-				id      : input._id,
-				user_id : input._user
+				id      : input.id,
+				user_id : input.user_id
 			})
 			.then(function (transaction) {
 				if( input.date ) {
@@ -86,19 +99,24 @@ function update (input, filters) {
 					transaction.comment  = input.comment;
 				}
 				if( input.program_id ) {
-					transaction._program = input._program;
+					transaction._program = input.program_id;
 				}
-				output = transaction;
-				return transaction.saveAsync();
+				return transaction.saveAsync()
+					.then(function () {
+						BPromise.resolve(transaction);
+					});
 			});
 	}
 
-	var promiseEnd = promise
-		.then(function () {
-			return BPromise.resolve(output);
+	let promiseEnd = promise
+		.then(function (transaction) {
+			if(transaction) {
+				return BPromise.resolve(transaction);
+			}
 		})
 		.catch(function (err) {
-			Logger.error('TransactionDao#update | ' + err.message);
+			Logger.debug('[DAO-CATCH] TransactionDao#update');
+			Logger.error('-- message : ' + err.message);
 
 			if (err.code === 11000) {
 				throw new ErrorManager.DuplicateError('Transaction already exist');
@@ -107,28 +125,35 @@ function update (input, filters) {
 			}
 		});
 
-	Logger.debug('TransactionDao#update [end]');
+	Logger.debug('[DAO - END] TransactionDao#update');
 
 	return promiseEnd;
 }
 
 /**
- * @param  {Json} filters 	Keys : 	- user_id 
- * 									- id / user_id
+ * @param  {Json} filters 	Keys : 	- id 
+ * 									- user_id
+ * 									- plan_id
  * @return {} 
  * @throws {ParamsError} 	If params given are wrong
  * @throws {Error} 			If an other error is met
  */
 function remove (filters) {
 
-	Logger.debug('TransactionDao#remove [start]');
+	Logger.debug('[DAO-START] TransactionDao#remove');
 	Logger.debug('-- filters : ' + JSON.stringify(filters));
 
-	var promise;
+	let promise;
 	if(filters.user_id) {
-		if(filters.id) {		
+		if(filters.id) {
 			promise = TransactionModel.removeAsync({ 
 				_id   : filters.id,
+				_user : filters.user_id
+			});
+
+		} else if(filters.plan_id) {
+			promise = TransactionModel.removeAsync({ 
+				_plan : filters.plan_id,
 				_user : filters.user_id
 			});
 
@@ -139,14 +164,15 @@ function remove (filters) {
 		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
 
-	var promiseEnd = promise
+	let promiseEnd = promise
 		.catch(function (err) {
-			Logger.error('TransactionDao#remove | ' + err.message);
+			Logger.debug('[DAO-CATCH] TransactionDao#remove');
+			Logger.error('-- message : ' + err.message);
 
 			throw err;
 		});
 
-	Logger.debug('TransactionDao#remove [end]');
+	Logger.debug('[DAO - END] TransactionDao#remove');
 
 	return promiseEnd;
 }
@@ -160,10 +186,10 @@ function remove (filters) {
  */
 function getAll (filters) {
 
-	Logger.debug('TransactionDao#getAll [start]');
+	Logger.debug('[DAO-START] TransactionDao#getAll');
 	Logger.debug('-- filters : ' + JSON.stringify(filters));
 
-	var promise;
+	let promise;
 	if(filters.user_id) {
 		if(filters.program_id) {
 			promise = TransactionModel.findAsync({
@@ -179,14 +205,15 @@ function getAll (filters) {
 		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
 
-	var promiseEnd = promise
+	let promiseEnd = promise
 		.catch(function (err) {
-			Logger.error('TransactionDao#getAll | ' + err.message);
+			Logger.debug('[DAO-CATCH] TransactionDao#getAll');
+			Logger.error('-- message : ' + err.message);
 
 			throw err;
 		});
 
-	Logger.debug('TransactionDao#getAll [end]');
+	Logger.debug('[DAO - END] TransactionDao#getAll');
 
 	return promiseEnd;
 }
@@ -200,10 +227,10 @@ function getAll (filters) {
  */
 function getOne (filters) {
 
-	Logger.debug('TransactionDao#getOne [start]');
+	Logger.debug('[DAO-START] TransactionDao#getOne');
 	Logger.debug('-- filters : ' + JSON.stringify(filters));
 	
-	var promise;
+	let promise;
 	if(filters.user_id) {
 		if(filters.id) {		
 			promise = TransactionModel.findOneAsync({
@@ -218,7 +245,7 @@ function getOne (filters) {
 		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
 		
-	var promiseEnd = promise
+	let promiseEnd = promise
 		.then(function (transaction) {
 			if (!transaction) {
 				throw new ErrorManager.NoResultError('Transaction not found');
@@ -226,12 +253,13 @@ function getOne (filters) {
 			return BPromise.resolve(transaction);
 		})
 		.catch(function (err) {
-			Logger.error('TransactionDao#getOne | ' + err.message);
+			Logger.debug('[DAO-CATCH] TransactionDao#getOne');
+			Logger.error('-- message : ' + err.message);
 
 			throw err;
 		});
 
-	Logger.debug('TransactionDao#getOne [end]');
+	Logger.debug('[DAO - END] TransactionDao#getOne');
 
 	return promiseEnd;
 }

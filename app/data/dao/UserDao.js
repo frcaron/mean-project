@@ -15,11 +15,11 @@ var CountersModel = require(global.__model + '/CountersModel');
  */
 function create (input) {
 	
-	Logger.debug('UserDao#create [start]');
+	Logger.debug('[DAO-START] UserDao#create');
 	Logger.debug('-- input : ' + JSON.stringify(input));
 
-	var user = new UserModel();
-	var promise = CountersModel.getNextSequence('user_id')
+	let user = new UserModel();
+	let promise = CountersModel.getNextSequence('user_id')
 		.then(function (seq){
 
 			user._id       = seq;
@@ -37,7 +37,8 @@ function create (input) {
 			return BPromise.resolve(user);
 		})
 		.catch(function (err) {
-			Logger.error('UserDao#create | ' + err.message);
+			Logger.debug('[DAO-CATCH] UserDao#create');
+			Logger.error('-- message : ' + err.message);
 
 			if (err.code === 11000) {
 				throw new ErrorManager.DuplicateError('User already exist');
@@ -46,7 +47,7 @@ function create (input) {
 			}
 		});
 
-	Logger.debug('UserDao#create [end]');
+	Logger.debug('[DAO - END] UserDao#create');
 
 	return promise;
 }
@@ -60,11 +61,10 @@ function create (input) {
  */
 function update (input) {
 
-	Logger.debug('UserDao#update [start]');
+	Logger.debug('[DAO-START] UserDao#update');
 	Logger.debug('-- input : ' + JSON.stringify(input));
 
-	var output;
-	var promise = getOne({ id : input._id })
+	let promise = getOne({ id : input.id })
 		.then(function (user) {
 			if ( input.surname ) { 
 				user.surname   = input.surname;
@@ -81,14 +81,17 @@ function update (input) {
 			if ( input.admin !== undefined ) { 
 				user.admin     = input.admin;
 			}
-			output = user;
-			return user.saveAsync();
+			return user.saveAsync()
+				.then(function () {
+					return BPromise.resolve(user);
+				});
 		})
-		.then(function () {
-			return BPromise.resolve(output);
+		.then(function (user) {
+			return BPromise.resolve(user);
 		})
 		.catch(function (err) {
-			Logger.error('UserDao#update | ' + err.message);
+			Logger.debug('[DAO-CATCH] UserDao#update');
+			Logger.error('-- message : ' + err.message);
 
 			if (err.code === 11000) {
 				throw new ErrorManager.DuplicateError('User already exist');
@@ -97,7 +100,7 @@ function update (input) {
 			}
 		});
 
-	Logger.debug('UserDao#update [end]');
+	Logger.debug('[DAO - END] UserDao#update');
 
 	return promise;
 }
@@ -112,20 +115,21 @@ function update (input) {
  */
 function remove (filters) {
 
-	Logger.debug('UserDao#remove [start]');
+	Logger.debug('[DAO-START] UserDao#remove');
 	Logger.debug('-- filters : ' + JSON.stringify(filters));
 
-	var promise = getOne(filters)
+	let promise = getOne(filters)
 		.then(function(user){
 			return user.removeAsync();
 		})
 		.catch(function (err) {
-			Logger.error('UserDao#remove | ' + err.message);
+			Logger.debug('[DAO-CATCH] UserDao#remove');
+			Logger.error('-- message : ' + err.message);
 
 			throw err;
 		});
 
-	Logger.debug('UserDao#remove [end]');
+	Logger.debug('[DAO - END] UserDao#remove');
 
 	return promise;
 }
@@ -136,19 +140,20 @@ function remove (filters) {
  */
 function getAll () {
 
-	Logger.debug('UserDao#getAll [start]');
+	Logger.debug('[DAO-START] UserDao#getAll');
 
-	var promise = UserModel.findAsync()
+	let promise = UserModel.findAsync()
 		.then(function (users) {
 			return BPromise.resolve(users);
 		})
 		.catch(function (err) {
-			Logger.error('UserDao#getAll | ' + err.message);
+			Logger.debug('[DAO-CATCH] UserDao#getAll');
+			Logger.error('-- message : ' + err.message);
 
 			throw err;
 		});
 
-	Logger.debug('UserDao#getAll [end]');
+	Logger.debug('[DAO - END] UserDao#getAll');
 
 	return promise;
 }
@@ -163,11 +168,11 @@ function getAll () {
  */
 function getOne (filters) {
 
-	Logger.debug('UserDao#getOne [start]');
+	Logger.debug('[DAO-START] UserDao#getOne');
 	Logger.debug('-- filters : ' + JSON.stringify(filters));
 	
-	var promise;
-	var id = filters.id || filters.user_id;
+	let promise;
+	let id = filters.id || filters.user_id;
 	if(id) {
 		promise = UserModel.findByIdAsync(id);
 
@@ -180,7 +185,7 @@ function getOne (filters) {
 		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
 
-	var promiseEnd = promise
+	let promiseEnd = promise
 		.then(function (user) {
 			if (!user) {
 				throw new ErrorManager.NoResultError('User not found');
@@ -188,12 +193,13 @@ function getOne (filters) {
 			return BPromise.resolve(user);
 		})
 		.catch(function (err) {
-			Logger.error('UserDao#getOne | ' + err.message);
+			Logger.debug('[DAO-CATCH] UserDao#getOne');
+			Logger.error('-- message : ' + err.message);
 
 			throw err;
 		});
 
-	Logger.debug('UserDao#getOne [end]');
+	Logger.debug('[DAO - END] UserDao#getOne');
 
 	return promiseEnd;
 }
@@ -233,7 +239,7 @@ function validatePassword (log, pass) {
 		throw err;
 	});
 
-	Logger.debug('UserDao#validatePassword [end]');
+	Logger.debug('[DAO - END] UserDao#validatePassword [end]');
 
 	return BPromise.resolve(promise);
 }

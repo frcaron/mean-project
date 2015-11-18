@@ -4,7 +4,7 @@
 var Jwt             = require('jsonwebtoken');
 var TokenConfig     = require(global.__config + '/token');
 var Logger          = require(global.__app + '/LoggerManager');
-var ResponseService = require(global.__service_trans + '/ResponseService');
+var ResponseService = require(global.__service_share + '/ResponseService');
 
 module.exports = function (router) {
 
@@ -21,7 +21,8 @@ module.exports = function (router) {
 
 		var token = req.body.token || req.params.token ||  req.query.token || req.headers[ 'x-access-token' ];
 
-		Logger.debug('ExpressMiddleWare Basic [start] | token : ' + token);
+		Logger.debug('[WSB-START] MiddleWare');
+		Logger.debug('-- token : ' + token);
 
 		if (token) {
 			Jwt.verify(token, TokenConfig.secret, function (err, decoded) {
@@ -36,7 +37,8 @@ module.exports = function (router) {
 				// Follow token
 				req.decoded = decoded;
 
-				Logger.debug('ExpressMiddleWare Basic [end] | decoded : ' + decoded);	
+				Logger.debug('[WSB - END] MiddleWare');	
+				Logger.debug('-- token : ' + decoded);	
 
 				return next();
 			});

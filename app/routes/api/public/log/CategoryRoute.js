@@ -2,7 +2,7 @@
 
 //Inject
 var Logger          = require(global.__app + '/LoggerManager');
-var ResponseService = require(global.__service_trans + '/ResponseService');
+var ResponseService = require(global.__service_share + '/ResponseService');
 var CategoryService = require(global.__service + '/CategoryService');
 
 // Properties
@@ -18,7 +18,7 @@ module.exports = function (router) {
 			let plan_id          = req.body.plan_id || req.query.plan_id;
 			let type_category_id = req.body.type_category_id || req.query.type_category_id;
 
-			Logger.debug('Public#CategoryRoute#post [validation]');
+			Logger.debug('[WSP-VALID] CategoryRoute#post');
 			Logger.debug('-- plan_id          : ' + plan_id);
 			Logger.debug('-- type_category_id : ' + type_category_id);
 
@@ -44,7 +44,7 @@ module.exports = function (router) {
 
 			let type_category_id = req.body.type_category_id || req.query.type_category_id;
 
-			Logger.debug('Public#CategoryRoute#post [validation]');
+			Logger.debug('[WSP-VALID] CategoryRoute#post');
 			Logger.debug('-- req.body.name    : ' + req.body.name);
 			Logger.debug('-- type_category_id : ' + type_category_id);
 
@@ -79,6 +79,6 @@ module.exports = function (router) {
 
 		// Delete one category
 		.delete(function (req, res) {
-			CategoryService.desactivate(req, res);
+			CategoryService.remove(req, res);
 		});
 };

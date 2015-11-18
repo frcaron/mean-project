@@ -15,17 +15,17 @@ var CountersModel = require(global.__model + '/CountersModel');
  */
 function create (input) {
 
-	Logger.debug('PlanDao#create [start]');
+	Logger.debug('[DAO-START] PlanDao#create');
 	Logger.debug('-- input : ' + JSON.stringify(input));
 
-	var plan = new PlanModel();
-	var promise = CountersModel.getNextSequence('plan_id')
+	let plan = new PlanModel();
+	let promise = CountersModel.getNextSequence('plan_id')
 		.then(function (seq){
 
 			plan._id   = seq;
 			plan.month = input.month;
 			plan.year  = input.year;
-			plan._user = input._user;
+			plan._user = input.user_id;
 
 			return plan.saveAsync();
 		})
@@ -33,7 +33,8 @@ function create (input) {
 			return BPromise.resolve(plan);
 		})
 		.catch(function (err) {
-			Logger.error('PlanDao#create | ' + err.message);
+			Logger.debug('[DAO-CATCH] PlanDao#create');
+			Logger.error('-- message : ' + err.message);
 
 			if (err.code === 11000) {
 				throw new ErrorManager.DuplicateError('Plan already exist');
@@ -42,15 +43,14 @@ function create (input) {
 			}
 		});
 
-	Logger.debug('PlanDao#create [end]');
+	Logger.debug('[DAO - END] PlanDao#create');
 
 	return promise;
 }
 
 /** 
  * @param  {Json} input 	Data to update
- * @param  {Json} filters 	keys : 	- 
- *                         			- 
+ * @param  {Json} filters 	keys : 	- NO
  * @return {PlanModel} 		Object updated
  * @throws {DuplicateError} If index model is not unique
  * @throws {NoResultError} 	If id doesn't exist
@@ -58,18 +58,17 @@ function create (input) {
  */
 function update (input, filters) {
 
-	Logger.debug('PlanDao#update [start]');
+	Logger.debug('[DAO-START] PlanDao#update');
 	Logger.debug('-- input   : ' + JSON.stringify(input));
 	Logger.debug('-- filters : ' + JSON.stringify(filters));
 
-	var promise, output;
+	let promise;
 	if(filters) {
-		// TODO
-		promise = PlanModel.udpate();
+		promise = BPromise.reject(new ErrorManager.ParamsError('Filters forbidden'));
 	} else {
 		promise = getOne({ 
-				id      : input._id,
-				user_id : input._user
+				id      : input.id,
+				user_id : input.user_id
 			})
 			.then(function (plan) {
 				if ( input.month ) { 
@@ -78,17 +77,20 @@ function update (input, filters) {
 				if ( input.year ) { 
 					plan.year  = input.year;
 				}
-				output = plan;
-				return plan.saveAsync();
+				return plan.saveAsync()
+					.then(function () {
+						return BPromise.resolve(plan);
+					});
 			});
 	}
 
-	var promiseEnd = promise
-		.then(function () {
-			return BPromise.resolve(output);
+	let promiseEnd = promise
+		.then(function (plan) {
+			return BPromise.resolve(plan);
 		})
 		.catch(function (err) {
-			Logger.error('PlanDao#update | ' + err.message);
+			Logger.debug('[DAO-CATCH] PlanDao#update');
+			Logger.error('-- message : ' + err.message);
 
 			if (err.code === 11000) {
 				throw new ErrorManager.DuplicateError('Plan already exist');
@@ -97,7 +99,7 @@ function update (input, filters) {
 			}
 		});
 
-	Logger.debug('PlanDao#update [end]');
+	Logger.debug('[DAO - END] PlanDao#update');
 
 	return promiseEnd;
 }
@@ -111,14 +113,15 @@ function update (input, filters) {
  */
 function remove (filters) {
 
-	Logger.debug('PlanDao#remove [start]');
+	Logger.debug('[DAO-START] PlanDao#remove');
 	Logger.debug('-- filters : ' + JSON.stringify(filters));
 
-	var promise;
+	let promise;
 	if(filters.user_id) {
-		if(filters.id) {		
+		let id = filters.id || filters.plan_id;
+		if(id) {		
 			promise = PlanModel.removeAsync({ 
-				_id   : filters.id,
+				_id   : id,
 				_user : filters.user_id
 			});
 
@@ -129,14 +132,15 @@ function remove (filters) {
 		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
 
-	var promiseEnd = promise
+	let promiseEnd = promise
 		.catch(function (err) {
-			Logger.error('PlanDao#remove | ' + err.message);
+			Logger.debug('[DAO-CATCH] PlanDao#remove');
+			Logger.error('-- message : ' + err.message);
 
 			throw err;
 		});
 
-	Logger.debug('PlanDao#remove [end]');
+	Logger.debug('[DAO - END] PlanDao#remove');
 
 	return promiseEnd;
 }
@@ -149,10 +153,10 @@ function remove (filters) {
  */
 function getAll (filters) {
 
-	Logger.debug('PlanDao#getAll [start]');
+	Logger.debug('[DAO-START] PlanDao#getAll');
 	Logger.debug('-- filters : ' + JSON.stringify(filters));
 
-	var promise;
+	let promise;
 	if(filters.user_id) {
 		promise = PlanModel.findAsync({
 						_user : filters.user_id
@@ -162,14 +166,15 @@ function getAll (filters) {
 		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
 
-	var promiseEnd = promise
+	let promiseEnd = promise
 		.catch(function (err) {
-			Logger.error('PlanDao#getAll | ' + err.message);
+			Logger.debug('[DAO-CATCH] PlanDao#getAll');
+			Logger.error('-- message : ' + err.message);
 
 			throw err;
 		});
 
-	Logger.debug('PlanDao#getAll [end]');
+	Logger.debug('[DAO - END] PlanDao#getAll');
 
 	return promiseEnd;
 }
@@ -184,10 +189,10 @@ function getAll (filters) {
  */
 function getOne (filters) {
 
-	Logger.debug('PlanDao#getOne [start]');
+	Logger.debug('[DAO-START] PlanDao#getOne');
 	Logger.debug('-- filters : ' + JSON.stringify(filters));
 
-	var promise;
+	let promise;
 	if(filters.user_id) {
 		if(filters.id) {
 			promise = PlanModel.findOneAsync({
@@ -208,7 +213,7 @@ function getOne (filters) {
 		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing)'));
 	}
 		
-	var promiseEnd = promise
+	let promiseEnd = promise
 		.then(function (plan) {
 			if (!plan) {
 				throw new ErrorManager.NoResultError('Plan not found');
@@ -216,12 +221,13 @@ function getOne (filters) {
 			return BPromise.resolve(plan);
 		})
 		.catch(function (err) {
-			Logger.error('PlanDao#getOne | ' + err.message);
+			Logger.debug('[DAO-CATCH] PlanDao#getOne');
+			Logger.error('-- message : ' + err.message);
 
 			throw err;
 		});
 
-	Logger.debug('PlanDao#getOne [end]');
+	Logger.debug('[DAO - END] PlanDao#getOne');
 
 	return promiseEnd;
 }

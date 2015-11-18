@@ -2,7 +2,7 @@
 
 //Inject
 var Logger          = require(global.__app + '/LoggerManager');
-var ResponseService = require(global.__service_trans + '/ResponseService');
+var ResponseService = require(global.__service_share + '/ResponseService');
 var UserService     = require(global.__service + '/UserService');
 
 // Properties
@@ -15,7 +15,7 @@ module.exports = function (router) {
 		// Create new user
 		.post(function (req, res) {
 
-			Logger.debug('Public#UserRoute#post [validation]');
+			Logger.debug('[WSP-VALID] UserRoute#post');
 			Logger.debug('-- req.body.surname   : ' + req.body.surname);
 			Logger.debug('-- req.body.firstname : ' + req.body.firstname);
 			Logger.debug('-- req.body.email     : ' + req.body.email);
@@ -23,16 +23,28 @@ module.exports = function (router) {
 
 			// Validation
 			if (!req.body.surname) {
-				return ResponseService.fail(res, 'Add failed', 'Param "surname" missing');
+				return ResponseService.fail(res, {
+					message : 'Add', 
+					reason  : 'Param "surname" missing'
+				});
 			}
 			if (!req.body.firstname) {
-				return ResponseService.fail(res, 'Add failed', 'Param "firstname" missing');
+				return ResponseService.fail(res, {
+					message : 'Add', 
+					reason  : 'Param "firstname" missing'
+				});
 			}
 			if (!req.body.email) {
-				return ResponseService.fail(res, 'Add failed', 'Param "email" missing');
+				return ResponseService.fail(res, {
+					message : 'Add', 
+					reason  : 'Param "email" missing'
+				});
 			}
 			if (!req.body.password) {
-				return ResponseService.fail(res, 'Add failed', 'Param "password" missing');
+				return ResponseService.fail(res, {
+					message : 'Add', 
+					reason  : 'Param "password" missing'
+				});
 			}
 
 			UserService.create(req, res);

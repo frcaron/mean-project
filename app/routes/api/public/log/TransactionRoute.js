@@ -3,7 +3,7 @@
 //Inject
 var Moment             = require('moment');
 var Logger             = require(global.__app + '/LoggerManager');
-var ResponseService    = require(global.__service_trans + '/ResponseService');
+var ResponseService    = require(global.__service_share + '/ResponseService');
 var TransactionService = require(global.__service + '/TransactionService');
 
 // Properties
@@ -18,7 +18,7 @@ module.exports = function (router) {
 
 			let category_id = req.body.category_id ||req.query.category_id;
 
-			Logger.debug('Public#TransactionRoute#post [validation]');
+			Logger.debug('[WSP-VALID] TransactionRoute#post');
 			Logger.debug('-- req.body.date         : ' + req.body.date);
 			Logger.debug('-- req.body.sum          : ' + req.body.sum);
 			Logger.debug('-- req.query.category_id : ' + category_id);
@@ -68,7 +68,7 @@ module.exports = function (router) {
 
 			let category_id = req.body.category_id ||req.query.category_id;
 
-			Logger.debug('Public#TransactionRoute#put [validation]');
+			Logger.debug('[WSP-VALID] TransactionRoute#put');
 			Logger.debug('-- req.body.date         : ' + req.body.date);
 			Logger.debug('-- req.query.category_id : ' + category_id);
 

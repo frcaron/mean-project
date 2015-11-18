@@ -2,7 +2,7 @@
 
 //Inject
 var Logger          = require(global.__app + '/LoggerManager');
-var ResponseService = require(global.__service_trans + '/ResponseService');
+var ResponseService = require(global.__service_share + '/ResponseService');
 var UserService     = require(global.__service + '/UserService');
 
 // Properties
@@ -14,14 +14,14 @@ module.exports = function (router) {
 
 		// Get all users
 		.get(function (req, res) {
-			UserService.getAll(req, res);
+			UserService.all(req, res);
 		});
 
 	router.route(api_prefix + '/:user_id')
 
 		// Get one user
 		.get(function (req, res) {
-			UserService.getOne(req, res, req.params.user_id);
+			UserService.getById(req, res, req.params.user_id);
 		})
 
 		// Update one user
@@ -39,7 +39,7 @@ module.exports = function (router) {
 		// Manage permission
 		.put(function (req, res) {
 
-			Logger.debug('Admin#UserRoute#put [validation]');
+			Logger.debug('[WSA-VALID] UserRoute#put');
 			Logger.debug('-- req.body.admin : ' + req.body.admin);
 
 			// Validation

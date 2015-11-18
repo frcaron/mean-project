@@ -3,49 +3,26 @@
 // Inject
 var BPromise        = require('bluebird');
 var Logger          = require(global.__app + '/LoggerManager');
-var ResponseService = require(global.__service_trans + '/ResponseService');
+var ResponseService = require(global.__service_share + '/ResponseService');
+var BudgetService   = require(global.__service_share + '/BudgetService');
 var PlanDao         = require(global.__dao + '/PlanDao');
 var ProgramDao      = require(global.__dao + '/ProgramDao');
-var CategoryDao     = require(global.__dao + '/CategoryDao');
+var TransactionDao  = require(global.__dao + '/TransactionDao');
 
 module.exports = {
 
 	// Create one plan
 	create  : function (req, res) {
 
-		Logger.debug('PlanService#create - [start]');
+		Logger.debug('[SER-START] PlanService#create');
 
-		let inputPlan = {
-			month : req.body.month,
-			year  : req.body.year,
-			_user : req.decoded.id
+		let input = {
+			month   : req.body.month,
+			year    : req.body.year,
+			user_id : req.decoded.id
 		};
 
-		PlanDao.create(inputPlan)
-			.then(function (plan) {
-				return CategoryDao.getAll({ 
-						active  : false,
-						user_id : req.decoded.id
-					})
-					.then(function (categories) {
-						return BPromise.map(categories, function (category) {
-							
-							let inputProgram = {
-								_category : category._id,
-								_plan     : plan._id
-							};
-
-							return ProgramDao.create(inputProgram);
-						});
-					})
-					.then(function () {
-						return BPromise.resolve(plan);
-					})
-					.catch(function (err) {
-						PlanDao.remove({ id : plan._id });
-						throw err;
-					});
-			})
+		BudgetService.createPlan(input)
 			.then(function (plan) {
 				ResponseService.success(res, { 
 					message : 'Add plan', 
@@ -53,20 +30,58 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-                Logger.error('PlanService#create | ' + err.message);
+	            Logger.debug('[SER-CATCH] PlanService#create');
+	            Logger.error('-- message : ' + err.message);
 
-                ResponseService.fail(res, {
-                    message : 'Add plan'
-                });
+	            ResponseService.fail(res, {
+	                message : 'Add plan'
+	            });
 			});
 
-		Logger.debug('PlanService#create - [end]');
+		Logger.debug('[SER - END] PlanService#create');
+	},
+
+	// Delete plan user
+	remove  : function (req, res) {
+
+		Logger.debug('[SER-START] PlanService#remove');
+
+		let msg = [];
+        BPromise.map([PlanDao, ProgramDao, TransactionDao], 
+            function(dao) {
+                return dao.remove({ 
+            			plan_id : req.params.plan_id,
+                		user_id : req.decoded.id
+                	 })
+                    .then(function () {
+                       msg.push(' [Success]' + dao.name);
+                    })
+                    .catch(function (err) {
+                       msg.push(' [Failed]' + dao.name + ' / ' + err.message);
+                    });
+            })                                  
+        .then(function() {
+            ResponseService.success(res, {
+                    message : 'Remove plan', 
+                    result  : msg.toString()
+                });                 
+        })        
+        .catch(function (err) { 
+            Logger.debug('[SER-CATCH] PlanService#remove');
+            Logger.error('-- message : ' + err.message);
+
+            ResponseService.fail(res, {
+                message : 'Remove plan'
+            });
+        });
+
+		Logger.debug('[SER - END] PlanService#remove');
 	},
 
 	// Get plans by user
 	allByU  : function (req, res) {
 
-		Logger.debug('PlanService#allByU - [start]');
+		Logger.debug('[SER-START] PlanService#allByU');
 
 		PlanDao.getAll({ user_id : req.decoded.id })
 			.then(function (plans) {
@@ -76,20 +91,21 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-                Logger.error('PlanService#allByU | ' + err.message);
+                Logger.debug('[SER-CATCH] PlanService#allByU');
+                Logger.error('-- message : ' + err.message);
 
                 ResponseService.fail(res, {
                     message : 'Get all plans'
                 });
 			});
 
-		Logger.debug('PlanService#allByU - [end]');
+		Logger.debug('[SER - END] PlanService#allByU');
 	},
 
 	// Get one plan by id
 	getById : function (req, res) {
 
-		Logger.debug('PlanService#getById [start]');
+		Logger.debug('[SER-START] PlanService#getById');
 
 		PlanDao.getOne({
 				id      : req.params.plan_id,
@@ -102,13 +118,14 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-                Logger.error('PlanService#getById | ' + err.message);
+                Logger.debug('[SER-CATCH] PlanService#getById');
+                Logger.error('-- message : ' + err.message);
 
                 ResponseService.fail(res, {
                     message : 'Get plan'
                 });
 			});
 				
-		Logger.debug('PlanService#getById [end]');
+		Logger.debug('[SER - END] PlanService#getById');
 	}
 };

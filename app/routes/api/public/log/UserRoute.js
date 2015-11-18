@@ -12,7 +12,7 @@ module.exports = function (router) {
 
 		// Get one user
 		.get(function (req, res) {
-			UserService.getOne(req, res, req.decoded.id);
+			UserService.getById(req, res, req.decoded.id);
 		})
 
 		// Update one user
