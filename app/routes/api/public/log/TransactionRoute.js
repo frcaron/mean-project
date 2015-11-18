@@ -86,7 +86,7 @@ module.exports = function (router) {
 						});
 			}
 
-			var moment = Moment(req.body.date, "DD/MM/YYYY");
+			let moment = Moment(req.body.date, "DD/MM/YYYY");
 			if(!moment.isValid()) {
 				ResponseService.fail(res, {
 						message : 'Add',

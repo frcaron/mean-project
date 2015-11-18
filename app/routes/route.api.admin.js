@@ -53,7 +53,7 @@ module.exports = function (router) {
 	// Token verification
 	router.use(function (req, res, next) {
 
-		var token = req.body.token || req.params.token || req.query.token || req.headers[ 'x-access-token' ];
+		let token = req.body.token || req.params.token || req.query.token || req.headers[ 'x-access-token' ];
 
 		Logger.debug('[WSA-START] MiddleWare');
 		Logger.debug('-- token : ' + token);

@@ -1,11 +1,11 @@
 "use strict";
 
 // Inject 
-var Express  = require('express');
+var Express      = require('express');
 
-var adminRouter = Express.Router();
-var publicRouter   = Express.Router();
-var basicRouter = Express.Router();
+var adminRouter  = Express.Router();
+var publicRouter = Express.Router();
+var basicRouter  = Express.Router();
 
 require('./route.api.admin')(adminRouter);
 require('./route.api.public')(publicRouter);

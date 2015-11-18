@@ -35,7 +35,7 @@ module.exports = {
 			})
 			.catch(function (err) {
 				Logger.debug('[SER-CATCH] SessionService#login');
-                Logger.error('-- message : ' + err.message);
+				Logger.error('-- message : ' + err.message);
 
 				return ResponseService.fail(res, {
 					message : 'Authentication'

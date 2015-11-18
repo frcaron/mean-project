@@ -25,7 +25,7 @@ module.exports = {
 			})
 			.catch(function (err){
 				Logger.debug('[SER-CATCH] TypeCategoryService#create');
-                Logger.error('-- message : ' + err.message);
+				Logger.error('-- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Add type category'
@@ -53,7 +53,7 @@ module.exports = {
 			})
 			.catch(function (err) {
 				Logger.debug('[SER-CATCH] TypeCategoryService#update');
-                Logger.error('-- message : ' + err.message);
+				Logger.error('-- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Update type category'
@@ -77,7 +77,7 @@ module.exports = {
 			})
 			.catch(function (err) {
 				Logger.debug('[SER-CATCH] TypeCategoryService#all');
-                Logger.error('-- message : ' + err.message);
+				Logger.error('-- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Get all categories'
@@ -101,7 +101,7 @@ module.exports = {
 			})
 			.catch(function (err) {
 				Logger.debug('[SER-CATCH] TypeCategoryService#getById');
-                Logger.error('-- message : ' + err.message);
+				Logger.error('-- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Get type category'

@@ -30,12 +30,12 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-	            Logger.debug('[SER-CATCH] PlanService#create');
-	            Logger.error('-- message : ' + err.message);
+				Logger.debug('[SER-CATCH] PlanService#create');
+				Logger.error('-- message : ' + err.message);
 
-	            ResponseService.fail(res, {
-	                message : 'Add plan'
-	            });
+				ResponseService.fail(res, {
+					message : 'Add plan'
+				});
 			});
 
 		Logger.debug('[SER - END] PlanService#create');
@@ -47,33 +47,33 @@ module.exports = {
 		Logger.debug('[SER-START] PlanService#remove');
 
 		let msg = [];
-        BPromise.map([PlanDao, ProgramDao, TransactionDao], 
-            function(dao) {
-                return dao.remove({ 
-            			plan_id : req.params.plan_id,
-                		user_id : req.decoded.id
-                	 })
-                    .then(function () {
-                       msg.push(' [Success]' + dao.name);
-                    })
-                    .catch(function (err) {
-                       msg.push(' [Failed]' + dao.name + ' / ' + err.message);
-                    });
-            })                                  
-        .then(function() {
-            ResponseService.success(res, {
-                    message : 'Remove plan', 
-                    result  : msg.toString()
-                });                 
-        })        
-        .catch(function (err) { 
-            Logger.debug('[SER-CATCH] PlanService#remove');
-            Logger.error('-- message : ' + err.message);
+		BPromise.map([PlanDao, ProgramDao, TransactionDao], 
+			function(dao) {
+				return dao.remove({ 
+						plan_id : req.params.plan_id,
+						user_id : req.decoded.id
+					 })
+					.then(function () {
+					   msg.push(' [Success]' + dao.name);
+					})
+					.catch(function (err) {
+					   msg.push(' [Failed]' + dao.name + ' / ' + err.message);
+					});
+			})                                  
+		.then(function() {
+			ResponseService.success(res, {
+					message : 'Remove plan', 
+					result  : msg.toString()
+				});                 
+		})        
+		.catch(function (err) { 
+			Logger.debug('[SER-CATCH] PlanService#remove');
+			Logger.error('-- message : ' + err.message);
 
-            ResponseService.fail(res, {
-                message : 'Remove plan'
-            });
-        });
+			ResponseService.fail(res, {
+				message : 'Remove plan'
+			});
+		});
 
 		Logger.debug('[SER - END] PlanService#remove');
 	},
@@ -91,12 +91,12 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-                Logger.debug('[SER-CATCH] PlanService#allByU');
-                Logger.error('-- message : ' + err.message);
+				Logger.debug('[SER-CATCH] PlanService#allByU');
+				Logger.error('-- message : ' + err.message);
 
-                ResponseService.fail(res, {
-                    message : 'Get all plans'
-                });
+				ResponseService.fail(res, {
+					message : 'Get all plans'
+				});
 			});
 
 		Logger.debug('[SER - END] PlanService#allByU');
@@ -118,12 +118,12 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-                Logger.debug('[SER-CATCH] PlanService#getById');
-                Logger.error('-- message : ' + err.message);
+				Logger.debug('[SER-CATCH] PlanService#getById');
+				Logger.error('-- message : ' + err.message);
 
-                ResponseService.fail(res, {
-                    message : 'Get plan'
-                });
+				ResponseService.fail(res, {
+					message : 'Get plan'
+				});
 			});
 				
 		Logger.debug('[SER - END] PlanService#getById');

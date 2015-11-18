@@ -34,7 +34,7 @@ module.exports = {
 			})
 			.catch(function (err) {
 				Logger.debug('[SER-CATCH] CategoryService#create');
-                Logger.error('-- message : ' + err.message);
+				Logger.error('-- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Add category'
@@ -65,7 +65,7 @@ module.exports = {
 			})
 			.catch(function (err) {
 				Logger.debug('[SER-CATCH] CategoryService#update');
-                Logger.error('-- message : ' + err.message);
+				Logger.error('-- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Update category'
@@ -97,7 +97,7 @@ module.exports = {
 			})
 			.catch(function (err) {
 				Logger.debug('[SER-CATCH] CategoryService#remove');
-                Logger.error('-- message : ' + err.message);
+				Logger.error('-- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Desactivate category'
@@ -135,7 +135,7 @@ module.exports = {
 			})
 			.catch(function (err) {
 				Logger.debug('[SER-CATCH] CategoryService#allActiveByTypeCategoryU');
-                Logger.error('-- message : ' + err.message);
+				Logger.error('-- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Get all categories active by type category'
@@ -162,7 +162,7 @@ module.exports = {
 			})
 			.catch(function (err) {
 				Logger.debug('[SER-CATCH] CategoryService#getByIdU');
-                Logger.error('-- message : ' + err.message);
+				Logger.error('-- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Get category'

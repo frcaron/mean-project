@@ -4,7 +4,7 @@
 var Util = require('util');
 
 var programmerError = function (message) {
- 	Error.captureStackTrace(this, this.constructor);
+	Error.captureStackTrace(this, this.constructor);
 	this.name    = this.constructor.name;
 	this.message = message || '';
 };

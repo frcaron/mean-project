@@ -68,7 +68,7 @@ module.exports = {
 			})
 			.catch(function (err) {
 				Logger.debug('[SER-CATCH] TransactionService#create');
-                Logger.error('-- message : ' + err.message);
+				Logger.error('-- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Add transaction'
@@ -104,7 +104,7 @@ module.exports = {
 			})
 			.catch(function (err) {
 				Logger.debug('[SER-CATCH] TransactionService#update');
-                Logger.error('-- message : ' + err.message);
+				Logger.error('-- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Update transaction'
@@ -130,7 +130,7 @@ module.exports = {
 			})
 			.catch(function (err) {
 				Logger.debug('[SER-CATCH] TransactionService#remove');
-                Logger.error('-- message : ' + err.message);
+				Logger.error('-- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Remove failed'
@@ -204,7 +204,7 @@ module.exports = {
 			})
 			.catch(function (err) {
 				Logger.debug('[SER-CATCH] TransactionService#allByProgramU');
-                Logger.error('-- message : ' + err.message);
+				Logger.error('-- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Get all transactions by program'
@@ -231,7 +231,7 @@ module.exports = {
 			})
 			.catch(function (err) {
 				Logger.debug('[SER-CATCH] TransactionService#getByIdU');
-                Logger.error('-- message : ' + err.message);
+				Logger.error('-- message : ' + err.message);
 
 				ResponseService.fail(res, {
 					message : 'Get transaction'

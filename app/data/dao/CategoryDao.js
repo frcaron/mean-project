@@ -8,10 +8,10 @@ var CategoryModel = require(global.__model + '/CategoryModel');
 var CountersModel = require(global.__model + '/CountersModel');
 
 /**
- * @param  {Json} input 	Data to create
- * @return {CategoryModel} 	Object created
+ * @param  {Json} input     Data to create
+ * @return {CategoryModel}  Object created
  * @throws {DuplicateError} If index model is not unique
- * @throws {Error} 			If an other error is met
+ * @throws {Error}          If an other error is met
  */
 function create (input) {
 
@@ -52,12 +52,12 @@ function create (input) {
 }
 
 /** 
- * @param  {Json} input 	Data to update
- * @param  {Json} filters 	Keys : 	- NO 
- * @return {CategoryModel} 	Object updated
+ * @param  {Json} input     Data to update
+ * @param  {Json} filters   Keys :  - NO 
+ * @return {CategoryModel}  Object updated
  * @throws {DuplicateError} If index model is not unique
- * @throws {NoResultError} 	If id doesn't exist
- * @throws {Error} 			If an other error is met
+ * @throws {NoResultError}  If id doesn't exist
+ * @throws {Error}          If an other error is met
  */
 function update (input, filters) {
 
@@ -111,12 +111,12 @@ function update (input, filters) {
 }
 
 /**
- * @param  {Json} filters 	Keys : 	- user_id
- * 									- id / user_id
- * @return {CategoryModel}	Object found
- * @throws {ParamsError} 	If params given are wrong
- * @throws {NoResultError} 	If no result found
- * @throws {Error} 			If an other error is met
+ * @param  {Json} filters   Keys :  - user_id
+ *                                  - id / user_id
+ * @return {CategoryModel}  Object found
+ * @throws {ParamsError}    If params given are wrong
+ * @throws {NoResultError}  If no result found
+ * @throws {Error}          If an other error is met
  */
 function remove (filters) {
 
@@ -125,7 +125,7 @@ function remove (filters) {
 
 	let promise;
 	if(filters.user_id) {
-		if(filters.id) {		
+		if(filters.id) {        
 			promise = CategoryModel.removeAsync({ 
 				_id   : filters.id,
 				_user : filters.user_id
@@ -153,12 +153,12 @@ function remove (filters) {
 }
 
 /**
- * @param  {Json} filters 	Keys :  - user_id
- *                         			- type_id
- *                         			- active
- * @return {CategoryModel}	List of object found
- * @throws {ParamsError} 	If params given are wrong
- * @throws {Error} 			If an other error is met
+ * @param  {Json} filters   Keys :  - user_id
+ *                                  - type_id
+ *                                  - active
+ * @return {CategoryModel}  List of object found
+ * @throws {ParamsError}    If params given are wrong
+ * @throws {Error}          If an other error is met
  */
 function getAll (filters) {
 
@@ -193,14 +193,14 @@ function getAll (filters) {
 }
 
 /**
- * @param  {Json} filters 	Keys : 	- id
- * 									- type_id
- * 									- neutre
- * 									- user_id
- * @return {CategoryModel}	Object found
- * @throws {ParamsError} 	If params given are wrong
- * @throws {NoResultError} 	If no result found
- * @throws {Error} 			If an other error is met
+ * @param  {Json} filters   Keys :  - id
+ *                                  - type_id
+ *                                  - neutre
+ *                                  - user_id
+ * @return {CategoryModel}  Object found
+ * @throws {ParamsError}    If params given are wrong
+ * @throws {NoResultError}  If no result found
+ * @throws {Error}          If an other error is met
  */
 function getOne (filters) {
 
@@ -209,7 +209,7 @@ function getOne (filters) {
 
 	let promise;
 	if(filters.user_id) {
-		if(filters.id) {		
+		if(filters.id) {        
 			promise = CategoryModel.findOneAsync({
 							_id   : filters.id,
 							_user : filters.user_id
