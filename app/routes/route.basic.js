@@ -38,7 +38,7 @@ module.exports = function (router) {
 				req.decoded = decoded;
 
 				Logger.debug('[WSB - END] MiddleWare');	
-				Logger.debug('-- token : ' + decoded);	
+				Logger.debug('-- token : ' + JSON.stringify(decoded));	
 
 				return next();
 			});

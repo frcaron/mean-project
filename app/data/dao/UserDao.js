@@ -83,6 +83,7 @@ function update (input) {
 			}
 			return user.saveAsync()
 				.then(function () {
+					user.password = undefined;
 					return BPromise.resolve(user);
 				});
 		})
