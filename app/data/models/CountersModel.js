@@ -27,10 +27,11 @@ module.exports = {
 	// Get next id table
 	getNextSequence : function (name) {
 		return CountersModel.findByIdAndUpdateAsync(
-					name, 
-					{ $inc : { seq : 1 } }, 
-					{ new  : true,
-					upsert : true
+					name,
+					{ $inc : { seq : 1 } },
+					{
+						new    : true,
+						upsert : true
 					})
 				.then(function(ret) {
 					return BPromise.resolve(ret.seq);

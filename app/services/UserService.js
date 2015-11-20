@@ -19,11 +19,11 @@ module.exports = {
 		Logger.debug('[SER - START] UserService#create');
 
 		let inputUser = {
-			firstname : req.body.firstname,
-			surname   : req.body.surname,
-			email     : req.body.email,
-			password  : req.body.password,
-			admin     : req.body.admin // TODO delete after test
+            firstname : req.body.firstname,
+            surname   : req.body.surname,
+            email     : req.body.email,
+            password  : req.body.password,
+            admin     : req.body.admin // TODO delete after test
 		};
 
 		UserDao.create(inputUser)
@@ -51,8 +51,8 @@ module.exports = {
 			})
 			.then(function (user) {
 				ResponseService.success(res, {
-					message :'Add user', 
-					result  : user 
+					message :'Add user',
+					result  : user
 				});
 			})
 			.catch(function (err) {
@@ -84,7 +84,7 @@ module.exports = {
 		UserDao.update(input)
 			.then(function (user) {
 				ResponseService.success(res, {
-					message : 'Update user', 
+					message : 'Update user',
 					result  : user
 				});
 			})
@@ -106,7 +106,7 @@ module.exports = {
 		Logger.debug('[SER - START] UserService#remove');
 
 		let msg = [];
-		BPromise.map([UserDao, PlanDao, ProgramDao, CategoryDao, TransactionDao], 
+		BPromise.map([UserDao, PlanDao, ProgramDao, CategoryDao, TransactionDao],
 			function(dao) {
 				return dao.remove({ user_id : user_id })
 						.then(function () {
@@ -115,14 +115,14 @@ module.exports = {
 						.catch(function (err) {
 						   msg.push(' [Failed]' + dao.name + ' / ' + err.message);
 						});
-			})                                  
+			})
 		.then(function() {
 			ResponseService.success(res, {
-					message : 'Remove user', 
+					message : 'Remove user',
 					result  : msg.toString()
-				});                 
-		})        
-		.catch(function (err) { 
+				});
+		})
+		.catch(function (err) {
 			Logger.debug('[SER - CATCH] UserService#remove');
 			Logger.error('              -- message : ' + err.message);
 
@@ -142,7 +142,7 @@ module.exports = {
 		UserDao.getAll()
 			.then(function(users) {
 				ResponseService.success(res, {
-					message : 'Get all users', 
+					message : 'Get all users',
 					result  : users
 				});
 			})
@@ -168,7 +168,7 @@ module.exports = {
 			})
 			.then(function(user) {
 				ResponseService.success(res, {
-					message : 'Get user', 
+					message : 'Get user',
 					result  : user
 				});
 			})
