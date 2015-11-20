@@ -51,9 +51,9 @@ function create (input) {
 	return promise;
 }
 
-/** 
+/**
  * @param  {Json} input     Data to update
- * @param  {Json} filters   Keys :  - NO 
+ * @param  {Json} filters   Keys :  - NO
  * @return {CategoryModel}  Object updated
  * @throws {DuplicateError} If index model is not unique
  * @throws {NoResultError}  If id doesn't exist
@@ -69,7 +69,7 @@ function update (input, filters) {
 	if(filters) {
 		promise = BPromise.reject(new ErrorManager.ParamsError('Filters forbidden'));
 	} else {
-		promise = getOne({ 
+		promise = getOne({
 				id      : input.id,
 				user_id : input.user_id
 			})
@@ -90,7 +90,7 @@ function update (input, filters) {
 			});
 	}
 
-	let promiseEnd = promise 
+	let promiseEnd = promise
 		.then(function (category) {
 			return BPromise.resolve(category);
 		})
@@ -125,8 +125,8 @@ function remove (filters) {
 
 	let promise;
 	if(filters.user_id) {
-		if(filters.id) {        
-			promise = CategoryModel.removeAsync({ 
+		if(filters.id) {
+			promise = CategoryModel.removeAsync({
 				_id   : filters.id,
 				_user : filters.user_id
 			});
@@ -154,8 +154,9 @@ function remove (filters) {
 
 /**
  * @param  {Json} filters   Keys :  - user_id
- *                                  - type_id
+ *                                  - type_category_id
  *                                  - active
+ *                                  - no_categories_id
  * @return {CategoryModel}  List of object found
  * @throws {ParamsError}    If params given are wrong
  * @throws {Error}          If an other error is met
@@ -167,16 +168,29 @@ function getAll (filters) {
 
 	let promise;
 	if(filters.user_id) {
-
-		let query = {
-			_type  : filters.type_id,
-			active : filters.active,
-			_user  : filters.user_id
-		};
-
-		promise = CategoryModel.findAsync(query);
+		if(filters.type_category_id) {
+			if(filters.no_categories_id && filters.no_categories_id.length) {
+				promise = CategoryModel.findAsync({
+					_id    : { $nin : filters.no_categories_id },
+					_type  : filters.type_category_id,
+					active : filters.active,
+					_user  : filters.user_id
+				});
+			} else {
+				promise = CategoryModel.findAsync({
+					_type  : filters.type_category_id,
+					active : filters.active,
+					_user  : filters.user_id
+				});
+			}
+		} else {
+			promise = CategoryModel.findAsync({
+				active : filters.active,
+				_user  : filters.user_id
+			});
+		}
 	} else {
-		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
+		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing "user_id"'));
 	}
 
 	let promiseEnd = promise
@@ -194,7 +208,7 @@ function getAll (filters) {
 
 /**
  * @param  {Json} filters   Keys :  - id
- *                                  - type_id
+ *                                  - type_category_id
  *                                  - neutre
  *                                  - user_id
  * @return {CategoryModel}  Object found
@@ -209,14 +223,14 @@ function getOne (filters) {
 
 	let promise;
 	if(filters.user_id) {
-		if(filters.id) {        
+		if(filters.id) {
 			promise = CategoryModel.findOneAsync({
 							_id   : filters.id,
 							_user : filters.user_id
 						});
-		} else if(filters.neutre && filters.type_id) {
+		} else if(filters.neutre && filters.type_category_id) {
 			promise = CategoryModel.findOneAsync({
-							_type  : filters.type_id,
+							_type  : filters.type_category_id,
 							active : false,
 							_user  : filters.user_id
 						});
@@ -224,9 +238,9 @@ function getOne (filters) {
 			promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 		}
 	} else {
-		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
+		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing "user_id"'));
 	}
-		
+
 	let promiseEnd = promise
 		.then(function (category) {
 			if (!category) {

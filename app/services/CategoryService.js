@@ -1,8 +1,10 @@
 "use strict";
 
 // Inject
+var BPromise        = require('bluebird');
 var Logger          = require(global.__app + '/LoggerManager');
 var ResponseService = require(global.__service_share + '/ResponseService');
+var ProgramDao      = require(global.__dao + '/ProgramDao');
 var CategoryDao     = require(global.__dao + '/CategoryDao');
 var TypeCategoryDao = require(global.__dao + '/TypeCategoryDao');
 
@@ -78,7 +80,7 @@ module.exports = {
 	// Desactivate one category
 	remove             : function (req, res) {
 
-		// TODO 
+		// TODO
 		// Suppression des programs lié
 
 		Logger.debug('[SER - START] CategoryService#remove');
@@ -114,6 +116,45 @@ module.exports = {
 		let plan_id          = req.body.plan_id || req.query.plan_id;
 		let type_category_id = req.body.type_category_id || req.query.type_category_id;
 
+		ProgramDao.getAll({
+				plan_id : plan_id,
+				user_id : req.decoded.id
+			})
+			.then(function (programs) {
+				if(!programs.length) {
+					throw new Error('Program not found');
+				}
+
+				var categories_id = [];
+				programs.map(function (program) {
+					categories_id.push(program._id);
+				});
+
+				return BPromise.all(categories_id)
+					.then(function () {
+						return CategoryDao.getAll({
+							no_categories_id : categories_id,
+							type_category_id : type_category_id,
+							active           : true,
+							user_id          : req.decoded.id
+						});
+					});
+			})
+			. then(function (categories) {
+				ResponseService.success(res, {
+					message : 'Get all categories active usable for this plan',
+					result  : categories
+				});
+			})
+			.catch(function (err) {
+				Logger.debug('[SER - CATCH] CategoryService#allByTypeCatUNoUse');
+				Logger.error('              -- message : ' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Get all categories active usable for this plan'
+				});
+			});
+
 		Logger.debug('[SER -   END] CategoryService#allByTypeCatUNoUse');
 	},
 
@@ -129,7 +170,7 @@ module.exports = {
 			})
 			.then(function (categories) {
 				ResponseService.success(res, {
-					message : 'Get all categories active by type category', 
+					message : 'Get all categories active by type category',
 					result  : categories
 				});
 			})
@@ -156,7 +197,7 @@ module.exports = {
 			})
 			.then(function (category) {
 				ResponseService.success(res, {
-					message : 'Get category', 
+					message : 'Get category',
 					result  : category
 				});
 			})

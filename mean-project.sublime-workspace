@@ -4,28 +4,68 @@
 		"selected_items":
 		[
 			[
-				"catego",
+				"pr",
+				"programs_id"
+			],
+			[
+				"programs",
+				"programs_id"
+			],
+			[
+				"get",
+				"getAll"
+			],
+			[
+				"Trans",
+				"TransactionDao"
+			],
+			[
+				"progr",
+				"programs_id"
+			],
+			[
+				"pro",
+				"programs_id"
+			],
+			[
+				"ca",
 				"categories_id"
 			],
 			[
+				"categor",
+				"category_id"
+			],
+			[
+				"Plan",
+				"PlanDao"
+			],
+			[
+				"type_",
+				"type_category_id"
+			],
+			[
+				"tr",
+				"transaction"
+			],
+			[
+				"_",
+				"_program"
+			],
+			[
 				"categ",
+				"category"
+			],
+			[
+				"type",
+				"type_id"
+			],
+			[
+				"catego",
 				"categories_id"
 			],
 			[
 				"tran",
 				"transactions"
-			],
-			[
-				"type",
-				"type_category_id"
-			],
-			[
-				"pro",
-				"program_id"
-			],
-			[
-				"get",
-				"getAll"
 			],
 			[
 				"Tran",
@@ -40,10 +80,6 @@
 				"user_id"
 			],
 			[
-				"categor",
-				"category_id"
-			],
-			[
 				"filters",
 				"filters"
 			],
@@ -54,10 +90,6 @@
 			[
 				"res",
 				"resolve"
-			],
-			[
-				"_",
-				"_plan"
 			],
 			[
 				"plan",
@@ -120,10 +152,6 @@
 				"execAsync"
 			],
 			[
-				"pr",
-				"programService"
-			],
-			[
 				"a",
 				"admin"
 			]
@@ -132,42 +160,10 @@
 	"buffers":
 	[
 		{
-			"file": "app/services/CategoryService.js",
-			"settings":
-			{
-				"buffer_size": 4978,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "app/services/TransactionService.js",
-			"settings":
-			{
-				"buffer_size": 5954,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "app/services/ProgramService.js",
-			"settings":
-			{
-				"buffer_size": 4055,
-				"line_ending": "Windows"
-			}
-		},
-		{
 			"file": "TODO.txt",
 			"settings":
 			{
-				"buffer_size": 143,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "app/routes/api/public/log/PlanRoute.js",
-			"settings":
-			{
-				"buffer_size": 1346,
+				"buffer_size": 354,
 				"line_ending": "Windows"
 			}
 		},
@@ -175,15 +171,31 @@
 			"file": "app/data/dao/ProgramDao.js",
 			"settings":
 			{
-				"buffer_size": 6093,
+				"buffer_size": 7463,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "app/routes/api/public/log/TypeCategoryRoute.js",
+			"file": "/C/App/SublimeText3/Data/Packages/User/Preferences.sublime-settings",
 			"settings":
 			{
-				"buffer_size": 654,
+				"buffer_size": 912,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/services/TransactionService.js",
+			"settings":
+			{
+				"buffer_size": 7104,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "app/ErrorManager.js",
+			"settings":
+			{
+				"buffer_size": 456,
 				"line_ending": "Windows"
 			}
 		}
@@ -195,25 +207,61 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 173.0,
-		"last_filter": "quic",
+		"height": 160.0,
+		"last_filter": "remove",
 		"selected_items":
 		[
 			[
-				"quic",
-				"Git: Quick Commit"
+				"remove",
+				"Package Control: Remove Package"
 			],
 			[
 				"stat",
 				"Git: Status"
 			],
 			[
-				"git quic",
-				"Git: Quick Add"
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"remo",
+				"Package Control: Remove Package"
+			],
+			[
+				"color",
+				"Colorsublime: Install Theme"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"qui",
+				"Git: Quick Commit"
+			],
+			[
+				"status",
+				"Git: Status"
+			],
+			[
+				"quick",
+				"Git: Quick Commit"
+			],
+			[
+				"quic",
+				"Git: Quick Commit"
 			],
 			[
 				"commit",
-				"Git: Amend Commit"
+				"Git: Quick Commit"
+			],
+			[
+				"pull",
+				"Git: Pull"
+			],
+			[
+				"git quic",
+				"Git: Quick Add"
 			],
 			[
 				"git",
@@ -228,20 +276,12 @@
 				"Git: Commit"
 			],
 			[
-				"status",
-				"Git: Status"
-			],
-			[
 				"q",
 				"Git: Quick Commit"
 			],
 			[
 				"com",
 				"Git: Commit"
-			],
-			[
-				"qui",
-				"Git: Quick Add"
 			],
 			[
 				"gommit",
@@ -260,10 +300,6 @@
 				"SublimeLinter: Enable Linter"
 			],
 			[
-				"install",
-				"Package Control: Install Package"
-			],
-			[
 				"linter",
 				"SublimeLinter: Clear Caches"
 			],
@@ -276,16 +312,8 @@
 				"Package Control: Remove Package"
 			],
 			[
-				"remove",
-				"Package Control: Remove Package"
-			],
-			[
 				"install ",
 				"Package Control: Install Package"
-			],
-			[
-				"remo",
-				"Package Control: Remove Package"
 			],
 			[
 				"remov",
@@ -302,10 +330,6 @@
 			[
 				"inst",
 				"Package Control: Install Package"
-			],
-			[
-				"pull",
-				"Git: Pull"
 			],
 			[
 				"at",
@@ -346,10 +370,6 @@
 			[
 				"SublimeLinter",
 				"SublimeLinter: Lint This View"
-			],
-			[
-				"insta",
-				"Package Control: Install Package"
 			],
 			[
 				"fet",
@@ -428,7 +448,7 @@
 				"Git: Merge"
 			]
 		],
-		"width": 416.0
+		"width": 450.0
 	},
 	"console":
 	{
@@ -459,60 +479,85 @@
 		"/C/App/Workspace/mean-project/app",
 		"/C/App/Workspace/mean-project/app/data",
 		"/C/App/Workspace/mean-project/app/data/dao",
-		"/C/App/Workspace/mean-project/app/data/models",
-		"/C/App/Workspace/mean-project/app/routes",
-		"/C/App/Workspace/mean-project/app/routes/api",
-		"/C/App/Workspace/mean-project/app/routes/api/public",
-		"/C/App/Workspace/mean-project/app/routes/api/public/log",
+		"/C/App/Workspace/mean-project/app/data/plugins",
 		"/C/App/Workspace/mean-project/app/services",
-		"/C/App/Workspace/mean-project/node_modules/bluebird/js"
+		"/C/App/Workspace/mean-project/app/services/share"
 	],
 	"file_history":
 	[
-		"/C/App/Workspace/mean-project/app/routes/api/public/log/ProgramRoute.js",
-		"/C/App/Workspace/mean-project/app/data/models/ProgramModel.js",
-		"/C/App/Workspace/mean-project/app/routes/api/public/log/TransactionRoute.js",
-		"/C/App/Workspace/mean-project/app/services/UserService.js",
-		"/C/App/Workspace/mean-project/app/services/CategoryService.js",
-		"/C/App/Workspace/mean-project/app/routes/api/public/log/TypeCategoryRoute.js",
-		"/C/App/Workspace/mean-project/app/services/PlanService.js",
-		"/C/App/Workspace/mean-project/app/services/ProgramService.js",
-		"/C/App/Workspace/mean-project/app/services/TransactionService.js",
+		"/C/App/SublimeText3/Data/Packages/User/Preferences.sublime-settings",
 		"/C/App/Workspace/mean-project/app/data/dao/CategoryDao.js",
-		"/C/App/Workspace/mean-project/app/services/TypeCategoryService.js",
-		"/C/App/Workspace/mean-project/app/routes/api/public/log/CategoryRoute.js",
-		"/C/App/Workspace/mean-project/app/routes/api/public/log/PlanRoute.js",
-		"/C/App/Workspace/mean-project/TODO.txt",
-		"/C/App/Workspace/mean-project/app/services/SessionService.js",
-		"/C/App/Workspace/mean-project/app/data/models/CategoryModel.js",
-		"/C/App/Workspace/mean-project/app/ErrorManager.js",
-		"/C/App/Workspace/mean-project/app/routes/api/public/log/MeRoute.js",
-		"/C/App/Workspace/mean-project/app/routes/api/public/log/UserRoute.js",
-		"/C/App/Workspace/mean-project/app/routes/api/public/unlog/SessionRoute.js",
-		"/C/App/Workspace/mean-project/app/routes/api/public/unlog/UserRoute.js",
-		"/C/App/Workspace/mean-project/app/routes/api/admin/unlog/TypeCategoryRoute.js",
-		"/C/App/Workspace/mean-project/app/routes/api/admin/log/TypeCategoryRoute.js",
-		"/C/App/Workspace/mean-project/app/routes/api/admin/log/UserRoute.js",
-		"/C/App/Workspace/mean-project/README.md",
-		"/C/App/Workspace/mean-project/package.json",
-		"/C/App/Workspace/mean-project/mean-project.sublime-project",
-		"/C/App/Workspace/mean-project/app.js",
-		"/C/App/Workspace/mean-project/app/services/ResponseService.js",
-		"/C/App/Workspace/mean-project/app/routes/route.api.admin.js",
-		"/C/App/Workspace/mean-project/app/routes/route.api.public.js",
-		"/C/App/Workspace/mean-project/app/routes/route.basic.js",
-		"/C/App/Workspace/mean-project/app/data/dao/ProgramDao.js",
 		"/C/App/Workspace/mean-project/app/data/dao/TransactionDao.js",
+		"/C/App/Workspace/mean-project/app/data/dao/ProgramDao.js",
+		"/C/App/Workspace/mean-project/mean-project.sublime-project",
+		"/C/App/Workspace/mean-project/app/data/plugins/UserPlugin.js",
+		"/C/App/Workspace/mean-project/TODO.txt",
 		"/C/App/Workspace/mean-project/app/data/dao/PlanDao.js",
+		"/C/App/Workspace/mean-project/package.json",
+		"/C/App/Workspace/mean-project/app.js",
+		"/C/App/SublimeText3/Data/Packages/Default/Preferences.sublime-settings",
+		"/C/App/SublimeText3/Data/Packages/User/Default (Windows).sublime-keymap",
+		"/C/App/Workspace/mean-project/app/routes/route.api.public.js",
 		"/C/App/Workspace/mean-project/app/data/dao/TypeCategoryDao.js",
+		"/C/App/Workspace/mean-project/app/data/models/ProgramModel.js",
 		"/C/App/Workspace/mean-project/app/data/dao/UserDao.js",
-		"/C/App/Workspace/mean-project/app/data/models/CountersModel.js",
-		"/C/App/Workspace/mean-project/config/database.js",
+		"/C/App/SublimeText3/Data/Packages/BracketHighlighter/Example.sublime-keymap",
+		"/C/App/Workspace/mean-project/bin/www",
+		"/C/App/SublimeText3/Data/Packages/Emmet/Emmet.sublime-settings",
+		"/C/App/SublimeText3/Data/Packages/Default/Default (Windows).sublime-keymap",
+		"/C/App/SublimeText3/Data/Packages/User/Context.sublime-menu",
+		"/C/App/SublimeText3/Data/Packages/Alignment/Base File.sublime-settings",
+		"/C/App/SublimeText3/Data/Packages/User/Base File.sublime-settings",
+		"/C/App/SublimeText3/Data/Packages/Alignment/Default (Windows).sublime-keymap",
+		"/C/App/SublimeText3/Data/Packages/User/JavaScript.sublime-settings",
+		"/C/App/Workspace/mean-project/app/ErrorManager.js",
+		"/C/App/SublimeText3/Data/Packages/User/Distraction Free.sublime-settings",
+		"/C/App/SublimeText3/Data/Packages/User/JSON.sublime-settings",
+		"/C/App/Workspace/mean-project/app/routes/api/public/log/TransactionRoute.js",
 		"/C/App/Workspace/mean-project/app/LoggerManager.js",
 		"/C/App/Workspace/mean-project/config/logger.js",
-		"/C/App/Workspace/mean-project/app/routes/routes.js",
-		"/C/App/Workspace/mean-project/app/Injector.js",
+		"/C/App/Workspace/mean-project/app/routes/api/public/log/PlanRoute.js",
+		"/C/App/Workspace/mean-project/app/services/PlanService.js",
+		"/C/App/Workspace/mean-project/app/routes/api/public/log/ProgramRoute.js",
+		"/C/App/Workspace/mean-project/app/routes/api/public/log/UserRoute.js",
+		"/C/App/Workspace/mean-project/app/routes/api/public/log/TypeCategoryRoute.js",
+		"/C/App/Workspace/mean-project/node_modules/winston/lib/winston.js",
+		"/C/App/Workspace/mean-project/node_modules/winston/lib/winston/config.js",
+		"/C/App/Workspace/mean-project/node_modules/winston/package.json",
+		"/C/App/Workspace/mean-project/app/services/UserService.js",
+		"/C/App/Workspace/mean-project/app/services/TypeCategoryService.js",
+		"/C/App/Workspace/mean-project/app/services/TransactionService.js",
+		"/C/App/Workspace/mean-project/app/services/SessionService.js",
+		"/C/App/Workspace/mean-project/app/services/ProgramService.js",
+		"/C/App/Workspace/mean-project/app/services/CategoryService.js",
+		"/C/App/Workspace/mean-project/app/routes/route.basic.js",
+		"/C/App/Workspace/mean-project/app/routes/route.api.admin.js",
+		"/C/App/Workspace/mean-project/app/routes/api/public/unlog/UserRoute.js",
+		"/C/App/Workspace/mean-project/app/routes/api/admin/log/TypeCategoryRoute.js",
+		"/C/App/Workspace/mean-project/app/routes/api/public/unlog/SessionRoute.js",
+		"/C/App/Workspace/mean-project/app/routes/api/admin/log/UserRoute.js",
+		"/C/App/Workspace/mean-project/app/routes/api/public/log/CategoryRoute.js",
+		"/C/App/Workspace/mean-project/app/data/plugins/DatePlugin.js",
 		"/C/App/Workspace/mean-project/config/token.js",
+		"/C/App/Workspace/mean-project/config/database.js",
+		"/C/App/Workspace/mean-project/app/data/models/CategoryModel.js",
+		"/C/App/Workspace/mean-project/app/data/models/CountersModel.js",
+		"/C/App/Workspace/mean-project/app/data/models/PlanModel.js",
+		"/C/App/Workspace/mean-project/app/data/models/TransactionModel.js",
+		"/C/App/Workspace/mean-project/app/data/models/TypeCategoryModel.js",
+		"/C/App/Workspace/mean-project/app/data/models/UserModel.js",
+		"/C/App/Workspace/mean-project/app/routes/api/admin/unlog/TypeCategoryRoute.js",
+		"/C/App/Workspace/mean-project/app/routes/api/public/log/MeRoute.js",
+		"/C/App/Workspace/mean-project/app/routes/routes.js",
+		"/C/App/Workspace/mean-project/app/services/share/BudgetService.js",
+		"/C/App/Workspace/mean-project/app/services/share/ResponseService.js",
+		"/C/App/SublimeText3/Data/Packages/User/Plain text.sublime-settings",
+		"/C/App/SublimeText3/Data/Packages/User/SideBarEnhancements/Open With/Side Bar.sublime-menu",
+		"/C/App/Workspace/mean-project/README.md",
+		"/C/App/Workspace/mean-project/app/services/transversal/BudgetService.js",
+		"/C/App/Workspace/mean-project/app/services/transversal/ResponseService.js",
+		"/C/App/Workspace/mean-project/app/services/ResponseService.js",
+		"/C/App/Workspace/mean-project/app/Injector.js",
 		"/C/App/Workspace/mean-project/node_modules/bluebird/js/main/errors.js",
 		"/C/App/Workspace/mean-project/node_modules/bluebird/js/main/some.js",
 		"/C/App/Workspace/mean-project/node_modules/bluebird/js/browser/bluebird.js",
@@ -523,14 +568,9 @@
 		"/C/App/Workspace/mean-project/node_modules/bluebird/js/main/cancel.js",
 		"/C/App/Workspace/mean-project/node_modules/bluebird/js/main/async.js",
 		"/C/App/Workspace/mean-project/node_modules/bluebird/js/main/bluebird.js",
-		"/C/App/Workspace/mean-project/app/data/models/UserModel.js",
-		"/C/App/Workspace/mean-project/app/data/models/TypeCategoryModel.js",
-		"/C/App/Workspace/mean-project/app/data/models/TransactionModel.js",
-		"/C/App/Workspace/mean-project/app/data/models/PlanModel.js",
 		"/C/App/Workspace/mean-project/.gitignore_global",
 		"/C/App/Workspace/mean-project/.gitignore",
 		"/C/App/SublimeText3/Data/Packages/User/SublimeLinter.sublime-settings",
-		"/C/App/Workspace/mean-project/bin/www",
 		"/C/App/SublimeText3/Data/Packages/DocBlockr/Base File.sublime-settings",
 		"/C/App/Workspace/mean-project/npm-debug.log",
 		"/C/App/Workspace/mean-project/app/routes/api/log/MeRoute.js",
@@ -547,20 +587,13 @@
 		"/C/App/Workspace/mean-project/app/routes/api/log/TypeCategoryRoute.js",
 		"/C/App/Workspace/mean-project/app/routes/api/log/UserRoute.js",
 		"/C/App/Workspace/mean-project/app/routes/api/unlog/UserRoute.js",
-		"/C/App/SublimeText3/Data/Packages/User/Context.sublime-menu",
 		"/C/App/Workspace/mean-project/app/routes/admin/unlog/typecategory.js",
 		"/C/App/SublimeText3/Data/Packages/User/JavascriptBeautify.sublime-settings",
 		"/C/App/SublimeText3/Data/Packages/Javascript Beautify/JavascriptBeautify.sublime-settings",
 		"/C/App/SublimeText3/Data/Packages/JsFormat/JsFormat.sublime-settings",
 		"/C/App/SublimeText3/Data/Packages/User/JsFormat.sublime-settings",
-		"/C/App/SublimeText3/Data/Packages/Alignment/Base File.sublime-settings",
-		"/C/App/SublimeText3/Data/Packages/Alignment/Default (Windows).sublime-keymap",
-		"/C/App/SublimeText3/Data/Packages/User/Base File.sublime-settings",
-		"/C/App/SublimeText3/Data/Packages/User/JSON.sublime-settings",
 		"/C/App/Workspace/mean-project/app/routes/api/log/user.js",
 		"/C/App/Workspace/mean-project/app/routes/admin/log/user.js",
-		"/C/App/Workspace/mean-project/app/data/plugins/DatePlugin.js",
-		"/C/App/Workspace/mean-project/app/data/plugins/UserPlugin.js",
 		"/C/App/Workspace/mean-project/app/data/UserDao.js",
 		"/C/App/Workspace/mean-project/app/routes/api/log/plan.js",
 		"/C/App/Workspace/mean-project/app/models/CategoryModel.js",
@@ -579,24 +612,7 @@
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/models/TransactionModel.js",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/services/ProgramService.js",
 		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/services/CategoryService.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/models/ProgramModel.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/services/PlanService.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/models/CategoryModel.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/models/PlanModel.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/models/TypeCategoryModel.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/services/TransactionService.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/config/database.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/.jshintrc",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/mean-project.sublime-workspace",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/.gitignore",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/package.json",
-		"/C/Documents and Settings/Administrateur/Application Data/Sublime Text 3/Packages/User/SublimeLinter.sublime-settings",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/services/ResponseService.js",
-		"/C/Documents and Settings/Administrateur/Application Data/Sublime Text 3/Packages/SublimeLinter/SublimeLinter.sublime-settings",
-		"/C/Documents and Settings/Administrateur/Application Data/Sublime Text 3/Packages/SublimeLinter/Default (Windows).sublime-keymap",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/services/UserService.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/api/log/program.js"
+		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/models/ProgramModel.js"
 	],
 	"find":
 	{
@@ -607,6 +623,10 @@
 		"height": 90.0,
 		"where_history":
 		[
+			"C:\\App\\Workspace\\mean-project",
+			"C:\\App\\Workspace\\mean-project\\app",
+			"C:\\App\\Workspace\\mean-project",
+			"C:\\App\\Workspace\\mean-project\\app\\",
 			"C:\\App\\Workspace\\mean-project\\app\\routes",
 			"C:\\App\\Workspace\\mean-project\\app\\services",
 			"C:\\App\\Workspace\\mean-project\\app\\routes",
@@ -619,6 +639,39 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"size ",
+			"tab",
+			"wide-caret",
+			"ignored_packages",
+			"bold_folder_labels",
+			"alt+e",
+			"alt+z",
+			"shift+a",
+			"ctrl+a",
+			"alt+a",
+			"ctrl+alt+a",
+			";\n",
+			"colors",
+			"Logger.error('--",
+			"Logger.debug('--",
+			"Logger.debug('-- input",
+			"[WSP-VALID]",
+			"[WSA-VALID]",
+			"[SER-CATCH]",
+			"[DAO-CATCH]",
+			"[WSB-START]",
+			"[WSB - END]",
+			"[WSP - END]",
+			"[WSA - END]",
+			"[SER - END]",
+			"[DAO - END]",
+			"[WSA-START]",
+			"[WSP-START]",
+			"[SER-START]",
+			"[DAO-START]",
+			"global.__service_trans",
+			"require(global.__service + '/ResponseService');",
+			"getOne",
 			"var ResponseService = require(global.__service + '/ResponseService');",
 			"__service",
 			"var ResponseService = require(global.__service + '/ResponseService');",
@@ -701,6 +754,25 @@
 		"regex": false,
 		"replace_history":
 		[
+			"Logger.error('              --",
+			"Logger.debug('              --",
+			"Logger.debug('              -- input",
+			"[WSP - VALID]",
+			"[WSA - VALID]",
+			"[SER - CATCH]",
+			"[DAO - CATCH]",
+			"[WSB - START]",
+			"[WSB -   END]",
+			"[WSP -   END]",
+			"[WSA -   END]",
+			"[SER -   END]",
+			"[DAO -   END]",
+			"[WSA - START]",
+			"[WSP - START]",
+			"[SER - START]",
+			"[DAO - START]",
+			"global.__service_share",
+			"require(global.__service_trans + '/ResponseService');",
 			"var ResponseService = require(global.__service_trans + '/ResponseService');",
 			"C:\\App\\Workspace\\mean-project\nvar ResponseService = require(global.__service_trans + '/ResponseService');"
 		],
@@ -713,115 +785,87 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 1,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "app/services/CategoryService.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 4978,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								4188,
-								4188
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": -0.0,
-						"translation.y": 2070.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "app/services/TransactionService.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 5954,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								4843,
-								4843
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 2385.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "app/services/ProgramService.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 4055,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2724,
-								2724
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 1845.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
 					"file": "TODO.txt",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 143,
+						"buffer_size": 354,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								143,
-								143
+								0,
+								0
 							]
 						],
 						"settings":
 						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
+							],
 							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
@@ -832,90 +876,353 @@
 					"type": "text"
 				},
 				{
-					"buffer": 4,
-					"file": "app/routes/api/public/log/PlanRoute.js",
+					"buffer": 1,
+					"file": "app/data/dao/ProgramDao.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1346,
+						"buffer_size": 7463,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1275,
-								1275
+								6649,
+								6649
 							]
 						],
 						"settings":
 						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content"
+							],
 							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 405.0,
+						"translation.y": 3523.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/C/App/SublimeText3/Data/Packages/User/Preferences.sublime-settings",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 912,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content"
+							],
+							"syntax": "Packages/JavaScript/JSON.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
 					"type": "text"
 				},
 				{
-					"buffer": 5,
-					"file": "app/data/dao/ProgramDao.js",
+					"buffer": 3,
+					"file": "app/services/TransactionService.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6093,
+						"buffer_size": 7104,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4002,
-								4002
+								5972,
+								5972
 							]
 						],
 						"settings":
 						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content"
+							],
 							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2205.0,
+						"translation.y": 2974.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 2,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
-					"file": "app/routes/api/public/log/TypeCategoryRoute.js",
+					"buffer": 4,
+					"file": "app/ErrorManager.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 654,
+						"buffer_size": 456,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								448,
-								448
+								274,
+								274
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
+							],
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 4,
 					"type": "text"
 				}
 			]
@@ -994,12 +1301,20 @@
 		"selected_items":
 		[
 			[
-				"tra",
-				"app\\routes\\api\\log\\transaction.js"
+				"progra",
+				"app\\data\\dao\\ProgramDao.js"
+			],
+			[
+				"programdao",
+				"app\\data\\dao\\ProgramDao.js"
 			],
 			[
 				"program",
-				"app\\routes\\api\\log\\program.js"
+				"app\\data\\dao\\ProgramDao.js"
+			],
+			[
+				"tra",
+				"app\\routes\\api\\log\\transaction.js"
 			],
 			[
 				"planser",
@@ -1090,7 +1405,7 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 329.0,
+	"side_bar_width": 321.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{

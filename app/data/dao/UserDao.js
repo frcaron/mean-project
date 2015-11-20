@@ -14,7 +14,7 @@ var CountersModel = require(global.__model + '/CountersModel');
  * @throws {Error} 			If an other error is met
  */
 function create (input) {
-	
+
 	Logger.debug('[DAO - START] UserDao#create');
 	Logger.debug('              -- input : ' + JSON.stringify(input));
 
@@ -52,7 +52,7 @@ function create (input) {
 	return promise;
 }
 
-/** 
+/**
  * @param  {Json} input 	Data to update
  * @return {UserModel} 		Object updated
  * @throws {DuplicateError} If index model is not unique
@@ -66,19 +66,19 @@ function update (input) {
 
 	let promise = getOne({ id : input.id })
 		.then(function (user) {
-			if ( input.surname ) { 
+			if ( input.surname ) {
 				user.surname   = input.surname;
 			}
-			if ( input.firstname ) { 
+			if ( input.firstname ) {
 				user.firstname = input.firstname;
 			}
-			if ( input.email ) { 
+			if ( input.email ) {
 				user.email     = input.email;
 			}
-			if ( input.password ) { 
+			if ( input.password ) {
 				user.password  = input.password;
 			}
-			if ( input.admin !== undefined ) { 
+			if ( input.admin !== undefined ) {
 				user.admin     = input.admin;
 			}
 			return user.saveAsync()
@@ -109,7 +109,7 @@ function update (input) {
 /**
  * @param  {Json} filters 	Keys : 	- id [user_id]
  * 									- email
- * @return {} 
+ * @return {}
  * @throws {ParamsError} 	If params given are wrong
  * @throws {NoResultError} 	If no result found
  * @throws {Error} 			If an other error is met
@@ -171,7 +171,7 @@ function getOne (filters) {
 
 	Logger.debug('[DAO - START] UserDao#getOne');
 	Logger.debug('              -- filters : ' + JSON.stringify(filters));
-	
+
 	let promise;
 	let id = filters.id || filters.user_id;
 	if(id) {
@@ -181,7 +181,6 @@ function getOne (filters) {
 		promise = UserModel.findOneAsync({
 					email : filters.email
 				});
-
 	} else {
 		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}

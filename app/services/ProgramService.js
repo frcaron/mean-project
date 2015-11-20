@@ -59,12 +59,12 @@ module.exports = {
 
 		let promise;
 		if(category_id) {
-			promise = CategoryDao.getOne({ 
+			promise = CategoryDao.getOne({
 					id      : category_id,
 					user_id : req.decoded.id
 				})
 				.then(function (categoryNew) {
-					return ProgramDao.getOne({ 
+					return ProgramDao.getOne({
 							id      : req.params.program_id,
 							user_id : req.decoded.id
 						})
@@ -89,13 +89,13 @@ module.exports = {
 				});
 		} else {
 			promise = ProgramDao.update(input);
-		}		
+		}
 
 		promise
 			.then(function (program) {
 				ResponseService.success(res, {
 					message : 'Update program',
-					result  : program 
+					result  : program
 				});
 			})
 			.catch(function (err) {
@@ -114,8 +114,8 @@ module.exports = {
 	remove         : function (req, res) {
 
 		Logger.debug('[SER - START] ProgramService#remove');
-		
-		ProgramDao.getOne({ 
+
+		ProgramDao.getOne({
 				id : req.params.program_id,
 				user_id : req.decoded.id
 			})
@@ -125,14 +125,14 @@ module.exports = {
 						user_id : req.decoded.id
 					})
 					.then(function (category) {
-						return CategoryDao.getOne({ 
-								neutre  : true,
-								type_id : category._type,
-								user_id : req.decoded.id
+						return CategoryDao.getOne({
+								neutre           : true,
+								type_category_id : category._type,
+								user_id          : req.decoded.id
 							});
 					})
 					.then(function (categoryNeutre) {
-						return ProgramDao.getOne({ 
+						return ProgramDao.getOne({
 								plan_id     : program._plan,
 								category_id : categoryNeutre._id,
 								user_id     : req.decoded.id
@@ -179,14 +179,14 @@ module.exports = {
 		let type_category_id = req.body.type_category_id || req.query.type_category_id;
 
 		CategoryDao.getAll({
-			type_id : type_category_id,
-			user_id : req.decoded.id
+			type_category_id : type_category_id,
+			user_id          : req.decoded.id
 		})
-		.then(function (categories) {			
+		.then(function (categories) {
 			let categories_id = {};
 			return BPromise.map(categories, function (category) {
 					categories_id.push(category._id);
-				}) 
+				})
 				.then(function () {
 					return ProgramDao.getAll({
 								categories_id : categories_id,
@@ -224,7 +224,7 @@ module.exports = {
 			})
 			.then(function (program) {
 				ResponseService.success(res, {
-					message : 'Get program', 
+					message : 'Get program',
 					result  : program
 				});
 			})

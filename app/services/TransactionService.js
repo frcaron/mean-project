@@ -11,8 +11,8 @@ var ProgramDao      = require(global.__dao + '/ProgramDao');
 var TransactionDao  = require(global.__dao + '/TransactionDao');
 var CategoryDao     = require(global.__dao + '/CategoryDao');
 
-function fulfillProgram(input, category_id) {	
-	
+function fulfillProgram(input, category_id) {
+
 	let date_split = input.date.split('/');
 	let inputPlan = {
 		month   : date_split[ 1 ],
@@ -21,7 +21,7 @@ function fulfillProgram(input, category_id) {
 	};
 
 	return PlanDao.getOne(inputPlan)
-		.catch(ErrorManager.NoResultError, function () {			
+		.catch(ErrorManager.NoResultError, function () {
 			return BudgetService.createPlan(inputPlan);
 		})
 		.then(function (plan) {
@@ -31,10 +31,10 @@ function fulfillProgram(input, category_id) {
 				user_id     : input.user_id
 			};
 			return ProgramDao.getOne(inputProgram)
-				.catch(ErrorManager.NoResultError, function () {		
+				.catch(ErrorManager.NoResultError, function () {
 					return BudgetService.createProgram(inputProgram);
 				});
-			})		
+			})
 		.then(function (program) {
 			input.program_id = program._id;
 			return BPromise.resolve(input);
@@ -59,10 +59,10 @@ module.exports = {
 		fulfillProgram(input, category_id)
 			.then(function(transaction) {
 				return TransactionDao.create(transaction);
-			})		
+			})
 			.then(function (transaction) {
 				ResponseService.success(res, {
-					message : 'Add transaction', 
+					message : 'Add transaction',
 					result  : transaction
 				});
 			})
@@ -91,14 +91,14 @@ module.exports = {
 			user_id : req.decoded.id
 		};
 		let category_id = req.body.category_id || req.query.category_id;
-			
+
 		fulfillProgram(input, category_id)
 			.then(function (transaction) {
 				return TransactionDao.update(transaction);
 			})
 			.then(function (transaction) {
 				ResponseService.success(res, {
-					message : 'Update transaction', 
+					message : 'Update transaction',
 					result  : transaction
 				});
 			})
@@ -119,7 +119,7 @@ module.exports = {
 
 		Logger.debug('[SER - START] TransactionService#remove');
 
-		TransactionDao.remove({ 
+		TransactionDao.remove({
 				id      : req.params.transaction_id,
 				user_id : req.decoded.id
 			})
@@ -143,48 +143,70 @@ module.exports = {
 	// Get transactions by type category
 	allByTypeCatU : function (req, res) {
 
-		// TODO
+		Logger.debug('[SER - START] TransactionService#allByTypeCatU');
 
 		CategoryDao.getAll({
-				type_id : req.params.type_category_id,
-				user_id : req.decoded.id
+				type_category_id : req.params.type_category_id,
+				user_id          : req.decoded.id
 			})
 			.then(function (categories) {
-				if (categories.length === 0) {
-					throw new Error('Transactions not found');
+				if (!categories.length) {
+					throw new ErrorManager.NoResultError('Transactions not found');
 				}
 
-				var result = [];
+				var categories_id = [];
 				categories.map(function (category) {
-					category._programs.map(function (program) {
-						program.transactions.map(function (transaction) {
-							result.push(transaction);
-						});
-					});
+					categories_id.push(category._id);
 				});
 
-				BPromise.all(result)
-					.then(function (transactions) {
-						return TransactionModel.findAsync({ _id : { $in : transactions } });
+				return BPromise.all(categories_id)
+					.then(function () {
+						return ProgramDao.getAll({
+							categories_id : categories_id,
+							user_id       : req.decoded.id
+						});
 					})
-
-					.then(function (transaction) {
-
-						if (!transaction) {
-							throw new Error('Transaction not found');
+					.then(function (programs) {
+						if (!programs.length) {
+							throw new ErrorManager.NoResultError('Transaction not found');
 						}
 
-						responseService.success(res, 'Find success', transaction);
-					})
+						var programs_id = [];
+						programs.map(function(program){
+							programs_id.push(program._id);
+						}) ;
 
-					.catch(function (err) {
-						responseService.fail(res, 'Find failed', err.message);
+						return BPromise.all(programs_id)
+							.then(function () {
+								return TransactionDao.getAll({
+									programs_id : programs_id,
+									user_id     : req.decoded.id
+								});
+							});
 					});
 			})
-
+			.then(function (transactions) {
+				ResponseService.success(res, {
+					message : 'Get all transactions by type category',
+					result  : transactions
+				});
+			})
+			.catch(ErrorManager.NoResultError, function () {
+				ResponseService.success(res, {
+					message : 'Get all transactions by type category',
+					result  : []
+				});
+			})
 			.catch(function (err) {
-				ResponseService.fail(res, 'Find failed', err.message);
+				Logger.debug('[SER - CATCH] TransactionService#allByTypeCatU');
+				Logger.error('              -- message : ' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Get all transactions by type category'
+				});
 			});
+
+		Logger.debug('[SER -   END] TransactionService#allByTypeCatU');
 	},
 
 	// Get transactions by program
@@ -193,12 +215,12 @@ module.exports = {
 		Logger.debug('[SER - START] TransactionService#allByProgramU');
 
 		TransactionDao.getAll({
-				program_id : req.params.program_id,
-				user_id    : req.decoded.id
+				programs_id : [ req.params.programs_id ],
+				user_id     : req.decoded.id
 			})
 			.then(function (transactions) {
 				ResponseService.success(res, {
-					message : 'Get all transactions by program', 
+					message : 'Get all transactions by program',
 					result  : transactions
 				});
 			})
@@ -225,7 +247,7 @@ module.exports = {
 			})
 			.then(function (transaction) {
 				ResponseService.success(res, {
-					message : 'Get transaction', 
+					message : 'Get transaction',
 					result  : transaction,
 				});
 			})

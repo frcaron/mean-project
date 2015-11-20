@@ -31,8 +31,8 @@ ProgramSchema.plugin(UserPlugin);
 // Index
 ProgramSchema.index({
 	_category : 1,
-	_plan    : 1,
-	_user    : 1
+	_plan     : 1,
+	_user     : 1
 }, {
 	unique : true
 });

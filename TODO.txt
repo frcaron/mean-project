@@ -8,3 +8,4 @@ Category impossible à supprimer mais désactivé
 Mapping des objets retour pour cacher les champs en base (sécurité)
 Code retour pour identifier les erreurs (traitement côté IHM)
 Authentification + genere new token quand update user
+Trier les listes de résultat (Categorie => ordre alapha, transaction => date)

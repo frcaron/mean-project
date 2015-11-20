@@ -46,7 +46,7 @@ function create (input) {
 	return promise;
 }
 
-/** 
+/**
  * @param  {Json} input 		Data to update
  * @return {TypeCategoryModel} 	Object updated
  * @throws {DuplicateError} 	If index model is not unique
@@ -119,13 +119,13 @@ function getOne (filters) {
 
 	Logger.debug('[DAO - START] TypeCategoryDao#getOne');
 	Logger.debug('              -- filters : ' + JSON.stringify(filters));
-	
+
 	let promise;
 	if(filters.id) {
 		promise = TypeCategoryModel.findByIdAsync(filters.id);
 
 	} else {
-		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
+		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing "id"'));
 	}
 
 	let promiseEnd = promise

@@ -48,7 +48,7 @@ function create (input) {
 	return promise;
 }
 
-/** 
+/**
  * @param  {Json} input 	Data to update
  * @param  {Json} filters 	keys : 	- NO
  * @return {PlanModel} 		Object updated
@@ -66,15 +66,15 @@ function update (input, filters) {
 	if(filters) {
 		promise = BPromise.reject(new ErrorManager.ParamsError('Filters forbidden'));
 	} else {
-		promise = getOne({ 
+		promise = getOne({
 				id      : input.id,
 				user_id : input.user_id
 			})
 			.then(function (plan) {
-				if ( input.month ) { 
+				if ( input.month ) {
 					plan.month = input.month;
 				}
-				if ( input.year ) { 
+				if ( input.year ) {
 					plan.year  = input.year;
 				}
 				return plan.saveAsync()
@@ -105,9 +105,9 @@ function update (input, filters) {
 }
 
 /**
- * @param  {Json} filters 	Keys : 	- user_id 
+ * @param  {Json} filters 	Keys : 	- user_id
  * 									- id / user_id
- * @return {} 
+ * @return {}
  * @throws {ParamsError} 	If params given are wrong
  * @throws {Error} 			If an other error is met
  */
@@ -119,15 +119,15 @@ function remove (filters) {
 	let promise;
 	if(filters.user_id) {
 		let id = filters.id || filters.plan_id;
-		if(id) {		
-			promise = PlanModel.removeAsync({ 
+		if(id) {
+			promise = PlanModel.removeAsync({
 				_id   : id,
 				_user : filters.user_id
 			});
 
 		} else {
 			promise = PlanModel.removeAsync({ _user : filters.user_id });
-		}			
+		}
 	} else {
 		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
@@ -163,7 +163,7 @@ function getAll (filters) {
 					});
 
 	} else {
-		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
+		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing "user_id"'));
 	}
 
 	let promiseEnd = promise
@@ -180,8 +180,10 @@ function getAll (filters) {
 }
 
 /**
- * @param  {Json} filters 	Keys : 	- id / user_id
- * 									- month / year / user_id 									
+ * @param  {Json} filters 	Keys : 	- id
+ *                         			- user_id
+ * 									- month
+ * 									- year
  * @return {PlanModel}		Object found
  * @throws {ParamsError} 	If params given are wrong
  * @throws {NoResultError} 	If no result found
@@ -200,19 +202,19 @@ function getOne (filters) {
 						_user : filters.user_id
 					});
 
-		} else if(filters.month && filters.year) {			
+		} else if(filters.month && filters.year) {
 			promise = PlanModel.findOneAsync({
 						month : filters.month,
 						year  : filters.year,
 						_user : filters.user_id
 					});
 		} else {
-			promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing)'));
+			promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 		}
 	} else {
-		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing)'));
+		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing "user_id"'));
 	}
-		
+
 	let promiseEnd = promise
 		.then(function (plan) {
 			if (!plan) {

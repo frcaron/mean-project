@@ -17,7 +17,7 @@ function create (input) {
 
 	Logger.debug('[DAO - START] ProgramDao#create');
 	Logger.debug('              -- input : ' + JSON.stringify(input));
-	
+
 	let program = new ProgramModel();
 	let promise = CountersModel.getNextSequence('program_id')
 		.then(function (seq){
@@ -51,7 +51,7 @@ function create (input) {
 	return promise;
 }
 
-/** 
+/**
  * @param  {Json} input 	Data to update
  * @param  {Json} filters 	keys : 	- NO
  * @return {ProgramModel} 	Object updated
@@ -69,7 +69,7 @@ function update (input, filters) {
 	if (filters) {
 		promise = BPromise.reject(new ErrorManager.ParamsError('Filters forbidden'));
 	} else {
-		promise = getOne({ 
+		promise = getOne({
 				id      : input.id,
 				user_id : input.user_id
 			})
@@ -108,10 +108,10 @@ function update (input, filters) {
 }
 
 /**
- * @param  {Json} filters 	Keys : 	- id 
+ * @param  {Json} filters 	Keys : 	- id
  * 									- user_id
  * 									- plan_id
- * @return {} 
+ * @return {}
  * @throws {ParamsError} 	If params given are wrong
  * @throws {Error} 			If an other error is met
  */
@@ -122,14 +122,14 @@ function remove (filters) {
 
 	let promise;
 	if(filters.user_id) {
-		if(filters.id) {		
-			promise = ProgramModel.removeAsync({ 
+		if(filters.id) {
+			promise = ProgramModel.removeAsync({
 				_id   : filters.id,
 				_user : filters.user_id
 			});
 
-		} else if(filters.plan_id) {		
-			promise = ProgramModel.removeAsync({ 
+		} else if(filters.plan_id) {
+			promise = ProgramModel.removeAsync({
 				_plan : filters.plan_id,
 				_user : filters.user_id
 			});
@@ -157,7 +157,7 @@ function remove (filters) {
 /**
  * @param  {Json} filters 	Keys : 	- user_id
  *                         			- plan_id
- *                         			- categories_id
+ *                         			- [ categories_id ]
  * @return {ProgramModel}	List of object found
  * @throws {ParamsError} 	If params given are wrong
  * @throws {Error} 			If an other error is met
@@ -168,26 +168,30 @@ function getAll (filters) {
 	Logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise;
-	if(filters.plan_id && filters.user_id) {
-		if(filters.categories_id) {
-			if(filters.categories_id.length > 0) {
+	if(filters.user_id) {
+		if(filters.plan_id) {
+			if(filters.categories_id && filters.categories_id.length) {
 				promise = ProgramModel.findAsync({
 							_category : { $in : filters.categories_id },
 							_plan     : filters.plan_id,
 							_user     : filters.user_id
 						});
 			} else {
-				promise = BPromise.reject(
-					new ErrorManager.ParamsError('Filters missing "categories_id"'));
+				promise = ProgramModel.findAsync({
+							_plan : filters.plan_id,
+							_user : filters.user_id
+						});
 			}
-		} else {
+		} else if(filters.categories_id && filters.categories_id.length) {
 			promise = ProgramModel.findAsync({
-						_plan : filters.plan_id,
-						_user : filters.user_id
+						_category : { $in : filters.categories_id },
+						_user     : filters.user_id
 					});
+		} else {
+			promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 		}
 	} else {
-		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
+		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing "user_id"'));
 	}
 
 	let promiseEnd = promise
@@ -217,7 +221,7 @@ function getOne (filters) {
 
 	Logger.debug('[DAO - START] ProgramDao#getOne');
 	Logger.debug('              -- filters : ' + JSON.stringify(filters));
-	
+
 	let promise;
 	if(filters.user_id) {
 		if(filters.id) {
@@ -234,10 +238,10 @@ function getOne (filters) {
 					});
 
 		} else  {
-			promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));			
+			promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 		}
 	} else {
-		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
+		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing "user_id"'));
 	}
 
 	let promiseEnd = promise

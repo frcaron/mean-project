@@ -20,9 +20,8 @@ var logger = new Winston.Logger({
 					return Moment().format('DD/MM/YY HH:mm:ss');
 				},
 				formatter : function(options) {
-					// Return string will be passed to logger. 
-					return options.timestamp() + ' ' + 
-						options.level.toUpperCase() + ' ' + 
+					return options.timestamp() + ' ' +
+						options.level.toUpperCase() + ' ' +
 						(undefined !== options.message ? options.message : '') +
 						(options.meta && Object.keys(options.meta).length ? '\n\t' + JSON.stringify(options.meta) : '' );
 				}
@@ -34,9 +33,8 @@ var logger = new Winston.Logger({
 					return Moment().format('DD/MM/YY HH:mm:ss');
 				},
 				formatter : function(options) {
-					// Return string will be passed to logger. 
-					return options.timestamp() + ' ' + 
-						options.level.toUpperCase() + ' ' + 
+					return options.timestamp() + ' ' +
+						options.level.toUpperCase() + ' ' +
 						(undefined !== options.message ? options.message : '') +
 						(options.meta && Object.keys(options.meta).length ? '\n\t' + JSON.stringify(options.meta) : '' );
 				}
