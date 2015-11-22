@@ -12,8 +12,6 @@ var programmerError = function (message) {
 module.exports = {
 	DuplicateError : programmerError,
 	NoResultError  : programmerError,
-	ParamsError    : programmerError,
-	LoginError     : programmerError,
 	MetierError    : programmerError
 };
 

@@ -24,31 +24,29 @@ module.exports = function (router) {
 			Logger.debug('              -- req.query.category_id : ' + category_id);
 
 			// Validation
+			let msg = [];
 			if (!req.body.date) {
-				return ResponseService.fail(res, {
-							message : 'Add',
-							reason  : 'Param "date" missing'
-						});
+				msg.push('date');
 			}
 			if (!req.body.sum) {
-				return ResponseService.fail(res, {
-							message : 'Add',
-							reason  : 'Param "sum" missing'
-						});
+				msg.push('sum');
 			}
 			if (!category_id) {
+				msg.push('category_id');
+			}
+			if(msg.length) {
 				return ResponseService.fail(res, {
-							message : 'Add',
-							reason  : 'Param "category_id" missing'
-						});
+					message : 'Add',
+					reason  : 'Param missing : ' + msg.toString()
+				});
 			}
 
 			var moment = Moment(req.body.date, "DD/MM/YYYY");
 			if(!moment.isValid()) {
-				ResponseService.fail(res, {
-						message : 'Add',
-						reason  : 'Date is not valid'
-					});
+				return ResponseService.fail(res, {
+					message : 'Add',
+					reason  : 'Date is not valid'
+				});
 			} else {
 				req.body.date = moment.toDate();
 			}
@@ -73,25 +71,26 @@ module.exports = function (router) {
 			Logger.debug('              -- req.query.category_id : ' + category_id);
 
 			// Validation
+			let msg = [];
 			if (!req.body.date) {
-				return ResponseService.fail(res, {
-							message : 'Add',
-							reason  : 'Param "date" missing'
-						});
+				msg.push('date');
 			}
 			if (!category_id) {
+				msg.push('category_id');
+			}
+			if(msg.length) {
 				return ResponseService.fail(res, {
-							message : 'Add',
-							reason  : 'Param "category_id" missing'
-						});
+					message : 'Update',
+					reason  : 'Param missing : ' + msg.toString()
+				});
 			}
 
 			let moment = Moment(req.body.date, "DD/MM/YYYY");
 			if(!moment.isValid()) {
-				ResponseService.fail(res, {
-						message : 'Add',
-						reason  : 'Date is not valid'
-					});
+				return ResponseService.fail(res, {
+					message : 'Update',
+					reason  : 'Date is not valid'
+				});
 			} else {
 				req.body.date = moment.toDate();
 			}

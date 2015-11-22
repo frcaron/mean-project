@@ -22,28 +22,23 @@ module.exports = function (router) {
 			Logger.debug('              -- req.body.password  : ' + req.body.password);
 
 			// Validation
+			let msg = [];
 			if (!req.body.surname) {
-				return ResponseService.fail(res, {
-					message : 'Add',
-					reason  : 'Param "surname" missing'
-				});
+				msg.push('surname');
 			}
 			if (!req.body.firstname) {
-				return ResponseService.fail(res, {
-					message : 'Add',
-					reason  : 'Param "firstname" missing'
-				});
+				msg.push('firstname');
 			}
 			if (!req.body.email) {
-				return ResponseService.fail(res, {
-					message : 'Add',
-					reason  : 'Param "email" missing'
-				});
+				msg.push('email');
 			}
 			if (!req.body.password) {
+				msg.push('password');
+			}
+			if(msg.length) {
 				return ResponseService.fail(res, {
-					message : 'Add',
-					reason  : 'Param "password" missing'
+					message : 'Add user',
+					reason  : 'Param missing : ' + msg.toString()
 				});
 			}
 

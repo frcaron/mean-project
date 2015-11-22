@@ -25,17 +25,18 @@ module.exports = function (router) {
 			Logger.debug('              -- req.body.year  : ' + req.body.year);
 
 			// Validation
+			let msg = [];
 			if (!req.body.month) {
-				return ResponseService.fail(res, {
-							message : 'Add',
-							reason  : 'Param "month" missing'
-						});
+				msg.push('month');
 			}
 			if (!req.body.year) {
+				msg.push('year');
+			}
+			if(msg.length) {
 				return ResponseService.fail(res, {
-							message : 'Add',
-							reason  : 'Param "year" missing'
-						});
+					message : 'Add',
+					reason  : 'Param missing : ' + msg.toString()
+				});
 			}
 
 			PlanService.create(req, res);

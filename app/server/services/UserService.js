@@ -2,6 +2,7 @@
 
 // Inject
 var BPromise        = require('bluebird');
+var ErrMng          = require(global.__server + '/ErrMng');
 var Logger          = require(global.__server + '/LoggerManager');
 var ResponseService = require(global.__service + '/share/ResponseService');
 var UserDao         = require(global.__dao + '/UserDao');
@@ -51,6 +52,15 @@ module.exports = {
 					result  : user
 				});
 			})
+			.catch(ErrMng.DuplicateError, function(err) {
+				Logger.debug('[SER - CATCH] UserService#create');
+				Logger.error('              -- message : ' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Add user',
+					reason  : err.message
+				});
+			})
 			.catch(function (err) {
 				Logger.debug('[SER - CATCH] UserService#create');
 				Logger.error('              -- message : ' + err.message);
@@ -80,6 +90,15 @@ module.exports = {
 				ResponseService.success(res, {
 					message : 'Update user',
 					result  : user
+				});
+			})
+			.catch(ErrMng.DuplicateError, ErrMng.NoResultError, ErrMng.MetierError, function(err) {
+				Logger.debug('[SER - CATCH] UserService#update');
+				Logger.error('              -- message : ' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Update user',
+					reason  : err.message
 				});
 			})
 			.catch(function (err) {
@@ -166,6 +185,15 @@ module.exports = {
 					result  : user
 				});
 			})
+			.catch(ErrMng.NoResultError, ErrMng.MetierError, function(err) {
+				Logger.debug('[SER - CATCH] UserService#getOne');
+				Logger.error('              -- message : ' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Get user',
+					reason  : err.message
+				});
+			})
 			.catch(function(err) {
 				Logger.debug('[SER - CATCH] UserService#getOne');
 				Logger.error('              -- message : ' + err.message);
@@ -190,6 +218,15 @@ module.exports = {
 			.then(function() {
 				ResponseService.success(res, {
 					message : 'Give rights'
+				});
+			})
+			.catch(ErrMng.NoResultError, function(err) {
+				Logger.debug('[SER - CATCH] UserService#managePermission');
+				Logger.error('              -- message : ' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Give rights',
+					reason  : err.message
 				});
 			})
 			.catch(function(err) {

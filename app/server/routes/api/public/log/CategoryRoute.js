@@ -23,17 +23,18 @@ module.exports = function (router) {
 			Logger.debug('              -- type_category_id : ' + type_category_id);
 
 			// Validation
+			var msg = [];
 			if (!plan_id) {
-				return ResponseService.fail(res, {
-							message : 'Add',
-							reason  : 'Param "plan_id" missing'
-						});
+				msg.push('plan_id');
 			}
 			if (!type_category_id) {
+				msg.push('type_category_id');
+			}
+			if(msg.length) {
 				return ResponseService.fail(res, {
-							message : 'Add',
-							reason  : 'Param "type_category_id" missing'
-						});
+					message : 'Add',
+					reason  : 'Param missing : ' + msg.toString()
+				});
 			}
 
 			CategoryService.allByTypeCatUNoUse(req, res);
@@ -49,17 +50,18 @@ module.exports = function (router) {
 			Logger.debug('              -- type_category_id : ' + type_category_id);
 
 			// Validation
+			var msg = [];
 			if (!req.body.name) {
-				return ResponseService.fail(res, {
-							message : 'Add',
-							reason  : 'Param "name" missing'
-						});
+				msg.push('name');
 			}
 			if (!type_category_id) {
+				msg.push('type_category_id');
+			}
+			if(msg.length) {
 				return ResponseService.fail(res, {
-							message : 'Add',
-							reason  : 'Param "type_category_id" missing'
-						});
+					message : 'Update',
+					reason  : 'Param missing : ' + msg.toString()
+				});
 			}
 
 			CategoryService.create(req, res);

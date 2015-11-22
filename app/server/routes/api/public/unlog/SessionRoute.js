@@ -20,17 +20,18 @@ module.exports = function (router) {
 			Logger.debug('              -- req.body.password : ' + req.body.password);
 
 			// Validation
+			let msg = [];
 			if (!req.body.email) {
-				return ResponseService.fail(res, {
-							message : 'Authentication',
-							reason  : 'Param "email" missing'
-						});
+				msg.push('email');
 			}
 			if (!req.body.password) {
+				msg.push('password');
+			}
+			if(msg.length) {
 				return ResponseService.fail(res, {
-							message : 'Authentication',
-							reason  : 'Param "password" missing'
-						});
+					message : 'Authentication',
+					reason  : 'Param missing : ' + msg.toString()
+				});
 			}
 
 			SessionService.login(req, res);

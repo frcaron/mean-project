@@ -24,17 +24,18 @@ module.exports = function (router) {
 			Logger.debug('              -- type_category_id : ' + type_category_id);
 
 			// Validation
+			var msg = [];
 			if (!plan_id) {
-				return ResponseService.fail(res, {
-							message : 'Get programs by plan and type category',
-							reason  : 'Param "plan_id" missing'
-						});
+				msg.push('plan_id');
 			}
 			if (!type_category_id) {
+				msg.push('type_category_id');
+			}
+			if(msg.length) {
 				return ResponseService.fail(res, {
-							message : 'Get programs by plan and type category',
-							reason  : 'Param "type_category_id" missing'
-						});
+					message : 'Get programs by plan and type category',
+					reason  : 'Param missing : ' + msg.toString()
+				});
 			}
 
 			ProgramService.allByPlanTypeU(req, res);
@@ -51,17 +52,18 @@ module.exports = function (router) {
 			Logger.debug('              -- req.query.plan_id 		: ' + plan_id);
 
 			// Validation
-			if (!category_id) {
-				return ResponseService.fail(res, {
-							message : 'Add',
-							reason  : 'Param "category_id" missing'
-						});
-			}
+			var msg = [];
 			if (!plan_id) {
+				msg.push('plan_id');
+			}
+			if (!category_id) {
+				msg.push('category_id');
+			}
+			if(msg.length) {
 				return ResponseService.fail(res, {
-							message : 'Add',
-							reason  : 'Param "plan_id" missing'
-						});
+					message : 'Add',
+					reason  : 'Param missing : ' + msg.toString()
+				});
 			}
 
 			ProgramService.create(req, res);

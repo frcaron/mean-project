@@ -3,7 +3,7 @@
 // Inject
 var BPromise      = require('bluebird');
 var Logger        = require(global.__server + '/LoggerManager');
-var ErrorManager  = require(global.__server + '/ErrorManager');
+var ErrMng        = require(global.__server + '/ErrMng');
 var CategoryModel = require(global.__model + '/CategoryModel');
 var CountersModel = require(global.__model + '/CountersModel');
 
@@ -40,7 +40,7 @@ function create (input) {
 			Logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
-				throw new ErrorManager.DuplicateError('Category already exist');
+				throw new ErrMng.DuplicateError('Category already exist');
 			} else {
 				throw err;
 			}
@@ -67,7 +67,7 @@ function update (input, filters) {
 
 	let promise;
 	if(filters) {
-		promise = BPromise.reject(new ErrorManager.ParamsError('Filters forbidden'));
+		promise = BPromise.reject(new ErrMng.MetierError('Filters forbidden'));
 	} else {
 		promise = getOne({
 				category_id : input.category_id,
@@ -99,7 +99,7 @@ function update (input, filters) {
 			Logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
-				throw new ErrorManager.DuplicateError('Category already exist');
+				throw new ErrMng.DuplicateError('Category already exist');
 			} else {
 				throw err;
 			}
@@ -114,7 +114,7 @@ function update (input, filters) {
  * @param  {Json} filters   Keys :  - user_id
  *                                  - id / user_id
  * @return {CategoryModel}  Object found
- * @throws {ParamsError}    If params given are wrong
+ * @throws {MetierError}    If params given are wrong
  * @throws {NoResultError}  If no result found
  * @throws {Error}          If an other error is met
  */
@@ -138,7 +138,7 @@ function remove (filters) {
 	}
 
 	if(!promise) {
-		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
+		promise = BPromise.reject(new ErrMng.MetierError('Filters missing'));
 	}
 
 	let promiseEnd = promise
@@ -159,7 +159,7 @@ function remove (filters) {
  *                                  - type_category_id
  *                                  - no_categories_id
  * @return {CategoryModel}  List of object found
- * @throws {ParamsError}    If params given are wrong
+ * @throws {MetierError}    If params given are wrong
  * @throws {Error}          If an other error is met
  */
 function getAll (filters) {
@@ -193,7 +193,7 @@ function getAll (filters) {
 	}
 
 	if(!promise) {
-		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
+		promise = BPromise.reject(new ErrMng.MetierError('Filters missing'));
 	}
 
 	let promiseEnd = promise
@@ -215,7 +215,7 @@ function getAll (filters) {
  *                                  - neutre
  *                                  - user_id
  * @return {CategoryModel}  Object found
- * @throws {ParamsError}    If params given are wrong
+ * @throws {MetierError}    If params given are wrong
  * @throws {NoResultError}  If no result found
  * @throws {Error}          If an other error is met
  */
@@ -251,13 +251,13 @@ function getOne (filters) {
 	}
 
 	if(!promise) {
-		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
+		promise = BPromise.reject(new ErrMng.MetierError('Filters missing'));
 	}
 
 	let promiseEnd = promise
 		.then(function (category) {
 			if (!category) {
-				throw new ErrorManager.NoResultError('Category not found');
+				throw new ErrMng.NoResultError('Category not found');
 			}
 			return BPromise.resolve(category);
 		})

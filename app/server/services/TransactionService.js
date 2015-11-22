@@ -2,7 +2,7 @@
 
 // Inject
 var BPromise        = require('bluebird');
-var ErrorManager    = require(global.__server + '/ErrorManager');
+var ErrMng          = require(global.__server + '/ErrMng');
 var Logger          = require(global.__server + '/LoggerManager');
 var ResponseService = require(global.__service + '/share/ResponseService');
 var BudgetService   = require(global.__service + '/share/BudgetService');
@@ -21,7 +21,7 @@ function fulfillProgram(input, category_id) {
 	};
 
 	return PlanDao.getOne(inputPlan)
-		.catch(ErrorManager.NoResultError, function () {
+		.catch(ErrMng.NoResultError, function () {
 			return BudgetService.createPlan(inputPlan);
 		})
 		.then(function (plan) {
@@ -31,7 +31,7 @@ function fulfillProgram(input, category_id) {
 				user_id     : input.user_id
 			};
 			return ProgramDao.getOne(inputProgram)
-				.catch(ErrorManager.NoResultError, function () {
+				.catch(ErrMng.NoResultError, function () {
 					return BudgetService.createProgram(inputProgram);
 				});
 			})
@@ -63,6 +63,15 @@ module.exports = {
 				ResponseService.success(res, {
 					message : 'Add transaction',
 					result  : transaction
+				});
+			})
+			.catch(ErrMng.DuplicateError, function(err) {
+				Logger.debug('[SER - CATCH] TransactionService#create');
+				Logger.error('              -- message : ' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Add transaction',
+					reason  : err.message
 				});
 			})
 			.catch(function (err) {
@@ -100,6 +109,15 @@ module.exports = {
 					result  : transaction
 				});
 			})
+			.catch(ErrMng.DuplicateError, ErrMng.NoResultError, ErrMng.MetierError, function(err) {
+				Logger.debug('[SER - CATCH] TransactionService#update');
+				Logger.error('              -- message : ' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Update transaction',
+					reason  : err.message
+				});
+			})
 			.catch(function (err) {
 				Logger.debug('[SER - CATCH] TransactionService#update');
 				Logger.error('              -- message : ' + err.message);
@@ -126,6 +144,15 @@ module.exports = {
 					message : 'Remove transaction'
 				});
 			})
+			.catch(ErrMng.MetierError, function(err) {
+				Logger.debug('[SER - CATCH] TransactionService#remove');
+				Logger.error('              -- message : ' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Remove failed',
+					reason  : err.message
+				});
+			})
 			.catch(function (err) {
 				Logger.debug('[SER - CATCH] TransactionService#remove');
 				Logger.error('              -- message : ' + err.message);
@@ -149,7 +176,7 @@ module.exports = {
 			})
 			.then(function (categories) {
 				if (!categories.length) {
-					throw new ErrorManager.NoResultError('Transactions not found');
+					throw new ErrMng.NoResultError('Transactions not found');
 				}
 
 				var categories_id = [];
@@ -166,7 +193,7 @@ module.exports = {
 					})
 					.then(function (programs) {
 						if (!programs.length) {
-							throw new ErrorManager.NoResultError('Transaction not found');
+							throw new ErrMng.NoResultError('Transaction not found');
 						}
 
 						var programs_id = [];
@@ -189,10 +216,19 @@ module.exports = {
 					result  : transactions
 				});
 			})
-			.catch(ErrorManager.NoResultError, function () {
+			.catch(ErrMng.NoResultError, function () {
 				ResponseService.success(res, {
 					message : 'Get all transactions by type category',
 					result  : []
+				});
+			})
+			.catch(ErrMng.MetierError, function(err) {
+				Logger.debug('[SER - CATCH] TransactionService#allByTypeCatU');
+				Logger.error('              -- message : ' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Get all transactions by type category',
+					reason  : err.message
 				});
 			})
 			.catch(function (err) {
@@ -222,6 +258,15 @@ module.exports = {
 					result  : transactions
 				});
 			})
+			.catch(ErrMng.MetierError, function(err) {
+				Logger.debug('[SER - CATCH] TransactionService#allByProgramU');
+				Logger.error('              -- message : ' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Get all transactions by program',
+					reason  : err.message
+				});
+			})
 			.catch(function (err) {
 				Logger.debug('[SER - CATCH] TransactionService#allByProgramU');
 				Logger.error('              -- message : ' + err.message);
@@ -247,6 +292,15 @@ module.exports = {
 				ResponseService.success(res, {
 					message : 'Get transaction',
 					result  : transaction,
+				});
+			})
+			.catch(ErrMng.NoResultError, ErrMng.MetierError, function(err) {
+				Logger.debug('[SER - CATCH] TransactionService#getByIdU');
+				Logger.error('              -- message : ' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Get transaction',
+					reason  : err.message
 				});
 			})
 			.catch(function (err) {

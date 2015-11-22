@@ -3,6 +3,7 @@
 // Inject
 var Jwt             = require('jsonwebtoken');
 var TokenConfig     = require(global.__config + '/token');
+var ErrMng          = require(global.__server + '/ErrMng');
 var Logger          = require(global.__server + '/LoggerManager');
 var ResponseService = require(global.__service + '/share/ResponseService');
 var UserDao         = require(global.__dao + '/UserDao');
@@ -33,12 +34,19 @@ module.exports = {
 					result  : token
 				});
 			})
+			.catch(ErrMng.NoResultError, ErrMng.MetierError, function(err) {
+				return ResponseService.fail(res, {
+					message : 'Authentication',
+					reason  : err.message
+				});
+			})
 			.catch(function (err) {
 				Logger.debug('[SER - CATCH] SessionService#login');
 				Logger.error('              -- message : ' + err.message);
 
 				return ResponseService.fail(res, {
-					message : 'Authentication'
+					message : 'Authentication',
+					reason  : 'Unknow'
 				});
 			});
 

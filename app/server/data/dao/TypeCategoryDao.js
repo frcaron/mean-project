@@ -3,7 +3,7 @@
 // Inject
 var BPromise          = require('bluebird');
 var Logger            = require(global.__server + '/LoggerManager');
-var ErrorManager      = require(global.__server + '/ErrorManager');
+var ErrMng            = require(global.__server + '/ErrMng');
 var TypeCategoryModel = require(global.__model + '/TypeCategoryModel');
 var CountersModel     = require(global.__model + '/CountersModel');
 
@@ -35,7 +35,7 @@ function create (input) {
 			Logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
-				throw new ErrorManager.DuplicateError('Type Category already exist');
+				throw new ErrMng.DuplicateError('Type Category already exist');
 			} else {
 				throw err;
 			}
@@ -76,7 +76,7 @@ function update (input) {
 			Logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
-				throw new ErrorManager.DuplicateError('Type Category already exist');
+				throw new ErrMng.DuplicateError('Type Category already exist');
 			} else {
 				throw err;
 			}
@@ -111,7 +111,7 @@ function getAll () {
 /**
  * @param  {Json} filters 		Keys : 	- type_category_id
  * @return {TypeCategoryModel}	Object found
- * @throws {ParamsError} 		If params given are wrong
+ * @throws {MetierError} 		If params given are wrong
  * @throws {NoResultError} 		If no result found
  * @throws {Error} 				If an other error is met
  */
@@ -127,13 +127,13 @@ function getOne (filters) {
 	}
 
 	if(!promise) {
-		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
+		promise = BPromise.reject(new ErrMng.MetierError('Filters missing'));
 	}
 
 	let promiseEnd = promise
 		.then(function (typeCategory) {
 			if (!typeCategory) {
-				throw new ErrorManager.NoResultError('Type Category not found');
+				throw new ErrMng.NoResultError('Type Category not found');
 			}
 			return BPromise.resolve(typeCategory);
 		})

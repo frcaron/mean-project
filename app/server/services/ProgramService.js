@@ -2,7 +2,7 @@
 
 // Inject
 var BPromise        = require('bluebird');
-var ErrorManager    = require(global.__server + '/ErrorManager');
+var ErrMng          = require(global.__server + '/ErrMng');
 var Logger          = require(global.__server + '/LoggerManager');
 var ResponseService = require(global.__service + '/share/ResponseService');
 var BudgetService   = require(global.__service + '/share/BudgetService');
@@ -81,7 +81,7 @@ module.exports = {
 							if(categoryOld._type === categoryNew._type) {
 								return ProgramDao.update(input);
 							} else {
-								throw new ErrorManager.MetierError('Category invalid');
+								throw new ErrMng.MetierError('Category invalid');
 							}
 						});
 				});

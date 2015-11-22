@@ -3,7 +3,7 @@
 // Inject
 var BPromise         = require('bluebird');
 var Logger           = require(global.__server + '/LoggerManager');
-var ErrorManager     = require(global.__server + '/ErrorManager');
+var ErrMng           = require(global.__server + '/ErrMng');
 var TransactionModel = require(global.__model + '/TransactionModel');
 var CountersModel    = require(global.__model + '/CountersModel');
 
@@ -41,7 +41,7 @@ function create (input) {
 			Logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
-				throw new ErrorManager.DuplicateError('Transaction already exist');
+				throw new ErrMng.DuplicateError('Transaction already exist');
 			} else {
 				throw err;
 			}
@@ -81,7 +81,7 @@ function update (input, filters) {
 				});
 
 		} else {
-			promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
+			promise = BPromise.reject(new ErrMng.MetierError('Filters missing'));
 		}
 	} else {
 		promise = getOne({
@@ -89,16 +89,16 @@ function update (input, filters) {
 				user_id        : input.user_id
 			})
 			.then(function (transaction) {
-				if( input.date ) {
+				if(input.date) {
 					transaction.date     = input.date;
 				}
-				if( input.sum ) {
+				if(input.sum) {
 					transaction.sum      = input.sum;
 				}
-				if( input.comment ) {
+				if(input.comment) {
 					transaction.comment  = input.comment;
 				}
-				if( input.program_id ) {
+				if(input.program_id) {
 					transaction._program = input.program_id;
 				}
 				return transaction.saveAsync()
@@ -119,7 +119,7 @@ function update (input, filters) {
 			Logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
-				throw new ErrorManager.DuplicateError('Transaction already exist');
+				throw new ErrMng.DuplicateError('Transaction already exist');
 			} else {
 				throw err;
 			}
@@ -135,7 +135,7 @@ function update (input, filters) {
  * 									- user_id
  * 									- plan_id
  * @return {}
- * @throws {ParamsError} 	If params given are wrong
+ * @throws {MetierError} 	If params given are wrong
  * @throws {Error} 			If an other error is met
  */
 function remove (filters) {
@@ -163,7 +163,7 @@ function remove (filters) {
 	}
 
 	if(!promise) {
-		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
+		promise = BPromise.reject(new ErrMng.MetierError('Filters missing'));
 	}
 
 	let promiseEnd = promise
@@ -183,7 +183,7 @@ function remove (filters) {
  * @param  {Json} filters 		Keys : 	- user_id
  *                          			- [ programs_id ]
  * @return {TransactionModel}	List of object found
- * @throws {ParamsError} 		If params given are wrong
+ * @throws {MetierError} 		If params given are wrong
  * @throws {Error} 				If an other error is met
  */
 function getAll (filters) {
@@ -206,7 +206,7 @@ function getAll (filters) {
 	}
 
 	if(!promise) {
-		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
+		promise = BPromise.reject(new ErrMng.MetierError('Filters missing'));
 	}
 
 	let promiseEnd = promise
@@ -226,7 +226,7 @@ function getAll (filters) {
  * @param  {Json} filters 		Keys : 	- transaction_id
  *										- user_id
  * @return {TransactionModel}	Object found
- * @throws {ParamsError} 		If params given are wrong
+ * @throws {MetierError} 		If params given are wrong
  * @throws {NoResultError} 		If no result found
  * @throws {Error} 				If an other error is met
  */
@@ -246,13 +246,13 @@ function getOne (filters) {
 	}
 
 	if(!promise) {
-		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing "user_id"'));
+		promise = BPromise.reject(new ErrMng.MetierError('Filters missing "user_id"'));
 	}
 
 	let promiseEnd = promise
 		.then(function (transaction) {
 			if (!transaction) {
-				throw new ErrorManager.NoResultError('Transaction not found');
+				throw new ErrMng.NoResultError('Transaction not found');
 			}
 			return BPromise.resolve(transaction);
 		})

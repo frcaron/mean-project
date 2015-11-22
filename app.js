@@ -26,7 +26,7 @@ app.use(Express.static(Path.join(__dirname, 'public')));
 global.__base          = __dirname + '/';
 global.__app           = __dirname + '/app';
 global.__config        = __dirname + '/config';
-global.__server        = __dirname + '/server';
+global.__server        = __dirname + '/app/server';
 global.__model         = __dirname + '/app/server/data/models';
 global.__plugin        = __dirname + '/app/server/data/plugins';
 global.__dao           = __dirname + '/app/server/data/dao';

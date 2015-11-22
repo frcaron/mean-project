@@ -1,6 +1,7 @@
 "use strict";
 
 // Inject
+var ErrMng          = require(global.__server + '/ErrMng');
 var Logger          = require(global.__server + '/LoggerManager');
 var ResponseService = require(global.__service + '/share/ResponseService');
 var TypeCategoryDao = require(global.__dao + '/TypeCategoryDao');
@@ -19,6 +20,15 @@ module.exports = {
 				ResponseService.success(res, {
 					message : 'Add type category',
 					result  : typeCategory
+				});
+			})
+			.catch(ErrMng.DuplicateError, function(err) {
+				Logger.debug('[SER - CATCH] TypeCategoryService#create');
+				Logger.error('              -- message : ' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Add type category',
+					reason  : err.message
 				});
 			})
 			.catch(function (err){
@@ -45,6 +55,15 @@ module.exports = {
 				ResponseService.success(res, {
 					message : 'Update type category',
 					result 	: typeCategory
+				});
+			})
+			.catch(ErrMng.DuplicateError, ErrMng.NoResultError, ErrMng.MetierError, function(err) {
+				Logger.debug('[SER - CATCH] TypeCategoryService#update');
+				Logger.error('              -- message : ' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Update type category',
+					reason  : err.message
 				});
 			})
 			.catch(function (err) {
@@ -93,6 +112,15 @@ module.exports = {
 				ResponseService.success(res, {
 					message : 'Get type category',
 					result  : typeCategory
+				});
+			})
+			.catch(ErrMng.NoResultError, ErrMng.MetierError, function(err) {
+				Logger.debug('[SER - CATCH] TypeCategoryService#getById');
+				Logger.error('              -- message : ' + err.message);
+
+				ResponseService.fail(res, {
+					message : 'Get type category',
+					reason  : err.manager
 				});
 			})
 			.catch(function (err) {

@@ -21,9 +21,9 @@ module.exports = function (router) {
 			// Validation
 			if (!req.body.name) {
 				return ResponseService.fail(res, {
-							message : 'Add',
-							reason  : 'Param "name" missing'
-						});
+					message : 'Add',
+					reason  : 'Param missing : name'
+				});
 			}
 
 			TypeCategoryService.create(req, res);

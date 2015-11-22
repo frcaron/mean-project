@@ -7,7 +7,7 @@ module.exports = {
 		res.status(options.code_http || 500).json({
 			success : false,
 			message : '[Fail] ' + options.message,
-			reason  :  options.reason
+			reason  :  options.reason || 'Unknow'
 		});
 	},
 
