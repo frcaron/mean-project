@@ -26,12 +26,13 @@ app.use(Express.static(Path.join(__dirname, 'public')));
 global.__base          = __dirname + '/';
 global.__app           = __dirname + '/app';
 global.__config        = __dirname + '/config';
-global.__model         = __dirname + '/app/data/models';
-global.__plugin        = __dirname + '/app/data/plugins';
-global.__dao           = __dirname + '/app/data/dao';
-global.__route         = __dirname + '/app/routes';
-global.__service       = __dirname + '/app/services';
-global.__service_share = __dirname + '/app/services/share';
+global.__server        = __dirname + '/server';
+global.__model         = __dirname + '/app/server/data/models';
+global.__plugin        = __dirname + '/app/server/data/plugins';
+global.__dao           = __dirname + '/app/server/data/dao';
+global.__route         = __dirname + '/app/server/routes';
+global.__service       = __dirname + '/app/server/services';
+global.__client        = __dirname + '/client';
 
 // DataBase ==================================================
 
