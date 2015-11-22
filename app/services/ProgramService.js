@@ -17,14 +17,12 @@ module.exports = {
 
 		Logger.debug('[SER - START] ProgramService#create');
 
-		let input = {
-			category_id : req.body.category_id || req.query.category_id,
-			budget      : req.body.budget,
-			plan_id     : req.body.plan_id || req.query.plan_id,
-			user_id     : req.decoded.id
-		};
-
-		BudgetService.createProgram(input)
+		BudgetService.createProgram({
+				category_id : req.body.category_id || req.query.category_id,
+				budget      : req.body.budget,
+				plan_id     : req.body.plan_id || req.query.plan_id,
+				user_id     : req.decoded.id
+			})
 			.then(function (program) {
 				ResponseService.success(res, {
 					message : 'Add program',
@@ -51,7 +49,7 @@ module.exports = {
 		let category_id = req.body.category_id || req.query.category_id;
 
 		let input = {
-			id          : req.params.program_id,
+			program_id  : req.params.program_id,
 			category_id : category_id,
 			budget      : req.body.budget,
 			user_id     : req.decoded.id
@@ -60,13 +58,13 @@ module.exports = {
 		let promise;
 		if(category_id) {
 			promise = CategoryDao.getOne({
-					id      : category_id,
-					user_id : req.decoded.id
+					category_id : category_id,
+					user_id     : req.decoded.id
 				})
 				.then(function (categoryNew) {
 					return ProgramDao.getOne({
-							id      : req.params.program_id,
-							user_id : req.decoded.id
+							program_id : req.params.program_id,
+							user_id    : req.decoded.id
 						})
 						.then(function (program) {
 							if(categoryNew._id === program._category) {
@@ -74,8 +72,8 @@ module.exports = {
 
 							} else {
 								return CategoryDao.getOne({
-									id      : program._category,
-									user_id : req.decoded.id
+									category_id : program._category,
+									user_id     : req.decoded.id
 								});
 							}
 						})
@@ -116,42 +114,42 @@ module.exports = {
 		Logger.debug('[SER - START] ProgramService#remove');
 
 		ProgramDao.getOne({
-				id : req.params.program_id,
-				user_id : req.decoded.id
+				program_id : req.params.program_id,
+				user_id    : req.decoded.id
 			})
 			.then(function (program) {
 				return CategoryDao.getOne({
-						id      : program._category,
-						user_id : req.decoded.id
+						category_id : program._category,
+						user_id     : req.decoded.id
 					})
 					.then(function (category) {
 						return CategoryDao.getOne({
-								neutre           : true,
-								type_category_id : category._type,
-								user_id          : req.decoded.id
-							});
+							neutre           : true,
+							type_category_id : category._type,
+							user_id          : req.decoded.id
+						});
 					})
 					.then(function (categoryNeutre) {
 						return ProgramDao.getOne({
-								plan_id     : program._plan,
-								category_id : categoryNeutre._id,
-								user_id     : req.decoded.id
-							});
+							plan_id     : program._plan,
+							category_id : categoryNeutre._id,
+							user_id     : req.decoded.id
+						});
 					})
 					.then(function (programNeutre) {
 						return TransactionDao.update({
-								program_id : programNeutre._id
-							}, {
-								program_id : program._id,
-								user_id    : req.decoded.id
-							});
+							program_id : programNeutre._id
+						}, {
+							program_id : program._id,
+							user_id    : req.decoded.id
+						});
 					});
 			})
 			.then(function () {
 				return ProgramDao.remove({
-						id      : req.params.program_id,
-						user_id : req.decoded.id
-					});
+					program_id : req.params.program_id,
+					user_id    : req.decoded.id
+				});
 			})
 			.then(function () {
 				ResponseService.success(res, {
@@ -183,16 +181,16 @@ module.exports = {
 			user_id          : req.decoded.id
 		})
 		.then(function (categories) {
-			let categories_id = {};
+			let categories_id = [];
 			return BPromise.map(categories, function (category) {
 					categories_id.push(category._id);
 				})
 				.then(function () {
 					return ProgramDao.getAll({
-								categories_id : categories_id,
-								plan_id       : plan_id,
-								user_id       : req.decoded.id
-							});
+						categories_id : categories_id,
+						plan_id       : plan_id,
+						user_id       : req.decoded.id
+					});
 				});
 		})
 		.then(function (programs) {
@@ -219,8 +217,8 @@ module.exports = {
 		Logger.debug('[SER - START] ProgramService#getByIdU');
 
 		ProgramDao.getOne({
-				id      : req.params.program_id,
-				user_id : req.decoded.id
+				program_id : req.params.program_id,
+				user_id    : req.decoded.id
 			})
 			.then(function (program) {
 				ResponseService.success(res, {

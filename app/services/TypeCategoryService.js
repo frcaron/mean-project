@@ -12,14 +12,12 @@ module.exports = {
 
 		Logger.debug('[SER - START] TypeCategoryService#create');
 
-		let input = {
-			type : req.body.name
-		};
-
-		TypeCategoryDao.create(input)
+		TypeCategoryDao.create({
+				type : req.body.name
+			})
 			.then(function (typeCategory){
 				ResponseService.success(res, {
-					message : 'Add type category', 
+					message : 'Add type category',
 					result  : typeCategory
 				});
 			})
@@ -40,14 +38,12 @@ module.exports = {
 
 		Logger.debug('[SER - START] TypeCategoryService#update');
 
-		let input = {
-			type : req.body.name
-		};
-
-		TypeCategoryDao.update(input)
+		TypeCategoryDao.update({
+				type : req.body.name
+			})
 			.then(function (typeCategory) {
 				ResponseService.success(res, {
-					message : 'Update type category', 
+					message : 'Update type category',
 					result 	: typeCategory
 				});
 			})
@@ -71,7 +67,7 @@ module.exports = {
 		TypeCategoryDao.getAll()
 			.then(function (typeCategories) {
 				ResponseService.success(res, {
-					message : 'Get all categories', 
+					message : 'Get all categories',
 					result  : typeCategories
 				});
 			})
@@ -92,10 +88,10 @@ module.exports = {
 
 		Logger.debug('[SER - START] TypeCategoryService#getById');
 
-		TypeCategoryDao.getOne({ id : req.params.type_category_id })
+		TypeCategoryDao.getOne({ type_category_id : req.params.type_category_id })
 			.then(function (typeCategory) {
 				ResponseService.success(res, {
-					message : 'Get type category', 
+					message : 'Get type category',
 					result  : typeCategory
 				});
 			})

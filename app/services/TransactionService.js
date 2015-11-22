@@ -48,15 +48,14 @@ module.exports = {
 
 		Logger.debug('[SER - START] TransactionService#create');
 
-		let input = {
-			date    : req.body.date,
-			sum     : req.body.sum,
-			comment : req.body.comment,
-			user_id : req.decoded.id
-		};
 		let category_id = req.body.category_id || req.query.category_id;
 
-		fulfillProgram(input, category_id)
+		fulfillProgram({
+				date    : req.body.date,
+				sum     : req.body.sum,
+				comment : req.body.comment,
+				user_id : req.decoded.id
+			}, category_id)
 			.then(function(transaction) {
 				return TransactionDao.create(transaction);
 			})
@@ -83,16 +82,15 @@ module.exports = {
 
 		Logger.debug('[SER - START] TransactionService#update');
 
-		let input = {
-			id      : req.params.transaction_id,
-			date    : req.body.date,
-			sum     : req.body.sum,
-			comment : req.body.comment,
-			user_id : req.decoded.id
-		};
 		let category_id = req.body.category_id || req.query.category_id;
 
-		fulfillProgram(input, category_id)
+		fulfillProgram({
+				transaction_id : req.params.transaction_id,
+				date           : req.body.date,
+				sum            : req.body.sum,
+				comment        : req.body.comment,
+				user_id        : req.decoded.id
+			}, category_id)
 			.then(function (transaction) {
 				return TransactionDao.update(transaction);
 			})
@@ -120,8 +118,8 @@ module.exports = {
 		Logger.debug('[SER - START] TransactionService#remove');
 
 		TransactionDao.remove({
-				id      : req.params.transaction_id,
-				user_id : req.decoded.id
+				transaction_id : req.params.transaction_id,
+				user_id        : req.decoded.id
 			})
 			.then(function () {
 				ResponseService.success(res, {
@@ -242,8 +240,8 @@ module.exports = {
 		Logger.debug('[SER - START] TransactionService#getByIdU');
 
 		TransactionDao.getOne({
-				id    : req.params.transaction_id,
-				_user : req.decoded.id
+				transaction_id : req.params.transaction_id,
+				_user          : req.decoded.id
 			})
 			.then(function (transaction) {
 				ResponseService.success(res, {

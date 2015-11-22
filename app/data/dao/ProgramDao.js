@@ -70,8 +70,8 @@ function update (input, filters) {
 		promise = BPromise.reject(new ErrorManager.ParamsError('Filters forbidden'));
 	} else {
 		promise = getOne({
-				id      : input.id,
-				user_id : input.user_id
+				program_id : input.program_id,
+				user_id    : input.user_id
 			})
 			.then(function (program) {
 				if( input.category_id ) {
@@ -108,7 +108,7 @@ function update (input, filters) {
 }
 
 /**
- * @param  {Json} filters 	Keys : 	- id
+ * @param  {Json} filters 	Keys : 	- program_id
  * 									- user_id
  * 									- plan_id
  * @return {}
@@ -122,9 +122,9 @@ function remove (filters) {
 
 	let promise;
 	if(filters.user_id) {
-		if(filters.id) {
+		if(filters.program_id) {
 			promise = ProgramModel.removeAsync({
-				_id   : filters.id,
+				_id   : filters.program_id,
 				_user : filters.user_id
 			});
 
@@ -134,10 +134,10 @@ function remove (filters) {
 				_user : filters.user_id
 			});
 
-		} else {
-			promise = ProgramModel.removeAsync({ _user : filters.user_id });
 		}
-	} else {
+	}
+
+	if(!promise) {
 		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
 
@@ -172,26 +172,26 @@ function getAll (filters) {
 		if(filters.plan_id) {
 			if(filters.categories_id && filters.categories_id.length) {
 				promise = ProgramModel.findAsync({
-							_category : { $in : filters.categories_id },
-							_plan     : filters.plan_id,
-							_user     : filters.user_id
-						});
+					_category : { $in : filters.categories_id },
+					_plan     : filters.plan_id,
+					_user     : filters.user_id
+				});
 			} else {
 				promise = ProgramModel.findAsync({
-							_plan : filters.plan_id,
-							_user : filters.user_id
-						});
+					_plan : filters.plan_id,
+					_user : filters.user_id
+				});
 			}
 		} else if(filters.categories_id && filters.categories_id.length) {
 			promise = ProgramModel.findAsync({
-						_category : { $in : filters.categories_id },
-						_user     : filters.user_id
-					});
-		} else {
-			promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
+				_category : { $in : filters.categories_id },
+				_user     : filters.user_id
+			});
 		}
-	} else {
-		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing "user_id"'));
+	}
+
+	if(!promise) {
+		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
 
 	let promiseEnd = promise
@@ -224,9 +224,9 @@ function getOne (filters) {
 
 	let promise;
 	if(filters.user_id) {
-		if(filters.id) {
+		if(filters.program_id) {
 			promise = ProgramModel.findOneAsync({
-						_id   : filters.id,
+						_id   : filters.program_id,
 						_user : filters.user_id
 					});
 
@@ -237,11 +237,11 @@ function getOne (filters) {
 						_user     : filters.user_id
 					});
 
-		} else  {
-			promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 		}
-	} else {
-		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing "user_id"'));
+	}
+
+	if(!promise) {
+		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
 
 	let promiseEnd = promise

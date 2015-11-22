@@ -17,16 +17,14 @@ module.exports = {
 
 		let type_category_id = req.body.type_category_id || req.query.type_category_id;
 
-		TypeCategoryDao.getOne({ id : type_category_id })
+		TypeCategoryDao.getOne({ type_category_id : type_category_id })
 			.then(function (typeCategory) {
 
-				let input = {
+				return CategoryDao.create({
 					name             : req.body.name,
 					type_category_id : typeCategory._id,
 					user_id          : req.decoded.id
-				};
-
-				return CategoryDao.create(input);
+				});
 			})
 			.then(function (category) {
 				ResponseService.success(res, {
@@ -51,14 +49,12 @@ module.exports = {
 
 		Logger.debug('[SER - START] CategoryService#update');
 
-		let input = {
-			id               : req.params.category_id,
-			name             : req.body.name,
-			type_category_id : req.body.type_category_id || req.query.type_category_id,
-			user_id          : req.decoded.id
-		};
-
-		CategoryDao.update(input)
+		CategoryDao.update({
+				category_id      : req.params.category_id,
+				name             : req.body.name,
+				type_category_id : req.body.type_category_id || req.query.type_category_id,
+				user_id          : req.decoded.id
+			})
 			.then(function (category) {
 				ResponseService.success(res, {
 					message : 'Update category',
@@ -78,27 +74,22 @@ module.exports = {
 	},
 
 	// Desactivate one category
-	remove             : function (req, res) {
+	desactivate        : function (req, res) {
 
-		// TODO
-		// Suppression des programs lié
+		Logger.debug('[SER - START] CategoryService#desactivate');
 
-		Logger.debug('[SER - START] CategoryService#remove');
-
-		let input = {
-			id      : req.params.category_id,
-			active  : false,
-			user_id : req.decoded.id
-		};
-
-		CategoryDao.update(input)
+		CategoryDao.update({
+				category_id : req.params.category_id,
+				active      : false,
+				user_id     : req.decoded.id
+			})
 			.then(function () {
 				ResponseService.success(res, {
 					message : 'Desactivate category'
 				});
 			})
 			.catch(function (err) {
-				Logger.debug('[SER - CATCH] CategoryService#remove');
+				Logger.debug('[SER - CATCH] CategoryService#desactivate');
 				Logger.error('              -- message : ' + err.message);
 
 				ResponseService.fail(res, {
@@ -106,7 +97,7 @@ module.exports = {
 				});
 			});
 
-		Logger.debug('[SER -   END] CategoryService#remove');
+		Logger.debug('[SER -   END] CategoryService#desactivate');
 	},
 
 	allByTypeCatUNoUse : function (req, res) {
@@ -135,7 +126,6 @@ module.exports = {
 						return CategoryDao.getAll({
 							no_categories_id : categories_id,
 							type_category_id : type_category_id,
-							active           : true,
 							user_id          : req.decoded.id
 						});
 					});
@@ -164,7 +154,6 @@ module.exports = {
 		Logger.debug('[SER - START] CategoryService#allActiveByTypeCategoryU');
 
 		CategoryDao.getAll({
-				active  : req.body.active,
 				type_id : req.params.type_category_id,
 				user_id : req.decoded.id
 			})
@@ -192,8 +181,8 @@ module.exports = {
 		Logger.debug('[SER - START] CategoryService#getByIdU');
 
 		CategoryDao.getOne({
-				id      : req.params.category_id,
-				user_id : req.decoded.id
+				category_id : req.params.category_id,
+				user_id     : req.decoded.id
 			})
 			.then(function (category) {
 				ResponseService.success(res, {

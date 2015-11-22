@@ -18,34 +18,30 @@ module.exports = {
 
 		Logger.debug('[SER - START] UserService#create');
 
-		let inputUser = {
-            firstname : req.body.firstname,
-            surname   : req.body.surname,
-            email     : req.body.email,
-            password  : req.body.password,
-            admin     : req.body.admin // TODO delete after test
-		};
-
-		UserDao.create(inputUser)
+		UserDao.create({
+                firstname : req.body.firstname,
+                surname   : req.body.surname,
+                email     : req.body.email,
+                password  : req.body.password,
+                admin     : req.body.admin // TODO delete after test
+            })
 			.then(function (user) {
 				return TypeCategoryDao.getAll()
 					.then(function (typeCategories) {
 						return BPromise.map(typeCategories, function (typeCategory) {
-
-								let inputCategory = {
-									name             : 'Autres',
-									type_category_id : typeCategory._id,
-									active           : false,
-									user_id          : user._id
-								};
-								return CategoryDao.create(inputCategory);
-							});
+							return CategoryDao.create({
+                                name             : 'Autres',
+                                type_category_id : typeCategory._id,
+                                neutre           : true,
+                                user_id          : user._id
+                            });
+						});
 					})
 					.then(function() {
 						return BPromise.resolve(user);
 					})
 					.catch(function (err) {
-						UserDao.remove({ id : user._id });
+						UserDao.remove({ user_id : user._id });
 						throw err;
 					});
 			})
@@ -72,16 +68,14 @@ module.exports = {
 
 		Logger.debug('[SER - START] UserService#update');
 
-		let input = {
-			id        : user_id,
-			firstname : req.body.firstname,
-			surname   : req.body.surname,
-			email     : req.body.email,
-			password  : req.body.password,
-			admin     : req.body.admin // TODO delete after test
-		};
-
-		UserDao.update(input)
+		UserDao.update({
+                user_id   : user_id,
+                firstname : req.body.firstname,
+                surname   : req.body.surname,
+                email     : req.body.email,
+                password  : req.body.password,
+                admin     : req.body.admin // TODO delete after test
+            })
 			.then(function (user) {
 				ResponseService.success(res, {
 					message : 'Update user',
@@ -109,12 +103,12 @@ module.exports = {
 		BPromise.map([UserDao, PlanDao, ProgramDao, CategoryDao, TransactionDao],
 			function(dao) {
 				return dao.remove({ user_id : user_id })
-						.then(function () {
-						   msg.push(' [Success]' + dao.name);
-						})
-						.catch(function (err) {
-						   msg.push(' [Failed]' + dao.name + ' / ' + err.message);
-						});
+					.then(function () {
+					   msg.push(' [Success]' + dao.name);
+					})
+					.catch(function (err) {
+					   msg.push(' [Failed]' + dao.name + ' / ' + err.message);
+					});
 			})
 		.then(function() {
 			ResponseService.success(res, {
@@ -164,7 +158,7 @@ module.exports = {
 		Logger.debug('[SER - START] UserService#getOne');
 
 		UserDao.getOne({
-				id : user_id
+				user_id : user_id
 			})
 			.then(function(user) {
 				ResponseService.success(res, {
@@ -189,12 +183,10 @@ module.exports = {
 
 		Logger.debug('[SER - START] UserService#managePermission');
 
-		let input = {
-			_id    : user_id,
-			admin : req.body.admin
-		};
-
-		UserDao.update(input)
+		UserDao.update({
+                user_id : user_id,
+                admin   : req.body.admin
+            })
 			.then(function() {
 				ResponseService.success(res, {
 					message : 'Give rights'

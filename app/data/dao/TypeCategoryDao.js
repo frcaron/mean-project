@@ -58,7 +58,7 @@ function update (input) {
 	Logger.debug('[DAO - START] TypeCategoryDao#update');
 	Logger.debug('              -- input : ' + JSON.stringify(input));
 
-	let promise = getOne({ id : input.id })
+	let promise = getOne({ type_category_id : input.type_category_id })
 		.then(function (typeCategory) {
 			if( input.name ) {
 				typeCategory.name = input.name;
@@ -109,7 +109,7 @@ function getAll () {
 }
 
 /**
- * @param  {Json} filters 		Keys : 	- id
+ * @param  {Json} filters 		Keys : 	- type_category_id
  * @return {TypeCategoryModel}	Object found
  * @throws {ParamsError} 		If params given are wrong
  * @throws {NoResultError} 		If no result found
@@ -121,11 +121,13 @@ function getOne (filters) {
 	Logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise;
-	if(filters.id) {
-		promise = TypeCategoryModel.findByIdAsync(filters.id);
+	if(filters.type_category_id) {
+		promise = TypeCategoryModel.findByIdAsync(filters.type_category_id);
 
-	} else {
-		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing "id"'));
+	}
+
+	if(!promise) {
+		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
 
 	let promiseEnd = promise

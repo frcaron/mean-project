@@ -16,16 +16,14 @@ module.exports = {
 
 		Logger.debug('[SER - START] PlanService#create');
 
-		let input = {
-			month   : req.body.month,
-			year    : req.body.year,
-			user_id : req.decoded.id
-		};
-
-		BudgetService.createPlan(input)
+		BudgetService.createPlan({
+				month   : req.body.month,
+				year    : req.body.year,
+				user_id : req.decoded.id
+			})
 			.then(function (plan) {
-				ResponseService.success(res, { 
-					message : 'Add plan', 
+				ResponseService.success(res, {
+					message : 'Add plan',
 					result  : plan
 				});
 			})
@@ -47,9 +45,9 @@ module.exports = {
 		Logger.debug('[SER - START] PlanService#remove');
 
 		let msg = [];
-		BPromise.map([PlanDao, ProgramDao, TransactionDao], 
+		BPromise.map([PlanDao, ProgramDao, TransactionDao],
 			function(dao) {
-				return dao.remove({ 
+				return dao.remove({
 						plan_id : req.params.plan_id,
 						user_id : req.decoded.id
 					 })
@@ -59,14 +57,14 @@ module.exports = {
 					.catch(function (err) {
 					   msg.push(' [Failed]' + dao.name + ' / ' + err.message);
 					});
-			})                                  
+			})
 		.then(function() {
 			ResponseService.success(res, {
-					message : 'Remove plan', 
+					message : 'Remove plan',
 					result  : msg.toString()
-				});                 
-		})        
-		.catch(function (err) { 
+				});
+		})
+		.catch(function (err) {
 			Logger.debug('[SER - CATCH] PlanService#remove');
 			Logger.error('              -- message : ' + err.message);
 
@@ -108,12 +106,12 @@ module.exports = {
 		Logger.debug('[SER - START] PlanService#getById');
 
 		PlanDao.getOne({
-				id      : req.params.plan_id,
+				plan_id : req.params.plan_id,
 				user_id : req.decoded.id
 			})
 			.then(function (plan) {
 				ResponseService.success(res, {
-					message : 'Get plan', 
+					message : 'Get plan',
 					result  : plan
 				});
 			})
@@ -125,7 +123,7 @@ module.exports = {
 					message : 'Get plan'
 				});
 			});
-				
+
 		Logger.debug('[SER -   END] PlanService#getById');
 	}
 };

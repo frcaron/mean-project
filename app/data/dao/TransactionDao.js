@@ -76,8 +76,8 @@ function update (input, filters) {
 				},{
 					_program : input.program_id
 				})
-				.then(function () {
-					BPromise.resolve(undefined);
+				.then(function (transactions) {
+					BPromise.resolve(transactions);
 				});
 
 		} else {
@@ -85,8 +85,8 @@ function update (input, filters) {
 		}
 	} else {
 		promise = getOne({
-				id      : input.id,
-				user_id : input.user_id
+				transaction_id : input.transaction_id,
+				user_id        : input.user_id
 			})
 			.then(function (transaction) {
 				if( input.date ) {
@@ -131,7 +131,7 @@ function update (input, filters) {
 }
 
 /**
- * @param  {Json} filters 	Keys : 	- id
+ * @param  {Json} filters 	Keys : 	- transaction_id
  * 									- user_id
  * 									- plan_id
  * @return {}
@@ -145,9 +145,9 @@ function remove (filters) {
 
 	let promise;
 	if(filters.user_id) {
-		if(filters.id) {
+		if(filters.transaction_id) {
 			promise = TransactionModel.removeAsync({
-				_id   : filters.id,
+				_id   : filters.transaction_id,
 				_user : filters.user_id
 			});
 
@@ -160,7 +160,9 @@ function remove (filters) {
 		} else {
 			promise = TransactionModel.removeAsync({ _user : filters.user_id });
 		}
-	} else {
+	}
+
+	if(!promise) {
 		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
 
@@ -191,22 +193,20 @@ function getAll (filters) {
 
 	let promise;
 	if(filters.user_id) {
-		if(filters.programs_id) {
-			if(filters.programs_id.length) {
-				promise = TransactionModel.findAsync({
-							_program : { $in : filters.program_id },
-							_user    : filters.user_id
-						});
-			} else {
-				promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing "programs_id"'));
-			}
+		if(filters.programs_id && filters.programs_id.length) {
+			promise = TransactionModel.findAsync({
+				_program : { $in : filters.programs_id },
+				_user    : filters.user_id
+			});
 		} else {
 			promise = TransactionModel.findAsync({
-						_user : filters.user_id
-					});
+				_user : filters.user_id
+			});
 		}
-	} else {
-		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing "user_id"'));
+	}
+
+	if(!promise) {
+		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
 
 	let promiseEnd = promise
@@ -223,7 +223,8 @@ function getAll (filters) {
 }
 
 /**
- * @param  {Json} filters 		Keys : 	- id / user_id
+ * @param  {Json} filters 		Keys : 	- transaction_id
+ *										- user_id
  * @return {TransactionModel}	Object found
  * @throws {ParamsError} 		If params given are wrong
  * @throws {NoResultError} 		If no result found
@@ -236,15 +237,15 @@ function getOne (filters) {
 
 	let promise;
 	if(filters.user_id) {
-		if(filters.id) {
+		if(filters.transaction_id) {
 			promise = TransactionModel.findOneAsync({
-						_id   : filters.id,
-						_user : filters.user_id
-					});
-		} else {
-			promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing "id"'));
+				_id   : filters.transaction_id,
+				_user : filters.user_id
+			});
 		}
-	} else {
+	}
+
+	if(!promise) {
 		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing "user_id"'));
 	}
 

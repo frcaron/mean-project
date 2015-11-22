@@ -10,44 +10,39 @@ module.exports = {
 
 	createPlan    : function (input) {
 
-		let promise = PlanDao.create(input)
+		return PlanDao.create(input)
 			.then(function (plan) {
-				return CategoryDao.getAll({ 
-						active  : false,
+				return CategoryDao.getAll({
+						neutre  : true,
 						user_id : input.user_id
 					})
 					.then(function (categories) {
 						return BPromise.map(categories, function (category) {
-							
-							let inputProgram = {
+							return ProgramDao.create({
 								category_id : category._id,
 								plan_id     : plan._id,
 								user_id     : input.user_id
-							};
-
-							return ProgramDao.create(inputProgram);
+							});
 						});
 					})
 					.then(function () {
 						return BPromise.resolve(plan);
 					})
 					.catch(function (err) {
-						PlanDao.remove({ id : plan._id });
+						PlanDao.remove({ plan_id : plan._id });
 						throw err;
 					});
 			});
-
-		return promise;
 	},
 
 	createProgram : function (input) {
 
-		let promise = CategoryDao.getOne({ 
-				id      : input._category,
-				user_id : input._user
+		return CategoryDao.getOne({
+				category_id : input._category,
+				user_id     : input._user
 			})
 			.then(function () {
-				return PlanDao.getOne({ 
+				return PlanDao.getOne({
 							id      : input._plan,
 							user_id : input._user
 						});
@@ -55,8 +50,6 @@ module.exports = {
 			.then(function () {
 				return ProgramDao.create(input);
 			});
-
-	return promise;
-}
+	}
 
 };

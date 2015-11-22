@@ -25,13 +25,13 @@ module.exports = function (router) {
 			// Validation
 			if (!plan_id) {
 				return ResponseService.fail(res, {
-							message : 'Add', 
+							message : 'Add',
 							reason  : 'Param "plan_id" missing'
 						});
 			}
 			if (!type_category_id) {
 				return ResponseService.fail(res, {
-							message : 'Add', 
+							message : 'Add',
 							reason  : 'Param "type_category_id" missing'
 						});
 			}
@@ -51,13 +51,13 @@ module.exports = function (router) {
 			// Validation
 			if (!req.body.name) {
 				return ResponseService.fail(res, {
-							message : 'Add', 
+							message : 'Add',
 							reason  : 'Param "name" missing'
 						});
 			}
 			if (!type_category_id) {
 				return ResponseService.fail(res, {
-							message : 'Add', 
+							message : 'Add',
 							reason  : 'Param "type_category_id" missing'
 						});
 			}
@@ -79,6 +79,6 @@ module.exports = function (router) {
 
 		// Delete one category
 		.delete(function (req, res) {
-			CategoryService.remove(req, res);
+			CategoryService.desactivate(req, res);
 		});
 };

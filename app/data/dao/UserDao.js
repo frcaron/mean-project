@@ -64,7 +64,7 @@ function update (input) {
 	Logger.debug('[DAO - START] UserDao#update');
 	Logger.debug('              -- input : ' + JSON.stringify(input));
 
-	let promise = getOne({ id : input.id })
+	let promise = getOne({ id : input.user_id })
 		.then(function (user) {
 			if ( input.surname ) {
 				user.surname   = input.surname;
@@ -107,7 +107,7 @@ function update (input) {
 }
 
 /**
- * @param  {Json} filters 	Keys : 	- id [user_id]
+ * @param  {Json} filters 	Keys : 	- user_id
  * 									- email
  * @return {}
  * @throws {ParamsError} 	If params given are wrong
@@ -160,7 +160,7 @@ function getAll () {
 }
 
 /**
- * @param  {Json} filters 	Keys : 	- id [user_id]
+ * @param  {Json} filters 	Keys : 	- user_id
  * 									- email
  * @return {UserModel}		Object found
  * @throws {ParamsError} 	If params given are wrong
@@ -173,15 +173,16 @@ function getOne (filters) {
 	Logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise;
-	let id = filters.id || filters.user_id;
-	if(id) {
-		promise = UserModel.findByIdAsync(id);
+	if(filters.user_id) {
+		promise = UserModel.findByIdAsync(filters.user_id);
 
 	} else if(filters.email) {
 		promise = UserModel.findOneAsync({
-					email : filters.email
-				});
-	} else {
+			email : filters.email
+		});
+	}
+
+	if(!promise) {
 		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));
 	}
 
