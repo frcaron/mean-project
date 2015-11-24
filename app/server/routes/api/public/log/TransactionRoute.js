@@ -36,29 +36,28 @@ module.exports = function (router) {
 			}
 			if(msg.length) {
 				return ResponseService.fail(res, {
-					message : 'Add',
-					reason  : 'Param missing : ' + msg.toString()
+					reason : 'Param missing',
+					detail : msg
 				});
 			}
 
 			var moment = Moment(req.body.date, "DD/MM/YYYY");
 			if(!moment.isValid()) {
 				return ResponseService.fail(res, {
-					message : 'Add',
 					reason  : 'Date is not valid'
 				});
 			} else {
 				req.body.date = moment.toDate();
 			}
 
-			TransactionService.create(req, res);
+			TransactionService.create(req, res, req.decoded.user_id);
 		});
 
 	router.route(api_prefix + '/:transaction_id')
 
 		// Get one transaction
 		.get(function (req, res) {
-			TransactionService.getByIdU(req, res);
+			TransactionService.getByIdU(req, res, req.decoded.user_id);
 		})
 
 		// Update one transaction
@@ -80,26 +79,25 @@ module.exports = function (router) {
 			}
 			if(msg.length) {
 				return ResponseService.fail(res, {
-					message : 'Update',
-					reason  : 'Param missing : ' + msg.toString()
+					reason : 'Param missing',
+					detail : msg
 				});
 			}
 
 			let moment = Moment(req.body.date, "DD/MM/YYYY");
 			if(!moment.isValid()) {
 				return ResponseService.fail(res, {
-					message : 'Update',
 					reason  : 'Date is not valid'
 				});
 			} else {
 				req.body.date = moment.toDate();
 			}
 
-			TransactionService.update(req, res);
+			TransactionService.update(req, res, req.decoded.user_id);
 		})
 
 		// Delete one transaction
 		.delete(function (req, res) {
-			TransactionService.remove(req, res);
+			TransactionService.remove(req, res, req.decoded.user_id);
 		});
 };

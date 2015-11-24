@@ -1,16 +1,20 @@
 "use strict";
 
 // Inject
-var BPromise    = require('bluebird');
-var PlanDao     = require(global.__dao + '/PlanDao');
-var ProgramDao  = require(global.__dao + '/ProgramDao');
+var BPromise   = require('bluebird');
+var Logger     = require(global.__server + '/LoggerManager');
+var PlanDao    = require(global.__dao + '/PlanDao');
+var ProgramDao = require(global.__dao + '/ProgramDao');
 var CategoryDao = require(global.__dao + '/CategoryDao');
 
 module.exports = {
 
 	createPlan    : function (input) {
 
-		return PlanDao.create(input)
+		Logger.debug('[SER - START] BudgetService#createPlan');
+		Logger.debug('              -- input   : ' + JSON.stringify(input));
+
+		let promise = PlanDao.create(input)
 			.then(function (plan) {
 				return CategoryDao.getAll({
 						neutre  : true,
@@ -29,27 +33,41 @@ module.exports = {
 						return BPromise.resolve(plan);
 					})
 					.catch(function (err) {
+						Logger.debug('[SER - CATCH] BudgetService#createPlan');
+						Logger.error('              -- message : ' + err.message);
+
 						PlanDao.remove({ plan_id : plan._id });
 						throw err;
 					});
 			});
+
+		Logger.debug('[SER -   END] BudgetService#createPlan');
+
+		return promise;
 	},
 
 	createProgram : function (input) {
 
-		return CategoryDao.getOne({
-				category_id : input._category,
-				user_id     : input._user
+		Logger.debug('[SER - START] BudgetService#createProgram');
+		Logger.debug('              -- input   : ' + JSON.stringify(input));
+
+		let promise = CategoryDao.getOne({
+				category_id : input.category_id,
+				user_id     : input.user_id
 			})
 			.then(function () {
 				return PlanDao.getOne({
-							id      : input._plan,
-							user_id : input._user
+							id      : input.plan_id,
+							user_id : input.user_id
 						});
 			})
 			.then(function () {
 				return ProgramDao.create(input);
 			});
+
+		Logger.debug('[SER -   END] BudgetService#createProgram');
+
+		return promise;
 	}
 
 };

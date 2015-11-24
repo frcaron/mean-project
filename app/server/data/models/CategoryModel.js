@@ -30,6 +30,17 @@ var CategorySchema = new Schema({
 	}
 });
 
+// Index
+CategorySchema.index({
+	name   : 1,
+	_type  : 1,
+	active : 1,
+	neutre : 1,
+	_user  : 1
+}, {
+	unique : true
+});
+
 // Plugin
 CategorySchema.plugin(DatePlugin);
 CategorySchema.plugin(UserPlugin);

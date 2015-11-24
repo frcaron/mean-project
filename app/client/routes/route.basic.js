@@ -28,10 +28,9 @@ module.exports = function (router) {
 			Jwt.verify(token, TokenConfig.secret, function (err, decoded) {
 				if (err) {
 					return ResponseService.fail(res, {
-								message   : 'Session',
-								reason    : 'Expired',
-								code_http : 403
-							});
+						reason    : 'Session expired',
+						code_http : 403
+					});
 				}
 
 				// Follow token
@@ -44,10 +43,9 @@ module.exports = function (router) {
 			});
 		} else {
 			return ResponseService.fail(res, {
-						message   : 'Session',
-						reason    : 'No authicate',
-						code_http : 403
-					});
+				reason    : 'No session',
+				code_http : 403
+			});
 		}
 	});
 

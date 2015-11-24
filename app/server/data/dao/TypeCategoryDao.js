@@ -2,15 +2,15 @@
 
 // Inject
 var BPromise          = require('bluebird');
+var ExManager         = require(global.__server + '/ExceptionManager');
 var Logger            = require(global.__server + '/LoggerManager');
-var ErrMng            = require(global.__server + '/ErrMng');
 var TypeCategoryModel = require(global.__model + '/TypeCategoryModel');
 var CountersModel     = require(global.__model + '/CountersModel');
 
 /**
  * @param  {Json} input 		Data to create
  * @return {TypeCategoryModel} 	Object created
- * @throws {DuplicateError} 	If index model is not unique
+ * @throws {DuplicateEx} 	If index model is not unique
  * @throws {Error} 				If an other error is met
  */
 function create (input) {
@@ -35,7 +35,13 @@ function create (input) {
 			Logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
-				throw new ErrMng.DuplicateError('Type Category already exist');
+				throw new ExManager.DuplicateEx('Type Category already exist');
+			} if(err.name === 'ValidationError') {
+				let detail = [];
+				Object.keys(err.errors).map(function(prop) {
+					detail.push(err.errors[prop].message);
+				});
+				throw new ExManager.ValidatorEx(err.message, detail);
 			} else {
 				throw err;
 			}
@@ -49,8 +55,8 @@ function create (input) {
 /**
  * @param  {Json} input 		Data to update
  * @return {TypeCategoryModel} 	Object updated
- * @throws {DuplicateError} 	If index model is not unique
- * @throws {NoResultError} 		If id doesn't exist
+ * @throws {DuplicateEx} 	If index model is not unique
+ * @throws {NoResultEx} 		If id doesn't exist
  * @throws {Error} 				If an other error is met
  */
 function update (input) {
@@ -76,7 +82,13 @@ function update (input) {
 			Logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
-				throw new ErrMng.DuplicateError('Type Category already exist');
+				throw new ExManager.DuplicateEx('Type Category already exist');
+			} if(err.name === 'ValidationError') {
+				let detail = [];
+				Object.keys(err.errors).map(function(prop) {
+					detail.push(err.errors[prop].message);
+				});
+				throw new ExManager.ValidatorEx(err.message, detail);
 			} else {
 				throw err;
 			}
@@ -111,8 +123,8 @@ function getAll () {
 /**
  * @param  {Json} filters 		Keys : 	- type_category_id
  * @return {TypeCategoryModel}	Object found
- * @throws {MetierError} 		If params given are wrong
- * @throws {NoResultError} 		If no result found
+ * @throws {ParamEx} 		If params given are wrong
+ * @throws {NoResultEx} 		If no result found
  * @throws {Error} 				If an other error is met
  */
 function getOne (filters) {
@@ -127,13 +139,13 @@ function getOne (filters) {
 	}
 
 	if(!promise) {
-		promise = BPromise.reject(new ErrMng.MetierError('Filters missing'));
+		promise = BPromise.reject(new ExManager.ParamEx('Filters missing'));
 	}
 
 	let promiseEnd = promise
 		.then(function (typeCategory) {
 			if (!typeCategory) {
-				throw new ErrMng.NoResultError('Type Category not found');
+				throw new ExManager.NoResultEx('Type Category not found');
 			}
 			return BPromise.resolve(typeCategory);
 		})

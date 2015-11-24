@@ -32,12 +32,12 @@ module.exports = function (router) {
 			}
 			if(msg.length) {
 				return ResponseService.fail(res, {
-					message : 'Add',
-					reason  : 'Param missing : ' + msg.toString()
+					reason : 'Param missing',
+					detail : msg
 				});
 			}
 
-			CategoryService.allByTypeCatUNoUse(req, res);
+			CategoryService.allByTypeCatUNoUse(req, res, req.decoded.user_id);
 		})
 
 		// Create one category
@@ -59,28 +59,28 @@ module.exports = function (router) {
 			}
 			if(msg.length) {
 				return ResponseService.fail(res, {
-					message : 'Update',
-					reason  : 'Param missing : ' + msg.toString()
+					reason : 'Param missing',
+					detail : msg
 				});
 			}
 
-			CategoryService.create(req, res);
+			CategoryService.create(req, res, req.decoded.user_id);
 		});
 
 	router.route(api_prefix + '/:category_id')
 
 		// Get one category
 		.get(function (req, res) {
-			CategoryService.getByIdU(req, res);
+			CategoryService.getByIdU(req, res, req.decoded.user_id);
 		})
 
 		// Update one category
 		.put(function (req, res) {
-			CategoryService.update(req, res);
+			CategoryService.update(req, res, req.decoded.user_id);
 		})
 
 		// Delete one category
 		.delete(function (req, res) {
-			CategoryService.desactivate(req, res);
+			CategoryService.desactivate(req, res, req.decoded.user_id);
 		});
 };

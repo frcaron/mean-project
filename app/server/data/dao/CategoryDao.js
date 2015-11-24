@@ -2,15 +2,15 @@
 
 // Inject
 var BPromise      = require('bluebird');
+var ExManager     = require(global.__server + '/ExceptionManager');
 var Logger        = require(global.__server + '/LoggerManager');
-var ErrMng        = require(global.__server + '/ErrMng');
 var CategoryModel = require(global.__model + '/CategoryModel');
 var CountersModel = require(global.__model + '/CountersModel');
 
 /**
  * @param  {Json} input     Data to create
  * @return {CategoryModel}  Object created
- * @throws {DuplicateError} If index model is not unique
+ * @throws {DuplicateEx} If index model is not unique
  * @throws {Error}          If an other error is met
  */
 function create (input) {
@@ -28,6 +28,9 @@ function create (input) {
 			if( input.active !== undefined ) {
 				category.active = input.active;
 			}
+			if( input.neutre !== undefined ) {
+				category.neutre = input.neutre;
+			}
 			category._user = input.user_id;
 
 			return category.saveAsync();
@@ -40,7 +43,13 @@ function create (input) {
 			Logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
-				throw new ErrMng.DuplicateError('Category already exist');
+				throw new ExManager.DuplicateEx('Category already exist');
+			} if(err.name === 'ValidationError') {
+				let detail = [];
+				Object.keys(err.errors).map(function(prop) {
+					detail.push(err.errors[prop].message);
+				});
+				throw new ExManager.ValidatorEx(err.message, detail);
 			} else {
 				throw err;
 			}
@@ -55,8 +64,8 @@ function create (input) {
  * @param  {Json} input     Data to update
  * @param  {Json} filters   Keys :  - NO
  * @return {CategoryModel}  Object updated
- * @throws {DuplicateError} If index model is not unique
- * @throws {NoResultError}  If id doesn't exist
+ * @throws {DuplicateEx} If index model is not unique
+ * @throws {NoResultEx}  If id doesn't exist
  * @throws {Error}          If an other error is met
  */
 function update (input, filters) {
@@ -67,7 +76,7 @@ function update (input, filters) {
 
 	let promise;
 	if(filters) {
-		promise = BPromise.reject(new ErrMng.MetierError('Filters forbidden'));
+		promise = BPromise.reject(new ExManager.ParamEx('Filters forbidden'));
 	} else {
 		promise = getOne({
 				category_id : input.category_id,
@@ -99,7 +108,13 @@ function update (input, filters) {
 			Logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
-				throw new ErrMng.DuplicateError('Category already exist');
+				throw new ExManager.DuplicateEx('Category already exist');
+			} if(err.name === 'ValidationError') {
+				let detail = [];
+				Object.keys(err.errors).map(function(prop) {
+					detail.push(err.errors[prop].message);
+				});
+				throw new ExManager.ValidatorEx(err.message, detail);
 			} else {
 				throw err;
 			}
@@ -114,8 +129,8 @@ function update (input, filters) {
  * @param  {Json} filters   Keys :  - user_id
  *                                  - id / user_id
  * @return {CategoryModel}  Object found
- * @throws {MetierError}    If params given are wrong
- * @throws {NoResultError}  If no result found
+ * @throws {ParamEx}    If params given are wrong
+ * @throws {NoResultEx}  If no result found
  * @throws {Error}          If an other error is met
  */
 function remove (filters) {
@@ -138,7 +153,7 @@ function remove (filters) {
 	}
 
 	if(!promise) {
-		promise = BPromise.reject(new ErrMng.MetierError('Filters missing'));
+		promise = BPromise.reject(new ExManager.ParamEx('Filters missing'));
 	}
 
 	let promiseEnd = promise
@@ -159,7 +174,7 @@ function remove (filters) {
  *                                  - type_category_id
  *                                  - no_categories_id
  * @return {CategoryModel}  List of object found
- * @throws {MetierError}    If params given are wrong
+ * @throws {ParamEx}    If params given are wrong
  * @throws {Error}          If an other error is met
  */
 function getAll (filters) {
@@ -170,13 +185,15 @@ function getAll (filters) {
 	let promise;
 	if(filters.user_id) {
 		if(filters.type_category_id) {
-			if(filters.no_categories_id && filters.no_categories_id.length) {
-				promise = CategoryModel.findAsync({
-					_id    : { $nin : filters.no_categories_id },
-					_type  : filters.type_category_id,
-					active : true,
-					_user  : filters.user_id
-				});
+			if(filters.no_categories_id) {
+				if(filters.no_categories_id.length) {
+					promise = CategoryModel.findAsync({
+						_id    : { $nin : filters.no_categories_id },
+						_type  : filters.type_category_id,
+						active : true,
+						_user  : filters.user_id
+					});
+				}
 			} else {
 				promise = CategoryModel.findAsync({
 					_type  : filters.type_category_id,
@@ -184,16 +201,17 @@ function getAll (filters) {
 					_user  : filters.user_id
 				});
 			}
-		} else {
+		} else if(filters.neutre !== undefined) {
 			promise = CategoryModel.findAsync({
 				active : true,
+				neutre : filters.neutre,
 				_user  : filters.user_id
 			});
 		}
 	}
 
 	if(!promise) {
-		promise = BPromise.reject(new ErrMng.MetierError('Filters missing'));
+		promise = BPromise.reject(new ExManager.ParamEx('Filters missing'));
 	}
 
 	let promiseEnd = promise
@@ -215,8 +233,8 @@ function getAll (filters) {
  *                                  - neutre
  *                                  - user_id
  * @return {CategoryModel}  Object found
- * @throws {MetierError}    If params given are wrong
- * @throws {NoResultError}  If no result found
+ * @throws {ParamEx}    If params given are wrong
+ * @throws {NoResultEx}  If no result found
  * @throws {Error}          If an other error is met
  */
 function getOne (filters) {
@@ -251,13 +269,13 @@ function getOne (filters) {
 	}
 
 	if(!promise) {
-		promise = BPromise.reject(new ErrMng.MetierError('Filters missing'));
+		promise = BPromise.reject(new ExManager.ParamEx('Filters missing'));
 	}
 
 	let promiseEnd = promise
 		.then(function (category) {
 			if (!category) {
-				throw new ErrMng.NoResultError('Category not found');
+				throw new ExManager.NoResultEx('Category not found');
 			}
 			return BPromise.resolve(category);
 		})

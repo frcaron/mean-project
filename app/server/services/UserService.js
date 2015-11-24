@@ -2,7 +2,7 @@
 
 // Inject
 var BPromise        = require('bluebird');
-var ErrMng          = require(global.__server + '/ErrMng');
+var ExManager       = require(global.__server + '/ExceptionManager');
 var Logger          = require(global.__server + '/LoggerManager');
 var ResponseService = require(global.__service + '/share/ResponseService');
 var UserDao         = require(global.__dao + '/UserDao');
@@ -48,26 +48,20 @@ module.exports = {
 			})
 			.then(function (user) {
 				ResponseService.success(res, {
-					message :'Add user',
 					result  : user
 				});
 			})
-			.catch(ErrMng.DuplicateError, function(err) {
-				Logger.debug('[SER - CATCH] UserService#create');
-				Logger.error('              -- message : ' + err.message);
-
+			.catch(ExManager.MetierEx, function(err) {
 				ResponseService.fail(res, {
-					message : 'Add user',
-					reason  : err.message
+					reason : err.message,
+					detail : err.detail
 				});
 			})
 			.catch(function (err) {
 				Logger.debug('[SER - CATCH] UserService#create');
 				Logger.error('              -- message : ' + err.message);
 
-				ResponseService.fail(res, {
-					message : 'Add user'
-				});
+				ResponseService.fail(res);
 			});
 
 		Logger.debug('[SER -   END] UserService#create');
@@ -77,6 +71,7 @@ module.exports = {
 	update           : function (req, res, user_id) {
 
 		Logger.debug('[SER - START] UserService#update');
+		Logger.debug('              -- user_id : ' + user_id);
 
 		UserDao.update({
                 user_id   : user_id,
@@ -88,26 +83,20 @@ module.exports = {
             })
 			.then(function (user) {
 				ResponseService.success(res, {
-					message : 'Update user',
 					result  : user
 				});
 			})
-			.catch(ErrMng.DuplicateError, ErrMng.NoResultError, ErrMng.MetierError, function(err) {
-				Logger.debug('[SER - CATCH] UserService#update');
-				Logger.error('              -- message : ' + err.message);
-
+			.catch(ExManager.MetierEx, function(err) {
 				ResponseService.fail(res, {
-					message : 'Update user',
-					reason  : err.message
+					reason : err.message,
+					detail : err.detail
 				});
 			})
 			.catch(function (err) {
 				Logger.debug('[SER - CATCH] UserService#update');
 				Logger.error('              -- message : ' + err.message);
 
-				ResponseService.fail(res, {
-					message : 'Update user'
-				});
+				ResponseService.fail(res);
 			});
 
 		Logger.debug('[SER -   END] UserService#update');
@@ -117,10 +106,10 @@ module.exports = {
 	remove           : function (req, res, user_id) {
 
 		Logger.debug('[SER - START] UserService#remove');
+		Logger.debug('              -- user_id : ' + user_id);
 
 		let msg = [];
-		BPromise.map([UserDao, PlanDao, ProgramDao, CategoryDao, TransactionDao],
-			function(dao) {
+		BPromise.map([UserDao, PlanDao, ProgramDao, CategoryDao, TransactionDao], function(dao) {
 				return dao.remove({ user_id : user_id })
 					.then(function () {
 					   msg.push(' [Success]' + dao.name);
@@ -129,20 +118,23 @@ module.exports = {
 					   msg.push(' [Failed]' + dao.name + ' / ' + err.message);
 					});
 			})
-		.then(function() {
-			ResponseService.success(res, {
-					message : 'Remove user',
-					result  : msg.toString()
+			.then(function() {
+				ResponseService.success(res, {
+						result  : msg.toString()
+					});
+			})
+			.catch(ExManager.MetierEx, function(err) {
+				ResponseService.fail(res, {
+					reason : err.message,
+					detail : err.detail
 				});
-		})
-		.catch(function (err) {
-			Logger.debug('[SER - CATCH] UserService#remove');
-			Logger.error('              -- message : ' + err.message);
+			})
+			.catch(function (err) {
+				Logger.debug('[SER - CATCH] UserService#remove');
+				Logger.error('              -- message : ' + err.message);
 
-			ResponseService.fail(res, {
-				message : 'Remove user'
+				ResponseService.fail(res);
 			});
-		});
 
 		Logger.debug('[SER -   END] UserService#remove');
 	},
@@ -155,7 +147,6 @@ module.exports = {
 		UserDao.getAll()
 			.then(function(users) {
 				ResponseService.success(res, {
-					message : 'Get all users',
 					result  : users
 				});
 			})
@@ -163,9 +154,7 @@ module.exports = {
 				Logger.debug('[SER - CATCH] UserService#getAll');
 				Logger.error('              -- message : ' + err.message);
 
-				ResponseService.fail(res, {
-					message : 'Get all users'
-				});
+				ResponseService.fail(res);
 			});
 
 		Logger.debug('[SER -   END] UserService#getAll');
@@ -175,32 +164,27 @@ module.exports = {
 	getById          : function (req, res, user_id) {
 
 		Logger.debug('[SER - START] UserService#getOne');
+		Logger.debug('              -- user_id : ' + user_id);
 
 		UserDao.getOne({
 				user_id : user_id
 			})
 			.then(function(user) {
 				ResponseService.success(res, {
-					message : 'Get user',
 					result  : user
 				});
 			})
-			.catch(ErrMng.NoResultError, ErrMng.MetierError, function(err) {
-				Logger.debug('[SER - CATCH] UserService#getOne');
-				Logger.error('              -- message : ' + err.message);
-
+			.catch(ExManager.MetierEx, function(err) {
 				ResponseService.fail(res, {
-					message : 'Get user',
-					reason  : err.message
+					reason : err.message,
+					detail : err.detail
 				});
 			})
 			.catch(function(err) {
 				Logger.debug('[SER - CATCH] UserService#getOne');
 				Logger.error('              -- message : ' + err.message);
 
-				ResponseService.fail(res, {
-					message : 'Get user'
-				});
+				ResponseService.fail(res);
 			});
 
 		Logger.debug('[SER -   END] UserService#getOne');
@@ -210,32 +194,26 @@ module.exports = {
 	managePermission : function (req, res, user_id) {
 
 		Logger.debug('[SER - START] UserService#managePermission');
+		Logger.debug('              -- user_id : ' + user_id);
 
 		UserDao.update({
                 user_id : user_id,
                 admin   : req.body.admin
             })
 			.then(function() {
-				ResponseService.success(res, {
-					message : 'Give rights'
-				});
+				ResponseService.success(res);
 			})
-			.catch(ErrMng.NoResultError, function(err) {
-				Logger.debug('[SER - CATCH] UserService#managePermission');
-				Logger.error('              -- message : ' + err.message);
-
+			.catch(ExManager.MetierEx, function(err) {
 				ResponseService.fail(res, {
-					message : 'Give rights',
-					reason  : err.message
+					reason : err.message,
+					detail : err.detail
 				});
 			})
 			.catch(function(err) {
 				Logger.debug('[SER - CATCH] UserService#managePermission');
 				Logger.error('              -- message : ' + err.message);
 
-				ResponseService.fail(res, {
-					message : 'Give rights'
-				});
+				ResponseService.fail(res);
 			});
 
 		Logger.debug('[SER -   END] UserService#managePermission');

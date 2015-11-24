@@ -2,7 +2,7 @@
 
 // Inject
 var BPromise        = require('bluebird');
-var ErrMng          = require(global.__server + '/ErrMng');
+var ExManager       = require(global.__server + '/ExceptionManager');
 var Logger          = require(global.__server + '/LoggerManager');
 var ResponseService = require(global.__service + '/share/ResponseService');
 var BudgetService   = require(global.__service + '/share/BudgetService');
@@ -21,7 +21,7 @@ function fulfillProgram(input, category_id) {
 	};
 
 	return PlanDao.getOne(inputPlan)
-		.catch(ErrMng.NoResultError, function () {
+		.catch(ExManager.NoResultEx, function () {
 			return BudgetService.createPlan(inputPlan);
 		})
 		.then(function (plan) {
@@ -31,7 +31,7 @@ function fulfillProgram(input, category_id) {
 				user_id     : input.user_id
 			};
 			return ProgramDao.getOne(inputProgram)
-				.catch(ErrMng.NoResultError, function () {
+				.catch(ExManager.NoResultEx, function () {
 					return BudgetService.createProgram(inputProgram);
 				});
 			})
@@ -44,9 +44,10 @@ function fulfillProgram(input, category_id) {
 module.exports = {
 
 	// Create one transaction
-	create        : function (req, res) {
+	create        : function (req, res, user_id) {
 
 		Logger.debug('[SER - START] TransactionService#create');
+		Logger.debug('              -- user_id : ' + user_id);
 
 		let category_id = req.body.category_id || req.query.category_id;
 
@@ -54,42 +55,37 @@ module.exports = {
 				date    : req.body.date,
 				sum     : req.body.sum,
 				comment : req.body.comment,
-				user_id : req.decoded.id
+				user_id : user_id
 			}, category_id)
 			.then(function(transaction) {
 				return TransactionDao.create(transaction);
 			})
 			.then(function (transaction) {
 				ResponseService.success(res, {
-					message : 'Add transaction',
 					result  : transaction
 				});
 			})
-			.catch(ErrMng.DuplicateError, function(err) {
-				Logger.debug('[SER - CATCH] TransactionService#create');
-				Logger.error('              -- message : ' + err.message);
-
+			.catch(ExManager.MetierEx, function(err) {
 				ResponseService.fail(res, {
-					message : 'Add transaction',
-					reason  : err.message
+					reason : err.message,
+					detail : err.detail
 				});
 			})
 			.catch(function (err) {
 				Logger.debug('[SER - CATCH] TransactionService#create');
 				Logger.error('              -- message : ' + err.message);
 
-				ResponseService.fail(res, {
-					message : 'Add transaction'
-				});
+				ResponseService.fail(res);
 			});
 
 		Logger.debug('[SER -   END] TransactionService#create');
 	},
 
 	// Update one transaction
-	update        : function (req, res) {
+	update        : function (req, res, user_id) {
 
 		Logger.debug('[SER - START] TransactionService#update');
+		Logger.debug('              -- user_id : ' + user_id);
 
 		let category_id = req.body.category_id || req.query.category_id;
 
@@ -98,85 +94,74 @@ module.exports = {
 				date           : req.body.date,
 				sum            : req.body.sum,
 				comment        : req.body.comment,
-				user_id        : req.decoded.id
+				user_id        : user_id
 			}, category_id)
 			.then(function (transaction) {
 				return TransactionDao.update(transaction);
 			})
 			.then(function (transaction) {
 				ResponseService.success(res, {
-					message : 'Update transaction',
 					result  : transaction
 				});
 			})
-			.catch(ErrMng.DuplicateError, ErrMng.NoResultError, ErrMng.MetierError, function(err) {
-				Logger.debug('[SER - CATCH] TransactionService#update');
-				Logger.error('              -- message : ' + err.message);
-
+			.catch(ExManager.MetierEx, function(err) {
 				ResponseService.fail(res, {
-					message : 'Update transaction',
-					reason  : err.message
+					reason : err.message,
+					detail : err.detail
 				});
 			})
 			.catch(function (err) {
 				Logger.debug('[SER - CATCH] TransactionService#update');
 				Logger.error('              -- message : ' + err.message);
 
-				ResponseService.fail(res, {
-					message : 'Update transaction'
-				});
+				ResponseService.fail(res);
 			});
 
 		Logger.debug('[SER -   END] TransactionService#update');
 	},
 
 	// Remove one transaction
-	remove        : function (req, res) {
+	remove        : function (req, res, user_id) {
 
 		Logger.debug('[SER - START] TransactionService#remove');
+		Logger.debug('              -- user_id : ' + user_id);
 
 		TransactionDao.remove({
 				transaction_id : req.params.transaction_id,
-				user_id        : req.decoded.id
+				user_id        : user_id
 			})
 			.then(function () {
-				ResponseService.success(res, {
-					message : 'Remove transaction'
-				});
+				ResponseService.success(res);
 			})
-			.catch(ErrMng.MetierError, function(err) {
-				Logger.debug('[SER - CATCH] TransactionService#remove');
-				Logger.error('              -- message : ' + err.message);
-
+			.catch(ExManager.MetierEx, function(err) {
 				ResponseService.fail(res, {
-					message : 'Remove failed',
-					reason  : err.message
+					reason : err.message,
+					detail : err.detail
 				});
 			})
 			.catch(function (err) {
 				Logger.debug('[SER - CATCH] TransactionService#remove');
 				Logger.error('              -- message : ' + err.message);
 
-				ResponseService.fail(res, {
-					message : 'Remove failed'
-				});
+				ResponseService.fail(res);
 			});
 
 		Logger.debug('[SER -   END] TransactionService#remove');
 	},
 
 	// Get transactions by type category
-	allByTypeCatU : function (req, res) {
+	allByTypeCatU : function (req, res, user_id) {
 
 		Logger.debug('[SER - START] TransactionService#allByTypeCatU');
+		Logger.debug('              -- user_id : ' + user_id);
 
 		CategoryDao.getAll({
 				type_category_id : req.params.type_category_id,
-				user_id          : req.decoded.id
+				user_id          : user_id
 			})
 			.then(function (categories) {
 				if (!categories.length) {
-					throw new ErrMng.NoResultError('Transactions not found');
+					throw new ExManager.NoResultEx('Transactions not found');
 				}
 
 				var categories_id = [];
@@ -188,12 +173,12 @@ module.exports = {
 					.then(function () {
 						return ProgramDao.getAll({
 							categories_id : categories_id,
-							user_id       : req.decoded.id
+							user_id       : user_id
 						});
 					})
 					.then(function (programs) {
 						if (!programs.length) {
-							throw new ErrMng.NoResultError('Transaction not found');
+							throw new ExManager.NoResultEx('Transaction not found');
 						}
 
 						var programs_id = [];
@@ -205,111 +190,94 @@ module.exports = {
 							.then(function () {
 								return TransactionDao.getAll({
 									programs_id : programs_id,
-									user_id     : req.decoded.id
+									user_id     : user_id
 								});
 							});
 					});
 			})
 			.then(function (transactions) {
 				ResponseService.success(res, {
-					message : 'Get all transactions by type category',
 					result  : transactions
 				});
 			})
-			.catch(ErrMng.NoResultError, function () {
+			.catch(ExManager.NoResultEx, function () {
 				ResponseService.success(res, {
-					message : 'Get all transactions by type category',
 					result  : []
 				});
 			})
-			.catch(ErrMng.MetierError, function(err) {
-				Logger.debug('[SER - CATCH] TransactionService#allByTypeCatU');
-				Logger.error('              -- message : ' + err.message);
-
+			.catch(ExManager.MetierEx, function(err) {
 				ResponseService.fail(res, {
-					message : 'Get all transactions by type category',
-					reason  : err.message
+					reason : err.message,
+					detail : err.detail
 				});
 			})
 			.catch(function (err) {
 				Logger.debug('[SER - CATCH] TransactionService#allByTypeCatU');
 				Logger.error('              -- message : ' + err.message);
 
-				ResponseService.fail(res, {
-					message : 'Get all transactions by type category'
-				});
+				ResponseService.fail(res);
 			});
 
 		Logger.debug('[SER -   END] TransactionService#allByTypeCatU');
 	},
 
 	// Get transactions by program
-	allByProgramU : function (req, res) {
+	allByProgramU : function (req, res, user_id) {
 
 		Logger.debug('[SER - START] TransactionService#allByProgramU');
+		Logger.debug('              -- user_id : ' + user_id);
 
 		TransactionDao.getAll({
 				programs_id : [ req.params.programs_id ],
-				user_id     : req.decoded.id
+				user_id     : user_id
 			})
 			.then(function (transactions) {
 				ResponseService.success(res, {
-					message : 'Get all transactions by program',
 					result  : transactions
 				});
 			})
-			.catch(ErrMng.MetierError, function(err) {
-				Logger.debug('[SER - CATCH] TransactionService#allByProgramU');
-				Logger.error('              -- message : ' + err.message);
-
+			.catch(ExManager.MetierEx, function(err) {
 				ResponseService.fail(res, {
-					message : 'Get all transactions by program',
-					reason  : err.message
+					reason : err.message,
+					detail : err.detail
 				});
 			})
 			.catch(function (err) {
 				Logger.debug('[SER - CATCH] TransactionService#allByProgramU');
 				Logger.error('              -- message : ' + err.message);
 
-				ResponseService.fail(res, {
-					message : 'Get all transactions by program'
-					});
+				ResponseService.fail(res);
 			});
 
 		Logger.debug('[SER -   END] TransactionService#allByProgramU');
 	},
 
 	// Get one transaction by id
-	getByIdU      : function (req, res) {
+	getByIdU      : function (req, res, user_id) {
 
 		Logger.debug('[SER - START] TransactionService#getByIdU');
+		Logger.debug('              -- user_id : ' + user_id);
 
 		TransactionDao.getOne({
 				transaction_id : req.params.transaction_id,
-				_user          : req.decoded.id
+				user_id        : user_id
 			})
 			.then(function (transaction) {
 				ResponseService.success(res, {
-					message : 'Get transaction',
 					result  : transaction,
 				});
 			})
-			.catch(ErrMng.NoResultError, ErrMng.MetierError, function(err) {
-				Logger.debug('[SER - CATCH] TransactionService#getByIdU');
-				Logger.error('              -- message : ' + err.message);
-
+			.catch(ExManager.MetierEx, function(err) {
 				ResponseService.fail(res, {
-					message : 'Get transaction',
-					reason  : err.message
+					reason : err.message,
+					detail : err.detail
 				});
 			})
 			.catch(function (err) {
 				Logger.debug('[SER - CATCH] TransactionService#getByIdU');
 				Logger.error('              -- message : ' + err.message);
 
-				ResponseService.fail(res, {
-					message : 'Get transaction'
-				});
+				ResponseService.fail(res);
 			});
 
 		Logger.debug('[SER -   END] TransactionService#getByIdU');

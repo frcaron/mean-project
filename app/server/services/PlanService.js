@@ -2,6 +2,7 @@
 
 // Inject
 var BPromise        = require('bluebird');
+var ExManager       = require(global.__server + '/ExceptionManager');
 var Logger          = require(global.__server + '/LoggerManager');
 var ResponseService = require(global.__service + '/share/ResponseService');
 var BudgetService   = require(global.__service + '/share/BudgetService');
@@ -12,116 +13,133 @@ var TransactionDao  = require(global.__dao + '/TransactionDao');
 module.exports = {
 
 	// Create one plan
-	create  : function (req, res) {
+	create  : function (req, res, user_id) {
 
 		Logger.debug('[SER - START] PlanService#create');
+		Logger.debug('              -- user_id : ' + user_id);
 
 		BudgetService.createPlan({
 				month   : req.body.month,
 				year    : req.body.year,
-				user_id : req.decoded.id
+				user_id : user_id
 			})
 			.then(function (plan) {
 				ResponseService.success(res, {
-					message : 'Add plan',
 					result  : plan
+				});
+			})
+			.catch(ExManager.MetierEx, function(err) {
+				ResponseService.fail(res, {
+					reason : err.message,
+					detail : err.detail
 				});
 			})
 			.catch(function (err) {
 				Logger.debug('[SER - CATCH] PlanService#create');
 				Logger.error('              -- message : ' + err.message);
 
-				ResponseService.fail(res, {
-					message : 'Add plan'
-				});
+				ResponseService.fail(res);
 			});
 
 		Logger.debug('[SER -   END] PlanService#create');
 	},
 
 	// Delete plan user
-	remove  : function (req, res) {
+	remove  : function (req, res, user_id) {
 
 		Logger.debug('[SER - START] PlanService#remove');
+		Logger.debug('              -- user_id : ' + user_id);
 
 		let msg = [];
 		BPromise.map([PlanDao, ProgramDao, TransactionDao],
 			function(dao) {
 				return dao.remove({
 						plan_id : req.params.plan_id,
-						user_id : req.decoded.id
+						user_id : user_id
 					 })
-					.then(function () {
-					   msg.push(' [Success]' + dao.name);
+					.catch(ExManager.NoResultEx, function () {
 					})
 					.catch(function (err) {
-					   msg.push(' [Failed]' + dao.name + ' / ' + err.message);
+					   msg.push(err.message);
 					});
 			})
-		.then(function() {
-			ResponseService.success(res, {
-					message : 'Remove plan',
-					result  : msg.toString()
+			.then(function() {
+				console.log(msg);
+				if(msg.length) {
+					throw new Error();
+				}
+				ResponseService.success(res);
+			})
+			.catch(ExManager.MetierEx, function(err) {
+				ResponseService.fail(res, {
+					reason : err.message,
+					detail : err.detail
 				});
-		})
-		.catch(function (err) {
-			Logger.debug('[SER - CATCH] PlanService#remove');
-			Logger.error('              -- message : ' + err.message);
+			})
+			.catch(function (err) {
+				Logger.debug('[SER - CATCH] PlanService#remove');
+				Logger.error('              -- message : ' + err.message);
 
-			ResponseService.fail(res, {
-				message : 'Remove plan'
+				ResponseService.fail(res);
 			});
-		});
 
 		Logger.debug('[SER -   END] PlanService#remove');
 	},
 
 	// Get plans by user
-	allByU  : function (req, res) {
+	allByU  : function (req, res, user_id) {
 
 		Logger.debug('[SER - START] PlanService#allByU');
+		Logger.debug('              -- user_id : ' + user_id);
 
-		PlanDao.getAll({ user_id : req.decoded.id })
+		PlanDao.getAll({ user_id : user_id })
 			.then(function (plans) {
 				ResponseService.success(res, {
-					message : 'Get all plans',
 					result  : plans
+				});
+			})
+			.catch(ExManager.MetierEx, function(err) {
+				ResponseService.fail(res, {
+					reason : err.message,
+					detail : err.detail
 				});
 			})
 			.catch(function (err) {
 				Logger.debug('[SER - CATCH] PlanService#allByU');
 				Logger.error('              -- message : ' + err.message);
 
-				ResponseService.fail(res, {
-					message : 'Get all plans'
-				});
+				ResponseService.fail(res);
 			});
 
 		Logger.debug('[SER -   END] PlanService#allByU');
 	},
 
 	// Get one plan by id
-	getById : function (req, res) {
+	getById : function (req, res, user_id) {
 
 		Logger.debug('[SER - START] PlanService#getById');
+		Logger.debug('              -- user_id : ' + user_id);
 
 		PlanDao.getOne({
 				plan_id : req.params.plan_id,
-				user_id : req.decoded.id
+				user_id : user_id
 			})
 			.then(function (plan) {
 				ResponseService.success(res, {
-					message : 'Get plan',
 					result  : plan
+				});
+			})
+			.catch(ExManager.MetierEx, function(err) {
+				ResponseService.fail(res, {
+					reason : err.message,
+					detail : err.detail
 				});
 			})
 			.catch(function (err) {
 				Logger.debug('[SER - CATCH] PlanService#getById');
 				Logger.error('              -- message : ' + err.message);
 
-				ResponseService.fail(res, {
-					message : 'Get plan'
-				});
+				ResponseService.fail(res);
 			});
 
 		Logger.debug('[SER -   END] PlanService#getById');

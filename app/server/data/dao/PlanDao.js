@@ -2,15 +2,15 @@
 
 // Inject
 var BPromise      = require('bluebird');
+var ExManager     = require(global.__server + '/ExceptionManager');
 var Logger        = require(global.__server + '/LoggerManager');
-var ErrMng        = require(global.__server + '/ErrMng');
 var PlanModel     = require(global.__model + '/PlanModel');
 var CountersModel = require(global.__model + '/CountersModel');
 
 /**
  * @param  {Json} input 	Data to create
  * @return {PlanModel} 		Object created
- * @throws {DuplicateError} If index model is not unique
+ * @throws {DuplicateEx} If index model is not unique
  * @throws {Error} 			If an other error is met
  */
 function create (input) {
@@ -37,7 +37,13 @@ function create (input) {
 			Logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
-				throw new ErrMng.DuplicateError('Plan already exist');
+				throw new ExManager.DuplicateEx('Plan already exist');
+			} if(err.name === 'ValidationError') {
+				let detail = [];
+				Object.keys(err.errors).map(function(prop) {
+					detail.push(err.errors[prop].message);
+				});
+				throw new ExManager.ValidatorEx(err.message, detail);
 			} else {
 				throw err;
 			}
@@ -52,8 +58,8 @@ function create (input) {
  * @param  {Json} input 	Data to update
  * @param  {Json} filters 	keys : 	- NO
  * @return {PlanModel} 		Object updated
- * @throws {DuplicateError} If index model is not unique
- * @throws {NoResultError} 	If id doesn't exist
+ * @throws {DuplicateEx} If index model is not unique
+ * @throws {NoResultEx} 	If id doesn't exist
  * @throws {Error} 			If an other error is met
  */
 function update (input, filters) {
@@ -64,7 +70,7 @@ function update (input, filters) {
 
 	let promise;
 	if(filters) {
-		promise = BPromise.reject(new ErrMng.MetierError('Filters forbidden'));
+		promise = BPromise.reject(new ExManager.ParamEx('Filters forbidden'));
 	} else {
 		promise = getOne({
 				plan_id : input.plan_id,
@@ -93,7 +99,13 @@ function update (input, filters) {
 			Logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
-				throw new ErrMng.DuplicateError('Plan already exist');
+				throw new ExManager.DuplicateEx('Plan already exist');
+			} if(err.name === 'ValidationError') {
+				let detail = [];
+				Object.keys(err.errors).map(function(prop) {
+					detail.push(err.errors[prop].message);
+				});
+				throw new ExManager.ValidatorEx(err.message, detail);
 			} else {
 				throw err;
 			}
@@ -108,7 +120,7 @@ function update (input, filters) {
  * @param  {Json} filters 	Keys : 	- user_id
  * 									- plan_id
  * @return {}
- * @throws {MetierError} 	If params given are wrong
+ * @throws {ParamEx} 	If params given are wrong
  * @throws {Error} 			If an other error is met
  */
 function remove (filters) {
@@ -123,14 +135,15 @@ function remove (filters) {
 				_id   : filters.plan_id,
 				_user : filters.user_id
 			});
-
 		} else {
-			promise = PlanModel.removeAsync({ _user : filters.user_id });
+			promise = PlanModel.removeAsync({
+				_user : filters.user_id
+			});
 		}
 	}
 
 	if(!promise) {
-		promise = BPromise.reject(new ErrMng.MetierError('Filters missing'));
+		promise = BPromise.reject(new ExManager.ParamEx('Filters missing'));
 	}
 
 	let promiseEnd = promise
@@ -149,7 +162,7 @@ function remove (filters) {
 /**
  * @param  {Json} filters 	Keys : - user_id
  * @return {PlanModel}		List of object found
- * @throws {MetierError} 	If params given are wrong
+ * @throws {ParamEx} 	If params given are wrong
  * @throws {Error} 			If an other error is met
  */
 function getAll (filters) {
@@ -165,7 +178,7 @@ function getAll (filters) {
 	}
 
 	if(!promise) {
-		promise = BPromise.reject(new ErrMng.MetierError('Filters missing'));
+		promise = BPromise.reject(new ExManager.ParamEx('Filters missing'));
 	}
 
 	let promiseEnd = promise
@@ -187,8 +200,8 @@ function getAll (filters) {
  * 									- month
  * 									- year
  * @return {PlanModel}		Object found
- * @throws {MetierError} 	If params given are wrong
- * @throws {NoResultError} 	If no result found
+ * @throws {ParamEx} 	If params given are wrong
+ * @throws {NoResultEx} 	If no result found
  * @throws {Error} 			If an other error is met
  */
 function getOne (filters) {
@@ -214,13 +227,13 @@ function getOne (filters) {
 	}
 
 	if(!promise) {
-		promise = BPromise.reject(new ErrMng.MetierError('Filters missing'));
+		promise = BPromise.reject(new ExManager.ParamEx('Filters missing'));
 	}
 
 	let promiseEnd = promise
 		.then(function (plan) {
 			if (!plan) {
-				throw new ErrMng.NoResultError('Plan not found');
+				throw new ExManager.NoResultEx('Plan not found');
 			}
 			return BPromise.resolve(plan);
 		})

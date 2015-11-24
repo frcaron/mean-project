@@ -29,8 +29,8 @@ module.exports = function (router) {
 			}
 			if(msg.length) {
 				return ResponseService.fail(res, {
-					message : 'Authentication',
-					reason  : 'Param missing : ' + msg.toString()
+					reason : 'Param missing',
+					detail : msg
 				});
 			}
 

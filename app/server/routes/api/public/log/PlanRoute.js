@@ -14,7 +14,7 @@ module.exports = function (router) {
 
 		// Get all plans
 		.get(function (req, res) {
-			PlanService.allByU(req, res);
+			PlanService.allByU(req, res, req.decoded.user_id);
 		})
 
 		// Create one plan
@@ -34,23 +34,23 @@ module.exports = function (router) {
 			}
 			if(msg.length) {
 				return ResponseService.fail(res, {
-					message : 'Add',
-					reason  : 'Param missing : ' + msg.toString()
+					reason : 'Param missing',
+					detail : msg
 				});
 			}
 
-			PlanService.create(req, res);
+			PlanService.create(req, res, req.decoded.user_id);
 		});
 
 	router.route(api_prefix + '/:plan_id')
 
 		// Get one program
 		.get(function (req, res) {
-			PlanService.getById(req, res);
+			PlanService.getById(req, res, req.decoded.user_id);
 		})
 
 		// Delete one plan
 		.delete(function (req , res) {
-			PlanService.remove(req, res);
+			PlanService.remove(req, res, req.decoded.user_id);
 		});
 };

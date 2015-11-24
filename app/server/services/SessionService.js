@@ -3,7 +3,7 @@
 // Inject
 var Jwt             = require('jsonwebtoken');
 var TokenConfig     = require(global.__config + '/token');
-var ErrMng          = require(global.__server + '/ErrMng');
+var ExManager       = require(global.__server + '/ExceptionManager');
 var Logger          = require(global.__server + '/LoggerManager');
 var ResponseService = require(global.__service + '/share/ResponseService');
 var UserDao         = require(global.__dao + '/UserDao');
@@ -20,7 +20,7 @@ module.exports = {
 
 				// Generate token
 				let token = Jwt.sign({
-					id        : user._id,
+					user_id   : user._id,
 					surname   : user.surname,
 					firstname : user.firstname,
 					email     : user.email,
@@ -29,25 +29,21 @@ module.exports = {
 					expiresMinutes : 1440
 				});
 
-				return ResponseService.success(res, {
-					message : 'Authentication',
+				ResponseService.success(res, {
 					result  : token
 				});
 			})
-			.catch(ErrMng.NoResultError, ErrMng.MetierError, function(err) {
-				return ResponseService.fail(res, {
-					message : 'Authentication',
-					reason  : err.message
+			.catch(ExManager.MetierEx, function(err) {
+				ResponseService.fail(res, {
+					reason : err.message,
+					detail : err.detail
 				});
 			})
 			.catch(function (err) {
 				Logger.debug('[SER - CATCH] SessionService#login');
 				Logger.error('              -- message : ' + err.message);
 
-				return ResponseService.fail(res, {
-					message : 'Authentication',
-					reason  : 'Unknow'
-				});
+				ResponseService.fail(res);
 			});
 
 		Logger.debug('[SER -   END] SessionService#login');

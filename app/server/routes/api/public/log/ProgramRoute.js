@@ -33,12 +33,12 @@ module.exports = function (router) {
 			}
 			if(msg.length) {
 				return ResponseService.fail(res, {
-					message : 'Get programs by plan and type category',
-					reason  : 'Param missing : ' + msg.toString()
+					reason : 'Param missing',
+					detail : msg
 				});
 			}
 
-			ProgramService.allByPlanTypeU(req, res);
+			ProgramService.allByPlanTypeU(req, res, req.decoded.user_id);
 		})
 
 		// Create one program
@@ -61,35 +61,35 @@ module.exports = function (router) {
 			}
 			if(msg.length) {
 				return ResponseService.fail(res, {
-					message : 'Add',
-					reason  : 'Param missing : ' + msg.toString()
+					reason : 'Param missing',
+					detail : msg
 				});
 			}
 
-			ProgramService.create(req, res);
+			ProgramService.create(req, res, req.decoded.user_id);
 		});
 
 	router.route(api_prefix + '/:program_id')
 
 		// Get one program
 		.get(function (req, res) {
-			ProgramService.getByIdU(req, res);
+			ProgramService.getByIdU(req, res, req.decoded.user_id);
 		})
 
 		// Update one program
 		.put(function (req, res) {
-			ProgramService.update(req, res);
+			ProgramService.update(req, res, req.decoded.user_id);
 		})
 
 		// Delete one program
 		.delete(function (req, res) {
-			ProgramService.remove(req, res);
+			ProgramService.remove(req, res, req.decoded.user_id);
 		});
 
 	router.route(api_prefix + '/:program_id/transactions')
 
 		// Get all transactions by program
 		.get(function (req, res) {
-			TransactionService.allByProgramU(req, res);
+			TransactionService.allByProgramU(req, res, req.decoded.user_id);
 		});
 };

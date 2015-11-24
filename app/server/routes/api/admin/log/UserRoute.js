@@ -45,8 +45,8 @@ module.exports = function (router) {
 			// Validation
 			if ( req.body.admin === undefined ) {
 				return ResponseService.fail(res, {
-					message : 'Give permission',
-					reason  : 'Param missing : admin'
+					reason : 'Param missing',
+					detail : [ 'admin' ]
 				});
 			}
 

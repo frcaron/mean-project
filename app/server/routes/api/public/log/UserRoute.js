@@ -1,6 +1,6 @@
 "use strict";
 
-//Inject 
+//Inject
 var UserService = require(global.__service + '/UserService');
 
 // Properties
@@ -12,16 +12,16 @@ module.exports = function (router) {
 
 		// Get one user
 		.get(function (req, res) {
-			UserService.getById(req, res, req.decoded.id);
+			UserService.getById(req, res, req.decoded.user_id);
 		})
 
 		// Update one user
 		.put(function (req, res) {
-			UserService.update(req, res, req.decoded.id);
+			UserService.update(req, res, req.decoded.user_id);
 		})
 
 		// Delete one user
 		.delete(function (req, res) {
-			UserService.remove(req, res, req.decoded.id);
+			UserService.remove(req, res, req.decoded.user_id);
 		});
 };

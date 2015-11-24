@@ -19,9 +19,9 @@ module.exports = function (router) {
 
 		if (!user_id) {
 			return ResponseService.fail(res, {
-						message : 'Bad URL',
-						reason  : 'Param user id missing'
-					});
+				reason : 'Param missing',
+				detail : [ 'user_id' ]
+			});
 		}
 		return next();
 	});
@@ -33,9 +33,9 @@ module.exports = function (router) {
 
 		if (!type_category_id) {
 			return ResponseService.fail(res, {
-						message : 'Bad URL',
-						reason  : 'Param type category id missing'
-					});
+				reason : 'Param missing',
+				detail : [ 'type_category_id' ]
+			});
 		}
 		return next();
 	});
@@ -62,19 +62,17 @@ module.exports = function (router) {
 			Jwt.verify(token, TokenConfig.secret, function (err, decoded) {
 				if (err) {
 					return ResponseService.fail(res, {
-								message   : 'Session',
-								reason    : 'Expired',
-								code_http : 403
-							});
+						reason    : 'Session expired',
+						code_http : 403
+					});
 				}
 
 				// Admin access
 				if (!decoded.admin) {
 					return ResponseService.fail(res, {
-								message   : 'Session',
-								reason    : 'Permission refused',
-								code_http : 403
-							});
+						reason    : 'Permission refused',
+						code_http : 403
+					});
 				}
 
 				// Follow token
@@ -87,10 +85,9 @@ module.exports = function (router) {
 			});
 		} else {
 			return ResponseService.fail(res, {
-						message   : 'Session',
-						reason    : 'No authicate',
-						code_http : 403
-					});
+				reason    : 'No session',
+				code_http : 403
+			});
 		}
 	});
 

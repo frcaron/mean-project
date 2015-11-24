@@ -19,9 +19,9 @@ module.exports = function (router) {
 
 		if (!plan_id) {
 			return ResponseService.fail(res, {
-						message : 'Bad URL',
-						reason  : 'Param plan id missing'
-					});
+				reason : 'Param missing',
+				detail : [ 'plan_id' ]
+			});
 		}
 		return next();
 	});
@@ -33,9 +33,9 @@ module.exports = function (router) {
 
 		if (!program_id) {
 			return ResponseService.fail(res, {
-						message : 'Bad URL',
-						reason  : 'Param program id missing'
-					});
+				reason : 'Param missing',
+				detail : [ 'program_id' ]
+			});
 		}
 		return next();
 	});
@@ -47,9 +47,9 @@ module.exports = function (router) {
 
 		if (!transaction_id) {
 			return ResponseService.fail(res, {
-						message : 'Bad URL',
-						reason  : 'Param transaction id missing'
-					});
+				reason : 'Param missing',
+				detail : [ 'transaction_id' ]
+			});
 		}
 		return next();
 	});
@@ -61,9 +61,9 @@ module.exports = function (router) {
 
 		if (!category_id) {
 			return ResponseService.fail(res, {
-						message : 'Bad URL',
-						reason  : 'Param category id missing'
-					});
+				reason : 'Param missing',
+				detail : [ 'category_id' ]
+			});
 		}
 		return next();
 	});
@@ -75,9 +75,9 @@ module.exports = function (router) {
 
 		if (!type_category_id) {
 			return ResponseService.fail(res, {
-						message : 'Bad URL',
-						reason  : 'Param type category id missing'
-					});
+				reason : 'Param missing',
+				detail : [ 'type_category_id' ]
+			});
 		}
 		return next();
 	});
@@ -105,10 +105,9 @@ module.exports = function (router) {
 			Jwt.verify(token, TokenConfig.secret, function (err, decoded) {
 				if (err) {
 					return ResponseService.fail(res, {
-								message   : 'Session',
-								reason    : 'Expired',
-								code_http : 403
-							});
+						reason    : 'Session expired',
+						code_http : 403
+					});
 				}
 
 				// Follow token
@@ -121,10 +120,9 @@ module.exports = function (router) {
 			});
 		} else {
 			return ResponseService.fail(res, {
-						message   : 'Session',
-						reason    : 'No authicate',
-						code_http : 403
-					});
+				reason    : 'No session',
+				code_http : 403
+			});
 		}
 	});
 

@@ -2,15 +2,15 @@
 
 // Inject
 var BPromise      = require('bluebird');
+var ExManager     = require(global.__server + '/ExceptionManager');
 var Logger        = require(global.__server + '/LoggerManager');
-var ErrMng        = require(global.__server + '/ErrMng');
 var UserModel     = require(global.__model + '/UserModel');
 var CountersModel = require(global.__model + '/CountersModel');
 
 /**
  * @param  {Json} input 	Data to create
  * @return {UserModel} 		Object created
- * @throws {DuplicateError} If index model is not unique
+ * @throws {DuplicateEx} If index model is not unique
  * @throws {Error} 			If an other error is met
  */
 function create (input) {
@@ -41,7 +41,13 @@ function create (input) {
 			Logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
-				throw new ErrMng.DuplicateError('User already exist');
+				throw new ExManager.DuplicateEx('User already exist');
+			} if(err.name === 'ValidationError') {
+				let detail = [];
+				Object.keys(err.errors).map(function(prop) {
+					detail.push(err.errors[prop].message);
+				});
+				throw new ExManager.ValidatorEx(err.message, detail);
 			} else {
 				throw err;
 			}
@@ -55,8 +61,8 @@ function create (input) {
 /**
  * @param  {Json} input 	Data to update
  * @return {UserModel} 		Object updated
- * @throws {DuplicateError} If index model is not unique
- * @throws {NoResultError} 	If id doesn't exist
+ * @throws {DuplicateEx} If index model is not unique
+ * @throws {NoResultEx} 	If id doesn't exist
  * @throws {Error} 			If an other error is met
  */
 function update (input) {
@@ -64,7 +70,7 @@ function update (input) {
 	Logger.debug('[DAO - START] UserDao#update');
 	Logger.debug('              -- input : ' + JSON.stringify(input));
 
-	let promise = getOne({ id : input.user_id })
+	let promise = getOne({ user_id : input.user_id })
 		.then(function (user) {
 			if ( input.surname ) {
 				user.surname   = input.surname;
@@ -95,7 +101,13 @@ function update (input) {
 			Logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
-				throw new ErrMng.DuplicateError('User already exist');
+				throw new ExManager.DuplicateEx('User already exist');
+			} if(err.name === 'ValidationError') {
+				let detail = [];
+				Object.keys(err.errors).map(function(prop) {
+					detail.push(err.errors[prop].message);
+				});
+				throw new ExManager.ValidatorEx(err.message, detail);
 			} else {
 				throw err;
 			}
@@ -110,8 +122,8 @@ function update (input) {
  * @param  {Json} filters 	Keys : 	- user_id
  * 									- email
  * @return {}
- * @throws {MetierError} 	If params given are wrong
- * @throws {NoResultError} 	If no result found
+ * @throws {ParamEx} 	If params given are wrong
+ * @throws {NoResultEx} 	If no result found
  * @throws {Error} 			If an other error is met
  */
 function remove (filters) {
@@ -163,8 +175,8 @@ function getAll () {
  * @param  {Json} filters 	Keys : 	- user_id
  * 									- email
  * @return {UserModel}		Object found
- * @throws {MetierError} 	If params given are wrong
- * @throws {NoResultError} 	If no result found
+ * @throws {ParamEx} 	If params given are wrong
+ * @throws {NoResultEx} 	If no result found
  * @throws {Error} 			If an other error is met
  */
 function getOne (filters) {
@@ -183,13 +195,13 @@ function getOne (filters) {
 	}
 
 	if(!promise) {
-		promise = BPromise.reject(new ErrMng.MetierError('Filters missing'));
+		promise = BPromise.reject(new ExManager.ParamEx('Filters missing'));
 	}
 
 	let promiseEnd = promise
 		.then(function (user) {
 			if (!user) {
-				throw new ErrMng.NoResultError('User not found');
+				throw new ExManager.NoResultEx('User not found');
 			}
 			return BPromise.resolve(user);
 		})
@@ -209,8 +221,8 @@ function getOne (filters) {
  * @param  {String} log 	Login
  * @param  {String} pass 	Password
  * @return {UserModel}		Object found
- * @throws {NoResultError} 	If no result found
- * @throws {LoginError} 	If login failed
+ * @throws {NoResultEx} 	If no result found
+ * @throws {LoginEx} 		If login failed
  * @throws {Error} 			If an other error is met
  */
 function validatePassword (log, pass) {
@@ -223,13 +235,13 @@ function validatePassword (log, pass) {
 	.select('_id, surname firstname email password admin')
 	.then(function(user) {
 		if(!user) {
-			throw new ErrMng.NoResultError('User not found');
+			throw new ExManager.NoResultEx('User not found');
 		}
 
 		var validPassword = user.comparePassword(pass);
 
 		if (!validPassword) {
-			throw new ErrMng.MetierError('Wrong password');
+			throw new ExManager.LoginEx('Wrong password');
 		}
 
 		return BPromise.resolve(user);
