@@ -4,6 +4,46 @@
 		"selected_items":
 		[
 			[
+				"category",
+				"category_id"
+			],
+			[
+				"ca",
+				"category"
+			],
+			[
+				"get",
+				"getOne"
+			],
+			[
+				"cate",
+				"categories"
+			],
+			[
+				"pro",
+				"programs"
+			],
+			[
+				"pr",
+				"programs"
+			],
+			[
+				"Err",
+				"ErrMng"
+			],
+			[
+				"err",
+				"err"
+			],
+			[
+				"re",
+				"reason"
+			],
+			[
+				"m",
+				"MetierError"
+			],
+			[
 				"categor",
 				"categories_id"
 			],
@@ -20,14 +60,6 @@
 				"_user"
 			],
 			[
-				"pr",
-				"program"
-			],
-			[
-				"pro",
-				"programs"
-			],
-			[
 				"Categ",
 				"CategoryDao"
 			],
@@ -36,20 +68,12 @@
 				"programs_id"
 			],
 			[
-				"get",
-				"getAll"
-			],
-			[
 				"Trans",
 				"TransactionDao"
 			],
 			[
 				"progr",
 				"programs_id"
-			],
-			[
-				"ca",
-				"categories_id"
 			],
 			[
 				"Plan",
@@ -112,24 +136,12 @@
 				"UserDao"
 			],
 			[
-				"err",
-				"error"
-			],
-			[
 				"th",
 				"throws	@throws"
 			],
 			[
-				"Err",
-				"ErrorManager"
-			],
-			[
 				"t",
 				"throws	@throws"
-			],
-			[
-				"cate",
-				"categoryNew"
 			],
 			[
 				"cat",
@@ -156,10 +168,6 @@
 				"removeLinkCategory"
 			],
 			[
-				"re",
-				"removeLinkPlan"
-			],
-			[
 				"e",
 				"execAsync"
 			],
@@ -172,22 +180,11 @@
 	"buffers":
 	[
 		{
-			"contents": "\"use strict\";\n\n// Inject\nvar BPromise      = require('bluebird');\nvar Logger        = require(global.__app + '/LoggerManager');\nvar ErrorManager  = require(global.__app + '/ErrorManager');\nvar PlanModel     = require(global.__model + '/PlanModel');\nvar CountersModel = require(global.__model + '/CountersModel');\n\n/**\n * @param  {Json} input 	Data to create\n * @return {PlanModel} 		Object created\n * @throws {DuplicateError} If index model is not unique\n * @throws {Error} 			If an other error is met\n */\nfunction create (input) {\n\n	Logger.debug('[DAO - START] PlanDao#create');\n	Logger.debug('              -- input : ' + JSON.stringify(input));\n\n	let plan = new PlanModel();\n	let promise = CountersModel.getNextSequence('plan_id')\n		.then(function (seq){\n\n			plan._id   = seq;\n			plan.month = input.month;\n			plan.year  = input.year;\n			plan._user = input.user_id;\n\n			return plan.saveAsync();\n		})\n		.then(function () {\n			return BPromise.resolve(plan);\n		})\n		.catch(function (err) {\n			Logger.debug('[DAO - CATCH] PlanDao#create');\n			Logger.error('              -- message : ' + err.message);\n\n			if (err.code === 11000) {\n				throw new ErrorManager.DuplicateError('Plan already exist');\n			} else {\n				throw err;\n			}\n		});\n\n	Logger.debug('[DAO -   END] PlanDao#create');\n\n	return promise;\n}\n\n/**\n * @param  {Json} input 	Data to update\n * @param  {Json} filters 	keys : 	- NO\n * @return {PlanModel} 		Object updated\n * @throws {DuplicateError} If index model is not unique\n * @throws {NoResultError} 	If id doesn't exist\n * @throws {Error} 			If an other error is met\n */\nfunction update (input, filters) {\n\n	Logger.debug('[DAO - START] PlanDao#update');\n	Logger.debug('              -- input   : ' + JSON.stringify(input));\n	Logger.debug('              -- filters : ' + JSON.stringify(filters));\n\n	let promise;\n	if(filters) {\n		promise = BPromise.reject(new ErrorManager.ParamsError('Filters forbidden'));\n	} else {\n		promise = getOne({\n				id      : input.id,\n				user_id : input.user_id\n			})\n			.then(function (plan) {\n				if ( input.month ) {\n					plan.month = input.month;\n				}\n				if ( input.year ) {\n					plan.year  = input.year;\n				}\n				return plan.saveAsync()\n					.then(function () {\n						return BPromise.resolve(plan);\n					});\n			});\n	}\n\n	let promiseEnd = promise\n		.then(function (plan) {\n			return BPromise.resolve(plan);\n		})\n		.catch(function (err) {\n			Logger.debug('[DAO - CATCH] PlanDao#update');\n			Logger.error('              -- message : ' + err.message);\n\n			if (err.code === 11000) {\n				throw new ErrorManager.DuplicateError('Plan already exist');\n			} else {\n				throw err;\n			}\n		});\n\n	Logger.debug('[DAO -   END] PlanDao#update');\n\n	return promiseEnd;\n}\n\n/**\n * @param  {Json} filters 	Keys : 	- user_id\n * 									- id / user_id\n * @return {}\n * @throws {ParamsError} 	If params given are wrong\n * @throws {Error} 			If an other error is met\n */\nfunction remove (filters) {\n\n	Logger.debug('[DAO - START] PlanDao#remove');\n	Logger.debug('              -- filters : ' + JSON.stringify(filters));\n\n	let promise;\n	if(filters.user_id) {\n		let id = filters.id || filters.plan_id;\n		if(id) {\n			promise = PlanModel.removeAsync({\n				_id   : id,\n				_user : filters.user_id\n			});\n\n		} else {\n			promise = PlanModel.removeAsync({ _user : filters.user_id });\n		}\n	} else {\n		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));\n	}\n\n	let promiseEnd = promise\n		.catch(function (err) {\n			Logger.debug('[DAO - CATCH] PlanDao#remove');\n			Logger.error('              -- message : ' + err.message);\n\n			throw err;\n		});\n\n	Logger.debug('[DAO -   END] PlanDao#remove');\n\n	return promiseEnd;\n}\n\n/**\n * @param  {Json} filters 	Keys : - user_id\n * @return {PlanModel}		List of object found\n * @throws {ParamsError} 	If params given are wrong\n * @throws {Error} 			If an other error is met\n */\nfunction getAll (filters) {\n\n	Logger.debug('[DAO - START] PlanDao#getAll');\n	Logger.debug('              -- filters : ' + JSON.stringify(filters));\n\n	let promise;\n	if(filters.user_id) {\n		promise = PlanModel.findAsync({\n						_user : filters.user_id\n					});\n\n	} else {\n		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing \"user_id\"'));\n	}\n\n	let promiseEnd = promise\n		.catch(function (err) {\n			Logger.debug('[DAO - CATCH] PlanDao#getAll');\n			Logger.error('              -- message : ' + err.message);\n\n			throw err;\n		});\n\n	Logger.debug('[DAO -   END] PlanDao#getAll');\n\n	return promiseEnd;\n}\n\n/**\n * @param  {Json} filters 	Keys : 	- id\n *                         			- user_id\n * 									- month\n * 									- year\n * @return {PlanModel}		Object found\n * @throws {ParamsError} 	If params given are wrong\n * @throws {NoResultError} 	If no result found\n * @throws {Error} 			If an other error is met\n */\nfunction getOne (filters) {\n\n	Logger.debug('[DAO - START] PlanDao#getOne');\n	Logger.debug('              -- filters : ' + JSON.stringify(filters));\n\n	let promise;\n	if(filters.user_id) {\n		if(filters.id) {\n			promise = PlanModel.findOneAsync({\n						_id   : filters.id,\n						_user : filters.user_id\n					});\n\n		} else if(filters.month && filters.year) {\n			promise = PlanModel.findOneAsync({\n						month : filters.month,\n						year  : filters.year,\n						_user : filters.user_id\n					});\n		} else {\n			promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing'));\n		}\n	} else {\n		promise = BPromise.reject(new ErrorManager.ParamsError('Filters missing \"user_id\"'));\n	}\n\n	let promiseEnd = promise\n		.then(function (plan) {\n			if (!plan) {\n				throw new ErrorManager.NoResultError('Plan not found');\n			}\n			return BPromise.resolve(plan);\n		})\n		.catch(function (err) {\n			Logger.debug('[DAO - CATCH] PlanDao#getOne');\n			Logger.error('              -- message : ' + err.message);\n\n			throw err;\n		});\n\n	Logger.debug('[DAO -   END] PlanDao#getOne');\n\n	return promiseEnd;\n}\n\nmodule.exports = {\n	name   : 'PlanDao',\n	create : function (input) {\n		return create(input);\n	},\n	update : function (input, filters) {\n		return update(input, filters);\n	},\n	remove : function (filters) {\n		return remove(filters);\n	},\n	getAll : function (filters) {\n		return getAll(filters);\n	},\n	getOne : function (filters) {\n		return getOne(filters);\n	}\n};",
-			"file": "app/data/dao/PlanDao.js",
-			"file_size": 6466,
-			"file_write_time": 130925087009446608,
+			"file": "app/server/data/models/UserModel.js",
 			"settings":
 			{
-				"buffer_size": 6213,
+				"buffer_size": 1267,
 				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/C/App/SublimeText3/Data/Packages/User/Preferences.sublime-settings",
-			"settings":
-			{
-				"buffer_size": 937,
-				"line_ending": "Unix"
 			}
 		}
 	],
@@ -198,10 +195,26 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 260.0,
-		"last_filter": "pull",
+		"height": 135.0,
+		"last_filter": "qui",
 		"selected_items":
 		[
+			[
+				"qui",
+				"Git: Quick Commit"
+			],
+			[
+				"sta",
+				"Git: Status"
+			],
+			[
+				"quic",
+				"Git: Quick Commit"
+			],
+			[
+				"stat",
+				"Git: Status"
+			],
 			[
 				"pull",
 				"Git: Pull"
@@ -209,10 +222,6 @@
 			[
 				"quci",
 				"Git: Quick Commit"
-			],
-			[
-				"stat",
-				"Git: Status"
 			],
 			[
 				"remove",
@@ -235,19 +244,11 @@
 				"Package Control: Install Package"
 			],
 			[
-				"qui",
-				"Git: Quick Commit"
-			],
-			[
 				"status",
 				"Git: Status"
 			],
 			[
 				"quick",
-				"Git: Quick Commit"
-			],
-			[
-				"quic",
 				"Git: Quick Commit"
 			],
 			[
@@ -345,10 +346,6 @@
 			[
 				"sublimegit",
 				"Set Syntax: SublimeGit Show"
-			],
-			[
-				"sta",
-				"Git: Stash Include Untracked"
 			],
 			[
 				"statu",
@@ -472,16 +469,57 @@
 	[
 		"/C/App/Workspace/mean-project",
 		"/C/App/Workspace/mean-project/app",
-		"/C/App/Workspace/mean-project/app/client",
 		"/C/App/Workspace/mean-project/app/server",
+		"/C/App/Workspace/mean-project/app/server/data",
+		"/C/App/Workspace/mean-project/app/server/data/models",
 		"/C/App/Workspace/mean-project/app/server/services"
 	],
 	"file_history":
 	[
+		"/C/App/Workspace/mean-project/app/server/services/SessionService.js",
+		"/C/App/Workspace/mean-project/app/server/data/models/CategoryModel.js",
+		"/C/App/Workspace/mean-project/app/server/data/dao/CategoryDao.js",
+		"/C/App/Workspace/mean-project/app/server/services/CategoryService.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/MeRoute.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/PlanRoute.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/UserRoute.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public/unlog/SessionRoute.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public/unlog/UserRoute.js",
+		"/C/App/Workspace/mean-project/app/server/services/ProgramService.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/TypeCategoryRoute.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/ProgramRoute.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/CategoryRoute.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/TransactionRoute.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/admin/unlog/TypeCategoryRoute.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/admin/log/UserRoute.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/admin/log/TypeCategoryRoute.js",
+		"/C/App/Workspace/mean-project/app/server/services/UserService.js",
+		"/C/App/Workspace/mean-project/app/server/services/TypeCategoryService.js",
+		"/C/App/Workspace/mean-project/app/server/data/models/TypeCategoryModel.js",
+		"/C/App/Workspace/mean-project/app/server/data/dao/TypeCategoryDao.js",
+		"/C/App/Workspace/mean-project/app/server/data/dao/PlanDao.js",
+		"/C/App/Workspace/mean-project/app/server/data/dao/UserDao.js",
+		"/C/App/Workspace/mean-project/app/server/data/dao/TransactionDao.js",
+		"/C/App/Workspace/mean-project/app/server/data/dao/ProgramDao.js",
+		"/C/App/Workspace/mean-project/app/server/services/share/BudgetService.js",
+		"/C/App/Workspace/mean-project/app/server/services/TransactionService.js",
+		"/C/App/Workspace/mean-project/app/server/data/models/UserModel.js",
+		"/C/App/Workspace/mean-project/TODO.txt",
+		"/C/App/Workspace/mean-project/app/server/services/share/ResponseService.js",
+		"/C/App/Workspace/mean-project/app/server/data/models/ProgramModel.js",
+		"/C/App/Workspace/mean-project/app/server/ExceptionManager.js",
+		"/C/App/Workspace/mean-project/app/server/services/PlanService.js",
+		"/C/App/Workspace/mean-project/app/server/data/models/CountersModel.js",
+		"/C/App/Workspace/mean-project/app/server/data/models/PlanModel.js",
+		"/C/App/Workspace/mean-project/app/server/routes/route.api.public.js",
+		"/C/App/Workspace/mean-project/app/server/routes/route.api.admin.js",
+		"/C/App/Workspace/mean-project/app/client/routes/route.basic.js",
+		"/C/App/Workspace/mean-project/README.md",
+		"/C/App/SublimeText3/Data/Packages/User/Preferences.sublime-settings",
+		"/C/App/Workspace/mean-project/app/data/dao/PlanDao.js",
 		"/C/App/Workspace/mean-project/app/data/dao/TransactionDao.js",
 		"/C/App/Workspace/mean-project/app/LoggerManager.js",
 		"/C/App/Workspace/mean-project/app/data/dao/CategoryDao.js",
-		"/C/App/Workspace/mean-project/app/data/dao/PlanDao.js",
 		"/C/App/Workspace/mean-project/app/data/dao/ProgramDao.js",
 		"/C/App/Workspace/mean-project/app/data/dao/UserDao.js",
 		"/C/App/Workspace/mean-project/app/services/share/BudgetService.js",
@@ -492,10 +530,8 @@
 		"/C/App/Workspace/mean-project/app/services/TransactionService.js",
 		"/C/App/Workspace/mean-project/app/services/TypeCategoryService.js",
 		"/C/App/Workspace/mean-project/app/services/UserService.js",
-		"/C/App/Workspace/mean-project/TODO.txt",
 		"/C/App/Workspace/mean-project/app/data/dao/TypeCategoryDao.js",
 		"/C/App/Workspace/mean-project/app/ErrorManager.js",
-		"/C/App/SublimeText3/Data/Packages/User/Preferences.sublime-settings",
 		"/C/App/Workspace/mean-project/mean-project.sublime-project",
 		"/C/App/Workspace/mean-project/app/data/plugins/UserPlugin.js",
 		"/C/App/Workspace/mean-project/package.json",
@@ -546,7 +582,6 @@
 		"/C/App/Workspace/mean-project/app/services/share/ResponseService.js",
 		"/C/App/SublimeText3/Data/Packages/User/Plain text.sublime-settings",
 		"/C/App/SublimeText3/Data/Packages/User/SideBarEnhancements/Open With/Side Bar.sublime-menu",
-		"/C/App/Workspace/mean-project/README.md",
 		"/C/App/Workspace/mean-project/app/services/transversal/BudgetService.js",
 		"/C/App/Workspace/mean-project/app/services/transversal/ResponseService.js",
 		"/C/App/Workspace/mean-project/app/services/ResponseService.js",
@@ -568,44 +603,7 @@
 		"/C/App/Workspace/mean-project/npm-debug.log",
 		"/C/App/Workspace/mean-project/app/routes/api/log/MeRoute.js",
 		"/C/App/Workspace/mean-project/app/routes/route.api.js",
-		"/C/App/Workspace/mean-project/app/routes/route.admin.js",
-		"/C/App/Workspace/mean-project/app/routes/api/unlog/SessionRoute.js",
-		"/C/App/Workspace/mean-project/app/routes/api/log/TransactionRoute.js",
-		"/C/App/Workspace/mean-project/app/routes/api/log/PlanRoute.js",
-		"/C/App/Workspace/mean-project/app/routes/admin/log/TypeCategoryRoute.js",
-		"/C/App/Workspace/mean-project/app/routes/api/log/CategoryRoute.js",
-		"/C/App/Workspace/mean-project/app/routes/admin/log/UserRoute.js",
-		"/C/App/Workspace/mean-project/app/routes/admin/unlog/TypeCategoryRoute.js",
-		"/C/App/Workspace/mean-project/app/routes/api/log/ProgramRoute.js",
-		"/C/App/Workspace/mean-project/app/routes/api/log/TypeCategoryRoute.js",
-		"/C/App/Workspace/mean-project/app/routes/api/log/UserRoute.js",
-		"/C/App/Workspace/mean-project/app/routes/api/unlog/UserRoute.js",
-		"/C/App/Workspace/mean-project/app/routes/admin/unlog/typecategory.js",
-		"/C/App/SublimeText3/Data/Packages/User/JavascriptBeautify.sublime-settings",
-		"/C/App/SublimeText3/Data/Packages/Javascript Beautify/JavascriptBeautify.sublime-settings",
-		"/C/App/SublimeText3/Data/Packages/JsFormat/JsFormat.sublime-settings",
-		"/C/App/SublimeText3/Data/Packages/User/JsFormat.sublime-settings",
-		"/C/App/Workspace/mean-project/app/routes/api/log/user.js",
-		"/C/App/Workspace/mean-project/app/routes/admin/log/user.js",
-		"/C/App/Workspace/mean-project/app/data/UserDao.js",
-		"/C/App/Workspace/mean-project/app/routes/api/log/plan.js",
-		"/C/App/Workspace/mean-project/app/models/CategoryModel.js",
-		"/C/App/Workspace/mean-project/app/models/UserModel.js",
-		"/C/App/Workspace/mean-project/app/models/ProgramModel.js",
-		"/C/App/Workspace/mean-project/app/routes/api/unlog/user.js",
-		"/C/App/Workspace/mean-project/app/routes/admin/unlog/user.js",
-		"/C/App/Workspace/mean-project/app/routes/api/log/me.js",
-		"/C/App/Workspace/mean-project/app/models/TypeCategoryModel.js",
-		"/C/App/Workspace/mean-project/app/models/TransactionModel.js",
-		"/C/App/Workspace/mean-project/app/models/PlanModel.js",
-		"/C/App/Workspace/mean-project/app/models/CountersModel.js",
-		"/C/App/Workspace/mean-project/app/plugins/DatePlugin.js",
-		"/C/App/Workspace/mean-project/app/plugins/UserPlugin.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/routes/api/log/transaction.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/models/TransactionModel.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/services/ProgramService.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/services/CategoryService.js",
-		"/C/Documents and Settings/Administrateur/WebstormProjects/mean-project/app/models/ProgramModel.js"
+		"/C/App/Workspace/mean-project/app/routes/route.admin.js"
 	],
 	"find":
 	{
@@ -616,6 +614,12 @@
 		"height": 90.0,
 		"where_history":
 		[
+			"C:\\App\\Workspace\\mean-project",
+			"C:\\App\\Workspace\\mean-project\\app",
+			"C:\\App\\Workspace\\mean-project\\app\\server\\data\\dao",
+			"C:\\App\\Workspace\\mean-project\\app\\server\\services",
+			"C:\\App\\Workspace\\mean-project\\app",
+			"C:\\App\\Workspace\\mean-project\\app\\server\\services",
 			"C:\\App\\Workspace\\mean-project",
 			"C:\\App\\Workspace\\mean-project\\app",
 			"C:\\App\\Workspace\\mean-project",
@@ -629,9 +633,33 @@
 	},
 	"find_state":
 	{
-		"case_sensitive": false,
+		"case_sensitive": true,
 		"find_history":
 		[
+			"allByPlanTypeU",
+			"moment",
+			".all",
+			"all",
+			"msg",
+			"message",
+			"Error",
+			"ParamEx",
+			"MetierError",
+			"DuplicateError",
+			"NoResultError",
+			"MetierError",
+			"DuplicateError",
+			"NoResultError",
+			"ExMng",
+			"ErrMng",
+			"ErrorManager",
+			"MetierError",
+			"programmerError",
+			"metierError",
+			"MetierError",
+			"metierError",
+			"req.decoded.id",
+			"createProgram",
 			"length",
 			"CategoryDao",
 			"transactionDao.getAll",
@@ -735,14 +763,7 @@
 			"TransactionSchema",
 			"program",
 			"_program",
-			"transaction",
-			"planService",
-			"TypeCategoryService",
-			"typeCategoryService",
-			"ResponseService",
-			"responseService",
-			"TypeCategoryService",
-			"typeCategoryService"
+			"transaction"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -750,6 +771,13 @@
 		"regex": false,
 		"replace_history":
 		[
+			"ParamEx",
+			"DuplicateEx",
+			"NoResultEx",
+			"ExManager",
+			"ExMng",
+			"ExceptionManager",
+			"user_id",
 			"Logger.error('              --",
 			"Logger.debug('              --",
 			"Logger.debug('              -- input",
@@ -781,24 +809,24 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 0,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "app/data/dao/PlanDao.js",
-					"semi_transient": false,
+					"file": "app/server/data/models/UserModel.js",
+					"semi_transient": true,
 					"settings":
 					{
-						"buffer_size": 6213,
+						"buffer_size": 1267,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								557,
+								557
 							]
 						],
 						"settings":
@@ -806,41 +834,36 @@
 							"BracketHighlighterBusy": false,
 							"bh_regions":
 							[
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
 								"bh_single_quote",
 								"bh_single_quote_center",
 								"bh_single_quote_open",
 								"bh_single_quote_close",
 								"bh_single_quote_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
 								"bh_double_quote",
 								"bh_double_quote_center",
 								"bh_double_quote_open",
@@ -851,110 +874,27 @@
 								"bh_regex_open",
 								"bh_regex_close",
 								"bh_regex_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
 								"bh_round",
 								"bh_round_center",
 								"bh_round_open",
 								"bh_round_close",
-								"bh_round_content"
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content"
 							],
 							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "/C/App/SublimeText3/Data/Packages/User/Preferences.sublime-settings",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 937,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								144,
-								144
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_default_content",
-								"bh_c_define",
-								"bh_c_define_center",
-								"bh_c_define_open",
-								"bh_c_define_close",
-								"bh_c_define_content",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_tag_content",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_unmatched_content",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_curly_content",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_angle_content",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close",
-								"bh_single_quote_content",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_double_quote_content",
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_regex_content",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_square_content",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_round_content"
-							],
-							"syntax": "Packages/JavaScript/JSON.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.x": -0.0,
+						"translation.y": 252.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -965,7 +905,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 34.0
+		"height": 22.0
 	},
 	"input":
 	{
@@ -1026,7 +966,7 @@
 	"project": "mean-project.sublime-project",
 	"replace":
 	{
-		"height": 42.0
+		"height": 40.0
 	},
 	"save_all_on_build": true,
 	"select_file":
