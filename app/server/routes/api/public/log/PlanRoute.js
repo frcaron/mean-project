@@ -4,6 +4,7 @@
 var Logger          = require(global.__server + '/LoggerManager');
 var ResponseService = require(global.__service + '/share/ResponseService');
 var PlanService     = require(global.__service + '/PlanService');
+var ProgramService  = require(global.__service + '/ProgramService');
 
 // Properties
 var api_prefix = '/plans';
@@ -52,5 +53,28 @@ module.exports = function (router) {
 		// Delete one plan
 		.delete(function (req , res) {
 			PlanService.remove(req, res, req.decoded.user_id);
+		});
+
+	router.route(api_prefix + '/:plan_id/programs')
+
+		// Get all programs
+		.get(function (req, res) {
+
+			let plan_id          = req.body.plan_id || req.query.plan_id;
+			let type_category_id = req.body.type_category_id || req.query.type_category_id;
+
+			Logger.debug('[WSP - VALID] PlanRoute#get');
+			Logger.debug('              -- plan_id          : ' + plan_id);
+			Logger.debug('              -- type_category_id : ' + type_category_id);
+
+			// Validation
+			if(!type_category_id) {
+				return ResponseService.fail(res, {
+					reason : 'Param missing',
+					detail : [ 'type_category_id' ]
+				});
+			}
+
+			ProgramService.allByPlanTypeU(req, res, req.decoded.user_id);
 		});
 };

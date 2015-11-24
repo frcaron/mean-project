@@ -22,19 +22,9 @@ module.exports = function (router) {
 		// Get one user
 		.get(function (req, res) {
 			UserService.getById(req, res, req.params.user_id);
-		})
-
-		// Update one user
-		.put(function (req, res) {
-			UserService.update(req, res, req.params.user_id);
-		})
-
-		// Delete one user
-		.delete(function (req, res) {
-			UserService.remove(req, res, req.params.user_id);
 		});
 
-	router.route(api_prefix + '/:user_id/rules')
+	router.route(api_prefix + '/:user_id')
 
 		// Manage permission
 		.put(function (req, res) {

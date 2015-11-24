@@ -173,6 +173,7 @@ function remove (filters) {
  * @param  {Json} filters   Keys :  - user_id
  *                                  - type_category_id
  *                                  - no_categories_id
+ *                                  - neutre
  * @return {CategoryModel}  List of object found
  * @throws {ParamEx}    If params given are wrong
  * @throws {Error}          If an other error is met
@@ -205,6 +206,11 @@ function getAll (filters) {
 			promise = CategoryModel.findAsync({
 				active : true,
 				neutre : filters.neutre,
+				_user  : filters.user_id
+			});
+		} else {
+			promise = CategoryModel.findAsync({
+				active : true,
 				_user  : filters.user_id
 			});
 		}

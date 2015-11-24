@@ -185,7 +185,6 @@ module.exports = {
 		Logger.debug('[SER - START] ProgramService#allByPlanU');
 		Logger.debug('              -- user_id : ' + user_id);
 
-		let plan_id          = req.body.plan_id || req.query.plan_id;
 		let type_category_id = req.body.type_category_id || req.query.type_category_id;
 
 		CategoryDao.getAll({
@@ -207,7 +206,7 @@ module.exports = {
 					.then(function () {
 						return ProgramDao.getAll({
 							categories_id : categories_id,
-							plan_id       : plan_id,
+							plan_id       : req.params.plan_id,
 							user_id       : user_id
 						});
 					});

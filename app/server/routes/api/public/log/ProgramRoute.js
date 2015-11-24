@@ -13,34 +13,6 @@ module.exports = function (router) {
 
 	router.route(api_prefix)
 
-		// Get all programs
-		.get(function (req, res) {
-
-			let plan_id          = req.body.plan_id || req.query.plan_id;
-			let type_category_id = req.body.type_category_id || req.query.type_category_id;
-
-			Logger.debug('[WSP - VALID] PlanRoute#get');
-			Logger.debug('              -- plan_id          : ' + plan_id);
-			Logger.debug('              -- type_category_id : ' + type_category_id);
-
-			// Validation
-			var msg = [];
-			if (!plan_id) {
-				msg.push('plan_id');
-			}
-			if (!type_category_id) {
-				msg.push('type_category_id');
-			}
-			if(msg.length) {
-				return ResponseService.fail(res, {
-					reason : 'Param missing',
-					detail : msg
-				});
-			}
-
-			ProgramService.allByPlanTypeU(req, res, req.decoded.user_id);
-		})
-
 		// Create one program
 		.post(function (req, res) {
 

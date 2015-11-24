@@ -55,10 +55,9 @@ module.exports = {
 		Logger.debug('              -- user_id : ' + user_id);
 
 		CategoryDao.update({
-				category_id      : req.params.category_id,
-				name             : req.body.name,
-				type_category_id : req.body.type_category_id || req.query.type_category_id,
-				user_id          : user_id
+				category_id : req.params.category_id,
+				name        : req.body.name,
+				user_id     : user_id
 			})
 			.then(function (category) {
 				ResponseService.success(res, {
@@ -128,13 +127,9 @@ module.exports = {
 				user_id : user_id
 			})
 			.then(function (programs) {
-				if(!programs.length) {
-					throw new ExManager.MetierEx('Program not found');
-				}
-
 				var categories_id = [];
 				programs.map(function (program) {
-					categories_id.push(program._id);
+					categories_id.push(program._category);
 				});
 
 				return BPromise.all(categories_id)
@@ -142,6 +137,7 @@ module.exports = {
 						return CategoryDao.getAll({
 							no_categories_id : categories_id,
 							type_category_id : type_category_id,
+							neutre           : false,
 							user_id          : user_id
 						});
 					});
@@ -168,14 +164,14 @@ module.exports = {
 	},
 
 	// Get active categories by type category
-	allByTypeCatU      : function (req, res, user_id) {
+	allByTypeU      : function (req, res, user_id) {
 
-		Logger.debug('[SER - START] CategoryService#allActiveByTypeCategoryU');
+		Logger.debug('[SER - START] CategoryService#allByTypeU');
 		Logger.debug('              -- user_id : ' + user_id);
 
 		CategoryDao.getAll({
-				type_id : req.params.type_category_id,
-				user_id : user_id
+				type_category_id : req.params.type_category_id,
+				user_id          : user_id
 			})
 			.then(function (categories) {
 				ResponseService.success(res, {
@@ -189,13 +185,13 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-				Logger.debug('[SER - CATCH] CategoryService#allActiveByTypeCategoryU');
+				Logger.debug('[SER - CATCH] CategoryService#allByTypeU');
 				Logger.error('              -- message : ' + err.message);
 
 				ResponseService.fail(res);
 			});
 
-		Logger.debug('[SER -   END] CategoryService#allActiveByTypeCategoryU');
+		Logger.debug('[SER -   END] CategoryService#allByTypeU');
 	},
 
 	// Get one category by id

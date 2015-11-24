@@ -41,13 +41,13 @@ module.exports = function (router) {
 				});
 			}
 
-			var moment = Moment(req.body.date, "DD/MM/YYYY");
-			if(!moment.isValid()) {
+			var moment = Moment(req.body.date, "DD/MM/YYYY", true);
+			if(moment.isValid()) {
+				req.body.date = moment;
+			} else {
 				return ResponseService.fail(res, {
 					reason  : 'Date is not valid'
 				});
-			} else {
-				req.body.date = moment.toDate();
 			}
 
 			TransactionService.create(req, res, req.decoded.user_id);
@@ -84,13 +84,13 @@ module.exports = function (router) {
 				});
 			}
 
-			let moment = Moment(req.body.date, "DD/MM/YYYY");
-			if(!moment.isValid()) {
+			var moment = Moment(req.body.date, "DD/MM/YYYY", true);
+			if(moment.isValid()) {
+				req.body.date = moment;
+			} else {
 				return ResponseService.fail(res, {
 					reason  : 'Date is not valid'
 				});
-			} else {
-				req.body.date = moment.toDate();
 			}
 
 			TransactionService.update(req, res, req.decoded.user_id);

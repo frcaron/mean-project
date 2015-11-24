@@ -12,6 +12,35 @@ module.exports = function (router) {
 
 	router.route(api_prefix)
 
+		// Create one category
+		.post(function (req, res) {
+
+			let type_category_id = req.body.type_category_id || req.query.type_category_id;
+
+			Logger.debug('[WSP - VALID] CategoryRoute#post');
+			Logger.debug('              -- req.body.name    : ' + req.body.name);
+			Logger.debug('              -- type_category_id : ' + type_category_id);
+
+			// Validation
+			var msg = [];
+			if (!req.body.name) {
+				msg.push('name');
+			}
+			if (!type_category_id) {
+				msg.push('type_category_id');
+			}
+			if(msg.length) {
+				return ResponseService.fail(res, {
+					reason : 'Param missing',
+					detail : msg
+				});
+			}
+
+			CategoryService.create(req, res, req.decoded.user_id);
+		});
+
+	router.route(api_prefix + '/available')
+
 		// Get categories by type category no exist
 		.get(function (req, res) {
 
@@ -38,33 +67,6 @@ module.exports = function (router) {
 			}
 
 			CategoryService.allByTypeCatUNoUse(req, res, req.decoded.user_id);
-		})
-
-		// Create one category
-		.post(function (req, res) {
-
-			let type_category_id = req.body.type_category_id || req.query.type_category_id;
-
-			Logger.debug('[WSP - VALID] CategoryRoute#post');
-			Logger.debug('              -- req.body.name    : ' + req.body.name);
-			Logger.debug('              -- type_category_id : ' + type_category_id);
-
-			// Validation
-			var msg = [];
-			if (!req.body.name) {
-				msg.push('name');
-			}
-			if (!type_category_id) {
-				msg.push('type_category_id');
-			}
-			if(msg.length) {
-				return ResponseService.fail(res, {
-					reason : 'Param missing',
-					detail : msg
-				});
-			}
-
-			CategoryService.create(req, res, req.decoded.user_id);
 		});
 
 	router.route(api_prefix + '/:category_id')

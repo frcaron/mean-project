@@ -13,10 +13,9 @@ var CategoryDao     = require(global.__dao + '/CategoryDao');
 
 function fulfillProgram(input, category_id) {
 
-	let date_split = input.date.split('/');
 	let inputPlan = {
-		month   : date_split[ 1 ],
-		year    : date_split[ 2 ],
+		month   : input.date.month() + 1,
+		year    : input.date.year(),
 		user_id : input.user_id
 	};
 
@@ -150,9 +149,9 @@ module.exports = {
 	},
 
 	// Get transactions by type category
-	allByTypeCatU : function (req, res, user_id) {
+	allByTypeU : function (req, res, user_id) {
 
-		Logger.debug('[SER - START] TransactionService#allByTypeCatU');
+		Logger.debug('[SER - START] TransactionService#allByTypeU');
 		Logger.debug('              -- user_id : ' + user_id);
 
 		CategoryDao.getAll({
@@ -212,13 +211,13 @@ module.exports = {
 				});
 			})
 			.catch(function (err) {
-				Logger.debug('[SER - CATCH] TransactionService#allByTypeCatU');
+				Logger.debug('[SER - CATCH] TransactionService#allByTypeU');
 				Logger.error('              -- message : ' + err.message);
 
 				ResponseService.fail(res);
 			});
 
-		Logger.debug('[SER -   END] TransactionService#allByTypeCatU');
+		Logger.debug('[SER -   END] TransactionService#allByTypeU');
 	},
 
 	// Get transactions by program
@@ -228,7 +227,7 @@ module.exports = {
 		Logger.debug('              -- user_id : ' + user_id);
 
 		TransactionDao.getAll({
-				programs_id : [ req.params.programs_id ],
+				programs_id : [ req.params.program_id ],
 				user_id     : user_id
 			})
 			.then(function (transactions) {

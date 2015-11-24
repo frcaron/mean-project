@@ -144,6 +144,10 @@ function remove (filters) {
 				_plan : filters.plan_id,
 				_user : filters.user_id
 			});
+		} else {
+			promise = ProgramModel.removeAsync({
+				_user : filters.user_id
+			});
 		}
 	}
 

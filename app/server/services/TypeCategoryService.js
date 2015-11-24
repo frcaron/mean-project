@@ -14,7 +14,7 @@ module.exports = {
 		Logger.debug('[SER - START] TypeCategoryService#create');
 
 		TypeCategoryDao.create({
-				type : req.body.name
+				name : req.body.name
 			})
 			.then(function (typeCategory){
 				ResponseService.success(res, {
@@ -43,7 +43,8 @@ module.exports = {
 		Logger.debug('[SER - START] TypeCategoryService#update');
 
 		TypeCategoryDao.update({
-				type : req.body.name
+				type_category_id : req.params.type_category_id,
+				name             : req.body.name
 			})
 			.then(function (typeCategory) {
 				ResponseService.success(res, {

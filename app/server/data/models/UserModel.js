@@ -1,6 +1,6 @@
 "use strict";
 
-// Inject 
+// Inject
 var BPromise   = require('bluebird');
 var Mongoose   = BPromise.promisifyAll(require('mongoose'));
 var Bcrypt     = require('bcrypt-nodejs');
@@ -21,7 +21,7 @@ var UserSchema = new Schema({
 	},
 	email     : {
 		type     : String,
-		required : true
+		required : true // TODO validation email
 	},
 	password  : {
 		type     : String,
@@ -51,7 +51,7 @@ UserSchema.methods.comparePassword = function (password) {
 };
 
 // MiddleWare
-UserSchema.pre('save', function (next) { 
+UserSchema.pre('save', function (next) {
 	var user = this;
 
 	if (!user.isModified('password')) {

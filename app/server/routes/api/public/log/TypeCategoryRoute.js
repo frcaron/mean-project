@@ -11,15 +11,15 @@ module.exports = function (router) {
 
 	router.route(api_prefix + '/:type_category_id/categories')
 
-		// Get all categories by type category
+		// Get categories by type category no exist
 		.get(function (req, res) {
-			CategoryService.allByTypeCatU(req, res, req.decoded.user_id);
+			CategoryService.allByTypeU(req, res, req.decoded.user_id);
 		});
 
 	router.route(api_prefix + '/:type_category_id/transactions')
 
 		// Get all transaction by type transactions
 		.get(function (req, res) {
-			TransactionService.allByTypeCatU(req, res, req.decoded.user_id);
+			TransactionService.allByTypeU(req, res, req.decoded.user_id);
 		});
 };

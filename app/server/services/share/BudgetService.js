@@ -57,7 +57,7 @@ module.exports = {
 			})
 			.then(function () {
 				return PlanDao.getOne({
-							id      : input.plan_id,
+							plan_id : input.plan_id,
 							user_id : input.user_id
 						});
 			})
