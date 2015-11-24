@@ -1,19 +1,40 @@
+// Global variable = ==========================================
+
+global.__config    = Path.join(__dirname, '/config');
+global.__server    = Path.join(__dirname, '/app/server');
+global.__model     = Path.join(__dirname, '/app/server/data/models');
+global.__plugin    = Path.join(__dirname, '/app/server/data/plugins');
+global.__dao       = Path.join(__dirname, '/app/server/data/dao');
+global.__route     = Path.join(__dirname, '/app/server/routes');
+global.__service   = Path.join(__dirname, '/app/server/services');
+global.__client    = Path.join(__dirname, '/client');
+
 // Set up ====================================================
 
-var Express      = require('express');
-var Path         = require('path');
-// var Favicon      = require('serve-favicon');
-var Morgan       = require('morgan');
-var CookieParser = require('cookie-parser');
-var BodyParser   = require('body-parser');
-var BPromise     = require('bluebird');
-var Mongoose     = BPromise.promisifyAll(require('mongoose'));
+var BodyParser     = require('body-parser');
+var BPromise       = require('bluebird');
+var CookieParser   = require('cookie-parser');
+var Express        = require('express');
+var Favicon        = require('serve-favicon');
+var Flash          = require('connect-flash');
+var Morgan         = require('morgan');
+var Passport       = require('passport');
+var Path           = require('path');
+var Session        = require('express-session');
+var Mongoose       = BPromise.promisifyAll(require('mongoose'));
+var DatabaseConfig = require(Path.join(global.__config, '/database'));
+var PassportConfig = require(Path.join(global.__config, '/passport'));
+var SecretConfig   = require(Path.join(global.__config, '/token'));
 
-var app = Express();
+// DataBase ==================================================
+
+Mongoose.connect(process.env.BDD_URL || DatabaseConfig.url);
 
 // Configuration =============================================
 
-// app.use(Favicon(__dirname + '/public/favicon.ico'));
+var app = Express();
+
+app.use(Favicon(Path.join(__dirname,'/public/favicon.ico')));
 app.use(Morgan('dev'));
 app.use(BodyParser.json());
 app.use(BodyParser.urlencoded({ extended : true }));
@@ -21,26 +42,13 @@ app.use(BodyParser.json({ type : 'application/vnd.api+json' }));
 app.use(CookieParser());
 app.use(Express.static(Path.join(__dirname, 'public')));
 
-// Global variable ===========================================
-
-global.__base    = __dirname + '/';
-global.__app     = __dirname + '/app';
-global.__config  = __dirname + '/config';
-global.__server  = __dirname + '/app/server';
-global.__model   = __dirname + '/app/server/data/models';
-global.__plugin  = __dirname + '/app/server/data/plugins';
-global.__dao     = __dirname + '/app/server/data/dao';
-global.__route   = __dirname + '/app/server/routes';
-global.__service = __dirname + '/app/server/services';
-global.__client  = __dirname + '/client';
-
-// DataBase ==================================================
-
-var database = require(global.__config + '/database');
-Mongoose.connect(database.url);
+app.use(Session({ secret: process.env.SECRET || SecretConfig.secret }));
+app.use(Session.initialize());
+app.use(Passport.session());
+app.use(Flash());
 
 // Routers ===================================================
 
-require(global.__route + '/routes.js')(app);
+require(global.__route + '/routes.js')(app, PassportConfig);
 
 module.exports = app;

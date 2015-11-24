@@ -2,7 +2,7 @@
 
 // Inject
 var Jwt             = require('jsonwebtoken');
-var TokenConfig     = require(global.__config + '/token');
+var SecretConfig    = require(global.__config + '/token');
 var Logger          = require(global.__server + '/LoggerManager');
 var ResponseService = require(global.__service + '/share/ResponseService');
 
@@ -59,7 +59,7 @@ module.exports = function (router) {
 		Logger.debug('              -- token : ' + token);
 
 		if (token) {
-			Jwt.verify(token, TokenConfig.secret, function (err, decoded) {
+			Jwt.verify(token, SecretConfig.secret, function (err, decoded) {
 				if (err) {
 					return ResponseService.fail(res, {
 						reason    : 'Session expired',

@@ -2,7 +2,7 @@
 
 // Inject
 var Jwt             = require('jsonwebtoken');
-var TokenConfig     = require(global.__config + '/token');
+var SecretConfig    = require(global.__config + '/token');
 var ExManager       = require(global.__server + '/ExceptionManager');
 var Logger          = require(global.__server + '/LoggerManager');
 var ResponseService = require(global.__service + '/share/ResponseService');
@@ -25,7 +25,7 @@ module.exports = {
 					firstname : user.firstname,
 					email     : user.email,
 					admin     : user.admin
-				}, TokenConfig.secret, {
+				}, SecretConfig.secret, {
 					expiresMinutes : 1440
 				});
 
