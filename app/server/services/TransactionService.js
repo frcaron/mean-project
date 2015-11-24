@@ -177,7 +177,7 @@ module.exports = {
 					})
 					.then(function (programs) {
 						if (!programs.length) {
-							throw new ExManager.NoResultEx('Transaction not found');
+							throw new ExManager.NoResultEx('No transaction found');
 						}
 
 						var programs_id = [];

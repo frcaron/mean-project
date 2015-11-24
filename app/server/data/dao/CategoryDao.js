@@ -287,7 +287,7 @@ function getOne (filters) {
 	let promiseEnd = promise
 		.then(function (category) {
 			if (!category) {
-				throw new ExManager.NoResultEx('Category not found');
+				throw new ExManager.NoResultEx('No category found');
 			}
 			return BPromise.resolve(category);
 		})

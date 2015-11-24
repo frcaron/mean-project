@@ -262,7 +262,7 @@ function getOne (filters) {
 	let promiseEnd = promise
 		.then(function (transaction) {
 			if (!transaction) {
-				throw new ExManager.NoResultEx('Transaction not found');
+				throw new ExManager.NoResultEx('No transaction found');
 			}
 			return BPromise.resolve(transaction);
 		})

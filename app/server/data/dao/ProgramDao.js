@@ -264,7 +264,7 @@ function getOne (filters) {
 	let promiseEnd = promise
 		.then(function (program) {
 			if (!program ) {
-				throw new ExManager.NoResultEx('Program not found');
+				throw new ExManager.NoResultEx('No program found');
 			}
 			return BPromise.resolve(program);
 		})

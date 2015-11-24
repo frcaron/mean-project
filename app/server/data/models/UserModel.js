@@ -19,51 +19,57 @@ var UserSchema = new Schema({
 		type     : String,
 		required : true
 	},
-	email     : {
-		type     : String,
-		required : true // TODO validation email
-	},
-	password  : {
-		type     : String,
-		required : true,
-		select   : false
-	},
 	admin     : {
 		type     : Boolean,
 		default  : false
-	}
+	},
+	local     : {
+        email    : String, // validation email
+        password : {
+			type     : String,
+			select   : false
+		},
+    },
+	facebook  : {
+        id       : String,
+        token    : String,
+        email    : String,
+        name     : String
+    },
 });
 
 // Plugin
 UserSchema.plugin(DatePlugin);
 
 // Index
-UserSchema.index({
+UserSchema.index({ // TODO
 	email: 1
 }, {
 	unique: true
 });
 
 // Static methods
+UserSchema.methods.generateHash = function(password) {
+    return Bcrypt.hashSync(password, Bcrypt.genSaltSync(8), null);
+};
 UserSchema.methods.comparePassword = function (password) {
-	var user = this;
-	return Bcrypt.compareSync(password, user.password);
+	return Bcrypt.compareSync(password, this.local.password);
 };
 
 // MiddleWare
 UserSchema.pre('save', function (next) {
-	var user = this;
 
-	if (!user.isModified('password')) {
+	if (!this.isModified('local.password')) {
 		return next();
 	}
 
-	Bcrypt.hash(user.password, null, null, function (err, hash) {
+	Bcrypt.hash(this.local.password, Bcrypt.genSaltSync(8), null, function (err, hash) {
 		if (err) {
 			return next(err);
 		}
 
-		user.password = hash;
+		this.local.password = hash;
+
 		return next();
 	});
 });

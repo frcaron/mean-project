@@ -145,7 +145,7 @@ function getOne (filters) {
 	let promiseEnd = promise
 		.then(function (typeCategory) {
 			if (!typeCategory) {
-				throw new ExManager.NoResultEx('Type Category not found');
+				throw new ExManager.NoResultEx('No type category found');
 			}
 			return BPromise.resolve(typeCategory);
 		})

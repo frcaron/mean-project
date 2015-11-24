@@ -201,7 +201,7 @@ function getOne (filters) {
 	let promiseEnd = promise
 		.then(function (user) {
 			if (!user) {
-				throw new ExManager.NoResultEx('User not found');
+				throw new ExManager.NoResultEx('No user found');
 			}
 			return BPromise.resolve(user);
 		})
@@ -235,7 +235,7 @@ function validatePassword (log, pass) {
 	.select('_id, surname firstname email password admin')
 	.then(function(user) {
 		if(!user) {
-			throw new ExManager.NoResultEx('User not found');
+			throw new ExManager.NoResultEx('No user found');
 		}
 
 		var validPassword = user.comparePassword(pass);

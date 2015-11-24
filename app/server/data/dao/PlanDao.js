@@ -233,7 +233,7 @@ function getOne (filters) {
 	let promiseEnd = promise
 		.then(function (plan) {
 			if (!plan) {
-				throw new ExManager.NoResultEx('Plan not found');
+				throw new ExManager.NoResultEx('No plan found');
 			}
 			return BPromise.resolve(plan);
 		})
