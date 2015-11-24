@@ -34,7 +34,6 @@ var CategorySchema = new Schema({
 CategorySchema.index({
 	name   : 1,
 	_type  : 1,
-	active : 1,
 	neutre : 1,
 	_user  : 1
 }, {

@@ -25,6 +25,24 @@ module.exports = {
 					name             : req.body.name,
 					type_category_id : typeCategory._id,
 					user_id          : user_id
+				})
+				.catch(ExManager.DuplicateEx, function() {
+					return CategoryDao.getOne({
+							name             : req.body.name,
+							type_category_id : typeCategory._id,
+							user_id          : user_id
+						})
+						.then(function (category) {
+							if(category.active) {
+								throw new ExManager.DuplicateEx('Category already exist');
+							} else {
+								return  CategoryDao.update({
+									category_id : category._id,
+									active      : true,
+									user_id     : user_id
+								});
+							}
+						});
 				});
 			})
 			.then(function (category) {
@@ -87,8 +105,6 @@ module.exports = {
 
 		Logger.debug('[SER - START] CategoryService#desactivate');
 		Logger.debug('              -- user_id : ' + user_id);
-
-		// TODO check si une category desactive existe deja
 
 		CategoryDao.update({
 				category_id : req.params.category_id,

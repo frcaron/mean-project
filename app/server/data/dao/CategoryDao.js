@@ -238,6 +238,7 @@ function getAll (filters) {
  *                                  - type_category_id
  *                                  - neutre
  *                                  - user_id
+ *                                  - name
  * @return {CategoryModel}  Object found
  * @throws {ParamEx}    If params given are wrong
  * @throws {NoResultEx}  If no result found
@@ -253,7 +254,6 @@ function getOne (filters) {
 		if(filters.category_id) {
 			promise = CategoryModel.findOneAsync({
 				_id    : filters.category_id,
-				active : true,
 				_user  : filters.user_id
 			});
 		} else if(filters.neutre) {
@@ -271,6 +271,12 @@ function getOne (filters) {
 					_user  : filters.user_id
 				});
 			}
+		} if(filters.name && filters.type_category_id) {
+				promise = CategoryModel.findOneAsync({
+					name  : filters.name,
+					_type : filters.type_category_id,
+					_user : filters.user_id
+				});
 		}
 	}
 
