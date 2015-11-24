@@ -2,7 +2,7 @@
 
 var Express      = require('express');
 var Path         = require('path');
-var Favicon      = require('serve-favicon');
+// var Favicon      = require('serve-favicon');
 var Morgan       = require('morgan');
 var CookieParser = require('cookie-parser');
 var BodyParser   = require('body-parser');
