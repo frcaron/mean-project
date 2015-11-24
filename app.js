@@ -1,3 +1,5 @@
+var Path           = require('path');
+
 // Global variable = ==========================================
 
 global.__config    = Path.join(__dirname, '/config');
@@ -19,7 +21,6 @@ var Favicon        = require('serve-favicon');
 var Flash          = require('connect-flash');
 var Morgan         = require('morgan');
 var Passport       = require('passport');
-var Path           = require('path');
 var Session        = require('express-session');
 var Mongoose       = BPromise.promisifyAll(require('mongoose'));
 var DatabaseConfig = require(Path.join(global.__config, '/database'));
@@ -34,7 +35,7 @@ Mongoose.connect(process.env.BDD_URL || DatabaseConfig.url);
 
 var app = Express();
 
-app.use(Favicon(Path.join(__dirname,'/public/favicon.ico')));
+// app.use(Favicon(Path.join(__dirname,'/public/favicon.ico')));
 app.use(Morgan('dev'));
 app.use(BodyParser.json());
 app.use(BodyParser.urlencoded({ extended : true }));
@@ -42,8 +43,12 @@ app.use(BodyParser.json({ type : 'application/vnd.api+json' }));
 app.use(CookieParser());
 app.use(Express.static(Path.join(__dirname, 'public')));
 
-app.use(Session({ secret: process.env.SECRET || SecretConfig.secret }));
-app.use(Session.initialize());
+app.use(Session({
+	secret            : process.env.SECRET || SecretConfig.secret,
+	resave            : true,
+	saveUninitialized : true
+}));
+app.use(Passport.initialize());
 app.use(Passport.session());
 app.use(Flash());
 
