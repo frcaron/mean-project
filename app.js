@@ -23,16 +23,16 @@ app.use(Express.static(Path.join(__dirname, 'public')));
 
 // Global variable ===========================================
 
-global.__base          = __dirname + '/';
-global.__app           = __dirname + '/app';
-global.__config        = __dirname + '/config';
-global.__server        = __dirname + '/app/server';
-global.__model         = __dirname + '/app/server/data/models';
-global.__plugin        = __dirname + '/app/server/data/plugins';
-global.__dao           = __dirname + '/app/server/data/dao';
-global.__route         = __dirname + '/app/server/routes';
-global.__service       = __dirname + '/app/server/services';
-global.__client        = __dirname + '/client';
+global.__base    = __dirname + '/';
+global.__app     = __dirname + '/app';
+global.__config  = __dirname + '/config';
+global.__server  = __dirname + '/app/server';
+global.__model   = __dirname + '/app/server/data/models';
+global.__plugin  = __dirname + '/app/server/data/plugins';
+global.__dao     = __dirname + '/app/server/data/dao';
+global.__route   = __dirname + '/app/server/routes';
+global.__service = __dirname + '/app/server/services';
+global.__client  = __dirname + '/client';
 
 // DataBase ==================================================
 
