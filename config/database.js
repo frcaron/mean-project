@@ -1,3 +1,3 @@
 module.exports = {
-	url : 'mongodb://localhost/mean-project'
+	url : process.env.BDD_URL || 'mongodb://localhost/mean-project'
 };

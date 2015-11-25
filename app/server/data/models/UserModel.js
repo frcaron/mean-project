@@ -10,29 +10,29 @@ var Schema     = Mongoose.Schema;
 
 // Schema
 var UserSchema = new Schema({
-	_id       : Number,
-	surname   : {
-		type     : String
-	},
-	firstname : {
-		type     : String
-	},
-	admin     : {
+	_id         : Number,
+	firstname   : String,
+	surname     : String,
+	displayname : String,
+	admin       : {
 		type     : Boolean,
 		default  : false
 	},
-	local     : {
-        email    : String,
-        password : {
-			type     : String,
-			select   : false
+	local       : {
+		email    : String,
+		password : {
+			type    : String,
+			select  : false
 		},
+		active   : {
+			type    : Boolean,
+			default : false
+		}
     },
-	facebook  : {
-        id       : String,
-        token    : String,
-        email    : String,
-        name     : String
+	facebook    : {
+		id       : String,
+		token    : String,
+		email    : String
     },
 });
 
@@ -63,7 +63,7 @@ UserSchema.index({
 UserSchema.pre('save', function (next) {
 
 	var user = this;
-	if (!user.isModified('local.password')) {
+	if (!user.local.password || !user.isModified('local.password')) {
 		return next();
 	}
 

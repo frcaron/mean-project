@@ -118,4 +118,5 @@ module.exports = function (router, passport) {
 	require('./api/public/log/CategoryRoute')(router);
 	require('./api/public/log/TypeCategoryRoute')(router);
 	require('./api/public/log/MeRoute')(router);
+	require('./api/public/log/SessionRoute')(router, passport);
 };

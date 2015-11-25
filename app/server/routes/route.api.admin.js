@@ -56,7 +56,7 @@ module.exports = function (router) {
 		if (req.isAuthenticated()) {
 			// Admin access
 			if (!req.user.admin) {
-				return ResponseService.fail(res, {
+				ResponseService.fail(res, {
 					reason    : 'Permission refused',
 					code_http : 403
 				});

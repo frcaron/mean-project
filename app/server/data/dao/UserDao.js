@@ -22,14 +22,23 @@ function create (input) {
 	let promise = CountersModel.getNextSequence('user_id')
 		.then(function (seq){
 
+			// Base
 			user._id            = seq;
-			user.surname        = input.surname;
 			user.firstname      = input.firstname;
-			user.local.email    = input.email;
-			user.local.password = input.password;
+			user.surname        = input.surname;
+			user.displayname    = input.displayname;
 			if ( input.admin !== undefined ) {
 				user.admin = input.admin;
 			}
+
+			// Local
+			user.local.email    = input.local_email;
+			user.local.password = input.local_password;
+
+			// Facebook
+			user.facebook.id    = input.facebook_id;
+			user.facebook.token = input.facebook_token;
+			user.facebook.email = input.email;
 
 			return user.saveAsync();
 		})
@@ -73,21 +82,40 @@ function update (input) {
 
 	let promise = getOne({ user_id : input.user_id })
 		.then(function (user) {
+
+			// Base
 			if ( input.surname ) {
 				user.surname        = input.surname;
 			}
 			if ( input.firstname ) {
 				user.firstname      = input.firstname;
 			}
-			if ( input.email ) {
-				user.local.email    = input.email;
-			}
-			if ( input.password ) {
-				user.local.password = input.password;
+			if ( input.displayname ) {
+				user.displayname    = input.displayname;
 			}
 			if ( input.admin !== undefined ) {
 				user.admin          = input.admin;
 			}
+
+			// Local
+			if ( input.local_email ) {
+				user.local.email    = input.local_email;
+			}
+			if ( input.local_password ) {
+				user.local.password = input.local_password;
+			}
+
+			// Facebook
+			if ( input.facebook_id ) {
+				user.facebook.id    = input.facebook_id;
+			}
+			if ( input.facebook_token ) {
+				user.facebook.token = input.facebook_token;
+			}
+			if ( input.facebook_email ) {
+				user.facebook.email = input.facebook_email;
+			}
+
 			return user.saveAsync()
 				.then(function () {
 					user.local.password = undefined;
@@ -171,7 +199,8 @@ function getAll () {
 
 /**
  * @param  {Json} filters 	Keys : 	- user_id
- * 									- email
+ * 									- local_email
+ * 									- facebook_id
  * @return {UserModel}		Object found
  * @throws {ParamEx} 	If params given are wrong
  * @throws {NoResultEx} 	If no result found
@@ -188,7 +217,11 @@ function getOne (filters) {
 
 	} else if(filters.email) {
 		promise = UserModel.findOneAsync({
-			'local.email' : filters.email
+			'local.email' : filters.local_email
+		});
+	} else if(filters.facebook_id) {
+		promise = UserModel.findOneAsync({
+			'facebook.id' : filters.facebook_id
 		});
 	}
 

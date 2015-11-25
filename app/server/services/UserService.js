@@ -20,12 +20,12 @@ module.exports = {
 		Logger.debug('              -- user_id : ' + user_id);
 
 		UserDao.update({
-                user_id   : user_id,
-                firstname : req.body.firstname,
-                surname   : req.body.surname,
-                email     : req.body.email,
-                password  : req.body.password,
-                admin     : req.body.admin // TODO delete after test
+                user_id        : user_id,
+                firstname      : req.body.firstname,
+                surname        : req.body.surname,
+                displayname    : req.body.displayname,
+                local_email    : req.body.email,
+                local_password : req.body.password
             })
 			.then(function (user) {
 				ResponseService.success(res, {

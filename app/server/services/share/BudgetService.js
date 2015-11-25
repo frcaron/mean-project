@@ -17,21 +17,25 @@ module.exports = {
 		Logger.debug('              -- input   : ' + JSON.stringify(input));
 
 		var promise = UserDao.create({
-	            firstname : input.firstname,
-	            surname   : input.surname,
-	            email     : input.email,
-	            password  : input.password
-	        })
+				firstname      : input.firstname,
+				surname        : input.surname,
+				displayname    : input.displayname,
+				local_email    : input.local_email,
+				local_password : input.local_password,
+				facebook_id    : input.facebook_id,
+				facebook_token : input.facebook_token,
+				facebook_email : input.facebook_email
+			})
 			.then(function (user) {
 				return TypeCategoryDao.getAll()
 					.then(function (typeCategories) {
 						return BPromise.map(typeCategories, function (typeCategory) {
 							return CategoryDao.create({
-	                            name             : 'Autres',
-	                            type_category_id : typeCategory._id,
-	                            neutre           : true,
-	                            user_id          : user._id
-	                        });
+								name             : 'Autres',
+								type_category_id : typeCategory._id,
+								neutre           : true,
+								user_id          : user._id
+							});
 						});
 					})
 					.then(function() {

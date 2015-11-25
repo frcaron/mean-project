@@ -12,6 +12,7 @@ module.exports = function (router, passport) {
 
 	router.route(api_prefix + '/signup')
 
+		// Signup local
 		.post(function (req, res) {
 
 			Logger.debug('[WSP - VALID] SessionRoute#post');
@@ -41,11 +42,12 @@ module.exports = function (router, passport) {
 				});
 			}
 
-			SessionService.signup(req, res, passport);
+			SessionService.auth(req, res, passport, 'local-signup');
 		});
 
 	router.route(api_prefix + '/login')
 
+		// Login local
 		.post(function (req, res) {
 
 			Logger.debug('[WSP - VALID] SessionRoute#post');
@@ -67,13 +69,27 @@ module.exports = function (router, passport) {
 				});
 			}
 
-			SessionService.login(req, res, passport);
+			SessionService.auth(req, res, passport, 'local-login');
+		});
+
+	router.route(api_prefix + '/facebook')
+
+		// Login facebook
+		.get(passport.authenticate('facebook', { scope : 'email' }));
+
+	router.route(api_prefix + '/facebook/callback')
+
+		// Login facebook callback
+		.get(function (req, res) {
+			SessionService.auth(req, res, passport, 'facebook');
 		});
 
 	router.route(api_prefix + '/logout')
 
+		// Logout
 		.post(function (req, res) {
-			SessionService.logout(req, res);
+			req.logout();
+			ResponseService.success(res);
 		});
 
 };

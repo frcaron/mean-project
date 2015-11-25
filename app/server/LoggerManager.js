@@ -12,7 +12,7 @@ var logger = new Winston.Logger({
 			info  : 2,
 			debug : 3
 		},
-		level      : process.env.LEVEL_LOG || loggerConfig.level,
+		level      : loggerConfig.level,
 		transports : [
 			new (Winston.transports.Console)({
 				name      : 'console',

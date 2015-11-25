@@ -19,11 +19,10 @@ module.exports = function(passport) {
         UserDao.getOne({ user_id : id })
             .then(function(user) {
                 done(null, {
-                    id        : user._id,
-                    surname   : user.surname,
-                    firstname : user.firstname,
-                    email     : user.local.email || user.facebook.email,
-                    admin     : user.admin
+                    id    : user._id,
+                    name  : user.facebook.displayname || user.firstname + ' ' + user.surname,
+                    email : user.local ? user.local.email : undefined,
+                    admin : user.admin
                 });
             })
             .catch(function (err) {
@@ -32,4 +31,5 @@ module.exports = function(passport) {
     });
 
     require('./strategies/local')(passport);
+    require('./strategies/facebook')(passport);
 };

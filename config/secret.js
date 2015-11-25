@@ -1,3 +1,3 @@
 module.exports = {
-	secret : 'secretmeanproject'
+	secret : process.env.SECRET || 'secretmeanproject'
 };

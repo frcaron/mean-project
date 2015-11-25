@@ -28,13 +28,13 @@ var SecretConfig   = require(Path.join(global.__config, '/secret'));
 
 // DataBase ==================================================
 
-Mongoose.connect(process.env.BDD_URL || DatabaseConfig.url);
+Mongoose.connect(DatabaseConfig.url);
 
 // Configuration =============================================
 
 var app = Express();
 
-// app.use(Favicon(Path.join(__dirname,'/public/favicon.ico')));
+// app.use(Favicon(Path.join(__dirname,'/client/assets/img/favicon.ico')));
 app.use(Morgan('dev'));
 app.use(BodyParser.json());
 app.use(BodyParser.urlencoded({ extended : true }));
@@ -42,8 +42,9 @@ app.use(BodyParser.json({ type : 'application/vnd.api+json' }));
 app.use(CookieParser());
 app.use(Express.static(Path.join(__dirname, 'public')));
 
+// Authentication
 app.use(Session({
-	secret            : process.env.SECRET || SecretConfig.secret,
+	secret            : SecretConfig.secret,
 	resave            : true,
 	saveUninitialized : true
 }));

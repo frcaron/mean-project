@@ -6,14 +6,15 @@ var ResponseService = require(global.__service + '/share/ResponseService');
 
 module.exports = {
 
-	// Save user
-	signup : function (req, res,  passport) {
+	// Signup user
+	auth : function (req, res, passport, startegy) {
 
-		Logger.debug('[SER - START] SessionService#signup');
+		Logger.debug('[SER - START] SessionService#auth');
+		Logger.debug('              -- startegy : ' + startegy);
 
-		passport.authenticate('local-signup', { failureFlash: true }, function (err, user, info) {
+		passport.authenticate(startegy, { failureFlash: true }, function (err, user, info) {
 			if(err) {
-				Logger.debug('[SER - CATCH] SessionService#signup');
+				Logger.debug('[SER - CATCH] SessionService#auth');
 				Logger.error('              -- message : ' + err.message);
 
 				return ResponseService.fail(res);
@@ -33,7 +34,7 @@ module.exports = {
 
 			req.login(user, function(err){
 				if(err){
-					Logger.debug('[SER - CATCH] SessionService#signup');
+					Logger.debug('[SER - CATCH] SessionService#auth');
 					Logger.error('              -- message : ' + err.message);
 
 					return ResponseService.fail(res);
@@ -44,58 +45,6 @@ module.exports = {
 			});
 		})(req, res);
 
-		Logger.debug('[SER -   END] SessionService#signup');
-	},
-
-	// Authenticate user
-	login  : function (req, res, passport) {
-
-		Logger.debug('[SER - START] SessionService#login');
-
-		passport.authenticate('local-login', { failureFlash: true }, function (err, user, info) {
-			if(err) {
-				Logger.debug('[SER - CATCH] SessionService#login');
-				Logger.error('              -- message : ' + err.message);
-
-				return ResponseService.fail(res);
-			}
-
-			if(!user) {
-				if(info) {
-					return ResponseService.fail(res, {
-						reason : info.message
-					});
-				}
-
-				return ResponseService.fail(res, {
-					reason : req.flash('loginMessage')[0]
-				});
-			}
-
-			req.login(user, function(err){
-				if(err){
-					Logger.debug('[SER - CATCH] SessionService#login');
-					Logger.error('              -- message : ' + err.message);
-
-					return ResponseService.fail(res);
-				}
-				ResponseService.success(res, {
-					result : user
-				});
-			});
-		})(req, res);
-
-		Logger.debug('[SER -   END] SessionService#login');
-	},
-
-	// Authenticate user
-	logout  : function (req, res) {
-
-		Logger.debug('[SER - START] SessionService#logout');
-
-		req.logout();
-		ResponseService.success(res);
-
-		Logger.debug('[SER -   END] SessionService#logout');
+		Logger.debug('[SER -   END] SessionService#auth');
 	}
 };

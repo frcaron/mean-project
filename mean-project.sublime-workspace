@@ -4,6 +4,22 @@
 		"selected_items":
 		[
 			[
+				"pass",
+				"passport"
+			],
+			[
+				"No",
+				"NoResultEx"
+			],
+			[
+				"fun",
+				"function"
+			],
+			[
+				"new",
+				"newUser"
+			],
+			[
 				"category",
 				"category_id"
 			],
@@ -196,6 +212,10 @@
 				"Git: Status"
 			],
 			[
+				"statu",
+				"Git: Status"
+			],
+			[
 				"qui",
 				"Git: Quick Commit"
 			],
@@ -340,10 +360,6 @@
 				"Set Syntax: SublimeGit Show"
 			],
 			[
-				"statu",
-				"Git: Status"
-			],
-			[
 				"merge",
 				"Git: Merge"
 			],
@@ -461,52 +477,67 @@
 	[
 		"/C/App/Workspace/mean-project",
 		"/C/App/Workspace/mean-project/app",
+		"/C/App/Workspace/mean-project/app/client",
+		"/C/App/Workspace/mean-project/app/client/routes",
 		"/C/App/Workspace/mean-project/app/server",
 		"/C/App/Workspace/mean-project/app/server/data",
+		"/C/App/Workspace/mean-project/app/server/data/dao",
 		"/C/App/Workspace/mean-project/app/server/data/models",
-		"/C/App/Workspace/mean-project/app/server/services"
+		"/C/App/Workspace/mean-project/app/server/routes",
+		"/C/App/Workspace/mean-project/app/server/routes/api",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public/log",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public/unlog",
+		"/C/App/Workspace/mean-project/app/server/services",
+		"/C/App/Workspace/mean-project/app/server/services/share",
+		"/C/App/Workspace/mean-project/config",
+		"/C/App/Workspace/mean-project/config/strategies"
 	],
 	"file_history":
 	[
-		"/C/App/Workspace/mean-project/mean-project.sublime-project",
-		"/C/App/Workspace/mean-project/app/server/services/SessionService.js",
-		"/C/App/Workspace/mean-project/app/server/data/models/CategoryModel.js",
-		"/C/App/Workspace/mean-project/app/server/data/dao/CategoryDao.js",
-		"/C/App/Workspace/mean-project/app/server/services/CategoryService.js",
-		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/MeRoute.js",
-		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/PlanRoute.js",
-		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/UserRoute.js",
 		"/C/App/Workspace/mean-project/app/server/routes/api/public/unlog/SessionRoute.js",
-		"/C/App/Workspace/mean-project/app/server/routes/api/public/unlog/UserRoute.js",
-		"/C/App/Workspace/mean-project/app/server/services/ProgramService.js",
-		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/TypeCategoryRoute.js",
-		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/ProgramRoute.js",
+		"/C/App/Workspace/mean-project/app/server/services/SessionService.js",
+		"/C/App/Workspace/mean-project/app/server/data/models/UserModel.js",
+		"/C/App/Workspace/mean-project/app/server/routes/routes.js",
+		"/C/App/Workspace/mean-project/config/passport.js",
+		"/C/App/Workspace/mean-project/TODO.txt",
+		"/C/App/Workspace/mean-project/config/strategies/local.js",
+		"/C/App/Workspace/mean-project/app.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/MeRoute.js",
 		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/CategoryRoute.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/PlanRoute.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/ProgramRoute.js",
 		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/TransactionRoute.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/TypeCategoryRoute.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/UserRoute.js",
+		"/C/App/Workspace/mean-project/app/server/services/PlanService.js",
+		"/C/App/Workspace/mean-project/app/server/services/CategoryService.js",
+		"/C/App/Workspace/mean-project/app/server/data/dao/UserDao.js",
+		"/C/App/Workspace/mean-project/app/server/data/dao/TypeCategoryDao.js",
+		"/C/App/Workspace/mean-project/app/server/data/dao/TransactionDao.js",
+		"/C/App/Workspace/mean-project/app/server/data/dao/ProgramDao.js",
+		"/C/App/Workspace/mean-project/app/server/data/dao/PlanDao.js",
+		"/C/App/Workspace/mean-project/app/server/data/dao/CategoryDao.js",
+		"/C/App/Workspace/mean-project/app/server/services/ProgramService.js",
+		"/C/App/Workspace/mean-project/app/server/services/TransactionService.js",
+		"/C/App/Workspace/mean-project/app/server/services/TypeCategoryService.js",
+		"/C/App/Workspace/mean-project/app/server/services/UserService.js",
+		"/C/App/Workspace/mean-project/app/server/services/share/BudgetService.js",
+		"/C/App/Workspace/mean-project/app/server/routes/route.api.admin.js",
+		"/C/App/Workspace/mean-project/app/server/routes/route.api.public.js",
+		"/C/App/Workspace/mean-project/app/client/routes/route.basic.js",
+		"/C/App/Workspace/mean-project/app/server/data/models/TypeCategoryModel.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public/unlog/UserRoute.js",
+		"/C/App/Workspace/mean-project/app/server/services/share/ResponseService.js",
+		"/C/App/Workspace/mean-project/app/server/data/models/CountersModel.js",
+		"/C/App/Workspace/mean-project/mean-project.sublime-project",
+		"/C/App/Workspace/mean-project/app/server/data/models/CategoryModel.js",
 		"/C/App/Workspace/mean-project/app/server/routes/api/admin/unlog/TypeCategoryRoute.js",
 		"/C/App/Workspace/mean-project/app/server/routes/api/admin/log/UserRoute.js",
 		"/C/App/Workspace/mean-project/app/server/routes/api/admin/log/TypeCategoryRoute.js",
-		"/C/App/Workspace/mean-project/app/server/services/UserService.js",
-		"/C/App/Workspace/mean-project/app/server/services/TypeCategoryService.js",
-		"/C/App/Workspace/mean-project/app/server/data/models/TypeCategoryModel.js",
-		"/C/App/Workspace/mean-project/app/server/data/dao/TypeCategoryDao.js",
-		"/C/App/Workspace/mean-project/app/server/data/dao/PlanDao.js",
-		"/C/App/Workspace/mean-project/app/server/data/dao/UserDao.js",
-		"/C/App/Workspace/mean-project/app/server/data/dao/TransactionDao.js",
-		"/C/App/Workspace/mean-project/app/server/data/dao/ProgramDao.js",
-		"/C/App/Workspace/mean-project/app/server/services/share/BudgetService.js",
-		"/C/App/Workspace/mean-project/app/server/services/TransactionService.js",
-		"/C/App/Workspace/mean-project/app/server/data/models/UserModel.js",
-		"/C/App/Workspace/mean-project/TODO.txt",
-		"/C/App/Workspace/mean-project/app/server/services/share/ResponseService.js",
 		"/C/App/Workspace/mean-project/app/server/data/models/ProgramModel.js",
 		"/C/App/Workspace/mean-project/app/server/ExceptionManager.js",
-		"/C/App/Workspace/mean-project/app/server/services/PlanService.js",
-		"/C/App/Workspace/mean-project/app/server/data/models/CountersModel.js",
 		"/C/App/Workspace/mean-project/app/server/data/models/PlanModel.js",
-		"/C/App/Workspace/mean-project/app/server/routes/route.api.public.js",
-		"/C/App/Workspace/mean-project/app/server/routes/route.api.admin.js",
-		"/C/App/Workspace/mean-project/app/client/routes/route.basic.js",
 		"/C/App/Workspace/mean-project/README.md",
 		"/C/App/SublimeText3/Data/Packages/User/Preferences.sublime-settings",
 		"/C/App/Workspace/mean-project/app/data/dao/PlanDao.js",
@@ -527,7 +558,6 @@
 		"/C/App/Workspace/mean-project/app/ErrorManager.js",
 		"/C/App/Workspace/mean-project/app/data/plugins/UserPlugin.js",
 		"/C/App/Workspace/mean-project/package.json",
-		"/C/App/Workspace/mean-project/app.js",
 		"/C/App/SublimeText3/Data/Packages/Default/Preferences.sublime-settings",
 		"/C/App/SublimeText3/Data/Packages/User/Default (Windows).sublime-keymap",
 		"/C/App/Workspace/mean-project/app/routes/route.api.public.js",
@@ -592,10 +622,7 @@
 		"/C/App/Workspace/mean-project/.gitignore",
 		"/C/App/SublimeText3/Data/Packages/User/SublimeLinter.sublime-settings",
 		"/C/App/SublimeText3/Data/Packages/DocBlockr/Base File.sublime-settings",
-		"/C/App/Workspace/mean-project/npm-debug.log",
-		"/C/App/Workspace/mean-project/app/routes/api/log/MeRoute.js",
-		"/C/App/Workspace/mean-project/app/routes/route.api.js",
-		"/C/App/Workspace/mean-project/app/routes/route.admin.js"
+		"/C/App/Workspace/mean-project/npm-debug.log"
 	],
 	"find":
 	{
@@ -606,6 +633,8 @@
 		"height": 90.0,
 		"where_history":
 		[
+			"C:\\App\\Workspace\\mean-project",
+			"C:\\App\\Workspace\\mean-project\\app\\server\\routes",
 			"C:\\App\\Workspace\\mean-project",
 			"C:\\App\\Workspace\\mean-project\\app",
 			"C:\\App\\Workspace\\mean-project\\app\\server\\data\\dao",
@@ -628,6 +657,9 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"token",
+			"req.decoded.user_id",
+			"ExManager",
 			"allByPlanTypeU",
 			"moment",
 			".all",
@@ -752,10 +784,7 @@
 			"add",
 			"_program",
 			"transaction",
-			"TransactionSchema",
-			"program",
-			"_program",
-			"transaction"
+			"TransactionSchema"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -763,6 +792,8 @@
 		"regex": false,
 		"replace_history":
 		[
+			"req.user.id",
+			"Exception",
 			"ParamEx",
 			"DuplicateEx",
 			"NoResultEx",
