@@ -1,51 +1,101 @@
 "use strict";
 
 // Inject
-var Jwt             = require('jsonwebtoken');
-var SecretConfig    = require(global.__config + '/token');
-var ExManager       = require(global.__server + '/ExceptionManager');
 var Logger          = require(global.__server + '/LoggerManager');
 var ResponseService = require(global.__service + '/share/ResponseService');
-var UserDao         = require(global.__dao + '/UserDao');
 
 module.exports = {
 
+	// Save user
+	signup : function (req, res,  passport) {
+
+		Logger.debug('[SER - START] SessionService#signup');
+
+		passport.authenticate('local-signup', { failureFlash: true }, function (err, user, info) {
+			if(err) {
+				Logger.debug('[SER - CATCH] SessionService#signup');
+				Logger.error('              -- message : ' + err.message);
+
+				return ResponseService.fail(res);
+			}
+
+			if(!user) {
+				if(info) {
+					return ResponseService.fail(res, {
+						reason : info.message
+					});
+				}
+
+				return ResponseService.fail(res, {
+					reason : req.flash('signupMessage')[0]
+				});
+			}
+
+			req.login(user, function(err){
+				if(err){
+					Logger.debug('[SER - CATCH] SessionService#signup');
+					Logger.error('              -- message : ' + err.message);
+
+					return ResponseService.fail(res);
+				}
+				ResponseService.success(res, {
+					result : user
+				});
+			});
+		})(req, res);
+
+		Logger.debug('[SER -   END] SessionService#signup');
+	},
+
 	// Authenticate user
-	login : function (req, res) {
+	login  : function (req, res, passport) {
 
 		Logger.debug('[SER - START] SessionService#login');
 
-		UserDao.validatePassword(req.body.email, req.body.password)
-			.then(function (user){
-
-				// Generate token
-				let token = Jwt.sign({
-					user_id   : user._id,
-					surname   : user.surname,
-					firstname : user.firstname,
-					email     : user.email,
-					admin     : user.admin
-				}, SecretConfig.secret, {
-					expiresMinutes : 1440
-				});
-
-				ResponseService.success(res, {
-					result  : token
-				});
-			})
-			.catch(ExManager.MetierEx, function(err) {
-				ResponseService.fail(res, {
-					reason : err.message,
-					detail : err.detail
-				});
-			})
-			.catch(function (err) {
+		passport.authenticate('local-login', { failureFlash: true }, function (err, user, info) {
+			if(err) {
 				Logger.debug('[SER - CATCH] SessionService#login');
 				Logger.error('              -- message : ' + err.message);
 
-				ResponseService.fail(res);
+				return ResponseService.fail(res);
+			}
+
+			if(!user) {
+				if(info) {
+					return ResponseService.fail(res, {
+						reason : info.message
+					});
+				}
+
+				return ResponseService.fail(res, {
+					reason : req.flash('loginMessage')[0]
+				});
+			}
+
+			req.login(user, function(err){
+				if(err){
+					Logger.debug('[SER - CATCH] SessionService#login');
+					Logger.error('              -- message : ' + err.message);
+
+					return ResponseService.fail(res);
+				}
+				ResponseService.success(res, {
+					result : user
+				});
 			});
+		})(req, res);
 
 		Logger.debug('[SER -   END] SessionService#login');
+	},
+
+	// Authenticate user
+	logout  : function (req, res) {
+
+		Logger.debug('[SER - START] SessionService#logout');
+
+		req.logout();
+		ResponseService.success(res);
+
+		Logger.debug('[SER -   END] SessionService#logout');
 	}
 };

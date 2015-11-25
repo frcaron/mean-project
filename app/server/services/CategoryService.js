@@ -2,7 +2,7 @@
 
 // Inject
 var BPromise        = require('bluebird');
-var ExManager       = require(global.__server + '/ExceptionManager');
+var Exception       = require(global.__server + '/ExceptionManager');
 var Logger          = require(global.__server + '/LoggerManager');
 var ResponseService = require(global.__service + '/share/ResponseService');
 var ProgramDao      = require(global.__dao + '/ProgramDao');
@@ -26,7 +26,7 @@ module.exports = {
 					type_category_id : typeCategory._id,
 					user_id          : user_id
 				})
-				.catch(ExManager.DuplicateEx, function() {
+				.catch(Exception.DuplicateEx, function() {
 					return CategoryDao.getOne({
 							name             : req.body.name,
 							type_category_id : typeCategory._id,
@@ -34,7 +34,7 @@ module.exports = {
 						})
 						.then(function (category) {
 							if(category.active) {
-								throw new ExManager.DuplicateEx('Category already exist');
+								throw new Exception.DuplicateEx('Category already exist');
 							} else {
 								return  CategoryDao.update({
 									category_id : category._id,
@@ -50,7 +50,7 @@ module.exports = {
 					result  : category
 				});
 			})
-			.catch(ExManager.MetierEx, function(err) {
+			.catch(Exception.MetierEx, function(err) {
 				ResponseService.fail(res, {
 					reason : err.message,
 					detail : err.detail
@@ -82,7 +82,7 @@ module.exports = {
 					result  : category
 				});
 			})
-			.catch(ExManager.MetierEx, function(err) {
+			.catch(Exception.MetierEx, function(err) {
 				ResponseService.fail(res, {
 					reason : err.message,
 					detail : err.detail
@@ -114,7 +114,7 @@ module.exports = {
 			.then(function () {
 				ResponseService.success(res);
 			})
-			.catch(ExManager.MetierEx, function(err) {
+			.catch(Exception.MetierEx, function(err) {
 				ResponseService.fail(res, {
 					reason : err.message,
 					detail : err.detail
@@ -163,7 +163,7 @@ module.exports = {
 					result  : categories
 				});
 			})
-			.catch(ExManager.MetierEx, function(err) {
+			.catch(Exception.MetierEx, function(err) {
 				ResponseService.fail(res, {
 					reason : err.message,
 					detail : err.detail
@@ -194,7 +194,7 @@ module.exports = {
 					result  : categories
 				});
 			})
-			.catch(ExManager.MetierEx, function(err) {
+			.catch(Exception.MetierEx, function(err) {
 				ResponseService.fail(res, {
 					reason : err.message,
 					detail : err.detail
@@ -225,7 +225,7 @@ module.exports = {
 					result  : category
 				});
 			})
-			.catch(ExManager.MetierEx, function(err) {
+			.catch(Exception.MetierEx, function(err) {
 				ResponseService.fail(res, {
 					reason  : err.message,
 					detail : err.detail

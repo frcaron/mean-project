@@ -2,7 +2,7 @@
 
 // Inject
 var BPromise         = require('bluebird');
-var ExManager        = require(global.__server + '/ExceptionManager');
+var Exception        = require(global.__server + '/ExceptionManager');
 var Logger           = require(global.__server + '/LoggerManager');
 var TransactionModel = require(global.__model + '/TransactionModel');
 var CountersModel    = require(global.__model + '/CountersModel');
@@ -41,13 +41,13 @@ function create (input) {
 			Logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
-				throw new ExManager.DuplicateEx('Transaction already exist');
+				throw new Exception.DuplicateEx('Transaction already exist');
 			} if(err.name === 'ValidationError') {
 				let detail = [];
 				Object.keys(err.errors).map(function(prop) {
 					detail.push(err.errors[prop].message);
 				});
-				throw new ExManager.ValidatorEx(err.message, detail);
+				throw new Exception.ValidatorEx(err.message, detail);
 			} else {
 				throw err;
 			}
@@ -83,11 +83,11 @@ function update (input, filters) {
 					_program : input.program_id
 				})
 				.then(function (transactions) {
-					BPromise.resolve(transactions);
+					return BPromise.resolve(transactions);
 				});
 
 		} else {
-			promise = BPromise.reject(new ExManager.ParamEx('Filters missing'));
+			promise = BPromise.reject(new Exception.ParamEx('Filters missing'));
 		}
 	} else {
 		promise = getOne({
@@ -109,29 +109,24 @@ function update (input, filters) {
 				}
 				return transaction.saveAsync()
 					.then(function () {
-						BPromise.resolve(transaction);
+						return BPromise.resolve(transaction);
 					});
 			});
 	}
 
 	let promiseEnd = promise
-		.then(function (transaction) {
-			if(transaction) {
-				return BPromise.resolve(transaction);
-			}
-		})
 		.catch(function (err) {
 			Logger.debug('[DAO - CATCH] TransactionDao#update');
 			Logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
-				throw new ExManager.DuplicateEx('Transaction already exist');
+				throw new Exception.DuplicateEx('Transaction already exist');
 			} if(err.name === 'ValidationError') {
 				let detail = [];
 				Object.keys(err.errors).map(function(prop) {
 					detail.push(err.errors[prop].message);
 				});
-				throw new ExManager.ValidatorEx(err.message, detail);
+				throw new Exception.ValidatorEx(err.message, detail);
 			} else {
 				throw err;
 			}
@@ -173,7 +168,7 @@ function remove (filters) {
 	}
 
 	if(!promise) {
-		promise = BPromise.reject(new ExManager.ParamEx('Filters missing'));
+		promise = BPromise.reject(new Exception.ParamEx('Filters missing'));
 	}
 
 	let promiseEnd = promise
@@ -216,7 +211,7 @@ function getAll (filters) {
 	}
 
 	if(!promise) {
-		promise = BPromise.reject(new ExManager.ParamEx('Filters missing'));
+		promise = BPromise.reject(new Exception.ParamEx('Filters missing'));
 	}
 
 	let promiseEnd = promise
@@ -256,13 +251,13 @@ function getOne (filters) {
 	}
 
 	if(!promise) {
-		promise = BPromise.reject(new ExManager.ParamEx('Filters missing "user_id"'));
+		promise = BPromise.reject(new Exception.ParamEx('Filters missing "user_id"'));
 	}
 
 	let promiseEnd = promise
 		.then(function (transaction) {
 			if (!transaction) {
-				throw new ExManager.NoResultEx('No transaction found');
+				throw new Exception.NoResultEx('No transaction found');
 			}
 			return BPromise.resolve(transaction);
 		})

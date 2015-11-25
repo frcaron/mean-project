@@ -36,7 +36,7 @@ module.exports = function (router) {
 				});
 			}
 
-			CategoryService.create(req, res, req.decoded.user_id);
+			CategoryService.create(req, res, req.user.id);
 		});
 
 	router.route(api_prefix + '/available')
@@ -66,23 +66,23 @@ module.exports = function (router) {
 				});
 			}
 
-			CategoryService.allByTypeCatUNoUse(req, res, req.decoded.user_id);
+			CategoryService.allByTypeCatUNoUse(req, res, req.user.id);
 		});
 
 	router.route(api_prefix + '/:category_id')
 
 		// Get one category
 		.get(function (req, res) {
-			CategoryService.getByIdU(req, res, req.decoded.user_id);
+			CategoryService.getByIdU(req, res, req.user.id);
 		})
 
 		// Update one category
 		.put(function (req, res) {
-			CategoryService.update(req, res, req.decoded.user_id);
+			CategoryService.update(req, res, req.user.id);
 		})
 
 		// Delete one category
 		.delete(function (req, res) {
-			CategoryService.desactivate(req, res, req.decoded.user_id);
+			CategoryService.desactivate(req, res, req.user.id);
 		});
 };

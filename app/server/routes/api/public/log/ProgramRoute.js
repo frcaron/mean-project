@@ -38,30 +38,30 @@ module.exports = function (router) {
 				});
 			}
 
-			ProgramService.create(req, res, req.decoded.user_id);
+			ProgramService.create(req, res, req.user.id);
 		});
 
 	router.route(api_prefix + '/:program_id')
 
 		// Get one program
 		.get(function (req, res) {
-			ProgramService.getByIdU(req, res, req.decoded.user_id);
+			ProgramService.getByIdU(req, res, req.user.id);
 		})
 
 		// Update one program
 		.put(function (req, res) {
-			ProgramService.update(req, res, req.decoded.user_id);
+			ProgramService.update(req, res, req.user.id);
 		})
 
 		// Delete one program
 		.delete(function (req, res) {
-			ProgramService.remove(req, res, req.decoded.user_id);
+			ProgramService.remove(req, res, req.user.id);
 		});
 
 	router.route(api_prefix + '/:program_id/transactions')
 
 		// Get all transactions by program
 		.get(function (req, res) {
-			TransactionService.allByProgramU(req, res, req.decoded.user_id);
+			TransactionService.allByProgramU(req, res, req.user.id);
 		});
 };

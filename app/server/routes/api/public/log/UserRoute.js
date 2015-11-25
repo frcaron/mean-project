@@ -12,16 +12,16 @@ module.exports = function (router) {
 
 		// Get one user
 		.get(function (req, res) {
-			UserService.getById(req, res, req.decoded.user_id);
+			UserService.getById(req, res, req.user.id);
 		})
 
 		// Update one user
 		.put(function (req, res) {
-			UserService.update(req, res, req.decoded.user_id);
+			UserService.update(req, res, req.user.id);
 		})
 
 		// Delete one user
 		.delete(function (req, res) {
-			UserService.remove(req, res, req.decoded.user_id);
+			UserService.remove(req, res, req.user.id);
 		});
 };

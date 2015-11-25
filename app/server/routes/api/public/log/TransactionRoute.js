@@ -50,14 +50,14 @@ module.exports = function (router) {
 				});
 			}
 
-			TransactionService.create(req, res, req.decoded.user_id);
+			TransactionService.create(req, res, req.user.id);
 		});
 
 	router.route(api_prefix + '/:transaction_id')
 
 		// Get one transaction
 		.get(function (req, res) {
-			TransactionService.getByIdU(req, res, req.decoded.user_id);
+			TransactionService.getByIdU(req, res, req.user.id);
 		})
 
 		// Update one transaction
@@ -93,11 +93,11 @@ module.exports = function (router) {
 				});
 			}
 
-			TransactionService.update(req, res, req.decoded.user_id);
+			TransactionService.update(req, res, req.user.id);
 		})
 
 		// Delete one transaction
 		.delete(function (req, res) {
-			TransactionService.remove(req, res, req.decoded.user_id);
+			TransactionService.remove(req, res, req.user.id);
 		});
 };

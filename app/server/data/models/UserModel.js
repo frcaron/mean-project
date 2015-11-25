@@ -12,19 +12,17 @@ var Schema     = Mongoose.Schema;
 var UserSchema = new Schema({
 	_id       : Number,
 	surname   : {
-		type     : String,
-		required : true
+		type     : String
 	},
 	firstname : {
-		type     : String,
-		required : true
+		type     : String
 	},
 	admin     : {
 		type     : Boolean,
 		default  : false
 	},
 	local     : {
-        email    : String, // validation email
+        email    : String,
         password : {
 			type     : String,
 			select   : false
@@ -41,35 +39,39 @@ var UserSchema = new Schema({
 // Plugin
 UserSchema.plugin(DatePlugin);
 
-// Index
-UserSchema.index({ // TODO
-	email: 1
-}, {
-	unique: true
-});
-
 // Static methods
-UserSchema.methods.generateHash = function(password) {
-    return Bcrypt.hashSync(password, Bcrypt.genSaltSync(8), null);
-};
 UserSchema.methods.comparePassword = function (password) {
 	return Bcrypt.compareSync(password, this.local.password);
 };
 
+// Index
+UserSchema.index({
+	'local.email' : 1
+}, {
+	unique : true,
+	sparse : true
+});
+
+UserSchema.index({
+	'facebook.id' : 1
+}, {
+	unique : true,
+	sparse : true
+});
+
 // MiddleWare
 UserSchema.pre('save', function (next) {
 
-	if (!this.isModified('local.password')) {
+	var user = this;
+	if (!user.isModified('local.password')) {
 		return next();
 	}
 
-	Bcrypt.hash(this.local.password, Bcrypt.genSaltSync(8), null, function (err, hash) {
+	Bcrypt.hash(user.local.password, Bcrypt.genSaltSync(8), null, function (err, hash) {
 		if (err) {
 			return next(err);
 		}
-
-		this.local.password = hash;
-
+		user.local.password = hash;
 		return next();
 	});
 });

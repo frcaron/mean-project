@@ -24,8 +24,7 @@ var Passport       = require('passport');
 var Session        = require('express-session');
 var Mongoose       = BPromise.promisifyAll(require('mongoose'));
 var DatabaseConfig = require(Path.join(global.__config, '/database'));
-var PassportConfig = require(Path.join(global.__config, '/passport'));
-var SecretConfig   = require(Path.join(global.__config, '/token'));
+var SecretConfig   = require(Path.join(global.__config, '/secret'));
 
 // DataBase ==================================================
 
@@ -52,8 +51,13 @@ app.use(Passport.initialize());
 app.use(Passport.session());
 app.use(Flash());
 
+// Auth Strategies ===========================================
+
+require(Path.join(global.__config, '/passport'))(Passport);
+
 // Routers ===================================================
 
-require(global.__route + '/routes.js')(app, PassportConfig);
+require(global.__route + '/routes.js')(app, Passport);
+
 
 module.exports = app;

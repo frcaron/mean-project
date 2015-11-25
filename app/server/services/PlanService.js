@@ -2,7 +2,7 @@
 
 // Inject
 var BPromise        = require('bluebird');
-var ExManager       = require(global.__server + '/ExceptionManager');
+var Exception       = require(global.__server + '/ExceptionManager');
 var Logger          = require(global.__server + '/LoggerManager');
 var ResponseService = require(global.__service + '/share/ResponseService');
 var BudgetService   = require(global.__service + '/share/BudgetService');
@@ -28,7 +28,7 @@ module.exports = {
 					result  : plan
 				});
 			})
-			.catch(ExManager.MetierEx, function(err) {
+			.catch(Exception.MetierEx, function(err) {
 				ResponseService.fail(res, {
 					reason : err.message,
 					detail : err.detail
@@ -57,7 +57,7 @@ module.exports = {
 						plan_id : req.params.plan_id,
 						user_id : user_id
 					 })
-					.catch(ExManager.NoResultEx, function () {
+					.catch(Exception.NoResultEx, function () {
 					})
 					.catch(function (err) {
 					   msg.push(err.message);
@@ -70,7 +70,7 @@ module.exports = {
 				}
 				ResponseService.success(res);
 			})
-			.catch(ExManager.MetierEx, function(err) {
+			.catch(Exception.MetierEx, function(err) {
 				ResponseService.fail(res, {
 					reason : err.message,
 					detail : err.detail
@@ -98,7 +98,7 @@ module.exports = {
 					result  : plans
 				});
 			})
-			.catch(ExManager.MetierEx, function(err) {
+			.catch(Exception.MetierEx, function(err) {
 				ResponseService.fail(res, {
 					reason : err.message,
 					detail : err.detail
@@ -129,7 +129,7 @@ module.exports = {
 					result  : plan
 				});
 			})
-			.catch(ExManager.MetierEx, function(err) {
+			.catch(Exception.MetierEx, function(err) {
 				ResponseService.fail(res, {
 					reason : err.message,
 					detail : err.detail

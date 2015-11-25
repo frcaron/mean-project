@@ -1,13 +1,55 @@
 "use strict";
 
 // Inject
-var BPromise   = require('bluebird');
-var Logger     = require(global.__server + '/LoggerManager');
-var PlanDao    = require(global.__dao + '/PlanDao');
-var ProgramDao = require(global.__dao + '/ProgramDao');
-var CategoryDao = require(global.__dao + '/CategoryDao');
+var BPromise        = require('bluebird');
+var Logger          = require(global.__server + '/LoggerManager');
+var UserDao         = require(global.__dao + '/UserDao');
+var PlanDao         = require(global.__dao + '/PlanDao');
+var ProgramDao      = require(global.__dao + '/ProgramDao');
+var CategoryDao     = require(global.__dao + '/CategoryDao');
+var TypeCategoryDao = require(global.__dao + '/TypeCategoryDao');
 
 module.exports = {
+
+	createUser    : function (input) {
+
+		Logger.debug('[SER - START] BudgetService#createUser');
+		Logger.debug('              -- input   : ' + JSON.stringify(input));
+
+		var promise = UserDao.create({
+	            firstname : input.firstname,
+	            surname   : input.surname,
+	            email     : input.email,
+	            password  : input.password
+	        })
+			.then(function (user) {
+				return TypeCategoryDao.getAll()
+					.then(function (typeCategories) {
+						return BPromise.map(typeCategories, function (typeCategory) {
+							return CategoryDao.create({
+	                            name             : 'Autres',
+	                            type_category_id : typeCategory._id,
+	                            neutre           : true,
+	                            user_id          : user._id
+	                        });
+						});
+					})
+					.then(function() {
+						return BPromise.resolve(user);
+					})
+					.catch(function (err) {
+						Logger.debug('[SER - CATCH] BudgetService#createUser');
+						Logger.error('              -- message : ' + err.message);
+
+						UserDao.remove({ user_id : user._id });
+						throw err;
+					});
+			});
+
+		Logger.debug('[SER -   END] BudgetService#createUser');
+
+		return promise;
+	},
 
 	createPlan    : function (input) {
 

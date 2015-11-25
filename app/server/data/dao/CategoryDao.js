@@ -2,7 +2,7 @@
 
 // Inject
 var BPromise      = require('bluebird');
-var ExManager     = require(global.__server + '/ExceptionManager');
+var Exception     = require(global.__server + '/ExceptionManager');
 var Logger        = require(global.__server + '/LoggerManager');
 var CategoryModel = require(global.__model + '/CategoryModel');
 var CountersModel = require(global.__model + '/CountersModel');
@@ -43,13 +43,13 @@ function create (input) {
 			Logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
-				throw new ExManager.DuplicateEx('Category already exist');
+				throw new Exception.DuplicateEx('Category already exist');
 			} if(err.name === 'ValidationError') {
 				let detail = [];
 				Object.keys(err.errors).map(function(prop) {
 					detail.push(err.errors[prop].message);
 				});
-				throw new ExManager.ValidatorEx(err.message, detail);
+				throw new Exception.ValidatorEx(err.message, detail);
 			} else {
 				throw err;
 			}
@@ -76,7 +76,7 @@ function update (input, filters) {
 
 	let promise;
 	if(filters) {
-		promise = BPromise.reject(new ExManager.ParamEx('Filters forbidden'));
+		promise = BPromise.reject(new Exception.ParamEx('Filters forbidden'));
 	} else {
 		promise = getOne({
 				category_id : input.category_id,
@@ -100,21 +100,18 @@ function update (input, filters) {
 	}
 
 	let promiseEnd = promise
-		.then(function (category) {
-			return BPromise.resolve(category);
-		})
 		.catch(function (err) {
 			Logger.debug('[DAO - CATCH] CategoryDao#update');
 			Logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
-				throw new ExManager.DuplicateEx('Category already exist');
+				throw new Exception.DuplicateEx('Category already exist');
 			} if(err.name === 'ValidationError') {
 				let detail = [];
 				Object.keys(err.errors).map(function(prop) {
 					detail.push(err.errors[prop].message);
 				});
-				throw new ExManager.ValidatorEx(err.message, detail);
+				throw new Exception.ValidatorEx(err.message, detail);
 			} else {
 				throw err;
 			}
@@ -153,7 +150,7 @@ function remove (filters) {
 	}
 
 	if(!promise) {
-		promise = BPromise.reject(new ExManager.ParamEx('Filters missing'));
+		promise = BPromise.reject(new Exception.ParamEx('Filters missing'));
 	}
 
 	let promiseEnd = promise
@@ -217,7 +214,7 @@ function getAll (filters) {
 	}
 
 	if(!promise) {
-		promise = BPromise.reject(new ExManager.ParamEx('Filters missing'));
+		promise = BPromise.reject(new Exception.ParamEx('Filters missing'));
 	}
 
 	let promiseEnd = promise
@@ -281,13 +278,13 @@ function getOne (filters) {
 	}
 
 	if(!promise) {
-		promise = BPromise.reject(new ExManager.ParamEx('Filters missing'));
+		promise = BPromise.reject(new Exception.ParamEx('Filters missing'));
 	}
 
 	let promiseEnd = promise
 		.then(function (category) {
 			if (!category) {
-				throw new ExManager.NoResultEx('No category found');
+				throw new Exception.NoResultEx('No category found');
 			}
 			return BPromise.resolve(category);
 		})

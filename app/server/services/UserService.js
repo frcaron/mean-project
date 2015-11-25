@@ -2,7 +2,7 @@
 
 // Inject
 var BPromise        = require('bluebird');
-var ExManager       = require(global.__server + '/ExceptionManager');
+var Exception       = require(global.__server + '/ExceptionManager');
 var Logger          = require(global.__server + '/LoggerManager');
 var ResponseService = require(global.__service + '/share/ResponseService');
 var UserDao         = require(global.__dao + '/UserDao');
@@ -10,62 +10,8 @@ var PlanDao         = require(global.__dao + '/PlanDao');
 var ProgramDao      = require(global.__dao + '/ProgramDao');
 var CategoryDao     = require(global.__dao + '/CategoryDao');
 var TransactionDao  = require(global.__dao + '/TransactionDao');
-var TypeCategoryDao = require(global.__dao + '/TypeCategoryDao');
 
 module.exports = {
-
-	// Create one user
-	create           : function (req, res) {
-
-		Logger.debug('[SER - START] UserService#create');
-
-		UserDao.create({
-                firstname : req.body.firstname,
-                surname   : req.body.surname,
-                email     : req.body.email,
-                password  : req.body.password,
-                admin     : req.body.admin // TODO delete after test
-            })
-			.then(function (user) {
-				return TypeCategoryDao.getAll()
-					.then(function (typeCategories) {
-						return BPromise.map(typeCategories, function (typeCategory) {
-							return CategoryDao.create({
-                                name             : 'Autres',
-                                type_category_id : typeCategory._id,
-                                neutre           : true,
-                                user_id          : user._id
-                            });
-						});
-					})
-					.then(function() {
-						return BPromise.resolve(user);
-					})
-					.catch(function (err) {
-						UserDao.remove({ user_id : user._id });
-						throw err;
-					});
-			})
-			.then(function (user) {
-				ResponseService.success(res, {
-					result  : user
-				});
-			})
-			.catch(ExManager.MetierEx, function(err) {
-				ResponseService.fail(res, {
-					reason : err.message,
-					detail : err.detail
-				});
-			})
-			.catch(function (err) {
-				Logger.debug('[SER - CATCH] UserService#create');
-				Logger.error('              -- message : ' + err.message);
-
-				ResponseService.fail(res);
-			});
-
-		Logger.debug('[SER -   END] UserService#create');
-	},
 
 	// Update one user
 	update           : function (req, res, user_id) {
@@ -86,7 +32,7 @@ module.exports = {
 					result  : user
 				});
 			})
-			.catch(ExManager.MetierEx, function(err) {
+			.catch(Exception.MetierEx, function(err) {
 				ResponseService.fail(res, {
 					reason : err.message,
 					detail : err.detail
@@ -123,7 +69,7 @@ module.exports = {
 						result  : msg.toString()
 					});
 			})
-			.catch(ExManager.MetierEx, function(err) {
+			.catch(Exception.MetierEx, function(err) {
 				ResponseService.fail(res, {
 					reason : err.message,
 					detail : err.detail
@@ -174,7 +120,7 @@ module.exports = {
 					result  : user
 				});
 			})
-			.catch(ExManager.MetierEx, function(err) {
+			.catch(Exception.MetierEx, function(err) {
 				ResponseService.fail(res, {
 					reason : err.message,
 					detail : err.detail
@@ -203,7 +149,7 @@ module.exports = {
 			.then(function() {
 				ResponseService.success(res);
 			})
-			.catch(ExManager.MetierEx, function(err) {
+			.catch(Exception.MetierEx, function(err) {
 				ResponseService.fail(res, {
 					reason : err.message,
 					detail : err.detail

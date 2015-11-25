@@ -2,7 +2,7 @@
 
 // Inject
 var BPromise      = require('bluebird');
-var ExManager     = require(global.__server + '/ExceptionManager');
+var Exception     = require(global.__server + '/ExceptionManager');
 var Logger        = require(global.__server + '/LoggerManager');
 var ProgramModel  = require(global.__model + '/ProgramModel');
 var CountersModel = require(global.__model + '/CountersModel');
@@ -40,13 +40,13 @@ function create (input) {
 			Logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
-				throw new ExManager.DuplicateEx('Program already exist');
+				throw new Exception.DuplicateEx('Program already exist');
 			} if(err.name === 'ValidationError') {
 				let detail = [];
 				Object.keys(err.errors).map(function(prop) {
 					detail.push(err.errors[prop].message);
 				});
-				throw new ExManager.ValidatorEx(err.message, detail);
+				throw new Exception.ValidatorEx(err.message, detail);
 			} else {
 				throw err;
 			}
@@ -73,7 +73,7 @@ function update (input, filters) {
 
 	let promise;
 	if (filters) {
-		promise = BPromise.reject(new ExManager.ParamEx('Filters forbidden'));
+		promise = BPromise.reject(new Exception.ParamEx('Filters forbidden'));
 	} else {
 		promise = getOne({
 				program_id : input.program_id,
@@ -94,21 +94,18 @@ function update (input, filters) {
 	}
 
 	let promiseEnd = promise
-		.then(function (program) {
-			return BPromise.resolve(program);
-		})
 		.catch(function (err) {
 			Logger.debug('[DAO - CATCH] ProgramDao#update');
 			Logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
-				throw new ExManager.DuplicateEx('Program already exist');
+				throw new Exception.DuplicateEx('Program already exist');
 			} if(err.name === 'ValidationError') {
 				let detail = [];
 				Object.keys(err.errors).map(function(prop) {
 					detail.push(err.errors[prop].message);
 				});
-				throw new ExManager.ValidatorEx(err.message, detail);
+				throw new Exception.ValidatorEx(err.message, detail);
 			} else {
 				throw err;
 			}
@@ -152,7 +149,7 @@ function remove (filters) {
 	}
 
 	if(!promise) {
-		promise = BPromise.reject(new ExManager.ParamEx('Filters missing'));
+		promise = BPromise.reject(new Exception.ParamEx('Filters missing'));
 	}
 
 	let promiseEnd = promise
@@ -208,7 +205,7 @@ function getAll (filters) {
 	}
 
 	if(!promise) {
-		promise = BPromise.reject(new ExManager.ParamEx('Filters missing'));
+		promise = BPromise.reject(new Exception.ParamEx('Filters missing'));
 	}
 
 	let promiseEnd = promise
@@ -258,13 +255,13 @@ function getOne (filters) {
 	}
 
 	if(!promise) {
-		promise = BPromise.reject(new ExManager.ParamEx('Filters missing'));
+		promise = BPromise.reject(new Exception.ParamEx('Filters missing'));
 	}
 
 	let promiseEnd = promise
 		.then(function (program) {
 			if (!program ) {
-				throw new ExManager.NoResultEx('No program found');
+				throw new Exception.NoResultEx('No program found');
 			}
 			return BPromise.resolve(program);
 		})

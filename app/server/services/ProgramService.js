@@ -2,7 +2,7 @@
 
 // Inject
 var BPromise        = require('bluebird');
-var ExManager       = require(global.__server + '/ExceptionManager');
+var Exception       = require(global.__server + '/ExceptionManager');
 var Logger          = require(global.__server + '/LoggerManager');
 var ResponseService = require(global.__service + '/share/ResponseService');
 var BudgetService   = require(global.__service + '/share/BudgetService');
@@ -29,7 +29,7 @@ module.exports = {
 					result  : program
 				});
 			})
-			.catch(ExManager.MetierEx, function(err) {
+			.catch(Exception.MetierEx, function(err) {
 				ResponseService.fail(res, {
 					reason : err.message,
 					detail : err.detail
@@ -86,7 +86,7 @@ module.exports = {
 							if(categoryOld._type === categoryNew._type) {
 								return ProgramDao.update(input);
 							} else {
-								throw new ExManager.MetierEx('Category invalid');
+								throw new Exception.MetierEx('Category invalid');
 							}
 						});
 				});
@@ -100,7 +100,7 @@ module.exports = {
 					result  : program
 				});
 			})
-			.catch(ExManager.MetierEx, function(err) {
+			.catch(Exception.MetierEx, function(err) {
 				ResponseService.fail(res, {
 					reason : err.message,
 					detail : err.detail
@@ -163,7 +163,7 @@ module.exports = {
 			.then(function () {
 				ResponseService.success(res);
 			})
-			.catch(ExManager.MetierEx, function(err) {
+			.catch(Exception.MetierEx, function(err) {
 				ResponseService.fail(res, {
 					reason : err.message,
 					detail : err.detail
@@ -216,7 +216,7 @@ module.exports = {
 					result  : programs
 				});
 			})
-			.catch(ExManager.MetierEx, function(err) {
+			.catch(Exception.MetierEx, function(err) {
 				ResponseService.fail(res, {
 					reason : err.message,
 					detail : err.detail
@@ -247,7 +247,7 @@ module.exports = {
 					result  : program
 				});
 			})
-			.catch(ExManager.MetierEx, function(err) {
+			.catch(Exception.MetierEx, function(err) {
 				ResponseService.fail(res, {
 					reason : err.message,
 					detail : err.detail

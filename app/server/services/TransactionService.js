@@ -2,7 +2,7 @@
 
 // Inject
 var BPromise        = require('bluebird');
-var ExManager       = require(global.__server + '/ExceptionManager');
+var Exception       = require(global.__server + '/ExceptionManager');
 var Logger          = require(global.__server + '/LoggerManager');
 var ResponseService = require(global.__service + '/share/ResponseService');
 var BudgetService   = require(global.__service + '/share/BudgetService');
@@ -20,7 +20,7 @@ function fulfillProgram(input, category_id) {
 	};
 
 	return PlanDao.getOne(inputPlan)
-		.catch(ExManager.NoResultEx, function () {
+		.catch(Exception.NoResultEx, function () {
 			return BudgetService.createPlan(inputPlan);
 		})
 		.then(function (plan) {
@@ -30,7 +30,7 @@ function fulfillProgram(input, category_id) {
 				user_id     : input.user_id
 			};
 			return ProgramDao.getOne(inputProgram)
-				.catch(ExManager.NoResultEx, function () {
+				.catch(Exception.NoResultEx, function () {
 					return BudgetService.createProgram(inputProgram);
 				});
 			})
@@ -64,7 +64,7 @@ module.exports = {
 					result  : transaction
 				});
 			})
-			.catch(ExManager.MetierEx, function(err) {
+			.catch(Exception.MetierEx, function(err) {
 				ResponseService.fail(res, {
 					reason : err.message,
 					detail : err.detail
@@ -103,7 +103,7 @@ module.exports = {
 					result  : transaction
 				});
 			})
-			.catch(ExManager.MetierEx, function(err) {
+			.catch(Exception.MetierEx, function(err) {
 				ResponseService.fail(res, {
 					reason : err.message,
 					detail : err.detail
@@ -132,7 +132,7 @@ module.exports = {
 			.then(function () {
 				ResponseService.success(res);
 			})
-			.catch(ExManager.MetierEx, function(err) {
+			.catch(Exception.MetierEx, function(err) {
 				ResponseService.fail(res, {
 					reason : err.message,
 					detail : err.detail
@@ -160,7 +160,7 @@ module.exports = {
 			})
 			.then(function (categories) {
 				if (!categories.length) {
-					throw new ExManager.NoResultEx('Transactions not found');
+					throw new Exception.NoResultEx('Transactions not found');
 				}
 
 				var categories_id = [];
@@ -177,7 +177,7 @@ module.exports = {
 					})
 					.then(function (programs) {
 						if (!programs.length) {
-							throw new ExManager.NoResultEx('No transaction found');
+							throw new Exception.NoResultEx('No transaction found');
 						}
 
 						var programs_id = [];
@@ -199,12 +199,12 @@ module.exports = {
 					result  : transactions
 				});
 			})
-			.catch(ExManager.NoResultEx, function () {
+			.catch(Exception.NoResultEx, function () {
 				ResponseService.success(res, {
 					result  : []
 				});
 			})
-			.catch(ExManager.MetierEx, function(err) {
+			.catch(Exception.MetierEx, function(err) {
 				ResponseService.fail(res, {
 					reason : err.message,
 					detail : err.detail
@@ -235,7 +235,7 @@ module.exports = {
 					result  : transactions
 				});
 			})
-			.catch(ExManager.MetierEx, function(err) {
+			.catch(Exception.MetierEx, function(err) {
 				ResponseService.fail(res, {
 					reason : err.message,
 					detail : err.detail
@@ -266,7 +266,7 @@ module.exports = {
 					result  : transaction,
 				});
 			})
-			.catch(ExManager.MetierEx, function(err) {
+			.catch(Exception.MetierEx, function(err) {
 				ResponseService.fail(res, {
 					reason : err.message,
 					detail : err.detail

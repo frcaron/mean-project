@@ -2,7 +2,7 @@
 
 // Inject
 var BPromise      = require('bluebird');
-var ExManager     = require(global.__server + '/ExceptionManager');
+var Exception     = require(global.__server + '/ExceptionManager');
 var Logger        = require(global.__server + '/LoggerManager');
 var UserModel     = require(global.__model + '/UserModel');
 var CountersModel = require(global.__model + '/CountersModel');
@@ -22,11 +22,11 @@ function create (input) {
 	let promise = CountersModel.getNextSequence('user_id')
 		.then(function (seq){
 
-			user._id       = seq;
-			user.surname   = input.surname;
-			user.firstname = input.firstname;
-			user.email     = input.email;
-			user.password  = input.password;
+			user._id            = seq;
+			user.surname        = input.surname;
+			user.firstname      = input.firstname;
+			user.local.email    = input.email;
+			user.local.password = input.password;
 			if ( input.admin !== undefined ) {
 				user.admin = input.admin;
 			}
@@ -34,6 +34,7 @@ function create (input) {
 			return user.saveAsync();
 		})
 		.then(function () {
+			user.local.password = undefined;
 			return BPromise.resolve(user);
 		})
 		.catch(function (err) {
@@ -41,13 +42,13 @@ function create (input) {
 			Logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
-				throw new ExManager.DuplicateEx('User already exist');
+				throw new Exception.DuplicateEx('User already exist');
 			} if(err.name === 'ValidationError') {
 				let detail = [];
 				Object.keys(err.errors).map(function(prop) {
 					detail.push(err.errors[prop].message);
 				});
-				throw new ExManager.ValidatorEx(err.message, detail);
+				throw new Exception.ValidatorEx(err.message, detail);
 			} else {
 				throw err;
 			}
@@ -73,41 +74,38 @@ function update (input) {
 	let promise = getOne({ user_id : input.user_id })
 		.then(function (user) {
 			if ( input.surname ) {
-				user.surname   = input.surname;
+				user.surname        = input.surname;
 			}
 			if ( input.firstname ) {
-				user.firstname = input.firstname;
+				user.firstname      = input.firstname;
 			}
 			if ( input.email ) {
-				user.email     = input.email;
+				user.local.email    = input.email;
 			}
 			if ( input.password ) {
-				user.password  = input.password;
+				user.local.password = input.password;
 			}
 			if ( input.admin !== undefined ) {
-				user.admin     = input.admin;
+				user.admin          = input.admin;
 			}
 			return user.saveAsync()
 				.then(function () {
-					user.password = undefined;
+					user.local.password = undefined;
 					return BPromise.resolve(user);
 				});
-		})
-		.then(function (user) {
-			return BPromise.resolve(user);
 		})
 		.catch(function (err) {
 			Logger.debug('[DAO - CATCH] UserDao#update');
 			Logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
-				throw new ExManager.DuplicateEx('User already exist');
+				throw new Exception.DuplicateEx('User already exist');
 			} if(err.name === 'ValidationError') {
 				let detail = [];
 				Object.keys(err.errors).map(function(prop) {
 					detail.push(err.errors[prop].message);
 				});
-				throw new ExManager.ValidatorEx(err.message, detail);
+				throw new Exception.ValidatorEx(err.message, detail);
 			} else {
 				throw err;
 			}
@@ -190,18 +188,18 @@ function getOne (filters) {
 
 	} else if(filters.email) {
 		promise = UserModel.findOneAsync({
-			email : filters.email
+			'local.email' : filters.email
 		});
 	}
 
 	if(!promise) {
-		promise = BPromise.reject(new ExManager.ParamEx('Filters missing'));
+		promise = BPromise.reject(new Exception.ParamEx('Filters missing'));
 	}
 
 	let promiseEnd = promise
 		.then(function (user) {
 			if (!user) {
-				throw new ExManager.NoResultEx('No user found');
+				throw new Exception.NoResultEx('No user found');
 			}
 			return BPromise.resolve(user);
 		})
@@ -230,28 +228,29 @@ function validatePassword (log, pass) {
 	Logger.debug('[DAO - START] UserDao#validatePassword');
 
 	var promise = UserModel.findOne({
-		email : log
-	})
-	.select('_id, surname firstname email password admin')
-	.then(function(user) {
-		if(!user) {
-			throw new ExManager.NoResultEx('No user found');
-		}
+			'local.email' : log
+		})
+		.select('_id, surname firstname local.email local.password admin')
+		.then(function(user) {
+			if(!user) {
+				throw new Exception.NoResultEx('No user found');
+			}
 
-		var validPassword = user.comparePassword(pass);
+			var validPassword = user.comparePassword(pass);
 
-		if (!validPassword) {
-			throw new ExManager.LoginEx('Wrong password');
-		}
+			if (!validPassword) {
+				throw new Exception.LoginEx('Wrong password');
+			}
 
-		return BPromise.resolve(user);
-	})
-	.then(undefined, function (err){
-		Logger.debug('[DAO - CATCH] UserDao#validatePassword');
-		Logger.error('              -- message : ' + err.message);
+			user.local.password = undefined;
+			return BPromise.resolve(user);
+		})
+		.then(undefined, function (err){
+			Logger.debug('[DAO - CATCH] UserDao#validatePassword');
+			Logger.error('              -- message : ' + err.message);
 
-		throw err;
-	});
+			throw err;
+		});
 
 	Logger.debug('[DAO -   END] UserDao#validatePassword');
 

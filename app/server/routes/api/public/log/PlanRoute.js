@@ -15,7 +15,7 @@ module.exports = function (router) {
 
 		// Get all plans
 		.get(function (req, res) {
-			PlanService.allByU(req, res, req.decoded.user_id);
+			PlanService.allByU(req, res, req.user.id);
 		})
 
 		// Create one plan
@@ -40,19 +40,19 @@ module.exports = function (router) {
 				});
 			}
 
-			PlanService.create(req, res, req.decoded.user_id);
+			PlanService.create(req, res, req.user.id);
 		});
 
 	router.route(api_prefix + '/:plan_id')
 
 		// Get one program
 		.get(function (req, res) {
-			PlanService.getById(req, res, req.decoded.user_id);
+			PlanService.getById(req, res, req.user.id);
 		})
 
 		// Delete one plan
 		.delete(function (req , res) {
-			PlanService.remove(req, res, req.decoded.user_id);
+			PlanService.remove(req, res, req.user.id);
 		});
 
 	router.route(api_prefix + '/:plan_id/programs')
@@ -75,6 +75,6 @@ module.exports = function (router) {
 				});
 			}
 
-			ProgramService.allByPlanTypeU(req, res, req.decoded.user_id);
+			ProgramService.allByPlanTypeU(req, res, req.user.id);
 		});
 };

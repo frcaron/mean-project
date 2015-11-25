@@ -14,7 +14,7 @@ module.exports = function (router) {
 		.get(function (req, res) {
 			return ResponseService.success(res, {
 				message : 'Get success',
-				result  : req.decoded
+				result  : req.user
 			});
 		});
 };
