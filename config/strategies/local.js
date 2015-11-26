@@ -20,7 +20,7 @@ module.exports = function(passport) {
 	}, function(req, email, password, done) {
 
 		process.nextTick(function() {
-			UserDao.getOne({ email : email })
+			UserDao.getOne('byEmail', { local_email : email })
 				.then( function() {
 					return done(null, false, req.flash('authMessage', 'That email is already taken'));
 				})

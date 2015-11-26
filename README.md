@@ -2,6 +2,7 @@
 # MEAN-PROJECT
 
 Variable env :
+	- NODE_ENV         (no default)
 	- BDD_URL          (default : 'mongodb://localhost/mean-project')
 	- SECRET           (default : 'secretmeanproject')
 	- LEVEL_LOG        (default : 'debug')

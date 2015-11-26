@@ -13,7 +13,7 @@ var TransactionDao  = require(global.__dao + '/TransactionDao');
 module.exports = {
 
 	// Create one plan
-	create  : function (req, res, user_id) {
+	create (req, res, user_id) {
 
 		Logger.debug('[SER - START] PlanService#create');
 		Logger.debug('              -- user_id : ' + user_id);
@@ -45,7 +45,7 @@ module.exports = {
 	},
 
 	// Delete plan user
-	remove  : function (req, res, user_id) {
+	remove (req, res, user_id) {
 
 		Logger.debug('[SER - START] PlanService#remove');
 		Logger.debug('              -- user_id : ' + user_id);
@@ -87,7 +87,7 @@ module.exports = {
 	},
 
 	// Get plans by user
-	allByU  : function (req, res, user_id) {
+	allByU (req, res, user_id) {
 
 		Logger.debug('[SER - START] PlanService#allByU');
 		Logger.debug('              -- user_id : ' + user_id);
@@ -115,7 +115,7 @@ module.exports = {
 	},
 
 	// Get one plan by id
-	getById : function (req, res, user_id) {
+	getById (req, res, user_id) {
 
 		Logger.debug('[SER - START] PlanService#getById');
 		Logger.debug('              -- user_id : ' + user_id);

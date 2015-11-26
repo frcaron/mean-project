@@ -11,7 +11,7 @@ var ProgramDao      = require(global.__dao + '/ProgramDao');
 var TransactionDao  = require(global.__dao + '/TransactionDao');
 var CategoryDao     = require(global.__dao + '/CategoryDao');
 
-function fulfillProgram(input, category_id) {
+function fulfillProgram (input, category_id) {
 
 	let inputPlan = {
 		month   : input.date.month() + 1,
@@ -43,7 +43,7 @@ function fulfillProgram(input, category_id) {
 module.exports = {
 
 	// Create one transaction
-	create        : function (req, res, user_id) {
+	create (req, res, user_id) {
 
 		Logger.debug('[SER - START] TransactionService#create');
 		Logger.debug('              -- user_id : ' + user_id);
@@ -81,7 +81,7 @@ module.exports = {
 	},
 
 	// Update one transaction
-	update        : function (req, res, user_id) {
+	update (req, res, user_id) {
 
 		Logger.debug('[SER - START] TransactionService#update');
 		Logger.debug('              -- user_id : ' + user_id);
@@ -120,7 +120,7 @@ module.exports = {
 	},
 
 	// Remove one transaction
-	remove        : function (req, res, user_id) {
+	remove (req, res, user_id) {
 
 		Logger.debug('[SER - START] TransactionService#remove');
 		Logger.debug('              -- user_id : ' + user_id);
@@ -149,7 +149,7 @@ module.exports = {
 	},
 
 	// Get transactions by type category
-	allByTypeU : function (req, res, user_id) {
+	allByTypeU (req, res, user_id) {
 
 		Logger.debug('[SER - START] TransactionService#allByTypeU');
 		Logger.debug('              -- user_id : ' + user_id);
@@ -221,7 +221,7 @@ module.exports = {
 	},
 
 	// Get transactions by program
-	allByProgramU : function (req, res, user_id) {
+	allByProgramU (req, res, user_id) {
 
 		Logger.debug('[SER - START] TransactionService#allByProgramU');
 		Logger.debug('              -- user_id : ' + user_id);
@@ -252,7 +252,7 @@ module.exports = {
 	},
 
 	// Get one transaction by id
-	getByIdU      : function (req, res, user_id) {
+	getByIdU (req, res, user_id) {
 
 		Logger.debug('[SER - START] TransactionService#getByIdU');
 		Logger.debug('              -- user_id : ' + user_id);

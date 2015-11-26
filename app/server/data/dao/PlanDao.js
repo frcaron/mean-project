@@ -247,20 +247,20 @@ function getOne (filters) {
 }
 
 module.exports = {
-	name   : 'PlanDao',
-	create : function (input) {
+	name : 'PlanDao',
+	create (input) {
 		return create(input);
 	},
-	update : function (input, filters) {
+	update (input, filters) {
 		return update(input, filters);
 	},
-	remove : function (filters) {
+	remove (filters) {
 		return remove(filters);
 	},
-	getAll : function (filters) {
+	getAll (filters) {
 		return getAll(filters);
 	},
-	getOne : function (filters) {
+	getOne (filters) {
 		return getOne(filters);
 	}
 };

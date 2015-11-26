@@ -3,7 +3,7 @@
 module.exports = {
 
 	// Fail response
-	fail    : function (res, options) {
+	fail (res, options) {
 		if(!options) {
 			options = {};
 		}
@@ -15,7 +15,7 @@ module.exports = {
 	},
 
 	// Success response
-	success : function (res, options) {
+	success (res, options) {
 		if(!options) {
 			options = {};
 		}

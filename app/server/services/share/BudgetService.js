@@ -11,7 +11,7 @@ var TypeCategoryDao = require(global.__dao + '/TypeCategoryDao');
 
 module.exports = {
 
-	createUser    : function (input) {
+	createUser (input) {
 
 		Logger.debug('[SER - START] BudgetService#createUser');
 		Logger.debug('              -- input   : ' + JSON.stringify(input));
@@ -55,7 +55,7 @@ module.exports = {
 		return promise;
 	},
 
-	createPlan    : function (input) {
+	createPlan (input) {
 
 		Logger.debug('[SER - START] BudgetService#createPlan');
 		Logger.debug('              -- input   : ' + JSON.stringify(input));
@@ -92,7 +92,7 @@ module.exports = {
 		return promise;
 	},
 
-	createProgram : function (input) {
+	createProgram (input) {
 
 		Logger.debug('[SER - START] BudgetService#createProgram');
 		Logger.debug('              -- input   : ' + JSON.stringify(input));

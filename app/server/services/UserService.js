@@ -14,7 +14,7 @@ var TransactionDao  = require(global.__dao + '/TransactionDao');
 module.exports = {
 
 	// Update one user
-	update           : function (req, res, user_id) {
+	update (req, res, user_id) {
 
 		Logger.debug('[SER - START] UserService#update');
 		Logger.debug('              -- user_id : ' + user_id);
@@ -49,7 +49,7 @@ module.exports = {
 	},
 
 	// Remove one user
-	remove           : function (req, res, user_id) {
+	remove (req, res, user_id) {
 
 		Logger.debug('[SER - START] UserService#remove');
 		Logger.debug('              -- user_id : ' + user_id);
@@ -86,7 +86,7 @@ module.exports = {
 	},
 
 	// Get all users
-	all              : function (req, res) {
+	all (req, res) {
 
 		Logger.debug('[SER - START] UserService#getAll');
 
@@ -107,14 +107,12 @@ module.exports = {
 	},
 
 	// Get one user by id
-	getById          : function (req, res, user_id) {
+	getById (req, res, user_id) {
 
 		Logger.debug('[SER - START] UserService#getOne');
 		Logger.debug('              -- user_id : ' + user_id);
 
-		UserDao.getOne({
-				user_id : user_id
-			})
+		UserDao.getOne('byId', { user_id : user_id })
 			.then(function(user) {
 				ResponseService.success(res, {
 					result  : user
@@ -137,7 +135,7 @@ module.exports = {
 	},
 
 	// Set permission
-	managePermission : function (req, res, user_id) {
+	managePermission (req, res, user_id) {
 
 		Logger.debug('[SER - START] UserService#managePermission');
 		Logger.debug('              -- user_id : ' + user_id);

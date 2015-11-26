@@ -12,7 +12,7 @@ var TypeCategoryDao = require(global.__dao + '/TypeCategoryDao');
 module.exports = {
 
 	// Create one category
-	create             : function (req, res, user_id) {
+	create (req, res, user_id) {
 
 		Logger.debug('[SER - START] CategoryService#create');
 		Logger.debug('              -- user_id : ' + user_id);
@@ -67,7 +67,7 @@ module.exports = {
 	},
 
 	// Update one category
-	update             : function (req, res, user_id) {
+	update (req, res, user_id) {
 
 		Logger.debug('[SER - START] CategoryService#update');
 		Logger.debug('              -- user_id : ' + user_id);
@@ -101,7 +101,7 @@ module.exports = {
 	},
 
 	// Desactivate one category
-	desactivate        : function (req, res, user_id) {
+	desactivate (req, res, user_id) {
 
 		Logger.debug('[SER - START] CategoryService#desactivate');
 		Logger.debug('              -- user_id : ' + user_id);
@@ -130,7 +130,7 @@ module.exports = {
 		Logger.debug('[SER -   END] CategoryService#desactivate');
 	},
 
-	allByTypeCatUNoUse : function (req, res, user_id) {
+	allByTypeCatUNoUse (req, res, user_id) {
 
 		Logger.debug('[SER - START] CategoryService#allByTypeCatUNoUse');
 		Logger.debug('              -- user_id : ' + user_id);
@@ -180,7 +180,7 @@ module.exports = {
 	},
 
 	// Get active categories by type category
-	allByTypeU      : function (req, res, user_id) {
+	allByTypeU (req, res, user_id) {
 
 		Logger.debug('[SER - START] CategoryService#allByTypeU');
 		Logger.debug('              -- user_id : ' + user_id);
@@ -211,7 +211,7 @@ module.exports = {
 	},
 
 	// Get one category by id
-	getByIdU           : function (req, res, user_id) {
+	getByIdU (req, res, user_id) {
 
 		Logger.debug('[SER - START] CategoryService#getByIdU');
 		Logger.debug('              -- user_id : ' + user_id);

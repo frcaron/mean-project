@@ -13,7 +13,7 @@ var TransactionDao  = require(global.__dao + '/TransactionDao');
 module.exports = {
 
 	// Create one program
-	create         : function (req, res, user_id) {
+	create (req, res, user_id) {
 
 		Logger.debug('[SER - START] ProgramService#create');
 		Logger.debug('              -- user_id : ' + user_id);
@@ -46,7 +46,7 @@ module.exports = {
 	},
 
 	// Update one program
-	update         : function (req, res, user_id) {
+	update (req, res, user_id) {
 
 		Logger.debug('[SER - START] ProgramService#update');
 		Logger.debug('              -- user_id : ' + user_id);
@@ -117,7 +117,7 @@ module.exports = {
 	},
 
 	// Remove one program
-	remove         : function (req, res, user_id) {
+	remove (req, res, user_id) {
 
 		Logger.debug('[SER - START] ProgramService#remove');
 		Logger.debug('              -- user_id : ' + user_id);
@@ -180,7 +180,7 @@ module.exports = {
 	},
 
 	// Get programs by plan
-	allByPlanTypeU : function (req, res, user_id) {
+	allByPlanTypeU (req, res, user_id) {
 
 		Logger.debug('[SER - START] ProgramService#allByPlanU');
 		Logger.debug('              -- user_id : ' + user_id);
@@ -233,7 +233,7 @@ module.exports = {
 	},
 
 	// Get one program by id
-	getByIdU       : function (req, res, user_id) {
+	getByIdU (req, res, user_id) {
 
 		Logger.debug('[SER - START] ProgramService#getByIdU');
 		Logger.debug('              -- user_id : ' + user_id);

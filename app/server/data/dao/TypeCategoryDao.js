@@ -66,9 +66,11 @@ function update (input) {
 
 	let promise = getOne({ type_category_id : input.type_category_id })
 		.then(function (typeCategory) {
+
 			if( input.name ) {
 				typeCategory.name = input.name;
 			}
+
 			return typeCategory.saveAsync()
 				.then(function () {
 					return BPromise.resolve(typeCategory);
@@ -102,7 +104,7 @@ function update (input) {
  */
 function getAll () {
 
-	Logger.debug('[DAO - START] TypeCategoryDao#getAll [start]');
+	Logger.debug('[DAO - START] TypeCategoryDao#getAll');
 
 	let promise = TypeCategoryModel.findAsync()
 		.catch(function (err) {
@@ -159,17 +161,17 @@ function getOne (filters) {
 }
 
 module.exports = {
-	name   : 'TypeCategoryDao',
-	create : function (input) {
+	name : 'TypeCategoryDao',
+	create (input) {
 		return create(input);
 	},
-	update : function (input) {
+	update (input) {
 		return update(input);
 	},
-	getAll : function () {
+	getAll () {
 		return getAll();
 	},
-	getOne : function (filters) {
+	getOne (filters) {
 		return getOne(filters);
 	}
 };

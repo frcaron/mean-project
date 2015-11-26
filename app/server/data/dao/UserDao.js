@@ -4,6 +4,7 @@
 var BPromise      = require('bluebird');
 var Exception     = require(global.__server + '/ExceptionManager');
 var Logger        = require(global.__server + '/LoggerManager');
+var DaoManager    = require(global.__dao + '/DaoManager')('user');
 var UserModel     = require(global.__model + '/UserModel');
 var CountersModel = require(global.__model + '/CountersModel');
 
@@ -27,8 +28,11 @@ function create (input) {
 			user.firstname      = input.firstname;
 			user.surname        = input.surname;
 			user.displayname    = input.displayname;
+			if ( input.verified !== undefined ) {
+				user.verified = input.verified;
+			}
 			if ( input.admin !== undefined ) {
-				user.admin = input.admin;
+				user.admin    = input.admin;
 			}
 
 			// Local
@@ -80,7 +84,7 @@ function update (input) {
 	Logger.debug('[DAO - START] UserDao#update');
 	Logger.debug('              -- input : ' + JSON.stringify(input));
 
-	let promise = getOne({ user_id : input.user_id })
+	let promise = getOne('byId', { user_id : input.user_id })
 		.then(function (user) {
 
 			// Base
@@ -92,6 +96,9 @@ function update (input) {
 			}
 			if ( input.displayname ) {
 				user.displayname    = input.displayname;
+			}
+			if ( input.verified !== undefined ) {
+				user.verified       = input.verified;
 			}
 			if ( input.admin !== undefined ) {
 				user.admin          = input.admin;
@@ -148,7 +155,7 @@ function update (input) {
  * @param  {Json} filters 	Keys : 	- user_id
  * 									- email
  * @return {}
- * @throws {ParamEx} 	If params given are wrong
+ * @throws {ParamEx} 		If params given are wrong
  * @throws {NoResultEx} 	If no result found
  * @throws {Error} 			If an other error is met
  */
@@ -198,35 +205,26 @@ function getAll () {
 }
 
 /**
- * @param  {Json} filters 	Keys : 	- user_id
- * 									- local_email
- * 									- facebook_id
- * @return {UserModel}		Object found
- * @throws {ParamEx} 	If params given are wrong
- * @throws {NoResultEx} 	If no result found
- * @throws {Error} 			If an other error is met
+ * @param  {String} name_query	Name query
+ * @param  {Json} filters 		Filters query
+ * @return {UserModel}			Object found
+ * @throws {ParamEx} 			If params given are wrong
+ * @throws {NoResultEx} 		If no result found
+ * @throws {Error} 				If an other error is met
  */
-function getOne (filters) {
+function getOne (name_query, filters) {
 
 	Logger.debug('[DAO - START] UserDao#getOne');
-	Logger.debug('              -- filters : ' + JSON.stringify(filters));
+	Logger.debug('              -- name_query : ' + name_query);
+	Logger.debug('              -- filters    : ' + JSON.stringify(filters));
 
 	let promise;
-	if(filters.user_id) {
-		promise = UserModel.findByIdAsync(filters.user_id);
+	try {
+		let query = DaoManager.getFilters('getOne', name_query, filters);
 
-	} else if(filters.email) {
-		promise = UserModel.findOneAsync({
-			'local.email' : filters.local_email
-		});
-	} else if(filters.facebook_id) {
-		promise = UserModel.findOneAsync({
-			'facebook.id' : filters.facebook_id
-		});
-	}
-
-	if(!promise) {
-		promise = BPromise.reject(new Exception.ParamEx('Filters missing'));
+		promise = UserModel.findOneAsync(query);
+	} catch (err) {
+		promise = BPromise.reject(err);
 	}
 
 	let promiseEnd = promise
@@ -260,16 +258,14 @@ function validatePassword (log, pass) {
 
 	Logger.debug('[DAO - START] UserDao#validatePassword');
 
-	var promise = UserModel.findOne({
-			'local.email' : log
-		})
-		.select('_id, surname firstname local.email local.password admin')
+	let promise = UserModel.findOne({ 'local.email' : log })
+		.select('+local.password')
 		.then(function(user) {
 			if(!user) {
 				throw new Exception.NoResultEx('No user found');
 			}
 
-			var validPassword = user.comparePassword(pass);
+			let validPassword = user.comparePassword(pass);
 
 			if (!validPassword) {
 				throw new Exception.LoginEx('Wrong password');
@@ -285,29 +281,29 @@ function validatePassword (log, pass) {
 			throw err;
 		});
 
-	Logger.debug('[DAO -   END] UserDao#validatePassword');
+		Logger.debug('[DAO -   END] UserDao#validatePassword');
 
 	return BPromise.resolve(promise);
 }
 
 module.exports = {
-	name             : 'UserDao',
-	create           : function (input) {
+	name : 'UserDao',
+	create (input) {
 		return create(input);
 	},
-	update           : function (input) {
+	update (input) {
 		return update(input);
 	},
-	remove           : function (filters) {
+	remove (filters) {
 		return remove(filters);
 	},
-	getAll           : function () {
+	getAll () {
 		return getAll();
 	},
-	getOne           : function (filters) {
-		return getOne(filters);
+	getOne (name_query, filters) {
+		return getOne(name_query, filters);
 	},
-	validatePassword : function (log, pass) {
+	validatePassword (log, pass) {
 		return validatePassword(log, pass);
 	}
 };

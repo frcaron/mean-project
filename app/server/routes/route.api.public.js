@@ -21,7 +21,7 @@ module.exports = function (router, passport) {
 				detail : [ 'plan_id' ]
 			});
 		}
-		return next();
+		next();
 	});
 
 	// Validate param program_id
@@ -35,7 +35,7 @@ module.exports = function (router, passport) {
 				detail : [ 'program_id' ]
 			});
 		}
-		return next();
+		next();
 	});
 
 	// Validate param transaction_id
@@ -49,7 +49,7 @@ module.exports = function (router, passport) {
 				detail : [ 'transaction_id' ]
 			});
 		}
-		return next();
+		next();
 	});
 
 	// Validate param category_id
@@ -63,7 +63,7 @@ module.exports = function (router, passport) {
 				detail : [ 'category_id' ]
 			});
 		}
-		return next();
+		next();
 	});
 
 	// Validate param type_category_id
@@ -77,7 +77,7 @@ module.exports = function (router, passport) {
 				detail : [ 'type_category_id' ]
 			});
 		}
-		return next();
+		next();
 	});
 
 	// =========================================================================================

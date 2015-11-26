@@ -18,7 +18,7 @@ module.exports = function(passport) {
 		clientID     : AuthConfig.facebookAuth.clientID,
 		clientSecret : AuthConfig.facebookAuth.clientSecret,
 		callbackURL  : 'http://' + ServerConfig.hostname + ':' + ServerConfig.port +
-			AuthConfig.facebookAuth.callbackURL,
+							AuthConfig.facebookAuth.callbackURL,
 		passReqToCallback : true
 
 	}, function(req, token, refreshToken, profile, done) {
@@ -44,7 +44,7 @@ module.exports = function(passport) {
 
 			} else {
 
-				UserDao.getOne({ facebook_id : profile.id })
+				UserDao.getOne('byFbId', { facebook_id : profile.id })
 					.then(function (user) {
 
 						// Re link

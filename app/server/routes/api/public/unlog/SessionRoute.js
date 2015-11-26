@@ -13,7 +13,7 @@ module.exports = function (router, passport) {
 	router.route(api_prefix + '/signup')
 
 		// Signup local
-		.post(function (req, res) {
+		.post(function (req, res, next) {
 
 			Logger.debug('[WSP - VALID] SessionRoute#post');
 			Logger.debug('              -- req.body.surname   : ' + req.body.surname);
@@ -42,13 +42,18 @@ module.exports = function (router, passport) {
 				});
 			}
 
-			SessionService.auth(req, res, passport, 'local-signup');
+			SessionService.auth(req, res, next, passport, 'local-signup');
+
+		}, function (req, res) {
+			ResponseService.success(res, {
+				result : req.user
+			});
 		});
 
 	router.route(api_prefix + '/login')
 
 		// Login local
-		.post(function (req, res) {
+		.post(function (req, res, next) {
 
 			Logger.debug('[WSP - VALID] SessionRoute#post');
 			Logger.debug('              -- req.body.email     : ' + req.body.email);
@@ -69,7 +74,11 @@ module.exports = function (router, passport) {
 				});
 			}
 
-			SessionService.auth(req, res, passport, 'local-login');
+			SessionService.auth(req, res, next, passport, 'local-login');
+
+		}, function (req, res) {
+			console.log('TEST' + req.user);
+			SessionService.login(req, res);
 		});
 
 	router.route(api_prefix + '/facebook')
@@ -80,8 +89,11 @@ module.exports = function (router, passport) {
 	router.route(api_prefix + '/facebook/callback')
 
 		// Login facebook callback
-		.get(function (req, res) {
-			SessionService.auth(req, res, passport, 'facebook');
+		.get(function (req, res, next) {
+			SessionService.auth(req, res, next, passport, 'facebook');
+
+		}, function (req, res) {
+			SessionService.login(req, res);
 		});
 
 	router.route(api_prefix + '/logout')

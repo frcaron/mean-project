@@ -14,6 +14,10 @@ var UserSchema = new Schema({
 	firstname   : String,
 	surname     : String,
 	displayname : String,
+	verified    : {
+		type     : Boolean,
+		default  : false
+	},
 	admin       : {
 		type     : Boolean,
 		default  : false

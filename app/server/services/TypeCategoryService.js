@@ -9,7 +9,7 @@ var TypeCategoryDao = require(global.__dao + '/TypeCategoryDao');
 module.exports = {
 
 	// Create one type category
-	create    : function (req, res) {
+	create (req, res) {
 
 		Logger.debug('[SER - START] TypeCategoryService#create');
 
@@ -38,7 +38,7 @@ module.exports = {
 	},
 
 	// Update one type category
-	update    : function (req, res) {
+	update (req, res) {
 
 		Logger.debug('[SER - START] TypeCategoryService#update');
 
@@ -68,7 +68,7 @@ module.exports = {
 	},
 
 	// Get all type category
-	all       : function (req, res) {
+	all (req, res) {
 
 		Logger.debug('[SER - START] TypeCategoryService#all');
 
@@ -89,7 +89,7 @@ module.exports = {
 	},
 
 	// Get one type category by id
-	getById    : function (req, res) {
+	getById (req, res) {
 
 		Logger.debug('[SER - START] TypeCategoryService#getById');
 

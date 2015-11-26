@@ -7,7 +7,7 @@ var ResponseService = require(global.__service + '/share/ResponseService');
 module.exports = {
 
 	// Signup user
-	auth : function (req, res, passport, startegy) {
+	auth (req, res, next, passport, startegy) {
 
 		Logger.debug('[SER - START] SessionService#auth');
 		Logger.debug('              -- startegy : ' + startegy);
@@ -28,23 +28,33 @@ module.exports = {
 				}
 
 				return ResponseService.fail(res, {
-					reason : req.flash('signupMessage')[0]
+					reason : req.flash('authMessage')[0]
 				});
 			}
 
-			req.login(user, function(err){
-				if(err){
-					Logger.debug('[SER - CATCH] SessionService#auth');
-					Logger.error('              -- message : ' + err.message);
+			req.result = user;
 
-					return ResponseService.fail(res);
-				}
-				ResponseService.success(res, {
-					result : user
-				});
-			});
+			next();
+
 		})(req, res);
 
 		Logger.debug('[SER -   END] SessionService#auth');
+	},
+
+	login (req, res) {
+
+		Logger.debug('[SER - START] SessionService#login');
+
+		req.login(req.result, function(err) {
+			if(err){
+				return ResponseService.fail(res);
+			}
+
+			ResponseService.success(res, {
+				result : req.result
+			});
+		});
+
+		Logger.debug('[SER -   END] SessionService#login');
 	}
 };

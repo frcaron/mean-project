@@ -21,7 +21,7 @@ module.exports = function (router) {
 				detail : [ 'user_id' ]
 			});
 		}
-		return next();
+		next();
 	});
 
 	// Validate param type_category_id
@@ -35,7 +35,7 @@ module.exports = function (router) {
 				detail : [ 'type_category_id' ]
 			});
 		}
-		return next();
+		next();
 	});
 
 	// =========================================================================================
