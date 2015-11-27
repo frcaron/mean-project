@@ -92,7 +92,7 @@ module.exports = {
 		Logger.debug('[SER - START] PlanService#allByU');
 		Logger.debug('              -- user_id : ' + user_id);
 
-		PlanDao.getAll({ user_id : user_id })
+		PlanDao.getAll('byU', { user_id : user_id })
 			.then(function (plans) {
 				ResponseService.success(res, {
 					result  : plans
@@ -120,7 +120,7 @@ module.exports = {
 		Logger.debug('[SER - START] PlanService#getById');
 		Logger.debug('              -- user_id : ' + user_id);
 
-		PlanDao.getOne({
+		PlanDao.getOne('byIdU', {
 				plan_id : req.params.plan_id,
 				user_id : user_id
 			})
