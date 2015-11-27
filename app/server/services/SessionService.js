@@ -22,7 +22,7 @@ module.exports = {
 				if(info) {
 					return next(new Exception.MetierEx('Param missing', info.message));
 				}
-				return next(new Exception.MetierEx('Param missing', req.flash('authMessage')[0]));
+				return next(new Exception.MetierEx(req.flash('authMessage')[0]));
 			}
 
 			req.result = user;

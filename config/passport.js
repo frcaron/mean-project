@@ -31,8 +31,9 @@ module.exports = function(passport) {
             .then(function(user) {
                 done(null, {
                     id       : user._id,
-                    name     : user.facebook.displayname || user.firstname + ' ' + user.surname,
-                    email    : user.local ? user.local.email : undefined,
+                    name     : user.displayname || user.firstname + ' ' + user.surname,
+                    email    : user.local ? user.local.email ||
+                        user.facebook ? user.facebook.email : undefined : undefined,
                     verified : user.verified,
                     admin    : user.admin
                 });

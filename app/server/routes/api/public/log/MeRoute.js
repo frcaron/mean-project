@@ -2,6 +2,7 @@
 
 //Inject
 var ResponseService = require(global.__service + '/ResponseService');
+var UserService     = require(global.__service + '/UserService');
 
 // Properties
 var api_prefix = '/me';
@@ -10,11 +11,13 @@ module.exports = function (router) {
 
 	router.route(api_prefix)
 
-		// User token information
-		.get(function (req, res) {
+		// Get one user
+		.get(function (req, res, next) {
+			UserService.getById(req, next, req.user.id);
+
+		}, function (req, res) {
 			ResponseService.success(res, {
-				message : 'Get success',
-				result  : req.user
+				result  : req.result
 			});
 		});
 };

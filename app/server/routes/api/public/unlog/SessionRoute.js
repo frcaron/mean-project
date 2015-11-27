@@ -12,6 +12,14 @@ var api_prefix = '/auth';
 
 module.exports = function (router, passport) {
 
+	router.route('/logout')
+
+		// Logout
+		.all(function (req, res) {
+			req.logout();
+			ResponseService.success(res);
+		});
+
 	router.route(api_prefix + '/signup')
 
 		// Signup local
@@ -110,14 +118,6 @@ module.exports = function (router, passport) {
 			ResponseService.success(res, {
 				result : req.user
 			});
-		});
-
-	router.route(api_prefix + '/logout')
-
-		// Logout
-		.post(function (req, res) {
-			req.logout();
-			ResponseService.success(res);
 		});
 
 };

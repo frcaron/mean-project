@@ -17,7 +17,7 @@ Variable env :
 	- HOSTNAME         (default : 'localhost')
 
 	// Production
-	- DOMAIN           (default : 'http://HOSTNAME:PORT/')
+	- DOMAIN
 
 ## Usage
 

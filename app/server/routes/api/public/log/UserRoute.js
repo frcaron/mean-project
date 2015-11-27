@@ -13,16 +13,6 @@ module.exports = function (router) {
 
 	router.route(api_prefix)
 
-		// Get one user
-		.get(function (req, res, next) {
-			UserService.getById(req, next, req.user.id);
-
-		}, function (req, res) {
-			ResponseService.success(res, {
-				result  : req.result
-			});
-		})
-
 		// Update one user
 		.put(function (req, res, next) {
 
