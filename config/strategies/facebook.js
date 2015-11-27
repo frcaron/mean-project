@@ -1,6 +1,7 @@
 "use strict";
 
 // Inject
+var Url              = require('url');
 var FacebookStrategy = require('passport-facebook').Strategy;
 var Exception        = require(global.__server  + '/ExceptionManager');
 var BudgetService    = require(global.__service + '/share/BudgetService');
@@ -17,7 +18,7 @@ module.exports = function(passport) {
 	passport.use(new FacebookStrategy({
 		clientID     : AuthConfig.facebookAuth.clientID,
 		clientSecret : AuthConfig.facebookAuth.clientSecret,
-		callbackURL  : ServerConfig.domain + AuthConfig.facebookAuth.callbackURL,
+		callbackURL  : Url.resolve(ServerConfig.domain, AuthConfig.facebookAuth.callbackURL),
 		passReqToCallback : true
 
 	}, function(req, token, refreshToken, profile, done) {
