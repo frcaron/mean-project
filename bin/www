@@ -4,9 +4,10 @@
 var app          = require('../app');
 var ServerConfig = require(global.__config + '/server');
 
-app.set('hostname', ServerConfig.hostname);
 app.set('port', ServerConfig.port);
 
-var server = app.listen(app.get('port'), app.get('hostname'), function () {
+var server = app.listen(app.get('port'), function () {
 	console.log('Express server listening on port ' + server.address().port);
+	console.log(server.adress());
+	console.log(JSON.stringify(server.adress());
 });
