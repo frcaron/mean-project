@@ -4,6 +4,7 @@
 var BPromise   = require('bluebird');
 var Mongoose   = BPromise.promisifyAll(require('mongoose'));
 var Bcrypt     = require('bcrypt-nodejs');
+var Validator  = require('validator');
 var DatePlugin = require(global.__plugin + '/DatePlugin');
 
 var Schema     = Mongoose.Schema;
@@ -23,7 +24,15 @@ var UserSchema = new Schema({
 		default  : false
 	},
 	local       : {
-		email    : String,
+		email    : {
+			type     : String,
+			validate : {
+				validator : function(v) {
+					return Validator.isEmail(v);
+				},
+			message  : '{VALUE} is not a valid email'
+		    }
+		},
 		password : {
 			type    : String,
 			select  : false
@@ -34,9 +43,17 @@ var UserSchema = new Schema({
 		}
     },
 	facebook    : {
-		id       : String,
-		token    : String,
-		email    : String
+		id    : String,
+		token : String,
+		email : {
+			type     : String,
+			validate : {
+				validator : function(v) {
+					return Validator.isEmail(v);
+				},
+			message  : '{VALUE} is not a valid email'
+		    }
+		}
     },
 });
 

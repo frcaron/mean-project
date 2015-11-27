@@ -246,7 +246,6 @@ function getOne (name_query, filters) {
 }
 
 module.exports = {
-	name : 'TransactionDao',
 	create (input) {
 		return create(input);
 	},

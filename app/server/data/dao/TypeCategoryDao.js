@@ -162,7 +162,6 @@ function getOne (name_query, filters) {
 }
 
 module.exports = {
-	name : 'TypeCategoryDao',
 	create (input) {
 		return create(input);
 	},

@@ -2,10 +2,11 @@
 # MEAN-PROJECT
 
 Variable env :
-	- NODE_ENV         (no default)
 	- BDD_URL          (default : 'mongodb://localhost/mean-project')
 	- SECRET           (default : 'secretmeanproject')
+	- LEVEL_LOG_MORGAN (default : 'dev')
 	- LEVEL_LOG        (default : 'debug')
+	- PROTOCOLE        (default : 'http')
 	- HOSTNAME         (default : 'localhost')
 	- PORT             (default : 3000)
 	- FB_CLIENT_ID     (no default)

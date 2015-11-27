@@ -1,60 +1,89 @@
 "use strict";
 
 // Inject
-var Logger          = require(global.__server  + '/LoggerManager');
-var ResponseService = require(global.__service + '/share/ResponseService');
+var Exception = require(global.__server  + '/ExceptionManager');
+var Logger    = require(global.__server  + '/LoggerManager');
+var UserDao   = require(global.__dao     + '/UserDao');
 
 module.exports = {
 
-	// Signup user
-	auth (req, res, next, passport, startegy) {
+	// Authenticate user
+	authenticate (req, res, next, passport, startegy) {
 
-		Logger.debug('[SER - START] SessionService#auth');
+		Logger.debug('[SER - START] SessionService#authenticate');
 		Logger.debug('              -- startegy : ' + startegy);
 
 		passport.authenticate(startegy, { failureFlash: true }, function (err, user, info) {
 			if(err) {
-				Logger.debug('[SER - CATCH] SessionService#auth');
-				Logger.error('              -- message : ' + err.message);
-
-				return ResponseService.fail(res);
+				return next(err);
 			}
 
 			if(!user) {
 				if(info) {
-					return ResponseService.fail(res, {
-						reason : info.message
-					});
+					return next(new Exception.MetierEx('Param missing', info.message));
 				}
-
-				return ResponseService.fail(res, {
-					reason : req.flash('authMessage')[0]
-				});
+				return next(new Exception.MetierEx('Param missing', req.flash('authMessage')[0]));
 			}
 
 			req.result = user;
-
 			next();
 
 		})(req, res);
 
-		Logger.debug('[SER -   END] SessionService#auth');
+		Logger.debug('[SER -   END] SessionService#authenticate');
 	},
 
-	login (req, res) {
+	// Authorize user
+	authorize (req, res, next, passport, startegy) {
+
+		Logger.debug('[SER - START] SessionService#authorize');
+		Logger.debug('              -- startegy : ' + startegy);
+
+		passport.authorize(startegy, { failureFlash: true }, function (err, user, info) {
+			if(err) {
+				return next(err);
+			}
+
+			if(!user) {
+				if(info) {
+					return next(new Exception.MetierEx('Param missing', info.message));
+				}
+				return next(new Exception.MetierEx(req.flash('authMessage')[0]));
+			}
+
+			req.result = user;
+			next();
+
+		})(req, res);
+
+		Logger.debug('[SER -   END] SessionService#authorize');
+
+	},
+
+	// Login user
+	login (req, res, next) {
 
 		Logger.debug('[SER - START] SessionService#login');
 
 		req.login(req.result, function(err) {
 			if(err){
-				return ResponseService.fail(res);
+				return next(err);
 			}
-
-			ResponseService.success(res, {
-				result : req.result
-			});
+			next();
 		});
 
 		Logger.debug('[SER -   END] SessionService#login');
+	},
+
+	deleteToken (req, next, provider) {
+
+		Logger.debug('[SER - START] SessionService#unlink');
+		Logger.debug('              -- provider : ' + provider);
+
+		// TODO delete token user
+		next();
+
+		Logger.debug('[SER -   END] SessionService#unlink');
+
 	}
 };

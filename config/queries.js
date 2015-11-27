@@ -1,4 +1,5 @@
 // Authorise [query - params] by fonction and collection
+// Left param to match, right param model
 module.exports = {
 
     // ===============================================================
@@ -140,11 +141,11 @@ module.exports = {
 				'user_id'    : '_user'
 			},
 
-			// By id, plan and user
-			'byIdPlanU' : {
-				'program_id' : '_id',
-				'plan_id'    : '_plan',
-				'user_id'    : '_user'
+			// By category, plan and user
+			'byCategoryPlanU' : {
+				'category_id' : '_category',
+				'plan_id'     : '_plan',
+				'user_id'     : '_user'
 			}
 		}
 	},
@@ -174,13 +175,14 @@ module.exports = {
 		'getAll' : {
 
 			// Not in categories given by type and user
-			'ninCategorybiesTypeU' : {
+			'ninCategoryiesByTypeU' : {
 				'categories_id'    : {
 					field : '_id',
 					op    : '$nin'
 				},
 				'type_category_id' : '_type',
 				'active'           : {
+					field   : 'active',
 					default : true
 				},
 				'neutre'           : {
@@ -194,6 +196,7 @@ module.exports = {
 			'byTypeU' : {
 				'type_category_id' : '_type',
 				'active'           : {
+					field   : 'active',
 					default : true
 				},
 				'user_id'          : '_user'
@@ -202,6 +205,7 @@ module.exports = {
 			// By neutre and user
 			'byNeutreU' : {
 				'active'  : {
+					field   : 'active',
 					default : true
 				},
 				'neutre'  : 'neutre',
@@ -211,6 +215,7 @@ module.exports = {
 			// By user
 			'byU' : {
 				'active'  : {
+					field   : 'active',
 					default : true
 				},
 				'user_id' : '_user'
@@ -222,40 +227,40 @@ module.exports = {
 
 			// By id and user
 			'byIdU'        : {
-				'categorie_id' : '_id',
-				'user_id'      : '_user'
+				'category_id' : '_id',
+				'user_id'     : '_user'
 			},
 
 			// By neutre, type category and user
 			'byNeutreTypeU' : {
 				'active'            : {
+					field   : 'active',
 					default : true
 				},
 				'neutre'            : {
-					field   : 'neutre',
-					default : true
+					field   : 'neutre'
 				},
-				'type_categorie_id' : '_type',
-				'user_id'           : '_user'
+				'type_category_id' : '_type',
+				'user_id'          : '_user'
 			},
 
 			// By neutre and user
 			'byNeutreU' : {
 				'active'  : {
+					field   : 'active',
 					default : true
 				},
 				'neutre'  : {
-					field   : 'neutre',
-					default : true
+					field   : 'neutre'
 				},
 				'user_id' : '_user'
 			},
 
 			// By name, type category and user
 			'byNameTypeU' : {
-				'name'              : 'name',
-				'type_categorie_id' : '_type',
-				'user_id'           : '_user'
+				'name'             : 'name',
+				'type_category_id' : '_type',
+				'user_id'          : '_user'
 			}
 		}
 	},
@@ -270,7 +275,7 @@ module.exports = {
 		'update' : {
 
 			// By program and user
-			'ByProgramU' : {
+			'byProgramU' : {
 				'program_id' : '_program',
 				'user_id'    : '_user'
 			}
@@ -288,6 +293,11 @@ module.exports = {
 			// By plan and user
 			'byPlanU' : {
 				'plan_id' : '_plan',
+				'user_id' : '_user'
+			},
+
+			// By user
+			'byU' : {
 				'user_id' : '_user'
 			}
 		},

@@ -26,6 +26,7 @@ var Passport       = require('passport');
 var Session        = require('express-session');
 var Mongoose       = BPromise.promisifyAll(require('mongoose'));
 var DatabaseConfig = require(Path.join(global.__config, 'database'));
+var LoggerConfig   = require(Path.join(global.__config, 'logger'));
 var SecretConfig   = require(Path.join(global.__config, 'secret'));
 
 // DataBase ==================================================
@@ -37,12 +38,12 @@ Mongoose.connect(DatabaseConfig.url);
 var app = Express();
 
 // app.use(Favicon(Path.join(__dirname,'client/assets/img/favicon.ico')));
-app.use(Morgan('dev')); // Logger middleware
+app.use(Morgan(LoggerConfig.morganLevel)); // Logger middleware
 app.use(BodyParser.json());
 app.use(BodyParser.urlencoded({ extended : true }));
 app.use(BodyParser.json({ type : 'application/vnd.api+json' }));
 app.use(CookieParser());
-app.use(Express.static(Path.join(__dirname, 'app/client/views')));
+// app.use(Express.static(Path.join(__dirname, 'app/client/views')));
 
 // Auth Strategies ===========================================
 
@@ -59,6 +60,6 @@ require(Path.join(global.__config, 'passport'))(Passport);
 
 // Routers ===================================================
 
-require(global.__route + '/routes.js')(app, Passport);
+require(Path.join(global.__route, 'routes.js'))(app, Passport);
 
 module.exports = app;

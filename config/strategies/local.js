@@ -30,7 +30,8 @@ module.exports = function(passport) {
 				            surname        : req.body.surname,
 				            displayname    : req.body.firstname + ' ' +  req.body.surname,
 				            local_email    : email,
-				            local_password : password
+				            local_password : password,
+				            local_active   : true
 				        })
 						.then(function (user) {
 							return done(null, user);
@@ -55,6 +56,9 @@ module.exports = function(passport) {
 
 		UserDao.validatePassword(email, password)
 			.then(function (user) {
+				if(user.local && !user.local.active) {
+					return done(null, false, req.flash('authMessage', 'Login local not activate'));
+				}
 				return done(null, user);
 			})
 			.catch(Exception.MetierEx, function (err) {

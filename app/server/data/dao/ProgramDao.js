@@ -139,9 +139,6 @@ function remove (name_query, filters) {
 	}
 
 	let promiseEnd = promise
-		.then(function(test) {
-			console.log(test.result);
-		})
 		.catch(function (err) {
 			Logger.debug('[DAO - CATCH] ProgramDao#remove');
 			Logger.error('              -- message : ' + err.message);
@@ -230,7 +227,6 @@ function getOne (name_query, filters) {
 }
 
 module.exports = {
-	name : 'ProgramDao',
 	create (input) {
 		return create(input);
 	},

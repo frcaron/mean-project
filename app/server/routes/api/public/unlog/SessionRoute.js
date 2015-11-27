@@ -1,8 +1,10 @@
 "use strict";
 
 //Inject
+var Validator       = require('validator');
+var Exception       = require(global.__server  + '/ExceptionManager');
 var Logger          = require(global.__server  + '/LoggerManager');
-var ResponseService = require(global.__service + '/share/ResponseService');
+var ResponseService = require(global.__service + '/ResponseService');
 var SessionService  = require(global.__service + '/SessionService');
 
 // Properties
@@ -36,18 +38,20 @@ module.exports = function (router, passport) {
 				msg.push('password');
 			}
 			if(msg.length) {
-				return ResponseService.fail(res, {
-					reason : 'Param missing',
-					detail : msg
-				});
+				return next(new Exception.MetierEx('Param missing', msg));
 			}
 
-			SessionService.auth(req, res, next, passport, 'local-signup');
+			if(!Validator.isEmail(req.body.email)) {
+				return next(new Exception.MetierEx('Param invalid', [ 'email' ]));
+			}
+
+			next();
+
+		}, function (req, res, next) {
+			SessionService.authenticate(req, res, next, passport, 'local-signup');
 
 		}, function (req, res) {
-			ResponseService.success(res, {
-				result : req.user
-			});
+			ResponseService.success(res);
 		});
 
 	router.route(api_prefix + '/login')
@@ -68,17 +72,24 @@ module.exports = function (router, passport) {
 				msg.push('password');
 			}
 			if(msg.length) {
-				return ResponseService.fail(res, {
-					reason : 'Param missing',
-					detail : msg
-				});
+				return next(new Exception.MetierEx('Param missing', msg));
 			}
 
-			SessionService.auth(req, res, next, passport, 'local-login');
+			if(!Validator.isEmail(req.body.email)) {
+				return next(new Exception.MetierEx('Param invalid', [ 'email' ]));
+			}
+			next();
+
+		}, function (req, res, next) {
+			SessionService.authenticate(req, res, next, passport, 'local-login');
+
+		}, function (req, res, next) {
+			SessionService.login(req, res, next);
 
 		}, function (req, res) {
-			console.log('TEST' + req.user);
-			SessionService.login(req, res);
+			ResponseService.success(res, {
+				result : req.user
+			});
 		});
 
 	router.route(api_prefix + '/facebook')
@@ -90,10 +101,15 @@ module.exports = function (router, passport) {
 
 		// Login facebook callback
 		.get(function (req, res, next) {
-			SessionService.auth(req, res, next, passport, 'facebook');
+			SessionService.authenticate(req, res, next, passport, 'facebook');
+
+		}, function (req, res, next) {
+			SessionService.login(req, res, next);
 
 		}, function (req, res) {
-			SessionService.login(req, res);
+			ResponseService.success(res, {
+				result : req.user
+			});
 		});
 
 	router.route(api_prefix + '/logout')

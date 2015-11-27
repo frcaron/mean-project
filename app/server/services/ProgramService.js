@@ -1,19 +1,18 @@
 "use strict";
 
 // Inject
-var BPromise        = require('bluebird');
-var Exception       = require(global.__server + '/ExceptionManager');
-var Logger          = require(global.__server + '/LoggerManager');
-var ResponseService = require(global.__service + '/share/ResponseService');
-var BudgetService   = require(global.__service + '/share/BudgetService');
-var ProgramDao      = require(global.__dao + '/ProgramDao');
-var CategoryDao     = require(global.__dao + '/CategoryDao');
-var TransactionDao  = require(global.__dao + '/TransactionDao');
+var BPromise       = require('bluebird');
+var Exception      = require(global.__server + '/ExceptionManager');
+var Logger         = require(global.__server + '/LoggerManager');
+var BudgetService  = require(global.__service + '/share/BudgetService');
+var ProgramDao     = require(global.__dao + '/ProgramDao');
+var CategoryDao    = require(global.__dao + '/CategoryDao');
+var TransactionDao = require(global.__dao + '/TransactionDao');
 
 module.exports = {
 
 	// Create one program
-	create (req, res, user_id) {
+	create (req, next, user_id) {
 
 		Logger.debug('[SER - START] ProgramService#create');
 		Logger.debug('              -- user_id : ' + user_id);
@@ -25,28 +24,18 @@ module.exports = {
 				user_id     : user_id
 			})
 			.then(function (program) {
-				ResponseService.success(res, {
-					result  : program
-				});
-			})
-			.catch(Exception.MetierEx, function(err) {
-				ResponseService.fail(res, {
-					reason : err.message,
-					detail : err.detail
-				});
+				req.result = program;
+				next();
 			})
 			.catch(function (err) {
-				Logger.debug('[SER - CATCH] ProgramService#create');
-				Logger.error('              -- message : ' + err.message);
-
-				ResponseService.fail(res);
+				next(err);
 			});
 
 		Logger.debug('[SER -   END] ProgramService#create');
 	},
 
 	// Update one program
-	update (req, res, user_id) {
+	update (req, next, user_id) {
 
 		Logger.debug('[SER - START] ProgramService#update');
 		Logger.debug('              -- user_id : ' + user_id);
@@ -62,12 +51,12 @@ module.exports = {
 
 		let promise;
 		if(category_id) {
-			promise = CategoryDao.getOne({
+			promise = CategoryDao.getOne('byIdU', {
 					category_id : category_id,
 					user_id     : user_id
 				})
 				.then(function (categoryNew) {
-					return ProgramDao.getOne({
+					return ProgramDao.getOne('byIdU', {
 							program_id : req.params.program_id,
 							user_id    : user_id
 						})
@@ -76,7 +65,7 @@ module.exports = {
 								return BPromise.resolve(categoryNew);
 
 							} else {
-								return CategoryDao.getOne({
+								return CategoryDao.getOne('byIdU', {
 									category_id : program._category,
 									user_id     : user_id
 								});
@@ -96,50 +85,40 @@ module.exports = {
 
 		promise
 			.then(function (program) {
-				ResponseService.success(res, {
-					result  : program
-				});
-			})
-			.catch(Exception.MetierEx, function(err) {
-				ResponseService.fail(res, {
-					reason : err.message,
-					detail : err.detail
-				});
+				req.result = program;
+				next();
 			})
 			.catch(function (err) {
-				Logger.debug('[SER - CATCH] ProgramService#update');
-				Logger.error('              -- message : ' + err.message);
-
-				ResponseService.fail(res);
+				next(err);
 			});
 
 		Logger.debug('[SER -   END] ProgramService#update');
 	},
 
 	// Remove one program
-	remove (req, res, user_id) {
+	remove (req, next, user_id) {
 
 		Logger.debug('[SER - START] ProgramService#remove');
 		Logger.debug('              -- user_id : ' + user_id);
 
-		ProgramDao.getOne({
+		ProgramDao.getOne('byIdU', {
 				program_id : req.params.program_id,
 				user_id    : user_id
 			})
 			.then(function (program) {
-				return CategoryDao.getOne({
+				return CategoryDao.getOne('byIdU', {
 						category_id : program._category,
 						user_id     : user_id
 					})
 					.then(function (category) {
-						return CategoryDao.getOne({
+						return CategoryDao.getOne('byNeutreTypeU', {
 							neutre           : true,
 							type_category_id : category._type,
 							user_id          : user_id
 						});
 					})
 					.then(function (categoryNeutre) {
-						return ProgramDao.getOne({
+						return ProgramDao.getOne('byCategoryPlanU', {
 							plan_id     : program._plan,
 							category_id : categoryNeutre._id,
 							user_id     : user_id
@@ -148,46 +127,37 @@ module.exports = {
 					.then(function (programNeutre) {
 						return TransactionDao.update({
 							program_id : programNeutre._id
-						}, {
+						}, 'byProgramU', {
 							program_id : program._id,
 							user_id    : user_id
 						});
 					});
 			})
 			.then(function () {
-				return ProgramDao.remove({
+				return ProgramDao.remove('byIdU', {
 					program_id : req.params.program_id,
 					user_id    : user_id
 				});
 			})
 			.then(function () {
-				ResponseService.success(res);
-			})
-			.catch(Exception.MetierEx, function(err) {
-				ResponseService.fail(res, {
-					reason : err.message,
-					detail : err.detail
-				});
+				next();
 			})
 			.catch(function (err) {
-				Logger.debug('[SER - CATCH] ProgramService#update');
-				Logger.error('              -- message : ' + err.message);
-
-				ResponseService.fail(res);
+				next(err);
 			});
 
 		Logger.debug('[SER -   END] ProgramService#remove');
 	},
 
 	// Get programs by plan
-	allByPlanTypeU (req, res, user_id) {
+	allByPlanTypeU (req, next, user_id) {
 
 		Logger.debug('[SER - START] ProgramService#allByPlanU');
 		Logger.debug('              -- user_id : ' + user_id);
 
 		let type_category_id = req.body.type_category_id || req.query.type_category_id;
 
-		CategoryDao.getAll({
+		CategoryDao.getAll('byTypeU', {
 				type_category_id : type_category_id,
 				user_id          : user_id
 			})
@@ -204,7 +174,7 @@ module.exports = {
 
 				return BPromise.all(categories)
 					.then(function () {
-						return ProgramDao.getAll({
+						return ProgramDao.getAll('inCategoriesbyPlanU', {
 							categories_id : categories_id,
 							plan_id       : req.params.plan_id,
 							user_id       : user_id
@@ -212,52 +182,32 @@ module.exports = {
 					});
 			})
 			.then(function (programs) {
-				ResponseService.success(res, {
-					result  : programs
-				});
-			})
-			.catch(Exception.MetierEx, function(err) {
-				ResponseService.fail(res, {
-					reason : err.message,
-					detail : err.detail
-				});
+				req.result = programs;
+				next();
 			})
 			.catch(function (err) {
-				Logger.debug('[SER - CATCH] ProgramService#allByPlanU');
-				Logger.error('              -- message : ' + err.message);
-
-				ResponseService.fail(res);
+				next(err);
 			});
 
 		Logger.debug('[SER -   END] ProgramService#allByPlanU');
 	},
 
 	// Get one program by id
-	getByIdU (req, res, user_id) {
+	getByIdU (req, next, user_id) {
 
 		Logger.debug('[SER - START] ProgramService#getByIdU');
 		Logger.debug('              -- user_id : ' + user_id);
 
-		ProgramDao.getOne({
+		ProgramDao.getOne('byIdU', {
 				program_id : req.params.program_id,
 				user_id    : user_id
 			})
 			.then(function (program) {
-				ResponseService.success(res, {
-					result  : program
-				});
-			})
-			.catch(Exception.MetierEx, function(err) {
-				ResponseService.fail(res, {
-					reason : err.message,
-					detail : err.detail
-				});
+				req.result = program;
+				next();
 			})
 			.catch(function (err) {
-				Logger.debug('[SER - CATCH] ProgramService#getByIdU');
-				Logger.error('              -- message : ' + err.message);
-
-				ResponseService.fail(res);
+				next(err);
 			});
 
 		Logger.debug('[SER -   END] ProgramService#getByIdU');

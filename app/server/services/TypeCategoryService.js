@@ -1,15 +1,13 @@
 "use strict";
 
 // Inject
-var Exception       = require(global.__server  + '/ExceptionManager');
 var Logger          = require(global.__server  + '/LoggerManager');
-var ResponseService = require(global.__service + '/share/ResponseService');
 var TypeCategoryDao = require(global.__dao     + '/TypeCategoryDao');
 
 module.exports = {
 
 	// Create one type category
-	create (req, res) {
+	create (req, next) {
 
 		Logger.debug('[SER - START] TypeCategoryService#create');
 
@@ -17,28 +15,18 @@ module.exports = {
 				name : req.body.name
 			})
 			.then(function (typeCategory){
-				ResponseService.success(res, {
-					result  : typeCategory
-				});
-			})
-			.catch(Exception.MetierEx, function(err) {
-				ResponseService.fail(res, {
-					reason : err.message,
-					detail : err.detail
-				});
+				req.result = typeCategory;
+				next();
 			})
 			.catch(function (err){
-				Logger.debug('[SER - CATCH] TypeCategoryService#create');
-				Logger.error('              -- message : ' + err.message);
-
-				ResponseService.fail(res);
+				next(err);
 			});
 
 		Logger.debug('[SER -   END] TypeCategoryService#create');
 	},
 
 	// Update one type category
-	update (req, res) {
+	update (req, next) {
 
 		Logger.debug('[SER - START] TypeCategoryService#update');
 
@@ -47,69 +35,45 @@ module.exports = {
 				name             : req.body.name
 			})
 			.then(function (typeCategory) {
-				ResponseService.success(res, {
-					result 	: typeCategory
-				});
-			})
-			.catch(Exception.MetierEx, function(err) {
-				ResponseService.fail(res, {
-					reason : err.message,
-					detail : err.detail
-				});
+				req.result = typeCategory;
+				next();
 			})
 			.catch(function (err) {
-				Logger.debug('[SER - CATCH] TypeCategoryService#update');
-				Logger.error('              -- message : ' + err.message);
-
-				ResponseService.fail(res);
+				next(err);
 			});
 
 		Logger.debug('[SER -   END] TypeCategoryService#update');
 	},
 
 	// Get all type category
-	all (req, res) {
+	all (req, next) {
 
 		Logger.debug('[SER - START] TypeCategoryService#all');
 
 		TypeCategoryDao.getAll()
 			.then(function (typeCategories) {
-				ResponseService.success(res, {
-					result  : typeCategories
-				});
+				req.result = typeCategories;
+				next();
 			})
 			.catch(function (err) {
-				Logger.debug('[SER - CATCH] TypeCategoryService#all');
-				Logger.error('              -- message : ' + err.message);
-
-				ResponseService.fail(res);
+				next(err);
 			});
 
 		Logger.debug('[SER -   END] TypeCategoryService#all');
 	},
 
 	// Get one type category by id
-	getById (req, res) {
+	getById (req, next) {
 
 		Logger.debug('[SER - START] TypeCategoryService#getById');
 
-		TypeCategoryDao.getOne({ type_category_id : req.params.type_category_id })
+		TypeCategoryDao.getOne('byId', { type_category_id : req.params.type_category_id })
 			.then(function (typeCategory) {
-				ResponseService.success(res, {
-					result  : typeCategory
-				});
-			})
-			.catch(Exception.MetierEx, function(err) {
-				ResponseService.fail(res, {
-					reason : err.message,
-					detail : err.detail
-				});
+				req.result = typeCategory;
+				next();
 			})
 			.catch(function (err) {
-				Logger.debug('[SER - CATCH] TypeCategoryService#getById');
-				Logger.error('              -- message : ' + err.message);
-
-				ResponseService.fail(res);
+				next(err);
 			});
 
 		Logger.debug('[SER -   END] TypeCategoryService#getById');

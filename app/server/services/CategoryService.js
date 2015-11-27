@@ -4,7 +4,6 @@
 var BPromise        = require('bluebird');
 var Exception       = require(global.__server  + '/ExceptionManager');
 var Logger          = require(global.__server  + '/LoggerManager');
-var ResponseService = require(global.__service + '/share/ResponseService');
 var ProgramDao      = require(global.__dao     + '/ProgramDao');
 var CategoryDao     = require(global.__dao     + '/CategoryDao');
 var TypeCategoryDao = require(global.__dao     + '/TypeCategoryDao');
@@ -12,7 +11,7 @@ var TypeCategoryDao = require(global.__dao     + '/TypeCategoryDao');
 module.exports = {
 
 	// Create one category
-	create (req, res, user_id) {
+	create (req, next, user_id) {
 
 		Logger.debug('[SER - START] CategoryService#create');
 		Logger.debug('              -- user_id : ' + user_id);
@@ -46,28 +45,18 @@ module.exports = {
 				});
 			})
 			.then(function (category) {
-				ResponseService.success(res, {
-					result  : category
-				});
-			})
-			.catch(Exception.MetierEx, function(err) {
-				ResponseService.fail(res, {
-					reason : err.message,
-					detail : err.detail
-				});
+				req.result = category;
+				next();
 			})
 			.catch(function (err) {
-				Logger.debug('[SER - CATCH] CategoryService#create');
-				Logger.error('              -- message : ' + err.message);
-
-				ResponseService.fail(res);
+				next(err);
 			});
 
 		Logger.debug('[SER -   END] CategoryService#create');
 	},
 
 	// Update one category
-	update (req, res, user_id) {
+	update (req, next, user_id) {
 
 		Logger.debug('[SER - START] CategoryService#update');
 		Logger.debug('              -- user_id : ' + user_id);
@@ -78,30 +67,18 @@ module.exports = {
 				user_id     : user_id
 			})
 			.then(function (category) {
-				ResponseService.success(res, {
-					result  : category
-				});
-			})
-			.catch(Exception.MetierEx, function(err) {
-				ResponseService.fail(res, {
-					reason : err.message,
-					detail : err.detail
-				});
+				req.result = category;
+				next();
 			})
 			.catch(function (err) {
-				Logger.debug('[SER - CATCH] CategoryService#update');
-				Logger.error('              -- message : ' + err.message);
-
-				ResponseService.fail(res, {
-					message : 'Update category'
-				});
+				next(err);
 			});
 
 		Logger.debug('[SER -   END] CategoryService#update');
 	},
 
 	// Desactivate one category
-	desactivate (req, res, user_id) {
+	desactivate (req, next, user_id) {
 
 		Logger.debug('[SER - START] CategoryService#desactivate');
 		Logger.debug('              -- user_id : ' + user_id);
@@ -112,25 +89,16 @@ module.exports = {
 				user_id     : user_id
 			})
 			.then(function () {
-				ResponseService.success(res);
-			})
-			.catch(Exception.MetierEx, function(err) {
-				ResponseService.fail(res, {
-					reason : err.message,
-					detail : err.detail
-				});
+				next();
 			})
 			.catch(function (err) {
-				Logger.debug('[SER - CATCH] CategoryService#desactivate');
-				Logger.error('              -- message : ' + err.message);
-
-				ResponseService.fail(res);
+				next(err);
 			});
 
 		Logger.debug('[SER -   END] CategoryService#desactivate');
 	},
 
-	allByTypeCatUNoUse (req, res, user_id) {
+	allByTypeCatUNoUse (req, next, user_id) {
 
 		Logger.debug('[SER - START] CategoryService#allByTypeCatUNoUse');
 		Logger.debug('              -- user_id : ' + user_id);
@@ -150,7 +118,7 @@ module.exports = {
 
 				return BPromise.all(categories_id)
 					.then(function () {
-						return CategoryDao.getAll('ninCategorybiesTypeU', {
+						return CategoryDao.getAll('ninCategoryiesByTypeU', {
 							categories_id    : categories_id,
 							type_category_id : type_category_id,
 							neutre           : false,
@@ -159,28 +127,18 @@ module.exports = {
 					});
 			})
 			. then(function (categories) {
-				ResponseService.success(res, {
-					result  : categories
-				});
-			})
-			.catch(Exception.MetierEx, function(err) {
-				ResponseService.fail(res, {
-					reason : err.message,
-					detail : err.detail
-				});
+				req.result = categories;
+				next();
 			})
 			.catch(function (err) {
-				Logger.debug('[SER - CATCH] CategoryService#allByTypeCatUNoUse');
-				Logger.error('              -- message : ' + err.message);
-
-				ResponseService.fail(res);
+				next(err);
 			});
 
 		Logger.debug('[SER -   END] CategoryService#allByTypeCatUNoUse');
 	},
 
 	// Get active categories by type category
-	allByTypeU (req, res, user_id) {
+	allByTypeU (req, next, user_id) {
 
 		Logger.debug('[SER - START] CategoryService#allByTypeU');
 		Logger.debug('              -- user_id : ' + user_id);
@@ -190,28 +148,18 @@ module.exports = {
 				user_id          : user_id
 			})
 			.then(function (categories) {
-				ResponseService.success(res, {
-					result  : categories
-				});
-			})
-			.catch(Exception.MetierEx, function(err) {
-				ResponseService.fail(res, {
-					reason : err.message,
-					detail : err.detail
-				});
+				req.result = categories;
+				next();
 			})
 			.catch(function (err) {
-				Logger.debug('[SER - CATCH] CategoryService#allByTypeU');
-				Logger.error('              -- message : ' + err.message);
-
-				ResponseService.fail(res);
+				next(err);
 			});
 
 		Logger.debug('[SER -   END] CategoryService#allByTypeU');
 	},
 
 	// Get one category by id
-	getByIdU (req, res, user_id) {
+	getByIdU (req, next, user_id) {
 
 		Logger.debug('[SER - START] CategoryService#getByIdU');
 		Logger.debug('              -- user_id : ' + user_id);
@@ -221,21 +169,11 @@ module.exports = {
 				user_id     : user_id
 			})
 			.then(function (category) {
-				ResponseService.success(res, {
-					result  : category
-				});
-			})
-			.catch(Exception.MetierEx, function(err) {
-				ResponseService.fail(res, {
-					reason  : err.message,
-					detail : err.detail
-				});
+				req.result = category;
+				next();
 			})
 			.catch(function (err) {
-				Logger.debug('[SER - CATCH] CategoryService#getByIdU');
-				Logger.error('              -- message : ' + err.message);
-
-				ResponseService.fail(res);
+				next(err);
 			});
 
 		Logger.debug('[SER -   END] CategoryService#getByIdU');

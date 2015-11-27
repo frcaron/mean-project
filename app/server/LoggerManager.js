@@ -3,7 +3,7 @@
 // Inject
 var Winston      = require('winston');
 var Moment       = require('moment');
-var loggerConfig = require(global.__config + '/logger');
+var LoggerConfig = require(global.__config + '/logger');
 
 var logger = new Winston.Logger({
 		levels     : {
@@ -12,7 +12,7 @@ var logger = new Winston.Logger({
 			info  : 2,
 			debug : 3
 		},
-		level      : loggerConfig.level,
+		level      : LoggerConfig.level,
 		transports : [
 			new (Winston.transports.Console)({
 				name      : 'console',

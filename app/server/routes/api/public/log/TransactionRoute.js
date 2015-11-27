@@ -1,9 +1,10 @@
 "use strict";
 
 //Inject
+var Exception          = require(global.__server  + '/ExceptionManager');
 var Moment             = require('moment');
 var Logger             = require(global.__server  + '/LoggerManager');
-var ResponseService    = require(global.__service + '/share/ResponseService');
+var ResponseService    = require(global.__service + '/ResponseService');
 var TransactionService = require(global.__service + '/TransactionService');
 
 // Properties
@@ -14,7 +15,7 @@ module.exports = function (router) {
 	router.route(api_prefix)
 
 		// Create one transaction
-		.post(function (req, res) {
+		.post(function (req, res, next) {
 
 			let category_id = req.body.category_id ||req.query.category_id;
 
@@ -35,33 +36,41 @@ module.exports = function (router) {
 				msg.push('category_id');
 			}
 			if(msg.length) {
-				return ResponseService.fail(res, {
-					reason : 'Param missing',
-					detail : msg
-				});
+				return next(new Exception.MetierEx('Param missing', msg));
 			}
 
 			var moment = Moment(req.body.date, "DD/MM/YYYY", true);
-			if(moment.isValid()) {
-				req.body.date = moment;
-			} else {
-				return ResponseService.fail(res, {
-					reason  : 'Date is not valid'
-				});
+			if(!moment.isValid()) {
+				return next(new Exception.MetierEx('Param invalid', [ 'date' ]));
 			}
+			req.body.date = moment;
 
-			TransactionService.create(req, res, req.user.id);
+			next();
+
+		}, function (req, res, next) {
+
+			TransactionService.create(req, next, req.user.id);
+
+		}, function (req, res) {
+			ResponseService.success(res, {
+				result  : req.result
+			});
 		});
 
 	router.route(api_prefix + '/:transaction_id')
 
 		// Get one transaction
-		.get(function (req, res) {
-			TransactionService.getByIdU(req, res, req.user.id);
+		.get(function (req, res, next) {
+			TransactionService.getByIdU(req, next, req.user.id);
+
+		}, function (req, res) {
+			ResponseService.success(res, {
+				result  : req.result
+			});
 		})
 
 		// Update one transaction
-		.put(function (req, res) {
+		.put(function (req, res, next) {
 
 			let category_id = req.body.category_id ||req.query.category_id;
 
@@ -78,26 +87,32 @@ module.exports = function (router) {
 				msg.push('category_id');
 			}
 			if(msg.length) {
-				return ResponseService.fail(res, {
-					reason : 'Param missing',
-					detail : msg
-				});
+				return next(new Exception.MetierEx('Param missing', msg));
 			}
 
 			var moment = Moment(req.body.date, "DD/MM/YYYY", true);
-			if(moment.isValid()) {
-				req.body.date = moment;
-			} else {
-				return ResponseService.fail(res, {
-					reason  : 'Date is not valid'
-				});
+			if(!moment.isValid()) {
+				return next(new Exception.MetierEx('Param invalid', [ 'date' ]));
 			}
+			req.body.date = moment;
 
-			TransactionService.update(req, res, req.user.id);
+			next();
+
+		}, function (req, res, next) {
+
+			TransactionService.update(req, next, req.user.id);
+
+		}, function (req, res) {
+			ResponseService.success(res, {
+				result  : req.result
+			});
 		})
 
 		// Delete one transaction
-		.delete(function (req, res) {
-			TransactionService.remove(req, res, req.user.id);
+		.delete(function (req, res, next) {
+			TransactionService.remove(req, next, req.user.id);
+
+		}, function (req, res) {
+			ResponseService.success(res);
 		});
 };

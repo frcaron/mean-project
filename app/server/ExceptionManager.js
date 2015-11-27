@@ -7,7 +7,7 @@ var MetierEx = function (message, detail) {
 	Error.captureStackTrace(this, this.constructor);
 	this.name    = 'MetierEx';
 	this.message = message || '';
-	this.detail  = detail || '';
+	this.detail  = detail || undefined;
 };
 var DuplicateEx = function (message) {
 	Error.captureStackTrace(this, this.constructor);
@@ -23,7 +23,7 @@ var ValidatorEx = function (message, detail) {
 	Error.captureStackTrace(this, this.constructor);
 	this.name    = 'ValidatorEx';
 	this.message = message || '';
-	this.detail  = detail || '';
+	this.detail  = detail || undefined;
 };
 var ParamEx = function (message) {
 	Error.captureStackTrace(this, this.constructor);

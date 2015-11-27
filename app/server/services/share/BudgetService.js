@@ -20,8 +20,10 @@ module.exports = {
 				firstname      : input.firstname,
 				surname        : input.surname,
 				displayname    : input.displayname,
+				verified       : input.verified,
 				local_email    : input.local_email,
 				local_password : input.local_password,
+				local_active   : input.local_active,
 				facebook_id    : input.facebook_id,
 				facebook_token : input.facebook_token,
 				facebook_email : input.facebook_email

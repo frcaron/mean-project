@@ -3,7 +3,8 @@
 // Inject
 var Express         = require('express');
 var Exception       = require(global.__server  + '/ExceptionManager');
-var ResponseService = require(global.__service + '/share/ResponseService');
+var Logger          = require(global.__server  + '/LoggerManager');
+var ResponseService = require(global.__service + '/ResponseService');
 
 var adminRouter     = Express.Router();
 var publicRouter    = Express.Router();
@@ -19,7 +20,7 @@ module.exports = function (app, passport) {
 	// API unknow response
 	app.use('/*', function(req, res) {
 		ResponseService.fail(res, {
-				reason : 'API unknow'
+				reason : 'API unknow - ' + req.method + ' ' + req.originalUrl
 			});
 	});
 
@@ -27,9 +28,13 @@ module.exports = function (app, passport) {
 	app.use(function(err, req, res, next) {
 		if(err instanceof Exception.MetierEx) {
 			ResponseService.fail(res, {
-				reason : err.message
+				reason : err.message,
+				detail : err.detail
 			});
 		} else {
+			Logger.debug('[MID - ERROR] route#ErrorHandling');
+			Logger.error('              -- message : ' + err.message);
+
 			ResponseService.fail(res);
 		}
 	});

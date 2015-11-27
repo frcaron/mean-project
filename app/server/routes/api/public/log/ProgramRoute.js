@@ -1,8 +1,9 @@
 "use strict";
 
 //Inject
+var Exception          = require(global.__server  + '/ExceptionManager');
 var Logger             = require(global.__server  + '/LoggerManager');
-var ResponseService    = require(global.__service + '/share/ResponseService');
+var ResponseService    = require(global.__service + '/ResponseService');
 var ProgramService     = require(global.__service + '/ProgramService');
 var TransactionService = require(global.__service + '/TransactionService');
 
@@ -14,14 +15,14 @@ module.exports = function (router) {
 	router.route(api_prefix)
 
 		// Create one program
-		.post(function (req, res) {
+		.post(function (req, res, next) {
 
 			let category_id = req.body.category_id || req.query.category_id;
 			let plan_id     = req.body.plan_id || req.query.plan_id;
 
 			Logger.debug('[WSP - VALID] ProgramRoute#post');
-			Logger.debug('              -- req.query.category_id 	: ' + category_id);
-			Logger.debug('              -- req.query.plan_id 		: ' + plan_id);
+			Logger.debug('              -- req.query.category_id : ' + category_id);
+			Logger.debug('              -- req.query.plan_id     : ' + plan_id);
 
 			// Validation
 			var msg = [];
@@ -32,36 +33,59 @@ module.exports = function (router) {
 				msg.push('category_id');
 			}
 			if(msg.length) {
-				return ResponseService.fail(res, {
-					reason : 'Param missing',
-					detail : msg
-				});
+				return next(new Exception.MetierEx('Param missing', msg));
 			}
+			next();
 
-			ProgramService.create(req, res, req.user.id);
+		}, function (req, res, next) {
+
+			ProgramService.create(req, next, req.user.id);
+
+		}, function (req, res) {
+			ResponseService.success(res, {
+				result  : req.result
+			});
 		});
 
 	router.route(api_prefix + '/:program_id')
 
 		// Get one program
-		.get(function (req, res) {
-			ProgramService.getByIdU(req, res, req.user.id);
+		.get(function (req, res, next) {
+			ProgramService.getByIdU(req, next, req.user.id);
+
+		}, function (req, res) {
+			ResponseService.success(res, {
+				result  : req.result
+			});
 		})
 
 		// Update one program
-		.put(function (req, res) {
-			ProgramService.update(req, res, req.user.id);
+		.put(function (req, res, next) {
+			ProgramService.update(req, next, req.user.id);
+
+		}, function (req, res) {
+			ResponseService.success(res, {
+				result  : req.result
+			});
 		})
 
 		// Delete one program
-		.delete(function (req, res) {
-			ProgramService.remove(req, res, req.user.id);
+		.delete(function (req, res, next) {
+			ProgramService.remove(req, next, req.user.id);
+
+		}, function (req, res) {
+			ResponseService.success(res);
 		});
 
 	router.route(api_prefix + '/:program_id/transactions')
 
 		// Get all transactions by program
-		.get(function (req, res) {
-			TransactionService.allByProgramU(req, res, req.user.id);
+		.get(function (req, res, next) {
+			TransactionService.allByProgramU(req, next, req.user.id);
+
+		}, function (req, res) {
+			ResponseService.success(res, {
+				result  : req.result
+			});
 		});
 };

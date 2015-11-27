@@ -224,7 +224,6 @@ function getOne (name_query, filters) {
 }
 
 module.exports = {
-	name : 'PlanDao',
 	create (input) {
 		return create(input);
 	},

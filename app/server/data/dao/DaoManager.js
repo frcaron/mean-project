@@ -21,36 +21,64 @@ module.exports = function (name_collection) {
 			Logger.debug('              -- name_query : ' + name_query);
 			Logger.debug('              -- filters    : ' + JSON.stringify(filters));
 
-			let output  = {};
+			let output = {};
 			try {
 				if(!name_fct || !name_query || !filters) {
-				 	throw new Exception.ParamEx('Bad query');
+				 	throw new Error('Bad query : element missing');
 				}
 
 				let queries = collection[name_fct];
 				if(!queries) {
-					throw new Exception.ParamEx('No fonction found');
+					throw new Error('No fonction found');
 				}
 
 				let params  = queries[name_query];
 				if(!params) {
-					throw new Exception.ParamEx('No query found');
+					throw new Error('No query found');
 				}
 
 				Object.keys(params).map(function(key) {
 					var param = params[key];
 					var value = filters[key];
 
-					if(param instanceof String) {
-						if(value) {
+					if(typeof param === 'string') {
+						if(value !== undefined) {
 							output[param] = value;
 						} else {
-					 		throw new Exception.ParamEx('Param missing');
+					 		throw new Exception.ParamEx('Value missing for "' + param + '"');
 						}
-					} else if(param instanceof JSON) { // TODO is JSON
-
 					} else {
-						throw new Error('Queries malformed');
+
+						// Else JSON obj
+						if(!param.field) {
+							throw new Error('Bad query : "field" missing');
+						}
+
+						let options = {
+							field    : param.field,
+							op       : param.op || undefined,
+							default  : param.default ||undefined,
+							required : param.required || true
+						};
+
+						if( value !== undefined && options.op) {
+							let sel = {};
+							sel[options.op] = value;
+
+							// Value by default
+							output[options.field] = sel;
+
+						} else if(value !== undefined) {
+							// Value filtered
+							output[options.field] = value;
+
+						} else if(options.default) {
+							// Value by default
+							output[options.field] = options.default;
+
+						} else if(options.required) {
+							throw new Exception.ParamEx('Value missing for "' + param.field + '"');
+						}
 					}
 				});
 			} catch (err) {
@@ -61,7 +89,7 @@ module.exports = function (name_collection) {
 			}
 
 			Logger.debug('[DAO -   END] DaoManager#getQuery');
-			Logger.debug('              -- output   : ' + output);
+			Logger.debug('              -- output   : ' + JSON.stringify(output));
 
 			return output;
 		}

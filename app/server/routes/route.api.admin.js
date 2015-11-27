@@ -2,7 +2,7 @@
 
 // Inject
 var Logger          = require(global.__server  + '/LoggerManager');
-var ResponseService = require(global.__service + '/share/ResponseService');
+var ResponseService = require(global.__service + '/ResponseService');
 
 module.exports = function (router) {
 

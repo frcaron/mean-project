@@ -29,15 +29,18 @@ function create (input) {
 			user.surname        = input.surname;
 			user.displayname    = input.displayname;
 			if ( input.verified !== undefined ) {
-				user.verified = input.verified;
+				user.verified     = input.verified;
 			}
 			if ( input.admin !== undefined ) {
-				user.admin    = input.admin;
+				user.admin        = input.admin;
 			}
 
 			// Local
 			user.local.email    = input.local_email;
 			user.local.password = input.local_password;
+			if( input.local_active !== undefined ) {
+				user.local.active = input.local_active;
+			}
 
 			// Facebook
 			user.facebook.id    = input.facebook_id;
@@ -94,8 +97,8 @@ function update (input) {
 			if ( input.firstname ) {
 				user.firstname      = input.firstname;
 			}
-			if ( input.displayname ) {
-				user.displayname    = input.displayname;
+			if( user.isModified('surname') || user.isModified('firstname') ) {
+				user.displayname        = user.firstname + ' ' + user.surname;
 			}
 			if ( input.verified !== undefined ) {
 				user.verified       = input.verified;
@@ -110,6 +113,9 @@ function update (input) {
 			}
 			if ( input.local_password ) {
 				user.local.password = input.local_password;
+			}
+			if( input.local_active !== undefined ) {
+				user.local.active   = input.local_active;
 			}
 
 			// Facebook
@@ -165,7 +171,7 @@ function remove (name_query, filters) {
 	Logger.debug('              -- name_query : ' + name_query);
 	Logger.debug('              -- filters : ' + JSON.stringify(filters));
 
-	let promise = getOne(filters)
+	let promise = getOne(name_query, filters)
 		.then(function(user){
 			return user.removeAsync();
 		})
@@ -287,7 +293,6 @@ function validatePassword (log, pass) {
 }
 
 module.exports = {
-	name : 'UserDao',
 	create (input) {
 		return create(input);
 	},
