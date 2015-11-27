@@ -1,9 +1,8 @@
 "use strict";
 
 // Inject
-var Exception = require(global.__server + '/ExceptionManager');
 var Logger    = require(global.__server + '/LoggerManager');
-var UserDao   = require(global.__dao + '/UserDao');
+var UserDao   = require(global.__dao    + '/UserDao');
 
 module.exports = function(passport) {
 

@@ -2,9 +2,9 @@
 
 // Inject
 var LocalStrategy = require('passport-local').Strategy;
-var Exception     = require(global.__server + '/ExceptionManager');
+var Exception     = require(global.__server  + '/ExceptionManager');
 var BudgetService = require(global.__service + '/share/BudgetService');
-var UserDao       = require(global.__dao + '/UserDao');
+var UserDao       = require(global.__dao     + '/UserDao');
 
 module.exports = function(passport) {
 

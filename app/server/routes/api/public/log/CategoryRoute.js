@@ -1,7 +1,7 @@
 "use strict";
 
 //Inject
-var Logger          = require(global.__server + '/LoggerManager');
+var Logger          = require(global.__server  + '/LoggerManager');
 var ResponseService = require(global.__service + '/share/ResponseService');
 var CategoryService = require(global.__service + '/CategoryService');
 

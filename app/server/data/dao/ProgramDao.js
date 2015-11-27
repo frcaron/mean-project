@@ -4,13 +4,14 @@
 var BPromise      = require('bluebird');
 var Exception     = require(global.__server + '/ExceptionManager');
 var Logger        = require(global.__server + '/LoggerManager');
-var ProgramModel  = require(global.__model + '/ProgramModel');
-var CountersModel = require(global.__model + '/CountersModel');
+var DaoManager    = require(global.__dao    + '/DaoManager')('program');
+var ProgramModel  = require(global.__model  + '/ProgramModel');
+var CountersModel = require(global.__model  + '/CountersModel');
 
 /**
  * @param  {Json} input 	Data to create
  * @return {ProgramModel} 	Object created
- * @throws {DuplicateEx} If index model is not unique
+ * @throws {DuplicateEx} 	If index model is not unique
  * @throws {Error} 			If an other error is met
  */
 function create (input) {
@@ -61,7 +62,7 @@ function create (input) {
  * @param  {Json} input 	Data to update
  * @param  {Json} filters 	keys : 	- NO
  * @return {ProgramModel} 	Object updated
- * @throws {DuplicateEx} If index model is not unique
+ * @throws {DuplicateEx} 	If index model is not unique
  * @throws {NoResultEx} 	If id doesn't exist
  * @throws {Error} 			If an other error is met
  */
@@ -75,7 +76,7 @@ function update (input, filters) {
 	if (filters) {
 		promise = BPromise.reject(new Exception.ParamEx('Filters forbidden'));
 	} else {
-		promise = getOne({
+		promise = getOne('byIdU', {
 				program_id : input.program_id,
 				user_id    : input.user_id
 			})
@@ -117,39 +118,24 @@ function update (input, filters) {
 }
 
 /**
- * @param  {Json} filters 	Keys : 	- program_id
- * 									- user_id
- * 									- plan_id
+ * @param  {String} name_query	Name query
+ * @param  {Json} filters 		Filters query
  * @return {}
- * @throws {ParamEx} 	If params given are wrong
- * @throws {Error} 			If an other error is met
+ * @throws {ParamEx} 			If params given are wrong
+ * @throws {Error} 				If an other error is met
  */
-function remove (filters) {
+function remove (name_query, filters) {
 
 	Logger.debug('[DAO - START] ProgramDao#remove');
+	Logger.debug('              -- name_query : ' + name_query);
 	Logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise;
-	if(filters.user_id) {
-		if(filters.program_id) {
-			promise = ProgramModel.removeAsync({
-				_id   : filters.program_id,
-				_user : filters.user_id
-			});
-		} else if(filters.plan_id) {
-			promise = ProgramModel.removeAsync({
-				_plan : filters.plan_id,
-				_user : filters.user_id
-			});
-		} else {
-			promise = ProgramModel.removeAsync({
-				_user : filters.user_id
-			});
-		}
-	}
-
-	if(!promise) {
-		promise = BPromise.reject(new Exception.ParamEx('Filters missing'));
+	try {
+		let query = DaoManager.getQuery('remove', name_query, filters);
+		promise = ProgramModel.removeAsync(query);
+	} catch (err) {
+		promise = BPromise.reject(err);
 	}
 
 	let promiseEnd = promise
@@ -169,43 +155,24 @@ function remove (filters) {
 }
 
 /**
- * @param  {Json} filters 	Keys : 	- user_id
- *                         			- plan_id
- *                         			- [ categories_id ]
- * @return {ProgramModel}	List of object found
- * @throws {ParamEx} 	If params given are wrong
- * @throws {Error} 			If an other error is met
+ * @param  {String} name_query	Name query
+ * @param  {Json} filters 		Filters query
+ * @return {ProgramModel}		List of object found
+ * @throws {ParamEx} 			If params given are wrong
+ * @throws {Error} 				If an other error is met
  */
-function getAll (filters) {
+function getAll (name_query, filters) {
 
 	Logger.debug('[DAO - START] ProgramDao#getAll');
+	Logger.debug('              -- name_query : ' + name_query);
 	Logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise;
-	if(filters.user_id) {
-		if(filters.plan_id) {
-			if(filters.categories_id && filters.categories_id.length) {
-				promise = ProgramModel.findAsync({
-					_category : { $in : filters.categories_id },
-					_plan     : filters.plan_id,
-					_user     : filters.user_id
-				});
-			} else {
-				promise = ProgramModel.findAsync({
-					_plan : filters.plan_id,
-					_user : filters.user_id
-				});
-			}
-		} else if(filters.categories_id && filters.categories_id.length) {
-			promise = ProgramModel.findAsync({
-				_category : { $in : filters.categories_id },
-				_user     : filters.user_id
-			});
-		}
-	}
-
-	if(!promise) {
-		promise = BPromise.reject(new Exception.ParamEx('Filters missing'));
+	try {
+		let query = DaoManager.getQuery('getAll', name_query, filters);
+		promise = ProgramModel.findAsync(query);
+	} catch (err) {
+		promise = BPromise.reject(err);
 	}
 
 	let promiseEnd = promise
@@ -222,40 +189,25 @@ function getAll (filters) {
 }
 
 /**
- * @param  {Json} filters 	Keys : 	- id
- *                         			- user_id
- *                         			- category_id
- *                         			- plan_id
- * @return {ProgramModel}	Object found
- * @throws {ParamEx} 	If params given are wrong
- * @throws {NoResultEx} 	If no result found
- * @throws {Error} 			If an other error is met
+ * @param  {String} name_query	Name query
+ * @param  {Json} filters 		Filters query
+ * @return {ProgramModel}		Object found
+ * @throws {ParamEx} 			If params given are wrong
+ * @throws {NoResultEx} 		If no result found
+ * @throws {Error} 				If an other error is met
  */
-function getOne (filters) {
+function getOne (name_query, filters) {
 
 	Logger.debug('[DAO - START] ProgramDao#getOne');
+	Logger.debug('              -- name_query : ' + name_query);
 	Logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise;
-	if(filters.user_id) {
-		if(filters.program_id) {
-			promise = ProgramModel.findOneAsync({
-						_id   : filters.program_id,
-						_user : filters.user_id
-					});
-
-		} else if(filters.category_id && filters.plan_id) {
-			promise = ProgramModel.findOneAsync({
-						_category : filters.category_id,
-						_plan     : filters.plan_id,
-						_user     : filters.user_id
-					});
-
-		}
-	}
-
-	if(!promise) {
-		promise = BPromise.reject(new Exception.ParamEx('Filters missing'));
+	try {
+		let query = DaoManager.getQuery('getOne', name_query, filters);
+		promise = ProgramModel.findOneAsync(query);
+	} catch (err) {
+		promise = BPromise.reject(err);
 	}
 
 	let promiseEnd = promise
@@ -285,13 +237,13 @@ module.exports = {
 	update (input, filters) {
 		return update(input, filters);
 	},
-	remove (filters) {
-		return remove(filters);
+	remove (name_query, filters) {
+		return remove(name_query, filters);
 	},
-	getAll (filters) {
-		return getAll(filters);
+	getAll (name_query, filters) {
+		return getAll(name_query, filters);
 	},
-	getOne (filters) {
-		return getOne(filters);
+	getOne (name_query, filters) {
+		return getOne(name_query, filters);
 	}
 };

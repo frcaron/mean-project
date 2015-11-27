@@ -4,13 +4,14 @@
 var BPromise      = require('bluebird');
 var Exception     = require(global.__server + '/ExceptionManager');
 var Logger        = require(global.__server + '/LoggerManager');
-var PlanModel     = require(global.__model + '/PlanModel');
-var CountersModel = require(global.__model + '/CountersModel');
+var DaoManager    = require(global.__dao    + '/DaoManager')('plan');
+var PlanModel     = require(global.__model  + '/PlanModel');
+var CountersModel = require(global.__model  + '/CountersModel');
 
 /**
  * @param  {Json} input 	Data to create
  * @return {PlanModel} 		Object created
- * @throws {DuplicateEx} If index model is not unique
+ * @throws {DuplicateEx} 	If index model is not unique
  * @throws {Error} 			If an other error is met
  */
 function create (input) {
@@ -58,7 +59,7 @@ function create (input) {
  * @param  {Json} input 	Data to update
  * @param  {Json} filters 	keys : 	- NO
  * @return {PlanModel} 		Object updated
- * @throws {DuplicateEx} If index model is not unique
+ * @throws {DuplicateEx} 	If index model is not unique
  * @throws {NoResultEx} 	If id doesn't exist
  * @throws {Error} 			If an other error is met
  */
@@ -72,7 +73,7 @@ function update (input, filters) {
 	if(filters) {
 		promise = BPromise.reject(new Exception.ParamEx('Filters forbidden'));
 	} else {
-		promise = getOne({
+		promise = getOne('byIdU', {
 				plan_id : input.plan_id,
 				user_id : input.user_id
 			})
@@ -114,33 +115,24 @@ function update (input, filters) {
 }
 
 /**
- * @param  {Json} filters 	Keys : 	- user_id
- * 									- plan_id
+ * @param  {String} name_query	Name query
+ * @param  {Json} filters 		Filters query
  * @return {}
- * @throws {ParamEx} 	If params given are wrong
- * @throws {Error} 			If an other error is met
+ * @throws {ParamEx} 			If params given are wrong
+ * @throws {Error} 				If an other error is met
  */
-function remove (filters) {
+function remove (name_query, filters) {
 
 	Logger.debug('[DAO - START] PlanDao#remove');
+	Logger.debug('              -- name_query : ' + name_query);
 	Logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise;
-	if(filters.user_id) {
-		if(filters.plan_id) {
-			promise = PlanModel.removeAsync({
-				_id   : filters.plan_id,
-				_user : filters.user_id
-			});
-		} else {
-			promise = PlanModel.removeAsync({
-				_user : filters.user_id
-			});
-		}
-	}
-
-	if(!promise) {
-		promise = BPromise.reject(new Exception.ParamEx('Filters missing'));
+	try {
+		let query = DaoManager.getQuery('remove', name_query, filters);
+		promise = PlanModel.removeAsync(query);
+	} catch (err) {
+		promise = BPromise.reject(err);
 	}
 
 	let promiseEnd = promise
@@ -157,25 +149,24 @@ function remove (filters) {
 }
 
 /**
- * @param  {Json} filters 	Keys : - user_id
- * @return {PlanModel}		List of object found
- * @throws {ParamEx} 	If params given are wrong
- * @throws {Error} 			If an other error is met
+ * @param  {String} name_query	Name query
+ * @param  {Json} filters 		Filters query
+ * @return {PlanModel}			List of object found
+ * @throws {ParamEx} 			If params given are wrong
+ * @throws {Error} 				If an other error is met
  */
-function getAll (filters) {
+function getAll (name_query, filters) {
 
 	Logger.debug('[DAO - START] PlanDao#getAll');
+	Logger.debug('              -- name_query : ' + name_query);
 	Logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise;
-	if(filters.user_id) {
-		promise = PlanModel.findAsync({
-			_user : filters.user_id
-		});
-	}
-
-	if(!promise) {
-		promise = BPromise.reject(new Exception.ParamEx('Filters missing'));
+	try {
+		let query = DaoManager.getQuery('getAll', name_query, filters);
+		promise = PlanModel.findAsync(query);
+	} catch (err) {
+		promise = BPromise.reject(err);
 	}
 
 	let promiseEnd = promise
@@ -192,39 +183,25 @@ function getAll (filters) {
 }
 
 /**
- * @param  {Json} filters 	Keys : 	- plan_id
- *                         			- user_id
- * 									- month
- * 									- year
- * @return {PlanModel}		Object found
- * @throws {ParamEx} 	If params given are wrong
- * @throws {NoResultEx} 	If no result found
- * @throws {Error} 			If an other error is met
+ * @param  {String} name_query	Name query
+ * @param  {Json} filters 		Filters query
+ * @return {PlanModel}			Object found
+ * @throws {ParamEx} 			If params given are wrong
+ * @throws {NoResultEx} 		If no result found
+ * @throws {Error} 				If an other error is met
  */
-function getOne (filters) {
+function getOne (name_query, filters) {
 
 	Logger.debug('[DAO - START] PlanDao#getOne');
+	Logger.debug('              -- name_query : ' + name_query);
 	Logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise;
-	if(filters.user_id) {
-		if(filters.plan_id) {
-			promise = PlanModel.findOneAsync({
-				_id   : filters.plan_id,
-				_user : filters.user_id
-			});
-
-		} else if(filters.month && filters.year) {
-			promise = PlanModel.findOneAsync({
-				month : filters.month,
-				year  : filters.year,
-				_user : filters.user_id
-			});
-		}
-	}
-
-	if(!promise) {
-		promise = BPromise.reject(new Exception.ParamEx('Filters missing'));
+	try {
+		let query = DaoManager.getQuery('getOne', name_query, filters);
+		promise = PlanModel.findOneAsync(query);
+	} catch (err) {
+		promise = BPromise.reject(err);
 	}
 
 	let promiseEnd = promise
@@ -254,13 +231,13 @@ module.exports = {
 	update (input, filters) {
 		return update(input, filters);
 	},
-	remove (filters) {
-		return remove(filters);
+	remove (name_query, filters) {
+		return remove(name_query, filters);
 	},
-	getAll (filters) {
-		return getAll(filters);
+	getAll (name_query, filters) {
+		return getAll(name_query, filters);
 	},
-	getOne (filters) {
-		return getOne(filters);
+	getOne (name_query, filters) {
+		return getOne(name_query, filters);
 	}
 };

@@ -1,10 +1,10 @@
 "use strict";
 
 // Inject
-var Exception       = require(global.__server + '/ExceptionManager');
-var Logger          = require(global.__server + '/LoggerManager');
+var Exception       = require(global.__server  + '/ExceptionManager');
+var Logger          = require(global.__server  + '/LoggerManager');
 var ResponseService = require(global.__service + '/share/ResponseService');
-var TypeCategoryDao = require(global.__dao + '/TypeCategoryDao');
+var TypeCategoryDao = require(global.__dao     + '/TypeCategoryDao');
 
 module.exports = {
 

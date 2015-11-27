@@ -2,11 +2,11 @@
 
 // Inject
 var FacebookStrategy = require('passport-facebook').Strategy;
-var Exception        = require(global.__server + '/ExceptionManager');
+var Exception        = require(global.__server  + '/ExceptionManager');
 var BudgetService    = require(global.__service + '/share/BudgetService');
-var UserDao          = require(global.__dao + '/UserDao');
-var ServerConfig     = require(global.__config + '/server');
-var AuthConfig       = require(global.__config + '/auth');
+var UserDao          = require(global.__dao     + '/UserDao');
+var ServerConfig     = require(global.__config  + '/server');
+var AuthConfig       = require(global.__config  + '/auth');
 
 module.exports = function(passport) {
 

@@ -4,13 +4,14 @@
 var BPromise          = require('bluebird');
 var Exception         = require(global.__server + '/ExceptionManager');
 var Logger            = require(global.__server + '/LoggerManager');
-var TypeCategoryModel = require(global.__model + '/TypeCategoryModel');
-var CountersModel     = require(global.__model + '/CountersModel');
+var DaoManager        = require(global.__dao    + '/DaoManager')('type_category');
+var TypeCategoryModel = require(global.__model  + '/TypeCategoryModel');
+var CountersModel     = require(global.__model  + '/CountersModel');
 
 /**
  * @param  {Json} input 		Data to create
  * @return {TypeCategoryModel} 	Object created
- * @throws {DuplicateEx} 	If index model is not unique
+ * @throws {DuplicateEx} 		If index model is not unique
  * @throws {Error} 				If an other error is met
  */
 function create (input) {
@@ -55,7 +56,7 @@ function create (input) {
 /**
  * @param  {Json} input 		Data to update
  * @return {TypeCategoryModel} 	Object updated
- * @throws {DuplicateEx} 	If index model is not unique
+ * @throws {DuplicateEx} 		If index model is not unique
  * @throws {NoResultEx} 		If id doesn't exist
  * @throws {Error} 				If an other error is met
  */
@@ -64,7 +65,7 @@ function update (input) {
 	Logger.debug('[DAO - START] TypeCategoryDao#update');
 	Logger.debug('              -- input : ' + JSON.stringify(input));
 
-	let promise = getOne({ type_category_id : input.type_category_id })
+	let promise = getOne('byId', { type_category_id : input.type_category_id })
 		.then(function (typeCategory) {
 
 			if( input.name ) {
@@ -120,25 +121,25 @@ function getAll () {
 }
 
 /**
- * @param  {Json} filters 		Keys : 	- type_category_id
+ * @param  {String} name_query	Name query
+ * @param  {Json} filters 		Filters query
  * @return {TypeCategoryModel}	Object found
- * @throws {ParamEx} 		If params given are wrong
+ * @throws {ParamEx} 			If params given are wrong
  * @throws {NoResultEx} 		If no result found
  * @throws {Error} 				If an other error is met
  */
-function getOne (filters) {
+function getOne (name_query, filters) {
 
 	Logger.debug('[DAO - START] TypeCategoryDao#getOne');
+	Logger.debug('              -- name_query : ' + name_query);
 	Logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise;
-	if(filters.type_category_id) {
-		promise = TypeCategoryModel.findByIdAsync(filters.type_category_id);
-
-	}
-
-	if(!promise) {
-		promise = BPromise.reject(new Exception.ParamEx('Filters missing'));
+	try {
+		let query = DaoManager.getQuery('getOne', name_query, filters);
+		promise = TypeCategoryModel.findOneAsync(query);
+	} catch (err) {
+		promise = BPromise.reject(err);
 	}
 
 	let promiseEnd = promise
@@ -171,7 +172,7 @@ module.exports = {
 	getAll () {
 		return getAll();
 	},
-	getOne (filters) {
-		return getOne(filters);
+	getOne (name_query, filters) {
+		return getOne(name_query, filters);
 	}
 };

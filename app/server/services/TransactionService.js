@@ -2,14 +2,14 @@
 
 // Inject
 var BPromise        = require('bluebird');
-var Exception       = require(global.__server + '/ExceptionManager');
-var Logger          = require(global.__server + '/LoggerManager');
+var Exception       = require(global.__server  + '/ExceptionManager');
+var Logger          = require(global.__server  + '/LoggerManager');
 var ResponseService = require(global.__service + '/share/ResponseService');
 var BudgetService   = require(global.__service + '/share/BudgetService');
-var PlanDao         = require(global.__dao + '/PlanDao');
-var ProgramDao      = require(global.__dao + '/ProgramDao');
-var TransactionDao  = require(global.__dao + '/TransactionDao');
-var CategoryDao     = require(global.__dao + '/CategoryDao');
+var PlanDao         = require(global.__dao     + '/PlanDao');
+var ProgramDao      = require(global.__dao     + '/ProgramDao');
+var TransactionDao  = require(global.__dao     + '/TransactionDao');
+var CategoryDao     = require(global.__dao     + '/CategoryDao');
 
 function fulfillProgram (input, category_id) {
 

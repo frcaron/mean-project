@@ -176,13 +176,16 @@ module.exports = {
 			// Not in categories given by type and user
 			'ninCategorybiesTypeU' : {
 				'categories_id'    : {
-					field   : '_id',
-					op      : '$nin'
+					field : '_id',
+					op    : '$nin'
 				},
 				'type_category_id' : '_type',
 				'active'           : {
-					field   : 'active',
 					default : true
+				},
+				'neutre'           : {
+					field    : 'neutre',
+					required : false
 				},
 				'user_id'          : '_user'
 			},
@@ -191,7 +194,6 @@ module.exports = {
 			'byTypeU' : {
 				'type_category_id' : '_type',
 				'active'           : {
-					field   : 'active',
 					default : true
 				},
 				'user_id'          : '_user'
@@ -200,10 +202,17 @@ module.exports = {
 			// By neutre and user
 			'byNeutreU' : {
 				'active'  : {
-					field   : 'active',
 					default : true
 				},
 				'neutre'  : 'neutre',
+				'user_id' : '_user'
+			},
+
+			// By user
+			'byU' : {
+				'active'  : {
+					default : true
+				},
 				'user_id' : '_user'
 			}
 		},
@@ -213,15 +222,40 @@ module.exports = {
 
 			// By id and user
 			'byIdU'        : {
-				'plan_id' : '_id',
+				'categorie_id' : '_id',
+				'user_id'      : '_user'
+			},
+
+			// By neutre, type category and user
+			'byNeutreTypeU' : {
+				'active'            : {
+					default : true
+				},
+				'neutre'            : {
+					field   : 'neutre',
+					default : true
+				},
+				'type_categorie_id' : '_type',
+				'user_id'           : '_user'
+			},
+
+			// By neutre and user
+			'byNeutreU' : {
+				'active'  : {
+					default : true
+				},
+				'neutre'  : {
+					field   : 'neutre',
+					default : true
+				},
 				'user_id' : '_user'
 			},
 
-			// By month, year and user
-			'byMonthYearU' : {
-				'month'   : 'month',
-				'year'    : 'year',
-				'user_id' : '_user'
+			// By name, type category and user
+			'byNameTypeU' : {
+				'name'              : 'name',
+				'type_categorie_id' : '_type',
+				'user_id'           : '_user'
 			}
 		}
 	},

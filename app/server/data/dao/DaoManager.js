@@ -14,9 +14,9 @@ module.exports = function (name_collection) {
 
 	return {
 
-		getFilters (name_fct, name_query, filters) {
+		getQuery (name_fct, name_query, filters) {
 
-			Logger.debug('[DAO - START] DaoManager#getFilters');
+			Logger.debug('[DAO - START] DaoManager#getQuery');
 			Logger.debug('              -- name_fct   : ' + name_fct);
 			Logger.debug('              -- name_query : ' + name_query);
 			Logger.debug('              -- filters    : ' + JSON.stringify(filters));
@@ -41,26 +41,26 @@ module.exports = function (name_collection) {
 					var param = params[key];
 					var value = filters[key];
 
-					if(value instanceof String) {
+					if(param instanceof String) {
 						if(value) {
 							output[param] = value;
 						} else {
 					 		throw new Exception.ParamEx('Param missing');
 						}
-					} else if(value instanceof JSON) { // TODO is JSON
+					} else if(param instanceof JSON) { // TODO is JSON
 
 					} else {
 						throw new Error('Queries malformed');
 					}
 				});
 			} catch (err) {
-				Logger.debug('[DAO - CATCH] DaoManager#getFilters');
+				Logger.debug('[DAO - CATCH] DaoManager#getQuery');
 				Logger.error('              -- message : ' + err.message);
 
 				throw err;
 			}
 
-			Logger.debug('[DAO -   END] DaoManager#getFilters');
+			Logger.debug('[DAO -   END] DaoManager#getQuery');
 			Logger.debug('              -- output   : ' + output);
 
 			return output;

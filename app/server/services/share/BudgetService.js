@@ -3,11 +3,11 @@
 // Inject
 var BPromise        = require('bluebird');
 var Logger          = require(global.__server + '/LoggerManager');
-var UserDao         = require(global.__dao + '/UserDao');
-var PlanDao         = require(global.__dao + '/PlanDao');
-var ProgramDao      = require(global.__dao + '/ProgramDao');
-var CategoryDao     = require(global.__dao + '/CategoryDao');
-var TypeCategoryDao = require(global.__dao + '/TypeCategoryDao');
+var UserDao         = require(global.__dao    + '/UserDao');
+var PlanDao         = require(global.__dao    + '/PlanDao');
+var ProgramDao      = require(global.__dao    + '/ProgramDao');
+var CategoryDao     = require(global.__dao    + '/CategoryDao');
+var TypeCategoryDao = require(global.__dao    + '/TypeCategoryDao');
 
 module.exports = {
 
@@ -62,7 +62,7 @@ module.exports = {
 
 		let promise = PlanDao.create(input)
 			.then(function (plan) {
-				return CategoryDao.getAll({
+				return CategoryDao.getAll('byNeutreU', {
 						neutre  : true,
 						user_id : input.user_id
 					})
@@ -82,7 +82,10 @@ module.exports = {
 						Logger.debug('[SER - CATCH] BudgetService#createPlan');
 						Logger.error('              -- message : ' + err.message);
 
-						PlanDao.remove({ plan_id : plan._id });
+						PlanDao.remove('byIdU', {
+							plan_id : plan._id,
+							user_id : input.user_id
+						});
 						throw err;
 					});
 			});
@@ -97,12 +100,12 @@ module.exports = {
 		Logger.debug('[SER - START] BudgetService#createProgram');
 		Logger.debug('              -- input   : ' + JSON.stringify(input));
 
-		let promise = CategoryDao.getOne({
+		let promise = CategoryDao.getOne('byIdU', {
 				category_id : input.category_id,
 				user_id     : input.user_id
 			})
 			.then(function () {
-				return PlanDao.getOne({
+				return PlanDao.getOne('byIdU', {
 							plan_id : input.plan_id,
 							user_id : input.user_id
 						});

@@ -4,13 +4,14 @@
 var BPromise         = require('bluebird');
 var Exception        = require(global.__server + '/ExceptionManager');
 var Logger           = require(global.__server + '/LoggerManager');
-var TransactionModel = require(global.__model + '/TransactionModel');
-var CountersModel    = require(global.__model + '/CountersModel');
+var DaoManager       = require(global.__dao    + '/DaoManager')('transaction');
+var TransactionModel = require(global.__model  + '/TransactionModel');
+var CountersModel    = require(global.__model  + '/CountersModel');
 
 /**
  * @param  {Json} input 		Data to create
  * @return {TransactionModel} 	Object created
- * @throws {DuplicateEx} 	If index model is not unique
+ * @throws {DuplicateEx} 		If index model is not unique
  * @throws {Error} 				If an other error is met
  */
 function create (input) {
@@ -60,37 +61,35 @@ function create (input) {
 
 /**
  * @param  {Json} input 		Data to update
- * @param  {Json} filters 		keys : 	- program_id
- *                          			- user_id
+ * @param  {String} name_query	Name query
+ * @param  {Json} filters 		Filters query
  * @return {TransactionModel} 	Object updated
- * @throws {DuplicateEx} 	If index model is not unique
+ * @throws {DuplicateEx} 		If index model is not unique
  * @throws {NoResultEx} 		If id doesn't exist
  * @throws {Error} 				If an other error is met
  */
-function update (input, filters) {
+function update (input, name_query, filters) {
 
 	Logger.debug('[DAO - START] TransactionDao#update');
 	Logger.debug('              -- input   : ' + JSON.stringify(input));
+	Logger.debug('              -- name_query : ' + name_query);
 	Logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise;
 	if(filters) {
-		if(filters.user_id && filters.program_id) {
-			promise = TransactionModel.updateAsync({
-					_program : filters.program_id,
-					_user    : filters.user_id
-				},{
+		try {
+			let query = DaoManager.getQuery('update', name_query, filters);
+			promise = TransactionModel.updateAsync(query,{
 					_program : input.program_id
 				})
 				.then(function (transactions) {
 					return BPromise.resolve(transactions);
 				});
-
-		} else {
-			promise = BPromise.reject(new Exception.ParamEx('Filters missing'));
+		} catch (err) {
+			promise = BPromise.reject(err);
 		}
 	} else {
-		promise = getOne({
+		promise = getOne('byIdU', {
 				transaction_id : input.transaction_id,
 				user_id        : input.user_id
 			})
@@ -138,37 +137,24 @@ function update (input, filters) {
 }
 
 /**
- * @param  {Json} filters 	Keys : 	- transaction_id
- * 									- user_id
- * 									- plan_id
+ * @param  {String} name_query	Name query
+ * @param  {Json} filters 		Filters query
  * @return {}
- * @throws {ParamEx} 	If params given are wrong
- * @throws {Error} 			If an other error is met
+ * @throws {ParamEx} 			If params given are wrong
+ * @throws {Error} 				If an other error is met
  */
-function remove (filters) {
+function remove (name_query, filters) {
 
 	Logger.debug('[DAO - START] TransactionDao#remove');
+	Logger.debug('              -- name_query : ' + name_query);
 	Logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise;
-	if(filters.user_id) {
-		if(filters.transaction_id) {
-			promise = TransactionModel.removeAsync({
-				_id   : filters.transaction_id,
-				_user : filters.user_id
-			});
-		} else if(filters.plan_id) {
-			promise = TransactionModel.removeAsync({
-				_plan : filters.plan_id,
-				_user : filters.user_id
-			});
-		} else {
-			promise = TransactionModel.removeAsync({ _user : filters.user_id });
-		}
-	}
-
-	if(!promise) {
-		promise = BPromise.reject(new Exception.ParamEx('Filters missing'));
+	try {
+		let query = DaoManager.getQuery('remove', name_query, filters);
+		promise = TransactionModel.removeAsync(query);
+	} catch (err) {
+		promise = BPromise.reject(err);
 	}
 
 	let promiseEnd = promise
@@ -185,33 +171,24 @@ function remove (filters) {
 }
 
 /**
- * @param  {Json} filters 		Keys : 	- user_id
- *                          			- [ programs_id ]
+ * @param  {String} name_query	Name query
+ * @param  {Json} filters 		Filters query
  * @return {TransactionModel}	List of object found
- * @throws {ParamEx} 		If params given are wrong
+ * @throws {ParamEx} 			If params given are wrong
  * @throws {Error} 				If an other error is met
  */
-function getAll (filters) {
+function getAll (name_query, filters) {
 
 	Logger.debug('[DAO - START] TransactionDao#getAll');
+	Logger.debug('              -- name_query : ' + name_query);
 	Logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise;
-	if(filters.user_id) {
-		if(filters.programs_id && filters.programs_id.length) {
-			promise = TransactionModel.findAsync({
-				_program : { $in : filters.programs_id },
-				_user    : filters.user_id
-			});
-		} else {
-			promise = TransactionModel.findAsync({
-				_user : filters.user_id
-			});
-		}
-	}
-
-	if(!promise) {
-		promise = BPromise.reject(new Exception.ParamEx('Filters missing'));
+	try {
+		let query = DaoManager.getQuery('getAll', name_query, filters);
+		promise = TransactionModel.findAsync(query);
+	} catch (err) {
+		promise = BPromise.reject(err);
 	}
 
 	let promiseEnd = promise
@@ -228,30 +205,25 @@ function getAll (filters) {
 }
 
 /**
- * @param  {Json} filters 		Keys : 	- transaction_id
- *										- user_id
+ * @param  {String} name_query	Name query
+ * @param  {Json} filters 		Filters query
  * @return {TransactionModel}	Object found
- * @throws {ParamEx} 		If params given are wrong
+ * @throws {ParamEx} 			If params given are wrong
  * @throws {NoResultEx} 		If no result found
  * @throws {Error} 				If an other error is met
  */
-function getOne (filters) {
+function getOne (name_query, filters) {
 
 	Logger.debug('[DAO - START] TransactionDao#getOne');
+	Logger.debug('              -- name_query : ' + name_query);
 	Logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise;
-	if(filters.user_id) {
-		if(filters.transaction_id) {
-			promise = TransactionModel.findOneAsync({
-				_id   : filters.transaction_id,
-				_user : filters.user_id
-			});
-		}
-	}
-
-	if(!promise) {
-		promise = BPromise.reject(new Exception.ParamEx('Filters missing "user_id"'));
+	try {
+		let query = DaoManager.getQuery('getOne', name_query, filters);
+		promise = TransactionModel.findOneAsync(query);
+	} catch (err) {
+		promise = BPromise.reject(err);
 	}
 
 	let promiseEnd = promise
@@ -278,16 +250,16 @@ module.exports = {
 	create (input) {
 		return create(input);
 	},
-	update (input, filters) {
-		return update(input, filters);
+	update (input,name_query,  filters) {
+		return update(input,name_query,  filters);
 	},
-	remove (filters) {
-		return remove(filters);
+	remove (name_query, filters) {
+		return remove(name_query, filters);
 	},
-	getAll (filters) {
-		return getAll(filters);
+	getAll (name_query, filters) {
+		return getAll(name_query, filters);
 	},
-	getOne (filters) {
-		return getOne(filters);
+	getOne (name_query, filters) {
+		return getOne(name_query, filters);
 	}
 };

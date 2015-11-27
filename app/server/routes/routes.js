@@ -2,7 +2,7 @@
 
 // Inject
 var Express         = require('express');
-var Exception       = require(global.__server + '/ExceptionManager');
+var Exception       = require(global.__server  + '/ExceptionManager');
 var ResponseService = require(global.__service + '/share/ResponseService');
 
 var adminRouter     = Express.Router();

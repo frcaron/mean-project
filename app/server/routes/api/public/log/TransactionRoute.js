@@ -2,7 +2,7 @@
 
 //Inject
 var Moment             = require('moment');
-var Logger             = require(global.__server + '/LoggerManager');
+var Logger             = require(global.__server  + '/LoggerManager');
 var ResponseService    = require(global.__service + '/share/ResponseService');
 var TransactionService = require(global.__service + '/TransactionService');
 

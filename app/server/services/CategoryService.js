@@ -2,12 +2,12 @@
 
 // Inject
 var BPromise        = require('bluebird');
-var Exception       = require(global.__server + '/ExceptionManager');
-var Logger          = require(global.__server + '/LoggerManager');
+var Exception       = require(global.__server  + '/ExceptionManager');
+var Logger          = require(global.__server  + '/LoggerManager');
 var ResponseService = require(global.__service + '/share/ResponseService');
-var ProgramDao      = require(global.__dao + '/ProgramDao');
-var CategoryDao     = require(global.__dao + '/CategoryDao');
-var TypeCategoryDao = require(global.__dao + '/TypeCategoryDao');
+var ProgramDao      = require(global.__dao     + '/ProgramDao');
+var CategoryDao     = require(global.__dao     + '/CategoryDao');
+var TypeCategoryDao = require(global.__dao     + '/TypeCategoryDao');
 
 module.exports = {
 
@@ -19,7 +19,7 @@ module.exports = {
 
 		let type_category_id = req.body.type_category_id || req.query.type_category_id;
 
-		TypeCategoryDao.getOne({ type_category_id : type_category_id })
+		TypeCategoryDao.getOne('byId', { type_category_id : type_category_id })
 			.then(function (typeCategory) {
 				return CategoryDao.create({
 					name             : req.body.name,
@@ -27,7 +27,7 @@ module.exports = {
 					user_id          : user_id
 				})
 				.catch(Exception.DuplicateEx, function() {
-					return CategoryDao.getOne({
+					return CategoryDao.getOne('byNameTypeU', {
 							name             : req.body.name,
 							type_category_id : typeCategory._id,
 							user_id          : user_id
@@ -138,7 +138,7 @@ module.exports = {
 		let plan_id          = req.body.plan_id || req.query.plan_id;
 		let type_category_id = req.body.type_category_id || req.query.type_category_id;
 
-		ProgramDao.getAll({
+		ProgramDao.getAll('byPlanU', {
 				plan_id : plan_id,
 				user_id : user_id
 			})
@@ -150,8 +150,8 @@ module.exports = {
 
 				return BPromise.all(categories_id)
 					.then(function () {
-						return CategoryDao.getAll({
-							no_categories_id : categories_id,
+						return CategoryDao.getAll('ninCategorybiesTypeU', {
+							categories_id    : categories_id,
 							type_category_id : type_category_id,
 							neutre           : false,
 							user_id          : user_id
@@ -185,7 +185,7 @@ module.exports = {
 		Logger.debug('[SER - START] CategoryService#allByTypeU');
 		Logger.debug('              -- user_id : ' + user_id);
 
-		CategoryDao.getAll({
+		CategoryDao.getAll('byTypeU', {
 				type_category_id : req.params.type_category_id,
 				user_id          : user_id
 			})
@@ -216,7 +216,7 @@ module.exports = {
 		Logger.debug('[SER - START] CategoryService#getByIdU');
 		Logger.debug('              -- user_id : ' + user_id);
 
-		CategoryDao.getOne({
+		CategoryDao.getOne('byIdU', {
 				category_id : req.params.category_id,
 				user_id     : user_id
 			})

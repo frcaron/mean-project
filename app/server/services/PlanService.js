@@ -2,13 +2,13 @@
 
 // Inject
 var BPromise        = require('bluebird');
-var Exception       = require(global.__server + '/ExceptionManager');
-var Logger          = require(global.__server + '/LoggerManager');
+var Exception       = require(global.__server  + '/ExceptionManager');
+var Logger          = require(global.__server  + '/LoggerManager');
 var ResponseService = require(global.__service + '/share/ResponseService');
 var BudgetService   = require(global.__service + '/share/BudgetService');
-var PlanDao         = require(global.__dao + '/PlanDao');
-var ProgramDao      = require(global.__dao + '/ProgramDao');
-var TransactionDao  = require(global.__dao + '/TransactionDao');
+var PlanDao         = require(global.__dao     + '/PlanDao');
+var ProgramDao      = require(global.__dao     + '/ProgramDao');
+var TransactionDao  = require(global.__dao     + '/TransactionDao');
 
 module.exports = {
 
@@ -51,9 +51,9 @@ module.exports = {
 		Logger.debug('              -- user_id : ' + user_id);
 
 		let msg = [];
-		BPromise.map([PlanDao, ProgramDao, TransactionDao],
+		BPromise.map([[PlanDao, 'byIdU'], [ProgramDao, 'byPlanU'], [TransactionDao, 'byPlanU']],
 			function(dao) {
-				return dao.remove({
+				return dao[0].remove(dao[1], {
 						plan_id : req.params.plan_id,
 						user_id : user_id
 					 })

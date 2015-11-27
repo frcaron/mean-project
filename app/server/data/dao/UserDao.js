@@ -4,14 +4,14 @@
 var BPromise      = require('bluebird');
 var Exception     = require(global.__server + '/ExceptionManager');
 var Logger        = require(global.__server + '/LoggerManager');
-var DaoManager    = require(global.__dao + '/DaoManager')('user');
-var UserModel     = require(global.__model + '/UserModel');
-var CountersModel = require(global.__model + '/CountersModel');
+var DaoManager    = require(global.__dao    + '/DaoManager')('user');
+var UserModel     = require(global.__model  + '/UserModel');
+var CountersModel = require(global.__model  + '/CountersModel');
 
 /**
  * @param  {Json} input 	Data to create
  * @return {UserModel} 		Object created
- * @throws {DuplicateEx} If index model is not unique
+ * @throws {DuplicateEx} 	If index model is not unique
  * @throws {Error} 			If an other error is met
  */
 function create (input) {
@@ -75,7 +75,7 @@ function create (input) {
 /**
  * @param  {Json} input 	Data to update
  * @return {UserModel} 		Object updated
- * @throws {DuplicateEx} If index model is not unique
+ * @throws {DuplicateEx} 	If index model is not unique
  * @throws {NoResultEx} 	If id doesn't exist
  * @throws {Error} 			If an other error is met
  */
@@ -152,16 +152,17 @@ function update (input) {
 }
 
 /**
- * @param  {Json} filters 	Keys : 	- user_id
- * 									- email
+ * @param  {String} name_query	Name query
+ * @param  {Json} filters 		Filters query
  * @return {}
- * @throws {ParamEx} 		If params given are wrong
- * @throws {NoResultEx} 	If no result found
- * @throws {Error} 			If an other error is met
+ * @throws {ParamEx} 			If params given are wrong
+ * @throws {NoResultEx} 		If no result found
+ * @throws {Error} 				If an other error is met
  */
-function remove (filters) {
+function remove (name_query, filters) {
 
 	Logger.debug('[DAO - START] UserDao#remove');
+	Logger.debug('              -- name_query : ' + name_query);
 	Logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise = getOne(filters)
@@ -220,8 +221,7 @@ function getOne (name_query, filters) {
 
 	let promise;
 	try {
-		let query = DaoManager.getFilters('getOne', name_query, filters);
-
+		let query = DaoManager.getQuery('getOne', name_query, filters);
 		promise = UserModel.findOneAsync(query);
 	} catch (err) {
 		promise = BPromise.reject(err);
@@ -294,8 +294,8 @@ module.exports = {
 	update (input) {
 		return update(input);
 	},
-	remove (filters) {
-		return remove(filters);
+	remove (name_query, filters) {
+		return remove(name_query, filters);
 	},
 	getAll () {
 		return getAll();

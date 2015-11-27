@@ -61,5 +61,4 @@ require(Path.join(global.__config, 'passport'))(Passport);
 
 require(global.__route + '/routes.js')(app, Passport);
 
-
 module.exports = app;

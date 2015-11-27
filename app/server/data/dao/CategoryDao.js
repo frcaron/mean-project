@@ -4,13 +4,14 @@
 var BPromise      = require('bluebird');
 var Exception     = require(global.__server + '/ExceptionManager');
 var Logger        = require(global.__server + '/LoggerManager');
-var CategoryModel = require(global.__model + '/CategoryModel');
-var CountersModel = require(global.__model + '/CountersModel');
+var DaoManager    = require(global.__dao    + '/DaoManager')('category');
+var CategoryModel = require(global.__model  + '/CategoryModel');
+var CountersModel = require(global.__model  + '/CountersModel');
 
 /**
  * @param  {Json} input     Data to create
  * @return {CategoryModel}  Object created
- * @throws {DuplicateEx} If index model is not unique
+ * @throws {DuplicateEx} 	If index model is not unique
  * @throws {Error}          If an other error is met
  */
 function create (input) {
@@ -64,8 +65,8 @@ function create (input) {
  * @param  {Json} input     Data to update
  * @param  {Json} filters   Keys :  - NO
  * @return {CategoryModel}  Object updated
- * @throws {DuplicateEx} If index model is not unique
- * @throws {NoResultEx}  If id doesn't exist
+ * @throws {DuplicateEx} 	If index model is not unique
+ * @throws {NoResultEx}  	If id doesn't exist
  * @throws {Error}          If an other error is met
  */
 function update (input, filters) {
@@ -78,7 +79,7 @@ function update (input, filters) {
 	if(filters) {
 		promise = BPromise.reject(new Exception.ParamEx('Filters forbidden'));
 	} else {
-		promise = getOne({
+		promise = getOne('byIdU', {
 				category_id : input.category_id,
 				user_id     : input.user_id
 			})
@@ -123,30 +124,25 @@ function update (input, filters) {
 }
 
 /**
- * @param  {Json} filters   Keys :  - user_id
- *                                  - id / user_id
- * @return {CategoryModel}  Object found
- * @throws {ParamEx}    If params given are wrong
- * @throws {NoResultEx}  If no result found
- * @throws {Error}          If an other error is met
+ * @param  {String} name_query	Name query
+ * @param  {Json} filters 		Filters query
+ * @return {CategoryModel}  	Object found
+ * @throws {ParamEx}    		If params given are wrong
+ * @throws {NoResultEx}  		If no result found
+ * @throws {Error}          	If an other error is met
  */
-function remove (filters) {
+function remove (name_query, filters) {
 
 	Logger.debug('[DAO - START] CategoryDao#remove');
+	Logger.debug('              -- name_query : ' + name_query);
 	Logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise;
-	if(filters.user_id) {
-		if(filters.category_id) {
-			promise = CategoryModel.removeAsync({
-				_id   : filters.category_id,
-				_user : filters.user_id
-			});
-
-		} else {
-			promise = CategoryModel.removeAsync({ _user : filters.user_id });
-
-		}
+	try {
+		let query = DaoManager.getQuery('remove', name_query, filters);
+		promise = CategoryModel.removeAsync(query);
+	} catch (err) {
+		promise = BPromise.reject(err);
 	}
 
 	if(!promise) {
@@ -167,54 +163,24 @@ function remove (filters) {
 }
 
 /**
- * @param  {Json} filters   Keys :  - user_id
- *                                  - type_category_id
- *                                  - no_categories_id
- *                                  - neutre
- * @return {CategoryModel}  List of object found
- * @throws {ParamEx}    If params given are wrong
- * @throws {Error}          If an other error is met
+ * @param  {String} name_query	Name query
+ * @param  {Json} filters 		Filters query
+ * @return {CategoryModel}  	List of object found
+ * @throws {ParamEx}   			If params given are wrong
+ * @throws {Error}          	If an other error is met
  */
-function getAll (filters) {
+function getAll (name_query, filters) {
 
 	Logger.debug('[DAO - START] CategoryDao#getAll');
+	Logger.debug('              -- name_query : ' + name_query);
 	Logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise;
-	if(filters.user_id) {
-		if(filters.type_category_id) {
-			if(filters.no_categories_id) {
-				if(filters.no_categories_id.length) {
-					promise = CategoryModel.findAsync({
-						_id    : { $nin : filters.no_categories_id },
-						_type  : filters.type_category_id,
-						active : true,
-						_user  : filters.user_id
-					});
-				}
-			} else {
-				promise = CategoryModel.findAsync({
-					_type  : filters.type_category_id,
-					active : true,
-					_user  : filters.user_id
-				});
-			}
-		} else if(filters.neutre !== undefined) {
-			promise = CategoryModel.findAsync({
-				active : true,
-				neutre : filters.neutre,
-				_user  : filters.user_id
-			});
-		} else {
-			promise = CategoryModel.findAsync({
-				active : true,
-				_user  : filters.user_id
-			});
-		}
-	}
-
-	if(!promise) {
-		promise = BPromise.reject(new Exception.ParamEx('Filters missing'));
+	try {
+		let query = DaoManager.getQuery('getAll', name_query, filters);
+		promise = CategoryModel.findAsync(query);
+	} catch (err) {
+		promise = BPromise.reject(err);
 	}
 
 	let promiseEnd = promise
@@ -231,54 +197,25 @@ function getAll (filters) {
 }
 
 /**
- * @param  {Json} filters   Keys :  - category_id
- *                                  - type_category_id
- *                                  - neutre
- *                                  - user_id
- *                                  - name
- * @return {CategoryModel}  Object found
- * @throws {ParamEx}    If params given are wrong
- * @throws {NoResultEx}  If no result found
- * @throws {Error}          If an other error is met
+ * @param  {String} name_query	Name query
+ * @param  {Json} filters 		Filters query
+ * @return {CategoryModel}  	Object found
+ * @throws {ParamEx}    		If params given are wrong
+ * @throws {NoResultEx}  		If no result found
+ * @throws {Error}          	If an other error is met
  */
-function getOne (filters) {
+function getOne (name_query, filters) {
 
 	Logger.debug('[DAO - START] CategoryDao#getOne');
+	Logger.debug('              -- name_query : ' + name_query);
 	Logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise;
-	if(filters.user_id) {
-		if(filters.category_id) {
-			promise = CategoryModel.findOneAsync({
-				_id    : filters.category_id,
-				_user  : filters.user_id
-			});
-		} else if(filters.neutre) {
-			if(filters.type_category_id) {
-				promise = CategoryModel.findOneAsync({
-					_type  : filters.type_category_id,
-					active : true,
-					neutre : true,
-					_user  : filters.user_id
-				});
-			} else {
-				promise = CategoryModel.findOneAsync({
-					active : true,
-					neutre : true,
-					_user  : filters.user_id
-				});
-			}
-		} if(filters.name && filters.type_category_id) {
-				promise = CategoryModel.findOneAsync({
-					name  : filters.name,
-					_type : filters.type_category_id,
-					_user : filters.user_id
-				});
-		}
-	}
-
-	if(!promise) {
-		promise = BPromise.reject(new Exception.ParamEx('Filters missing'));
+	try {
+		let query = DaoManager.getQuery('getOne', name_query, filters);
+		promise = CategoryModel.findOneAsync(query);
+	} catch (err) {
+		promise = BPromise.reject(err);
 	}
 
 	let promiseEnd = promise
@@ -308,13 +245,13 @@ module.exports = {
 	update (input, filters) {
    		return update(input, filters);
 	},
-	remove (filters) {
-		return remove(filters);
+	remove (name_query, filters) {
+		return remove(name_query, filters);
 	},
-	getAll (filters) {
-		return getAll(filters);
+	getAll (name_query, filters) {
+		return getAll(name_query, filters);
 	},
-	getOne (filters) {
-		return getOne(filters);
+	getOne (name_query, filters) {
+		return getOne(name_query, filters);
 	}
 };
