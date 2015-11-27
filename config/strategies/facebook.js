@@ -5,7 +5,6 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 var Exception        = require(global.__server  + '/ExceptionManager');
 var BudgetService    = require(global.__service + '/share/BudgetService');
 var UserDao          = require(global.__dao     + '/UserDao');
-var ServerConfig     = require(global.__config  + '/server');
 var AuthConfig       = require(global.__config  + '/auth');
 
 module.exports = function(passport) {
@@ -17,8 +16,7 @@ module.exports = function(passport) {
 	passport.use(new FacebookStrategy({
 		clientID     : AuthConfig.facebookAuth.clientID,
 		clientSecret : AuthConfig.facebookAuth.clientSecret,
-		callbackURL  : ServerConfig.protocole + '://' + ServerConfig.hostname + ':' +
-							ServerConfig.port + AuthConfig.facebookAuth.callbackURL,
+		callbackURL  : AuthConfig.facebookAuth.callbackURL,
 		passReqToCallback : true
 
 	}, function(req, token, refreshToken, profile, done) {

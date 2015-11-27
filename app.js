@@ -27,7 +27,7 @@ var Session        = require('express-session');
 var Mongoose       = BPromise.promisifyAll(require('mongoose'));
 var DatabaseConfig = require(Path.join(global.__config, 'database'));
 var LoggerConfig   = require(Path.join(global.__config, 'logger'));
-var SecretConfig   = require(Path.join(global.__config, 'secret'));
+var AuthConfig     = require(Path.join(global.__config, 'auth'));
 
 // DataBase ==================================================
 
@@ -48,7 +48,7 @@ app.use(CookieParser());
 // Auth Strategies ===========================================
 
 app.use(Session({
-	secret            : SecretConfig.secret,
+	secret            : AuthConfig.sessionAuth.clientSecret,
 	resave            : true,
 	saveUninitialized : true
 }));

@@ -9,4 +9,5 @@ app.set('port', ServerConfig.port);
 
 var server = app.listen(app.get('port'), app.get('hostname'), function () {
 	console.log('Express server listening on port ' + server.address().port);
+	console.log(process.env);
 });
