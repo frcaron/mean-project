@@ -90,7 +90,6 @@ module.exports = function (router, passport) {
 	// Middleware
 	// =========================================================================================
 
-	// Token verification
 	router.use(function (req, res, next) {
 
 		Logger.debug('[WSP - START] MiddleWare');

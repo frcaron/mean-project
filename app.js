@@ -5,13 +5,14 @@ var Path           = require('path');
 // Global variable = ==========================================
 
 global.__config    = Path.join(__dirname, 'config');
-global.__server    = Path.join(__dirname, 'app/server');
-global.__model     = Path.join(__dirname, 'app/server/data/models');
-global.__plugin    = Path.join(__dirname, 'app/server/data/plugins');
-global.__dao       = Path.join(__dirname, 'app/server/data/dao');
-global.__route     = Path.join(__dirname, 'app/server/routes');
-global.__service   = Path.join(__dirname, 'app/server/services');
-global.__client    = Path.join(__dirname, 'client');
+global.__server    = Path.join(__dirname, 'src/server');
+global.__model     = Path.join(__dirname, 'src/server/data/models');
+global.__plugin    = Path.join(__dirname, 'src/server/data/plugins');
+global.__dao       = Path.join(__dirname, 'src/server/data/dao');
+global.__route     = Path.join(__dirname, 'src/server/routes');
+global.__service   = Path.join(__dirname, 'src/server/services');
+global.__app       = Path.join(__dirname, 'src/client/app');
+global.__assets    = Path.join(__dirname, 'src/client/assets');
 
 // Set up ====================================================
 
@@ -37,13 +38,13 @@ Mongoose.connect(DatabaseConfig.url);
 
 var app = Express();
 
+app.use('/static', Express.static(global.__assets));
 // app.use(Favicon(Path.join(__dirname,'client/assets/img/favicon.ico')));
 app.use(Morgan(LoggerConfig.morganLevel)); // Logger middleware
 app.use(BodyParser.json());
 app.use(BodyParser.urlencoded({ extended : true }));
 app.use(BodyParser.json({ type : 'application/vnd.api+json' }));
 app.use(CookieParser());
-// app.use(Express.static(Path.join(__dirname, 'app/client/views')));
 
 // Auth Strategies ===========================================
 

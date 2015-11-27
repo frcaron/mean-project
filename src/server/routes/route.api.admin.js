@@ -48,7 +48,6 @@ module.exports = function (router) {
 	// Middleware
 	// =========================================================================================
 
-	// Token verification
 	router.use(function (req, res, next) {
 
 		Logger.debug('[WSA - START] MiddleWare');

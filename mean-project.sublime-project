@@ -7,6 +7,7 @@
 			[
 				".gitignore",
 				".jshintrc",
+				".bowerrc",
 				"api-skeleton.xls"
 			],
 			"follow_symlinks": true,

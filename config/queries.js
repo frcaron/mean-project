@@ -93,13 +93,13 @@ module.exports = {
 
 			// By plan and user
 			'byPlanU' : {
-				'plan_id'    : '_plan',
-				'user_id'    : '_user'
+				'plan_id' : '_plan',
+				'user_id' : '_user'
 			},
 
 			// By user
 			'byU'     : {
-				'user_id'    : '_user'
+				'user_id' : '_user'
 			}
 		},
 

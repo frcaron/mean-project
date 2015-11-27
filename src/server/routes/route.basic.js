@@ -1,8 +1,7 @@
 "use strict";
 
 // Inject
-var Logger          = require(global.__server  + '/LoggerManager');
-var ResponseService = require(global.__service + '/ResponseService');
+var Logger = require(global.__server + '/LoggerManager');
 
 module.exports = function (router) {
 
@@ -14,7 +13,6 @@ module.exports = function (router) {
 	// Middleware
 	// =========================================================================================
 
-	// Token verification
 	router.use(function (req, res, next) {
 
 		Logger.debug('[WSB - START] MiddleWare');
@@ -22,10 +20,7 @@ module.exports = function (router) {
 		if (req.isAuthenticated()) {
 			next();
 		} else {
-			ResponseService.fail(res, {
-				reason    : 'No session',
-				code_http : 403
-			});
+			res.sendFile(global.__app + '/index.html');
 		}
 
 		Logger.debug('[WSB -   END] MiddleWare');

@@ -8,17 +8,23 @@ var ResponseService = require(global.__service + '/ResponseService');
 
 var adminRouter     = Express.Router();
 var publicRouter    = Express.Router();
+var basicRouter     = Express.Router();
 
 module.exports = function (app, passport) {
 
 	require('./route.api.admin')(adminRouter);
 	require('./route.api.public')(publicRouter, passport);
+	require('./route.basic')(basicRouter);
+
+	// ================================================================
+	// API ============================================================
+	// ================================================================
 
 	app.use('/api/admin', adminRouter);
 	app.use('/api/public', publicRouter);
 
 	// API unknow response
-	app.use('/*', function(req, res) {
+	app.use('/api/*', function(req, res) {
 		ResponseService.fail(res, {
 				reason : 'API unknow - ' + req.method + ' ' + req.originalUrl
 			});
@@ -37,5 +43,16 @@ module.exports = function (app, passport) {
 
 			ResponseService.fail(res);
 		}
+	});
+
+	// ================================================================
+	// PAGES ==========================================================
+	// ================================================================
+
+	app.use('/', basicRouter);
+
+	// API unknow response
+	app.use('/*', function(req, res) {
+		res.sendFile(global.__app + '/index.html');
 	});
 };
