@@ -14,8 +14,9 @@ global.__service   = Path.join(__dirname, 'src/server/services');
 global.__app       = Path.join(__dirname, 'src/client/app');
 global.__assets    = Path.join(__dirname, 'src/client/assets');
 
-// Set up ====================================================
+// Inject ====================================================
 
+var Fs             = require('fs');
 var BodyParser     = require('body-parser');
 var BPromise       = require('bluebird');
 var CookieParser   = require('cookie-parser');
@@ -34,19 +35,33 @@ var AuthConfig     = require(Path.join(global.__config, 'auth'));
 
 Mongoose.connect(DatabaseConfig.url);
 
-// Configuration =============================================
+// Configuration global ======================================
 
 var app = Express();
 
 app.use('/static', Express.static(global.__assets));
 // app.use(Favicon(Path.join(__dirname,'client/assets/img/favicon.ico')));
-app.use(Morgan(LoggerConfig.morganLevel)); // Logger middleware
+app.use(Morgan(LoggerConfig.morganLevel));
 app.use(BodyParser.json());
 app.use(BodyParser.urlencoded({ extended : true }));
 app.use(BodyParser.json({ type : 'application/vnd.api+json' }));
 app.use(CookieParser());
 
-// Auth Strategies ===========================================
+// Template engine html ========================================
+
+app.engine('html', function (filePath, options, callback) {
+  Fs.readFile(filePath, function (err, content) {
+    if (err) {
+    	return callback(new Error(err));
+    }
+    var rendered = content.toString();
+    return callback(null, rendered);
+  });
+});
+app.set('views', [ Path.join(global.__app, 'views') ]);
+app.set('view engine', 'html');
+
+// Auth Strategies ==============================================
 
 app.use(Session({
 	secret            : AuthConfig.sessionAuth.clientSecret,
@@ -59,7 +74,7 @@ app.use(Flash());
 
 require(Path.join(global.__config, 'passport'))(Passport);
 
-// Routers ===================================================
+// Routers ======================================================
 
 require(Path.join(global.__route, 'routes.js'))(app, Passport);
 

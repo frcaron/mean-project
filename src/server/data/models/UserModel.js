@@ -1,11 +1,12 @@
 "use strict";
 
 // Inject
+var Path       = require('path');
 var BPromise   = require('bluebird');
-var Mongoose   = BPromise.promisifyAll(require('mongoose'));
 var Bcrypt     = require('bcrypt-nodejs');
 var Validator  = require('validator');
-var DatePlugin = require(global.__plugin + '/DatePlugin');
+var Mongoose   = BPromise.promisifyAll(require('mongoose'));
+var DatePlugin = require(Path.join(global.__plugin, 'DatePlugin'));
 
 var Schema     = Mongoose.Schema;
 

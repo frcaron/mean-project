@@ -1,8 +1,9 @@
 "use strict";
 
 //Inject
-var ResponseService = require(global.__service + '/ResponseService');
-var UserService     = require(global.__service + '/UserService');
+var Path            = require('path');
+var ResponseService = require(Path.join(global.__service, 'ResponseService'));
+var UserService     = require(Path.join(global.__service, 'UserService'));
 
 // Properties
 var api_prefix = '/me';

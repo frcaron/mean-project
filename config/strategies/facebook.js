@@ -1,13 +1,14 @@
 "use strict";
 
 // Inject
+var Path             = require('path');
 var Url              = require('url');
 var FacebookStrategy = require('passport-facebook').Strategy;
-var Exception        = require(global.__server  + '/ExceptionManager');
-var BudgetService    = require(global.__service + '/share/BudgetService');
-var UserDao          = require(global.__dao     + '/UserDao');
-var AuthConfig       = require(global.__config  + '/auth');
-var ServerConfig     = require(global.__config  + '/server');
+var Exception        = require(Path.join(global.__server, 'ExceptionManager'));
+var BudgetService    = require(Path.join(global.__service, 'share/BudgetService'));
+var UserDao          = require(Path.join(global.__dao, 'UserDao'));
+var AuthConfig       = require(Path.join(global.__config, 'auth'));
+var ServerConfig     = require(Path.join(global.__config, 'server'));
 
 module.exports = function(passport) {
 

@@ -1,8 +1,9 @@
 "use strict";
 
 // Inject
-var Logger    = require(global.__server + '/LoggerManager');
-var UserDao   = require(global.__dao    + '/UserDao');
+var Path      = require('path');
+var Logger    = require(Path.join(global.__server, 'LoggerManager'));
+var UserDao   = require(Path.join(global.__dao, 'UserDao'));
 
 module.exports = function(passport) {
 

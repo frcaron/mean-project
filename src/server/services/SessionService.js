@@ -1,9 +1,10 @@
 "use strict";
 
 // Inject
-var Exception = require(global.__server  + '/ExceptionManager');
-var Logger    = require(global.__server  + '/LoggerManager');
-var UserDao   = require(global.__dao     + '/UserDao');
+var Path         = require('path');
+var Exception = require(Path.join(global.__server, 'ExceptionManager'));
+var Logger    = require(Path.join(global.__server, 'LoggerManager'));
+var UserDao   = require(Path.join(global.__dao, 'UserDao'));
 
 module.exports = {
 

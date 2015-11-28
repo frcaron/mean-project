@@ -1,11 +1,12 @@
 "use strict";
 
 //Inject
-var Exception          = require(global.__server  + '/ExceptionManager');
+var Path               = require('path');
 var Moment             = require('moment');
-var Logger             = require(global.__server  + '/LoggerManager');
-var ResponseService    = require(global.__service + '/ResponseService');
-var TransactionService = require(global.__service + '/TransactionService');
+var Exception          = require(Path.join(global.__server, 'ExceptionManager'));
+var Logger             = require(Path.join(global.__server, 'LoggerManager'));
+var ResponseService    = require(Path.join(global.__service, 'ResponseService'));
+var TransactionService = require(Path.join(global.__service, 'TransactionService'));
 
 // Properties
 var api_prefix = '/transactions';

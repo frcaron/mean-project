@@ -1,7 +1,8 @@
 "use strict";
 
 // Inject
-var Logger = require(global.__server + '/LoggerManager');
+var Path   = require('path');
+var Logger = require(Path.join(global.__server, 'LoggerManager'));
 
 module.exports = function (router) {
 
@@ -20,7 +21,7 @@ module.exports = function (router) {
 		if (req.isAuthenticated()) {
 			next();
 		} else {
-			res.sendFile(global.__app + '/index.html');
+			res.render('index');
 		}
 
 		Logger.debug('[WSB -   END] MiddleWare');

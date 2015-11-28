@@ -1,8 +1,9 @@
 "use strict";
 
 // Inject
-var ResponseService     = require(global.__service + '/ResponseService');
-var TypeCategoryService = require(global.__service + '/TypeCategoryService');
+var Path                = require('path');
+var ResponseService     = require(Path.join(global.__service, 'ResponseService'));
+var TypeCategoryService = require(Path.join(global.__service, 'TypeCategoryService'));
 
 // Propeties
 var api_prefix = '/typecategories';

@@ -1,8 +1,9 @@
 "use strict";
 
 // Inject
-var Logger          = require(global.__server  + '/LoggerManager');
-var TypeCategoryDao = require(global.__dao     + '/TypeCategoryDao');
+var Path            = require('path');
+var Logger          = require(Path.join(global.__server, 'LoggerManager'));
+var TypeCategoryDao = require(Path.join(global.__dao, 'TypeCategoryDao'));
 
 module.exports = {
 

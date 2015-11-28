@@ -1,13 +1,14 @@
 "use strict";
 
 // Inject
+var Path            = require('path');
 var BPromise        = require('bluebird');
-var Logger          = require(global.__server + '/LoggerManager');
-var UserDao         = require(global.__dao    + '/UserDao');
-var PlanDao         = require(global.__dao    + '/PlanDao');
-var ProgramDao      = require(global.__dao    + '/ProgramDao');
-var CategoryDao     = require(global.__dao    + '/CategoryDao');
-var TypeCategoryDao = require(global.__dao    + '/TypeCategoryDao');
+var Logger          = require(Path.join(global.__server, 'LoggerManager'));
+var UserDao         = require(Path.join(global.__dao, 'UserDao'));
+var PlanDao         = require(Path.join(global.__dao, 'PlanDao'));
+var ProgramDao      = require(Path.join(global.__dao, 'ProgramDao'));
+var CategoryDao     = require(Path.join(global.__dao, 'CategoryDao'));
+var TypeCategoryDao = require(Path.join(global.__dao, 'TypeCategoryDao'));
 
 module.exports = {
 

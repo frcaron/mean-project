@@ -1,10 +1,11 @@
 "use strict";
 
 // Inject
+var Path            = require('path');
 var Express         = require('express');
-var Exception       = require(global.__server  + '/ExceptionManager');
-var Logger          = require(global.__server  + '/LoggerManager');
-var ResponseService = require(global.__service + '/ResponseService');
+var Exception       = require(Path.join(global.__server, 'ExceptionManager'));
+var Logger          = require(Path.join(global.__server, 'LoggerManager'));
+var ResponseService = require(Path.join(global.__service, 'ResponseService'));
 
 var adminRouter     = Express.Router();
 var publicRouter    = Express.Router();
@@ -38,7 +39,7 @@ module.exports = function (app, passport) {
 				detail : err.detail
 			});
 		} else {
-			Logger.debug('[MID - ERROR] route#ErrorHandling');
+			Logger.debug('[MID - ERROR] API#ErrorHandling');
 			Logger.error('              -- message : ' + err.message);
 
 			ResponseService.fail(res);
@@ -53,6 +54,14 @@ module.exports = function (app, passport) {
 
 	// API unknow response
 	app.use('/*', function(req, res) {
-		res.sendFile(global.__app + '/index.html');
+		res.render('index');
+	});
+
+	// Error handling
+	app.use(function(err, req, res, next) {
+		Logger.debug('[MID - ERROR] PAGES#ErrorHandling');
+		Logger.error('              -- message : ' + err.message);
+
+		res.render('error');
 	});
 };

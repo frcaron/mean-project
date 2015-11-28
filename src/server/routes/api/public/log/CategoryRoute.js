@@ -1,10 +1,11 @@
 "use strict";
 
 //Inject
-var Exception       = require(global.__server  + '/ExceptionManager');
-var Logger          = require(global.__server  + '/LoggerManager');
-var ResponseService = require(global.__service + '/ResponseService');
-var CategoryService = require(global.__service + '/CategoryService');
+var Path            = require('path');
+var Exception       = require(Path.join(global.__server, 'ExceptionManager'));
+var Logger          = require(Path.join(global.__server, 'LoggerManager'));
+var ResponseService = require(Path.join(global.__service, 'ResponseService'));
+var CategoryService = require(Path.join(global.__service, 'CategoryService'));
 
 // Properties
 var api_prefix = '/categories';

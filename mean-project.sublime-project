@@ -8,7 +8,9 @@
 				".gitignore",
 				".jshintrc",
 				".bowerrc",
-				"api-skeleton.xls"
+				"api-skeleton.xls",
+				"Procfile",
+				"npm-debug*"
 			],
 			"follow_symlinks": true,
 			"path": "."

@@ -1,12 +1,13 @@
 "use strict";
 
 // Inject
+var Path          = require('path');
 var BPromise      = require('bluebird');
-var Exception     = require(global.__server + '/ExceptionManager');
-var Logger        = require(global.__server + '/LoggerManager');
-var DaoManager    = require(global.__dao    + '/DaoManager')('plan');
-var PlanModel     = require(global.__model  + '/PlanModel');
-var CountersModel = require(global.__model  + '/CountersModel');
+var Exception     = require(Path.join(global.__server, 'ExceptionManager'));
+var Logger        = require(Path.join(global.__server, 'LoggerManager'));
+var DaoManager    = require(Path.join(global.__dao, 'DaoManager'))('plan');
+var PlanModel     = require(Path.join(global.__model, 'PlanModel'));
+var CountersModel = require(Path.join(global.__model, 'CountersModel'));
 
 /**
  * @param  {Json} input 	Data to create

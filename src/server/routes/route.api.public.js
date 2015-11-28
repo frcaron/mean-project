@@ -1,8 +1,9 @@
 "use strict";
 
 // Inject
-var Logger          = require(global.__server  + '/LoggerManager');
-var ResponseService = require(global.__service + '/ResponseService');
+var Path            = require('path');
+var Logger          = require(Path.join(global.__server, 'LoggerManager'));
+var ResponseService = require(Path.join(global.__service, 'ResponseService'));
 
 module.exports = function (router, passport) {
 

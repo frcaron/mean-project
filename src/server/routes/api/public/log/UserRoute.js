@@ -1,10 +1,11 @@
 "use strict";
 
 //Inject
+var Path            = require('path');
 var Validator       = require('validator');
-var Exception       = require(global.__server  + '/ExceptionManager');
-var ResponseService = require(global.__service + '/ResponseService');
-var UserService     = require(global.__service + '/UserService');
+var Exception       = require(Path.join(global.__server, 'ExceptionManager'));
+var ResponseService = require(Path.join(global.__service, 'ResponseService'));
+var UserService     = require(Path.join(global.__service, 'UserService'));
 
 // Properties
 var api_prefix = '/users';
