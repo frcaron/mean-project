@@ -5,14 +5,15 @@ var Path           = require('path');
 // Global variable = ==========================================
 
 global.__config    = Path.join(__dirname, 'config');
-global.__server    = Path.join(__dirname, 'src/server');
-global.__model     = Path.join(__dirname, 'src/server/data/models');
-global.__plugin    = Path.join(__dirname, 'src/server/data/plugins');
-global.__dao       = Path.join(__dirname, 'src/server/data/dao');
-global.__route     = Path.join(__dirname, 'src/server/routes');
-global.__service   = Path.join(__dirname, 'src/server/services');
-global.__app       = Path.join(__dirname, 'src/client/app');
-global.__assets    = Path.join(__dirname, 'src/client/assets');
+global.__server    = Path.join(__dirname, 'app/server');
+global.__model     = Path.join(__dirname, 'app/server/data/models');
+global.__plugin    = Path.join(__dirname, 'app/server/data/plugins');
+global.__dao       = Path.join(__dirname, 'app/server/data/dao');
+global.__route     = Path.join(__dirname, 'app/server/routes');
+global.__service   = Path.join(__dirname, 'app/server/services');
+global.__src       = Path.join(__dirname, 'app/client/src');
+global.__assets    = Path.join(__dirname, 'app/client/assets');
+global.__views     = Path.join(__dirname, 'app/client/views');
 
 // Inject ====================================================
 
@@ -58,7 +59,7 @@ app.engine('html', function (filePath, options, callback) {
     return callback(null, rendered);
   });
 });
-app.set('views', [ Path.join(global.__app, 'views') ]);
+app.set('views', [ global.__views ]);
 app.set('view engine', 'html');
 
 // Auth Strategies ==============================================

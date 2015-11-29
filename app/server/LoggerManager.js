@@ -18,7 +18,7 @@ var logger = new Winston.Logger({
 			new (Winston.transports.Console)({
 				name      : 'console',
 				timestamp : function() {
-					return Moment().format('DD/MM/YY HH:mm:ss');
+					return Moment().format('[HH:mm:ss]');
 				},
 				formatter : function(options) {
 					return options.timestamp() + ' ' +
@@ -31,7 +31,7 @@ var logger = new Winston.Logger({
 				name      : 'file',
 				filename  : 'app.log',
 				timestamp : function() {
-					return Moment().format('DD/MM/YY HH:mm:ss');
+					return Moment().format('[DD-MM-YY HH:mm:ss]');
 				},
 				formatter : function(options) {
 					return options.timestamp() + ' ' +

@@ -1,8 +1,10 @@
 Evol :
 Mapping des objets retour pour cacher les champs en base (sécurité)
-Code retour pour identifier les erreurs (traitement côté IHM)
 Trier les listes de résultat (Categorie => ordre alapha, transaction => date)
 Mail de verification (param verified)
 Gestion de active local (auth)
 Verifier concordance des données queries au lancement serveur
 SessionService delete token
+
+Code retour pour identifier les erreurs (traitement côté IHM)
+Remove sequence mongo
