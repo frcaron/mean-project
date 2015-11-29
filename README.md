@@ -19,6 +19,18 @@ Variable env :
 	// Production
 	- DOMAIN
 
+Outil à installer :
+
+	- NodeJS 5.0.0
+	- npm
+	- MongoDB
+	- nodemon
+	- grunt-cli
+	- heroku
+	- browserfy
+	- jshint
+
+
 ## Usage
 
 Personal in progress
