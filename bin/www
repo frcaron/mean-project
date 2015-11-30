@@ -1,10 +1,11 @@
 "use strict";
 
 // Inject
-var app          = require('../app');
-var ServerConfig = require(global.__config + '/server');
+var app    = require('../app');
+var Path   = require('path');
+var config = require(Path.join(global.__package, 'system')).loadConfig();
 
-app.set('port', ServerConfig.port);
+app.set('port', config.http.port);
 
 var server = app.listen(app.get('port'), function () {
 	console.log('Express server listening on port ' + server.address().port);

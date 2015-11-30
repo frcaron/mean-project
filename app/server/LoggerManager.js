@@ -1,10 +1,10 @@
 "use strict";
 
 // Inject
-var Path         = require('path');
-var Winston      = require('winston');
-var Moment       = require('moment');
-var LoggerConfig = require(Path.join(global.__config, 'logger'));
+var Path    = require('path');
+var Winston = require('winston');
+var Moment  = require('moment');
+var config  = require(Path.join(global.__package, 'system')).loadConfig();
 
 var logger = new Winston.Logger({
 		levels     : {
@@ -13,7 +13,7 @@ var logger = new Winston.Logger({
 			info  : 2,
 			debug : 3
 		},
-		level      : LoggerConfig.level,
+		level      : config.logging.level,
 		transports : [
 			new (Winston.transports.Console)({
 				name      : 'console',

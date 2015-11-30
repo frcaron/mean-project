@@ -4,7 +4,7 @@ module.exports = {
 
 	// Fail response
 	fail (res, options) {
-		if(!options) options = {};
+		options = options || {};
 		res.status(options.code_http || 500).json({
 			success : false,
 			reason  :  options.reason || 'Unknow',
@@ -14,7 +14,7 @@ module.exports = {
 
 	// Success response
 	success (res, options) {
-		if(!options) options = {};
+		options = options || {};
 		if (options.result) {
 			res.status(200).json({
 				success : true,
