@@ -19,7 +19,7 @@ module.exports = function (app, passport) {
 
 	// Exposed ressources
 	app.use('/static', Express.static(global.__assets));
-	app.use('/public', Express.static(global.__dist));
+	app.use('/public', Express.static(global.__libs));
 
 	// Add logging middleware
 	require(Path.join(global.__config, 'middleware/logging'))(app, config.logging);

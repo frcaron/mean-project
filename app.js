@@ -21,6 +21,7 @@ global.__service = Path.join(__dirname, 'app/server/services');
 global.__views   = Path.join(__dirname, 'app/server/views');
 global.__assets  = Path.join(__dirname, 'app/client/assets');
 global.__dist    = Path.join(__dirname, 'app/client/dist');
+global.__libs    = Path.join(__dirname, 'app/client/libs');
 
 
 // =========================================================================
