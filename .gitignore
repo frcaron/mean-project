@@ -5,3 +5,4 @@ npm-debug.log
 app/client/dist/*.js
 .bowerrc
 .bower-*/
+app/client/libs/
