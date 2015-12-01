@@ -7,7 +7,7 @@
     "email" : "francois.caron59@gmail.com"
   },
   "scripts": {
-    "postinstall" : "grunt minify",
+    "postinstall" : "bower install && grunt minify",
     "start"       : "nodemon ./bin/www"
   },
   "engines": {

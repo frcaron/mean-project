@@ -5,14 +5,15 @@ module.exports = function(grunt) {
 	// Project configuration
 	grunt.initConfig({
 		pkg    : grunt.file.readJSON('package.json'),
-		clean  : [ 'app/client/dist' ],
+		clean  : [ 'app/client/libs/dist' ],
 		concat : {
 			options : {
 				separator: ';'
 			},
 			dist    : {
-				src  : [ 'app/client/js/**/*.js' ],
-				dest : 'app/client/dist/<%= pkg.name %>.js'
+				src  : [ 'app/client/routes/**/*.js', 'app/client/controllers/**/*.js',
+					'app/client/services/**/*.js' ],
+				dest : 'app/client/libs/dist/js/<%= pkg.name %>.js'
 			}
 		},
 		uglify : {
@@ -21,7 +22,7 @@ module.exports = function(grunt) {
 			},
 			dist    : {
 				src  : [ '<%= concat.dist.dest %>' ],
-				dest : 'app/client/dist/<%= pkg.name %>.min.js'
+				dest : 'app/client/libs/dist/js/<%= pkg.name %>.min.js'
 			}
 		}
 	});
