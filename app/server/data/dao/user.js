@@ -23,7 +23,7 @@ function create (input) {
 	let user = new UserModel();
 	let promise = CountersModel.getNextSequence('user_id')
 		.then(function (seq){
-
+			console.log('test' + JSON.stringify(seq));
 			// Base
 			user._id            = seq;
 			user.firstname      = input.firstname;

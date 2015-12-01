@@ -1,7 +1,10 @@
 'use strict';
 
 module.exports = {
-	db : 'mongodb://localhost/mean-project',
+	db : {
+		url : 'mongodb://localhost/mean-project',
+		seq : true
+	},
 	logging : {
 		format : 'dev',
 		transport : {

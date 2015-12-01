@@ -6,20 +6,22 @@ var BPromise   = require('bluebird');
 var Mongoose   = BPromise.promisifyAll(require('mongoose'));
 var DatePlugin = require(Path.join(global.__plugin, 'date'));
 var UserPlugin = require(Path.join(global.__plugin, 'user'));
+var Config     = require(Path.join(global.__core, 'system')).Config;
 
 var Schema     = Mongoose.Schema;
+var Types      = Schema.Types;
 
 // Schema
 var ProgramSchema = new Schema({
-	_id       : Number,
+	_id       : Config.db.seq ? Number : Types.ObjectId,
 	_category : {
-		type     : Number,
+		type     : Config.db.seq ? Number : Types.ObjectId,
 		ref      : 'Category',
 		required : true
 	},
 	budget       : Number,
 	_plan     : {
-		type     : Number,
+		type     : Config.db.seq ? Number : Types.ObjectId,
 		ref      : 'Plan',
 		required : true
 	}

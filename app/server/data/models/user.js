@@ -7,12 +7,14 @@ var Bcrypt     = require('bcrypt-nodejs');
 var Validator  = require('validator');
 var Mongoose   = BPromise.promisifyAll(require('mongoose'));
 var DatePlugin = require(Path.join(global.__plugin, 'date'));
+var Config     = require(Path.join(global.__core, 'system')).Config;
 
 var Schema     = Mongoose.Schema;
+var Types      = Schema.Types;
 
 // Schema
 var UserSchema = new Schema({
-	_id         : Number,
+	_id         : Config.db.seq ? Number : Types.ObjectId,
 	firstname   : String,
 	surname     : String,
 	displayname : String,

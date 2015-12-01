@@ -29,7 +29,7 @@ global.__libs    = Path.join(__dirname, 'app/client/libs');
 // =========================================================================
 
 var Config = require(Path.join(global.__core, 'system')).Config;
-Mongoose.connect(Config.db);
+Mongoose.connect(Config.db.url);
 
 // =========================================================================
 // Server ==================================================================

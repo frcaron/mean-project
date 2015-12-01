@@ -6,12 +6,14 @@ var BPromise   = require('bluebird');
 var Mongoose   = BPromise.promisifyAll(require('mongoose'));
 var DatePlugin = require(Path.join(global.__plugin, 'date'));
 var UserPlugin = require(Path.join(global.__plugin, 'user'));
+var Config     = require(Path.join(global.__core, 'system')).Config;
 
 var Schema     = Mongoose.Schema;
+var Types      = Schema.Types;
 
 // Schema
 var PlanSchema = new Schema({
-	_id   : Number,
+	_id   : Config.db.seq ? Number : Types.ObjectId,
 	month : {
 		type     : Number,
 		required : true,

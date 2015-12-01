@@ -3,6 +3,5 @@ node_modules/
 .DS_Store
 npm-debug.log
 app/client/dist/*.js
-.bowerrc
 .bower-*/
 app/client/libs/
