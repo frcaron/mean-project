@@ -1,15 +1,15 @@
 "use strict";
 
 // Inject
-var Path            = require('path');
-var BPromise        = require('bluebird');
-var Exception       = require(Path.join(global.__server, 'ExceptionManager'));
-var UserDao         = require(Path.join(global.__dao, 'user'));
-var PlanDao         = require(Path.join(global.__dao, 'plan'));
-var ProgramDao      = require(Path.join(global.__dao, 'program'));
-var CategoryDao     = require(Path.join(global.__dao, 'category'));
-var TransactionDao  = require(Path.join(global.__dao, 'transaction'));
-var Logger          = require(Path.join(global.__core, 'system')).Logger;
+var Path           = require('path');
+var BPromise       = require('bluebird');
+var UserDao        = require(Path.join(global.__dao, 'user'));
+var PlanDao        = require(Path.join(global.__dao, 'plan'));
+var ProgramDao     = require(Path.join(global.__dao, 'program'));
+var CategoryDao    = require(Path.join(global.__dao, 'category'));
+var TransactionDao = require(Path.join(global.__dao, 'transaction'));
+var Exception      = require(Path.join(global.__core, 'exception'));
+var Logger         = require(Path.join(global.__core, 'system')).Logger;
 
 module.exports = {
 

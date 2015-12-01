@@ -11,3 +11,5 @@ Remove sequence mongo
 package system => exception
 expose config charger conf côté client (liste lib à charger)
 grunt env grunt process
+
+dao manager try catch asyncronous => promise

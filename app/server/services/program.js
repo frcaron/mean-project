@@ -3,11 +3,11 @@
 // Inject
 var Path           = require('path');
 var BPromise       = require('bluebird');
-var Exception      = require(Path.join(global.__server, 'ExceptionManager'));
 var BudgetService  = require(Path.join(global.__service, 'share'));
 var ProgramDao     = require(Path.join(global.__dao, 'program'));
 var CategoryDao    = require(Path.join(global.__dao, 'category'));
 var TransactionDao = require(Path.join(global.__dao, 'transaction'));
+var Exception      = require(Path.join(global.__core, 'exception'));
 var Logger         = require(Path.join(global.__core, 'system')).Logger;
 
 module.exports = {

@@ -3,9 +3,9 @@
 // Inject
 var Path            = require('path');
 var Express         = require('express');
-var Exception       = require(Path.join(global.__server, 'ExceptionManager'));
 var ResponseService = require(Path.join(global.__service, 'response'));
 var Config          = require(Path.join(global.__core, 'system')).Config;
+var Exception       = require(Path.join(global.__core, 'exception'));
 var Logger          = require(Path.join(global.__core, 'system')).Logger;
 
 var adminRouter     = Express.Router();

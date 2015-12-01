@@ -3,9 +3,9 @@
 //Inject
 var Path            = require('path');
 var Validator       = require('validator');
-var Exception       = require(Path.join(global.__server, 'ExceptionManager'));
 var ResponseService = require(Path.join(global.__service, 'response'));
 var SessionService  = require(Path.join(global.__service, 'session'));
+var Exception       = require(Path.join(global.__core, 'exception'));
 var Config          = require(Path.join(global.__core, 'system')).Config;
 var Logger          = require(Path.join(global.__core, 'system')).Logger;
 

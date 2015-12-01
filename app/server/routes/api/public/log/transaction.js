@@ -3,9 +3,9 @@
 //Inject
 var Path               = require('path');
 var Moment             = require('moment');
-var Exception          = require(Path.join(global.__server, 'ExceptionManager'));
 var ResponseService    = require(Path.join(global.__service, 'response'));
 var TransactionService = require(Path.join(global.__service, 'transaction'));
+var Exception          = require(Path.join(global.__core, 'exception'));
 var Logger             = require(Path.join(global.__core, 'system')).Logger;
 
 // Properties

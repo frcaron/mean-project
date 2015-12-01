@@ -3,9 +3,9 @@
 //Inject
 var Path            = require('path');
 var Validator       = require('validator');
-var Exception       = require(Path.join(global.__server, 'ExceptionManager'));
 var ResponseService = require(Path.join(global.__service, 'response'));
 var UserService     = require(Path.join(global.__service, 'user'));
+var Exception       = require(Path.join(global.__core, 'exception'));
 
 // Properties
 var api_prefix = '/users';

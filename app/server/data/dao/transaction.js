@@ -3,10 +3,10 @@
 // Inject
 var Path             = require('path');
 var BPromise         = require('bluebird');
-var Exception        = require(Path.join(global.__server, 'ExceptionManager'));
-var DaoManager       = require(Path.join(global.__dao, 'DaoManager'))('transaction');
+var DaoManager       = require(Path.join(global.__dao, 'manager'))('transaction');
 var TransactionModel = require(Path.join(global.__model, 'transaction'));
 var CountersModel    = require(Path.join(global.__model, 'counters'));
+var Exception        = require(Path.join(global.__core, 'exception'));
 var Logger           = require(Path.join(global.__core, 'system')).Logger;
 
 /**

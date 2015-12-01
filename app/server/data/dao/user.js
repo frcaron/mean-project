@@ -3,10 +3,10 @@
 // Inject
 var Path          = require('path');
 var BPromise      = require('bluebird');
-var Exception     = require(Path.join(global.__server, 'ExceptionManager'));
-var DaoManager    = require(Path.join(global.__dao, 'DaoManager'))('user');
+var DaoManager    = require(Path.join(global.__dao, 'manager'))('user');
 var UserModel     = require(Path.join(global.__model, 'user'));
 var CountersModel = require(Path.join(global.__model, 'counters'));
+var Exception     = require(Path.join(global.__core, 'exception'));
 var Logger        = require(Path.join(global.__core, 'system')).Logger;
 
 /**
@@ -30,10 +30,10 @@ function create (input) {
 			user.surname        = input.surname;
 			user.displayname    = input.displayname;
 			if ( input.verified !== undefined ) {
-				user.verified     = input.verified;
+				user.verified = input.verified;
 			}
 			if ( input.admin !== undefined ) {
-				user.admin        = input.admin;
+				user.admin = input.admin;
 			}
 
 			// Local

@@ -2,9 +2,9 @@
 
 // Inject
 var Path                = require('path');
-var Exception           = require(Path.join(global.__server, 'ExceptionManager'));
 var ResponseService     = require(Path.join(global.__service, 'response'));
 var TypeCategoryService = require(Path.join(global.__service, 'type-category'));
+var Exception           = require(Path.join(global.__core, 'exception'));
 var Logger              = require(Path.join(global.__core, 'system')).Logger;
 
 // Properties
