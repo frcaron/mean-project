@@ -5,7 +5,7 @@ var Path       = require('path');
 var Logger     = require(Path.join(global.__server, 'LoggerManager'));
 var UserDao    = require(Path.join(global.__dao, 'UserDao'));
 
-module.exports = function(passport, config) {
+module.exports = function(passport) {
 
 	// =========================================================================
 	// passport session setup ==================================================
@@ -50,5 +50,5 @@ module.exports = function(passport, config) {
 	});
 
 	require('./strategies/local')(passport);
-	require('./strategies/facebook')(passport, config);
+	require('./strategies/facebook')(passport);
 };

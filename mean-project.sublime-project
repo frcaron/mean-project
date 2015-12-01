@@ -2,14 +2,16 @@
 	"folders":
 	[
 		{
-			"folder_exclude_patterns": [],
+			"folder_exclude_patterns": [
+				".bower-*"
+			],
 			"file_exclude_patterns":
 			[
 				".gitignore",
 				".jshintrc",
 				"api-skeleton.xls",
-				"Procfile",
-				"npm-debug*"
+				"npm-debug*",
+				".bowerrc"
 			],
 			"follow_symlinks": true,
 			"path": "."

@@ -18,17 +18,16 @@ global.__plugin  = Path.join(__dirname, 'app/server/data/plugins');
 global.__dao     = Path.join(__dirname, 'app/server/data/dao');
 global.__route   = Path.join(__dirname, 'app/server/routes');
 global.__service = Path.join(__dirname, 'app/server/services');
-global.__src     = Path.join(__dirname, 'app/client/src');
+global.__views   = Path.join(__dirname, 'app/server/views');
 global.__assets  = Path.join(__dirname, 'app/client/assets');
-global.__views   = Path.join(__dirname, 'app/client/views');
 global.__dist    = Path.join(__dirname, 'app/client/dist');
 
-var config = require(Path.join(global.__package, '/system')).loadConfig();
 
 // =========================================================================
 // DataBase ================================================================
 // =========================================================================
 
+var config = require(Path.join(global.__package, '/system')).loadConfig();
 Mongoose.connect(config.db);
 
 // =========================================================================
@@ -37,10 +36,13 @@ Mongoose.connect(config.db);
 
 var app = Express();
 
-require(Path.join(global.__config, 'express'))(app, Passport, config);
+// Express
+require(Path.join(global.__config, 'express'))(app, Passport);
 
-require(Path.join(global.__config, 'passport'))(Passport, config);
+// Passport
+require(Path.join(global.__config, 'passport'))(Passport);
 
+// Route
 require(Path.join(global.__route, 'routes'))(app, Passport);
 
 module.exports = app;

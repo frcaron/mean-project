@@ -8,7 +8,7 @@ var Logger          = require(Path.join(global.__server, 'LoggerManager'));
 var ResponseService = require(Path.join(global.__service, 'ResponseService'));
 var SessionService  = require(Path.join(global.__service, 'SessionService'));
 var config          = require(Path.join(global.__package, 'system')).loadConfig();
-;
+
 // Properties
 var api_prefix = '/auth';
 

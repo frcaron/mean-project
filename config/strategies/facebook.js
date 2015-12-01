@@ -7,8 +7,9 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 var Exception        = require(Path.join(global.__server, 'ExceptionManager'));
 var BudgetService    = require(Path.join(global.__service, 'share/BudgetService'));
 var UserDao          = require(Path.join(global.__dao, 'UserDao'));
+var config           = require(Path.join(global.__package, 'system')).loadConfig();
 
-module.exports = function(passport, config) {
+module.exports = function(passport) {
 
 	// =========================================================================
 	// Facebook ================================================================

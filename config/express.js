@@ -2,15 +2,16 @@
 
 // Inject
 var Path         = require('path');
-var Fs           = require('fs');
 var BodyParser   = require('body-parser');
 var CookieParser = require('cookie-parser');
+var Consolidate  = require('consolidate');
 var Express      = require('express');
 var Favicon      = require('serve-favicon');
 var Flash        = require('connect-flash');
 var Session      = require('express-session');
+var config       = require(Path.join(global.__package, 'system')).loadConfig();
 
-module.exports = function (app, passport, config) {
+module.exports = function (app, passport) {
 
 	// =========================================================================
 	// Global ==================================================================
@@ -40,16 +41,7 @@ module.exports = function (app, passport, config) {
 
 	// Setting path views public
 	app.set('views', [ global.__views ]);
-
-	app.engine('html', function (filePath, options, callback) {
-	  Fs.readFile(filePath, function (err, content) {
-	    if (err) {
-	    	return callback(new Error(err));
-	    }
-	    var rendered = content.toString();
-	    return callback(null, rendered);
-	  });
-	});
+	app.engine('html', Consolidate[config.templateEngine]);
 	app.set('view engine', 'html');
 
 	// =========================================================================

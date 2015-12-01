@@ -4,6 +4,7 @@ module.exports =  {
 	app : {
 		name : 'MEAN - budget'
 	},
+	templateEngine : 'swig',
 	hostname : process.env.HOST || process.env.HOSTNAME || 'localhost',
 	http : {
 		port : process.env.PORT || 3000

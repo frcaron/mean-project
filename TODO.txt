@@ -9,10 +9,8 @@ SessionService delete token
 Code retour pour identifier les erreurs (traitement côté IHM)
 Remove sequence mongo
 
-loadConfig
-renomme dao = > controller
-layout view côté serveur modification engine
 expose config
 package system => loadConfig
 				=> logger
 				=> exception
+charger conf côté client (liste lib à charger)
