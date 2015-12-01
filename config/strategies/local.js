@@ -4,8 +4,8 @@
 var Path          = require('path');
 var LocalStrategy = require('passport-local').Strategy;
 var Exception     = require(Path.join(global.__server, 'ExceptionManager'));
-var BudgetService = require(Path.join(global.__service, 'share/BudgetService'));
-var UserDao       = require(Path.join(global.__dao, 'UserDao'));
+var BudgetService = require(Path.join(global.__service, 'share'));
+var UserDao       = require(Path.join(global.__dao, 'user'));
 
 module.exports = function(passport) {
 

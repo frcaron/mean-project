@@ -4,8 +4,26 @@ module.exports = {
 	db : 'mongodb://' + process.env.DB_USR + ':' + process.env.DB_PWD + '@' +
 						process.env.DB_ADDR + ':' + process.env.DB_PORT + '/' + process.env.DB_SCHEMA,
 	logging : {
-		level  : process.env.LOG_LEVEL,
-    	format: 'combined'
+		format : 'combined',
+		transport : {
+			console : {
+				level   : 'error',
+				timestamp : {
+					format  : 'HH:mm:ss',
+					enabled : false
+				},
+				enabled : true
+			},
+			file    : {
+				filename : 'logs/app.log',
+				level    : 'debug',
+				timestamp : {
+					format  : 'DD-MM-YY HH:mm:ss',
+					enabled : false
+				},
+				enabled  : true
+			}
+		}
 	},
 	domain : process.env.DOMAIN,
 	strategies : {

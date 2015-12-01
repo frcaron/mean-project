@@ -2,15 +2,12 @@ Evol :
 Mapping des objets retour pour cacher les champs en base (sécurité)
 Trier les listes de résultat (Categorie => ordre alapha, transaction => date)
 Mail de verification (param verified)
-Gestion de active local (auth)
 Verifier concordance des données queries au lancement serveur
 SessionService delete token
 
 Code retour pour identifier les erreurs (traitement côté IHM)
 Remove sequence mongo
 
-expose config
-package system => loadConfig
-				=> logger
-				=> exception
-charger conf côté client (liste lib à charger)
+package system => exception
+expose config charger conf côté client (liste lib à charger)
+grunt env grunt process

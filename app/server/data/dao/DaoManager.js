@@ -3,8 +3,8 @@
 // Inject
 var Path          = require('path');
 var Exception     = require(Path.join(global.__server, 'ExceptionManager'));
-var Logger        = require(Path.join(global.__server, 'LoggerManager'));
 var QueriesConfig = require(Path.join(global.__config, 'queries'));
+var Logger        = require(Path.join(global.__core, 'system')).Logger;
 
 module.exports = function (name_collection) {
 	let collection = QueriesConfig[name_collection];

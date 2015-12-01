@@ -4,8 +4,9 @@
 var Path            = require('path');
 var Express         = require('express');
 var Exception       = require(Path.join(global.__server, 'ExceptionManager'));
-var Logger          = require(Path.join(global.__server, 'LoggerManager'));
-var ResponseService = require(Path.join(global.__service, 'ResponseService'));
+var ResponseService = require(Path.join(global.__service, 'response'));
+var Config          = require(Path.join(global.__core, 'system')).Config;
+var Logger          = require(Path.join(global.__core, 'system')).Logger;
 
 var adminRouter     = Express.Router();
 var publicRouter    = Express.Router();
@@ -54,7 +55,10 @@ module.exports = function (app, passport) {
 
 	// API unknow response
 	app.use('/*', function(req, res) {
-		res.render('index');
+		res.redirect('index', {
+			appName : Config.app.name,
+			title   : 'Home'
+		});
 	});
 
 	// Error handling
@@ -62,6 +66,6 @@ module.exports = function (app, passport) {
 		Logger.debug('[MID - ERROR] PAGES#ErrorHandling');
 		Logger.error('              -- message : ' + err.message);
 
-		res.render('error');
+		res.render('500');
 	});
 };

@@ -2,7 +2,8 @@
 
 // Inject
 var Path   = require('path');
-var Logger = require(Path.join(global.__server, 'LoggerManager'));
+var Logger = require(Path.join(global.__core, 'system')).Logger;
+var Config = require(Path.join(global.__core, 'system')).Config;
 
 module.exports = function (router) {
 
@@ -21,7 +22,10 @@ module.exports = function (router) {
 		if (req.isAuthenticated()) {
 			next();
 		} else {
-			res.render('index');
+			res.render('index', {
+				appName : Config.app.name,
+				title   : 'Home'
+			});
 		}
 
 		Logger.debug('[WSB -   END] MiddleWare');

@@ -2,7 +2,9 @@
 
 module.exports =  {
 	app : {
-		name : 'MEAN - budget'
+		name        : 'Budget',
+		description : '',
+		keyword     : ''
 	},
 	templateEngine : 'swig',
 	hostname : process.env.HOST || process.env.HOSTNAME || 'localhost',

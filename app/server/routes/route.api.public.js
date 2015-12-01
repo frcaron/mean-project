@@ -2,8 +2,8 @@
 
 // Inject
 var Path            = require('path');
-var Logger          = require(Path.join(global.__server, 'LoggerManager'));
-var ResponseService = require(Path.join(global.__service, 'ResponseService'));
+var ResponseService = require(Path.join(global.__service, 'response'));
+var Logger          = require(Path.join(global.__core, 'system')).Logger;
 
 module.exports = function (router, passport) {
 
@@ -85,7 +85,7 @@ module.exports = function (router, passport) {
 	// Public
 	// =========================================================================================
 
-	require('./api/public/unlog/SessionRoute')(router, passport);
+	require('./api/public/unlog/session')(router, passport);
 
 	// =========================================================================================
 	// Middleware
@@ -111,12 +111,12 @@ module.exports = function (router, passport) {
 	// Private
 	// =========================================================================================
 
-	require('./api/public/log/UserRoute')(router);
-	require('./api/public/log/PlanRoute')(router);
-	require('./api/public/log/ProgramRoute')(router);
-	require('./api/public/log/TransactionRoute')(router);
-	require('./api/public/log/CategoryRoute')(router);
-	require('./api/public/log/TypeCategoryRoute')(router);
-	require('./api/public/log/MeRoute')(router);
-	require('./api/public/log/SessionRoute')(router, passport);
+	require('./api/public/log/user')(router);
+	require('./api/public/log/plan')(router);
+	require('./api/public/log/program')(router);
+	require('./api/public/log/transaction')(router);
+	require('./api/public/log/category')(router);
+	require('./api/public/log/type-category')(router);
+	require('./api/public/log/me')(router);
+	require('./api/public/log/session')(router, passport);
 };

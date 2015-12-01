@@ -2,8 +2,8 @@
 
 // Inject
 var Path            = require('path');
-var Logger          = require(Path.join(global.__server, 'LoggerManager'));
-var ResponseService = require(Path.join(global.__service, 'ResponseService'));
+var ResponseService = require(Path.join(global.__service, 'response'));
+var Logger          = require(Path.join(global.__core, 'system')).Logger;
 
 module.exports = function (router) {
 
@@ -43,7 +43,7 @@ module.exports = function (router) {
 	// Public
 	// =========================================================================================
 
-	require('./api/admin/unlog/TypeCategoryRoute')(router);
+	require('./api/admin/unlog/type-category')(router);
 
 	// =========================================================================================
 	// Middleware
@@ -77,6 +77,6 @@ module.exports = function (router) {
 	// Private
 	// =========================================================================================
 
-	require('./api/admin/log/TypeCategoryRoute')(router);
-	require('./api/admin/log/UserRoute')(router);
+	require('./api/admin/log/type-category')(router);
+	require('./api/admin/log/user')(router);
 };

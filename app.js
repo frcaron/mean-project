@@ -10,9 +10,9 @@ var Mongoose = require('mongoose');
 // Global variable =========================================================
 // =========================================================================
 
-global.__package = Path.join(__dirname, 'package');
 global.__config  = Path.join(__dirname, 'config');
 global.__server  = Path.join(__dirname, 'app/server');
+global.__core    = Path.join(__dirname, 'app/server/core');
 global.__model   = Path.join(__dirname, 'app/server/data/models');
 global.__plugin  = Path.join(__dirname, 'app/server/data/plugins');
 global.__dao     = Path.join(__dirname, 'app/server/data/dao');
@@ -28,8 +28,8 @@ global.__libs    = Path.join(__dirname, 'app/client/libs');
 // DataBase ================================================================
 // =========================================================================
 
-var config = require(Path.join(global.__package, '/system')).loadConfig();
-Mongoose.connect(config.db);
+var Config = require(Path.join(global.__core, 'system')).Config;
+Mongoose.connect(Config.db);
 
 // =========================================================================
 // Server ==================================================================

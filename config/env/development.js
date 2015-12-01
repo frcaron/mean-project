@@ -3,8 +3,26 @@
 module.exports = {
 	db : 'mongodb://localhost/mean-project',
 	logging : {
-		level  : 'debug',
-		format : 'dev'
+		format : 'dev',
+		transport : {
+			console : {
+				level     : 'debug',
+				timestamp : {
+					format  : 'HH:mm:ss',
+					enabled : false
+				},
+				enabled   : true
+			},
+			file    : {
+				filename : 'logs/app.log',
+				level    : 'debug',
+				timestamp : {
+					format  : 'DD-MM-YY HH:mm:ss',
+					enabled : false
+				},
+				enabled  : false
+			}
+		}
 	},
 	domain : 'http://localhost:3000',
 	strategies : {
