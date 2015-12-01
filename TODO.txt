@@ -6,9 +6,8 @@ Verifier concordance des données queries au lancement serveur
 SessionService delete token
 
 Code retour pour identifier les erreurs (traitement côté IHM)
-Remove sequence mongo
+script demarrage test présence donnée en base
 
-package system => exception
 expose config charger conf côté client (liste lib à charger)
 grunt env grunt process
 
