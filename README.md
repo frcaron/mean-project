@@ -21,13 +21,13 @@ Variable env :
 
 Outil à installer :
 
-	- NodeJS 5.0.0
+	- NodeJS
 	- npm
+	- bower
 	- MongoDB
 	- nodemon
 	- grunt-cli
 	- heroku
-	- browserfy
 	- jshint
 
 
