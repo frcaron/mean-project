@@ -99,7 +99,10 @@ module.exports = function (router, passport) {
 
 			}, function (req, res) {
 				ResponseService.success(res, {
-					result : req.user
+					result : {
+						user : req.user,
+						token
+					}
 				});
 			});
 	}

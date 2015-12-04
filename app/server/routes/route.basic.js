@@ -17,7 +17,7 @@ module.exports = function (router) {
 
 	router.use(function (req, res, next) {
 
-		Logger.debug('[WSB - START] MiddleWare');
+		Logger.debug('[WSB - MIDDL] reoute.basic#secure');
 
 		if (req.isAuthenticated()) {
 			next();
@@ -27,8 +27,6 @@ module.exports = function (router) {
 				title   : 'Home'
 			});
 		}
-
-		Logger.debug('[WSB -   END] MiddleWare');
 	});
 
 	// =========================================================================================

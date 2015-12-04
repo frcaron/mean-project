@@ -26,10 +26,8 @@ module.exports = function (app, passport) {
 	app.use('/api/public', publicRouter);
 
 	// API unknow response
-	app.use('/api/*', function(req, res) {
-		ResponseService.fail(res, {
-				reason : 'API unknow - ' + req.method + ' ' + req.originalUrl
-			});
+	app.use('/api/*', function(req, res, next) {
+		next(new Exception.routeEx('API unknow - ' + req.method + ' ' + req.originalUrl));
 	});
 
 	// Error handling
@@ -39,8 +37,16 @@ module.exports = function (app, passport) {
 				reason : err.message,
 				detail : err.detail
 			});
+
+		} if(err instanceof Exception.RouteEx) {
+			ResponseService.fail(res, {
+				reason    : err.message,
+				detail    : err.detail,
+				code_http : 403
+			});
+
 		} else {
-			Logger.debug('[MID - ERROR] API#ErrorHandling');
+			Logger.debug('[WSG - ERROR] API#ErrorHandling');
 			Logger.error('              -- message : ' + err.message);
 
 			ResponseService.fail(res);
@@ -63,7 +69,7 @@ module.exports = function (app, passport) {
 
 	// Error handling
 	app.use(function(err, req, res, next) {
-		Logger.debug('[MID - ERROR] PAGES#ErrorHandling');
+		Logger.debug('[WSG - ERROR] PAGES#ErrorHandling');
 		Logger.error('              -- message : ' + err.message);
 
 		res.render('500');

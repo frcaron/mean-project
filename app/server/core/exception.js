@@ -35,6 +35,11 @@ var LoginEx = function (message) {
 	this.name    = 'LoginEx';
 	this.message = message || '';
 };
+var RouteEx = function (message) {
+	Error.captureStackTrace(this, this.constructor);
+	this.name    = 'RouteEx';
+	this.message = message || undefined;
+};
 
 module.exports = {
 	MetierEx    : MetierEx,
@@ -42,7 +47,8 @@ module.exports = {
 	NoResultEx  : NoResultEx,
 	ValidatorEx : ValidatorEx,
 	ParamEx     : ParamEx,
-	LoginEx     : LoginEx
+	LoginEx     : LoginEx,
+	RouteEx     : RouteEx
 };
 
 Util.inherits(MetierEx, Error);
@@ -51,3 +57,4 @@ Util.inherits(NoResultEx, MetierEx);
 Util.inherits(ValidatorEx, MetierEx);
 Util.inherits(ParamEx, MetierEx);
 Util.inherits(LoginEx, MetierEx);
+Util.inherits(RouteEx, Error);

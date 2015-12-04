@@ -2,7 +2,10 @@
 
 // Inject
 var Path            = require('path');
-var ResponseService = require(Path.join(global.__service, 'response'));
+var Jwt             = require('jsonwebtoken');
+var UserService     = require(Path.join(global.__service, 'user'));
+var Exception       = require(Path.join(global.__core, 'exception'));
+var Config          = require(Path.join(global.__core, 'system')).Config;
 var Logger          = require(Path.join(global.__core, 'system')).Logger;
 
 module.exports = function (router) {
@@ -17,10 +20,7 @@ module.exports = function (router) {
 		Logger.debug('[WSA - VALID] "user_id" : ' + user_id);
 
 		if (!user_id) {
-			return ResponseService.fail(res, {
-				reason : 'Param missing',
-				detail : [ 'user_id' ]
-			});
+			next(new Exception.RouteEx('Param missing', [ 'user_id' ]));
 		}
 		next();
 	});
@@ -31,10 +31,7 @@ module.exports = function (router) {
 		Logger.debug('[WSA - VALID] "type_category_id" : ' + type_category_id);
 
 		if (!type_category_id) {
-			return ResponseService.fail(res, {
-				reason : 'Param missing',
-				detail : [ 'type_category_id' ]
-			});
+			next(new Exception.RouteEx('Param missing', [ 'type_category_id' ]));
 		}
 		next();
 	});
@@ -51,26 +48,53 @@ module.exports = function (router) {
 
 	router.use(function (req, res, next) {
 
-		Logger.debug('[WSA - START] MiddleWare');
+		let token = req.body.token || req.params.token || req.query.token || req.headers[ 'x-access-token' ];
+
+		Logger.debug('[WSA - MIDDL] route.api.admin#secure');
+		Logger.debug('              -- token : ' + token);
 
 		if (req.isAuthenticated()) {
+
 			// Admin access
 			if (!req.user.admin) {
-				ResponseService.fail(res, {
-					reason    : 'Permission refused',
-					code_http : 403
-				});
+				next(new Exception.RouteEx('Permission refused'));
 			} else {
-				next();
+				next('route');
 			}
-		} else {
-			ResponseService.fail(res, {
-				reason    : 'No session',
-				code_http : 403
+
+		} else if (token) {
+			Jwt.verify(token, Config.session.secret, function (err, decoded) {
+				if (err) {
+					next(new Exception.RouteEx('Session Expired'));
+
+				} else {
+					Logger.debug('              -- token : ' + JSON.stringify(decoded));
+					UserService.getById(req, next, decoded.id);
+				}
 			});
+
+		} else {
+			next(new Exception.RouteEx('No session'));
 		}
 
-		Logger.debug('[WSA -   END] MiddleWare');
+	}, function (req, res, next) {
+		let user = req.resultat;
+
+		// Admin access
+		if(!user.admin) {
+			next(new Exception.RouteEx('Permission refused'));
+
+		} else {
+			req.user = {
+				id       : user._id,
+				name     : user.displayname || user.firstname + ' ' + user.surname,
+				email    : user.local ? user.local.email || user.facebook ? user.facebook.email : undefined : undefined,
+				verified : user.verified,
+				admin    : user.admin
+			};
+
+			next();
+		}
 	});
 
 	// =========================================================================================

@@ -2,7 +2,10 @@
 
 // Inject
 var Path            = require('path');
-var ResponseService = require(Path.join(global.__service, 'response'));
+var Jwt             = require('jsonwebtoken');
+var UserService     = require(Path.join(global.__service, 'user'));
+var Exception       = require(Path.join(global.__core, 'exception'));
+var Config          = require(Path.join(global.__core, 'system')).Config;
 var Logger          = require(Path.join(global.__core, 'system')).Logger;
 
 module.exports = function (router, passport) {
@@ -17,10 +20,7 @@ module.exports = function (router, passport) {
 		Logger.debug('[WSP - VALID] "plan_id" : ' + plan_id);
 
 		if (!plan_id) {
-			return ResponseService.fail(res, {
-				reason : 'Param missing',
-				detail : [ 'plan_id' ]
-			});
+			next(new Exception.RouteEx('Param missing', [ 'plan_id' ]));
 		}
 		next();
 	});
@@ -31,10 +31,7 @@ module.exports = function (router, passport) {
 		Logger.debug('[WSP - VALID] "program_id" : ' + program_id);
 
 		if (!program_id) {
-			return ResponseService.fail(res, {
-				reason : 'Param missing',
-				detail : [ 'program_id' ]
-			});
+			next(new Exception.RouteEx('Param missing', [ 'program_id' ]));
 		}
 		next();
 	});
@@ -45,10 +42,7 @@ module.exports = function (router, passport) {
 		Logger.debug('[WSP - VALID] "transaction_id" : ' + transaction_id);
 
 		if (!transaction_id) {
-			return ResponseService.fail(res, {
-				reason : 'Param missing',
-				detail : [ 'transaction_id' ]
-			});
+			next(new Exception.RouteEx('Param missing', [ 'transaction_id' ]));
 		}
 		next();
 	});
@@ -59,10 +53,7 @@ module.exports = function (router, passport) {
 		Logger.debug('[WSP - VALID] "category_id" : ' + category_id);
 
 		if (!category_id) {
-			return ResponseService.fail(res, {
-				reason : 'Param missing',
-				detail : [ 'category_id' ]
-			});
+			next(new Exception.RouteEx('Param missing', [ 'category_id' ]));
 		}
 		next();
 	});
@@ -73,10 +64,7 @@ module.exports = function (router, passport) {
 		Logger.debug('[WSP - VALID] "type_category_id" : ' + type_category_id);
 
 		if (!type_category_id) {
-			return ResponseService.fail(res, {
-				reason : 'Param missing',
-				detail : [ 'type_category_id' ]
-			});
+			next(new Exception.RouteEx('Param missing', [ 'type_category_id' ]));
 		}
 		next();
 	});
@@ -93,18 +81,40 @@ module.exports = function (router, passport) {
 
 	router.use(function (req, res, next) {
 
-		Logger.debug('[WSP - START] MiddleWare');
+		let token = req.body.token || req.params.token || req.query.token || req.headers[ 'x-access-token' ];
+
+		Logger.debug('[WSP - MIDDL] route.api.public#secure');
+		Logger.debug('              -- token : ' + token);
 
 		if (req.isAuthenticated()) {
-			next();
-		} else {
-			ResponseService.fail(res, {
-				reason    : 'No session',
-				code_http : 403
+			next('route');
+
+		} else if (token) {
+			Jwt.verify(token, Config.session.secret, function (err, decoded) {
+				if (err) {
+					next(new Exception.RouteEx('Session Expired'));
+
+				} else {
+					Logger.debug('              -- token : ' + JSON.stringify(decoded));
+					UserService.getById(req, next, decoded.id);
+				}
 			});
+
+		} else {
+			next(new Exception.RouteEx('No session'));
 		}
 
-		Logger.debug('[WSP -   END] MiddleWare');
+	}, function (req, res, next) {
+		let user = req.resultat;
+		req.user = {
+			id       : user._id,
+			name     : user.displayname || user.firstname + ' ' + user.surname,
+			email    : user.local ? user.local.email || user.facebook ? user.facebook.email : undefined : undefined,
+			verified : user.verified,
+			admin    : user.admin
+		};
+
+		next();
 	});
 
 	// =========================================================================================
