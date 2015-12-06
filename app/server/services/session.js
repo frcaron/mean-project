@@ -2,7 +2,9 @@
 
 // Inject
 var Path      = require('path');
+var Jwt       = require('jsonwebtoken');
 var Exception = require(Path.join(global.__core, 'exception'));
+var Config    = require(Path.join(global.__core, 'system')).Config;
 var Logger    = require(Path.join(global.__core, 'system')).Logger;
 
 module.exports = {
@@ -65,10 +67,20 @@ module.exports = {
 
 		Logger.debug('[SER - START] SessionService#login');
 
-		req.login(req.result, function(err) {
+		let user = req.result;
+		req.login(user, function(err) {
 			if(err){
 				return next(err);
 			}
+
+			// Generate token
+			let token = Jwt.sign({
+				id : user._id
+			}, Config.session.secret, {
+				expiresMinutes : Config.session.delay
+			});
+			req.result = token;
+
 			next();
 		});
 

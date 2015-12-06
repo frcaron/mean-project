@@ -14,7 +14,7 @@ var api_prefix = '/auth';
 
 module.exports = function (router, passport) {
 
-	router.route('/logout')
+	router.route(api_prefix + '/logout')
 
 		// Logout
 		.all(function (req, res) {
@@ -100,8 +100,8 @@ module.exports = function (router, passport) {
 			}, function (req, res) {
 				ResponseService.success(res, {
 					result : {
-						user : req.user,
-						token
+						user  : req.user,
+						token : req.result
 					}
 				});
 			});
@@ -124,7 +124,10 @@ module.exports = function (router, passport) {
 
 			}, function (req, res) {
 				ResponseService.success(res, {
-					result : req.user
+					result : {
+						user  : req.user,
+						token : req.result
+					}
 				});
 			});
 	}

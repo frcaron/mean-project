@@ -40,6 +40,7 @@ module.exports = {
 		}
 	},
 	session : {
-		secret : 'secretmeanproject'
+		secret : 'secretmeanproject',
+		delay  : 1440
 	}
 };

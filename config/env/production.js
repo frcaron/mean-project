@@ -40,6 +40,7 @@ module.exports = {
 		}
 	},
 	session : {
-		secret : process.env.SESSION_SECRET
+		secret : process.env.SESSION_SECRET,
+		delay  : 43200
 	}
 };

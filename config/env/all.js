@@ -27,7 +27,7 @@ module.exports =  {
 		currentLanguage : 'fr'
 	},
 	session : {
-		name : 'connect.sid',
+		name : 'connect.sid'
 	},
 	bodyParser : {
 		json       : { type : 'application/vnd.api+json' },

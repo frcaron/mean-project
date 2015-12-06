@@ -52,8 +52,8 @@ var defaultLogger = new Winston.Logger({
 });
 
 // Formatter
-var formatter = function(options) {
-	return  options.level.toUpperCase() + ' ' +
+var formatter = function(options, timestamp) {
+	return  (timestamp ? (options.timestamp() + '\t') : '') + options.level.toUpperCase() + ' ' +
 		(undefined !== options.message ? options.message : '') +
 		(options.meta && Object.keys(options.meta).length ? '\n\t' + JSON.stringify(options.meta) : '' );
 };
@@ -68,7 +68,7 @@ if(consoleConf.enabled) {
 			return Moment().format(consoleConf.timestamp.format);
 		},
 		formatter : function(options) {
-			return (consoleConf.timestamp.enabled ? (options.timestamp() + ' ') : '') + formatter(options);
+			return formatter(options, consoleConf.timestamp.enabled);
 		},
 		colorize  : true
 	}));
@@ -85,7 +85,7 @@ if(fileConf.enabled) {
 			return Moment().format(fileConf.timestamp.format);
 		},
 		formatter : function(options) {
-			return (fileConf.timestamp.enabled ? (options.timestamp() + ' ') : '') + formatter(options);
+			return formatter(options, fileConf.timestamp.enabled);
 		}
 	}));
 }
