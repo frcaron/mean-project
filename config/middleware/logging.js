@@ -1,10 +1,11 @@
 (function() {
 	'use strict';
 
-	var Fs                = require('fs');
-	var FileStreamRotator = require('file-stream-rotator');
-	var Path              = require('path');
-	var _                 = require('lodash');
+	var Fs        = require('fs');
+	var FSRotator = require('file-stream-rotator');
+	var Morgan    = require('morgan');
+	var Path      = require('path');
+	var _         = require('lodash');
 
 	module.exports = function(app, config) {
 		let format, options, stream;
@@ -27,9 +28,9 @@
 				});
 
 				// create a rotating write stream
-				var accessLogStream = FileStreamRotator.getStream({
+				var accessLogStream = FSRotator.getStream({
 					filename    : Path.join(logDirectory, Path.basename(stream.filename)),
-					frequency   : 'daily',
+					frequency   : stream.frequency,
 					verbose     : false,
 					date_format : stream.date_format
 				});
@@ -37,7 +38,7 @@
 				options = _.extend(options, { 'stream' : accessLogStream });
 			}
 
-			app.use(require('morgan')(format, options));
+			app.use(Morgan(format, options));
 		}
 	};
 })();
