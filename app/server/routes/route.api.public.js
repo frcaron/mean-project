@@ -79,7 +79,7 @@ module.exports = function (router, passport) {
 	// Middleware
 	// =========================================================================================
 
-	router.use(function (req, res, next) {
+	router.all('/*', function (req, res, next) {
 
 		let token = req.body.token || req.params.token || req.query.token || req.headers[ 'x-access-token' ];
 
@@ -105,7 +105,7 @@ module.exports = function (router, passport) {
 		}
 
 	}, function (req, res, next) {
-		let user = req.resultat;
+		let user = req.result;
 		req.user = {
 			id       : user._id,
 			name     : user.displayname || user.firstname + ' ' + user.surname,
@@ -113,7 +113,6 @@ module.exports = function (router, passport) {
 			verified : user.verified,
 			admin    : user.admin
 		};
-
 		next();
 	});
 

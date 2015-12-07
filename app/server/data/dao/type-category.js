@@ -137,8 +137,10 @@ function getOne (name_query, filters) {
 
 	let promise;
 	try {
-		let query = DaoManager.getQuery('getOne', name_query, filters);
-		promise = TypeCategoryModel.findOneAsync(query);
+		promise = DaoManager.getQuery('getOne', name_query, filters)
+			.then(function (query) {
+				return TypeCategoryModel.findOneAsync(query);
+			});
 	} catch (err) {
 		promise = BPromise.reject(err);
 	}

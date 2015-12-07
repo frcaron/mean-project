@@ -79,12 +79,11 @@ function update (input, name_query, filters) {
 	let promise;
 	if(filters) {
 		try {
-			let query = DaoManager.getQuery('update', name_query, filters);
-			promise = TransactionModel.updateAsync(query,{
-					_program : input.program_id
-				})
-				.then(function (transactions) {
-					return BPromise.resolve(transactions);
+			promise = DaoManager.getQuery('update', name_query, filters)
+				.then(function (query) {
+					return TransactionModel.updateAsync(query,{
+						_program : input.program_id
+					});
 				});
 		} catch (err) {
 			promise = BPromise.reject(err);
@@ -152,8 +151,10 @@ function remove (name_query, filters) {
 
 	let promise;
 	try {
-		let query = DaoManager.getQuery('remove', name_query, filters);
-		promise = TransactionModel.removeAsync(query);
+		promise = DaoManager.getQuery('remove', name_query, filters)
+			.then(function (query) {
+				return TransactionModel.removeAsync(query);
+			});
 	} catch (err) {
 		promise = BPromise.reject(err);
 	}
@@ -186,8 +187,10 @@ function getAll (name_query, filters) {
 
 	let promise;
 	try {
-		let query = DaoManager.getQuery('getAll', name_query, filters);
-		promise = TransactionModel.findAsync(query);
+		promise = DaoManager.getQuery('getAll', name_query, filters)
+			.then(function (query) {
+				return TransactionModel.findAsync(query);
+			});
 	} catch (err) {
 		promise = BPromise.reject(err);
 	}
@@ -221,8 +224,10 @@ function getOne (name_query, filters) {
 
 	let promise;
 	try {
-		let query = DaoManager.getQuery('getOne', name_query, filters);
-		promise = TransactionModel.findOneAsync(query);
+		promise = DaoManager.getQuery('getOne', name_query, filters)
+			.then(function (query) {
+				return TransactionModel.findOneAsync(query);
+			});
 	} catch (err) {
 		promise = BPromise.reject(err);
 	}

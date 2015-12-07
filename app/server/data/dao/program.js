@@ -133,8 +133,10 @@ function remove (name_query, filters) {
 
 	let promise;
 	try {
-		let query = DaoManager.getQuery('remove', name_query, filters);
-		promise = ProgramModel.removeAsync(query);
+		promise = DaoManager.getQuery('remove', name_query, filters)
+			.then(function (query) {
+				return ProgramModel.removeAsync(query);
+			});
 	} catch (err) {
 		promise = BPromise.reject(err);
 	}
@@ -167,8 +169,10 @@ function getAll (name_query, filters) {
 
 	let promise;
 	try {
-		let query = DaoManager.getQuery('getAll', name_query, filters);
-		promise = ProgramModel.findAsync(query);
+		promise = DaoManager.getQuery('getAll', name_query, filters)
+			.then(function (query) {
+				return ProgramModel.findAsync(query);
+			});
 	} catch (err) {
 		promise = BPromise.reject(err);
 	}
@@ -202,8 +206,10 @@ function getOne (name_query, filters) {
 
 	let promise;
 	try {
-		let query = DaoManager.getQuery('getOne', name_query, filters);
-		promise = ProgramModel.findOneAsync(query);
+		promise = DaoManager.getQuery('getOne', name_query, filters)
+			.then(function (query) {
+				return ProgramModel.findOneAsync(query);
+			});
 	} catch (err) {
 		promise = BPromise.reject(err);
 	}

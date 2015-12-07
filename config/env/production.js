@@ -6,24 +6,33 @@ module.exports = {
 		seq : false
 	},
 	logging : {
-		format : 'combined',
-		transport : {
+		morgan : {
+			format : 'combined',
+			stream :  {
+				enabled     : true,
+				filename    : 'logs/morgan/app.%DATE%',
+				frequency   : 'daily',
+				date_format : "YYYY-MM-DD"
+			}
+		},
+		winston : {
 			console : {
-				level   : 'error',
+				enabled   : true,
+				level     : 'error',
 				timestamp : {
-					format  : 'HH:mm:ss',
-					enabled : false
-				},
-				enabled : true
+					enabled : false,
+					format  : 'HH:mm:ss'
+				}
 			},
 			file    : {
-				filename : 'logs/app.log',
-				level    : 'debug',
-				timestamp : {
-					format  : 'DD-MM-YY HH:mm:ss',
-					enabled : false
-				},
-				enabled  : true
+				enabled     : true,
+				filename    : 'logs/winston/app',
+				date_format : ".yyyy-MM-dd",
+				level       : 'debug',
+				timestamp   : {
+					enabled : true,
+					format  : 'HH:mm:ss'
+				}
 			}
 		}
 	},
@@ -33,10 +42,10 @@ module.exports = {
 			enabled : true
 		},
 		facebook: {
+			enabled      : true,
 			clientID     : process.env.FB_ID,
 			clientSecret : process.env.FB_SECRET,
-			callbackURL  : '/api/auth/facebook/callback',
-			enabled      : true
+			callbackURL  : '/api/auth/facebook/callback'
 		}
 	},
 	session : {

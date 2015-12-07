@@ -6,24 +6,33 @@ module.exports = {
 		seq : true
 	},
 	logging : {
-		format : 'dev',
-		transport : {
+		morgan : {
+			format : '                    ** :url :method :status',
+			stream :  {
+				enabled     : false,
+				filename    : 'logs/morgan/log',
+				frequency   : 'daily',
+				date_format : "YYYY-MM-DD"
+			}
+		},
+		winston : {
 			console : {
+				enabled   : true,
 				level     : 'debug',
 				timestamp : {
-					format  : 'HH:mm:ss',
-					enabled : false
-				},
-				enabled   : true
+					enabled : false,
+					format  : 'HH:mm:ss'
+				}
 			},
 			file    : {
-				filename : 'logs/app.log',
-				level    : 'debug',
-				timestamp : {
-					format  : 'DD-MM-YY HH:mm:ss',
-					enabled : false
-				},
-				enabled  : false
+				enabled     : false,
+				filename    : 'logs/winston/log',
+				date_format : ".yyyy-MM-dd",
+				level       : 'debug',
+				timestamp   : {
+					enabled : false,
+					format  : 'HH:mm:ss'
+				}
 			}
 		}
 	},
@@ -33,14 +42,14 @@ module.exports = {
 			enabled : true
 		},
 		facebook: {
+			enabled      : false,
 			clientID     : 'DEFAULT_APP_ID',
 			clientSecret : 'APP_SECRET',
-			callbackURL  : '/api/auth/facebook/callback',
-			enabled      : false
+			callbackURL  : '/api/auth/facebook/callback'
 		}
 	},
 	session : {
 		secret : 'secretmeanproject',
-		delay  : 1440
+		delay  : 60
 	}
 };

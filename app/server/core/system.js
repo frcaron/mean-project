@@ -1,11 +1,12 @@
 "use strict";
 
 // Inject
-var Path    = require('path');
-var Fs      = require('fs');
-var Moment  = require('moment');
-var Winston = require('winston');
-var  _      = require('lodash');
+var Path              = require('path');
+var Fs                = require('fs');
+var Moment            = require('moment');
+var Winston           = require('winston');
+var WinstonRotateFile = require('winston-daily-rotate-file');
+var  _                = require('lodash');
 
 // =========================================================================
 // Config ==================================================================
@@ -59,7 +60,7 @@ var formatter = function(options, timestamp) {
 };
 
 // Activate log console
-let consoleConf = defaultconfig.logging.transport.console;
+let consoleConf = defaultconfig.logging.winston.console;
 if(consoleConf.enabled) {
 	defaultLogger.add(Winston.transports.Console, ({
 		name      : 'console',
@@ -75,16 +76,27 @@ if(consoleConf.enabled) {
 }
 
 // Activate log file
-let fileConf = defaultconfig.logging.transport.file;
+let fileConf = defaultconfig.logging.winston.file;
 if(fileConf.enabled) {
-	defaultLogger.add(Winston.transports.File, ({
-		name      : 'file',
-		level     : fileConf.level,
-		filename  : fileConf.filename,
-		timestamp : function() {
+
+	let dirname = Path.dirname(fileConf.filename);
+	let logDirectory = global.__root;
+	dirname.split('/').map(function(dir) {
+		logDirectory = Path.join(logDirectory, dir);
+
+		// ensure log directory exists
+		Fs.existsSync(logDirectory) || Fs.mkdirSync(logDirectory);
+	});
+
+	defaultLogger.add(WinstonRotateFile, ({
+		name        : 'file',
+		level       : fileConf.level,
+		filename    : fileConf.filename,
+  		datePattern : fileConf.date_format,
+		timestamp   : function() {
 			return Moment().format(fileConf.timestamp.format);
 		},
-		formatter : function(options) {
+		formatter   : function(options) {
 			return formatter(options, fileConf.timestamp.enabled);
 		}
 	}));

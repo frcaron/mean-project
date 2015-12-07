@@ -27,7 +27,7 @@ module.exports = function (app, passport) {
 
 	// API unknow response
 	app.use('/api/*', function(req, res, next) {
-		next(new Exception.routeEx('API unknow - ' + req.method + ' ' + req.originalUrl));
+		next(new Exception.RouteEx('API unknow - ' + req.method + ' ' + req.originalUrl));
 	});
 
 	// Error handling
@@ -38,7 +38,7 @@ module.exports = function (app, passport) {
 				detail : err.detail
 			});
 
-		} if(err instanceof Exception.RouteEx) {
+		} else if(err instanceof Exception.RouteEx) {
 			ResponseService.fail(res, {
 				reason    : err.message,
 				detail    : err.detail,

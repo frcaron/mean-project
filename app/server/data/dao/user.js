@@ -23,7 +23,7 @@ function create (input) {
 	let user = new UserModel();
 	let promise = CountersModel.getNextSequence('user_id')
 		.then(function (seq){
-			console.log('test' + JSON.stringify(seq));
+
 			// Base
 			user._id            = seq;
 			user.firstname      = input.firstname;
@@ -228,8 +228,11 @@ function getOne (name_query, filters) {
 
 	let promise;
 	try {
-		let query = DaoManager.getQuery('getOne', name_query, filters);
-		promise = UserModel.findOneAsync(query);
+		promise = DaoManager.getQuery('getOne', name_query, filters)
+			.then(function (query) {
+				return UserModel.findOneAsync(query);
+			});
+
 	} catch (err) {
 		promise = BPromise.reject(err);
 	}

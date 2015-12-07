@@ -46,7 +46,7 @@ module.exports = function (router) {
 	// Middleware
 	// =========================================================================================
 
-	router.use(function (req, res, next) {
+	router.all('/*', function (req, res, next) {
 
 		let token = req.body.token || req.params.token || req.query.token || req.headers[ 'x-access-token' ];
 
@@ -78,7 +78,7 @@ module.exports = function (router) {
 		}
 
 	}, function (req, res, next) {
-		let user = req.resultat;
+		let user = req.result;
 
 		// Admin access
 		if(!user.admin) {

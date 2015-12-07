@@ -27,7 +27,6 @@ module.exports = function (router) {
 			next();
 
 		}, function (req, res, next) {
-
 			TypeCategoryService.create(req, next);
 
 		}, function (req, res) {

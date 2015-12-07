@@ -10,6 +10,7 @@ var Mongoose = require('mongoose');
 // Global variable =========================================================
 // =========================================================================
 
+global.__root    = __dirname;
 global.__config  = Path.join(__dirname, 'config');
 global.__server  = Path.join(__dirname, 'app/server');
 global.__core    = Path.join(__dirname, 'app/server/core');

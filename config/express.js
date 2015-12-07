@@ -41,7 +41,7 @@ module.exports = function (app, passport) {
 	app.use(Flash());
 
 	// Add logging middleware
-	require(Path.join(global.__config, 'middleware/logging'))(app, Config.logging);
+	require(Path.join(global.__config, 'middleware/logging'))(app, Config.logging.morgan);
 
 	// =========================================================================
 	// Engine ==================================================================
