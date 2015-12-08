@@ -36,10 +36,10 @@ module.exports = {
 	},
 	domain : process.env.DOMAIN,
 	strategies : {
-		local : {
+		local    : {
 			enabled : true
 		},
-		facebook: {
+		facebook : {
 			enabled      : true,
 			clientID     : process.env.FB_ID,
 			clientSecret : process.env.FB_SECRET,
@@ -50,6 +50,8 @@ module.exports = {
 		secret : process.env.SESSION_SECRET,
 		delay  : 43200,
 		cookie : {
+			// Only set the maxAge to null if the cookie shouldn't be expired
+			// at all. The cookie will expunge when the browser is closed.
 			maxAge   : 24 * (60 * 60 * 1000),
 			httpOnly : true,
 			secure   : false

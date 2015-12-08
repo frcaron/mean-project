@@ -26,20 +26,11 @@ module.exports = function (app, passport) {
 		level: 9
 	}));
 
-	// Environment dependent middleware
-	if (process.env.NODE_ENV === 'development') {
-		// Disable views cache
-		app.set('view cache', false);
-
-		// Create structure ressource exposed
-		app.use('/dist/libs', Express.static(Path.join(global.__client, 'libs')));
-		app.use('/dist/static', Express.static(Path.join(global.__client, 'assets', 'static')));
-		app.use('/dist/js', Express.static(Path.join(global.__client, 'controllers')));
-		app.use('/dist/views', Express.static(Path.join(global.__client, 'views')));
-		app.use('/dist/css', Express.static(Path.join(global.__client, 'assets', 'css')));
-
-	} else if (process.env.NODE_ENV === 'production') {
-		app.user('/dist', Express.static(Path.join(global.__client, 'build')));
+	// Expose ressource
+	if (process.env.NODE_ENV === 'production') {
+		app.use('/dist', Express.static(Path.join(global.__client, 'build')));
+	} else {
+		app.use('/dist', Express.static(global.__client));
 	}
 
 	// Setting favicon

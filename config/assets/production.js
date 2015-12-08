@@ -1,23 +1,27 @@
 module.exports = {
 	client : {
-		libs  : {
-			css : {
-				header : [ "css/combined.min.css" ],
-				footer : []
-			},
-			js  : {
-				header : [ "js/combined.min.js" ],
-				footer : []
-			},
-		},
 		css   : {
-			header : [ "css/app.min.css" ],
-			footer : []
+			src   : 'app/client/build/css',
+			dist  : 'dist/css',
+			files : [
+				"combined.min.css",
+				"app.header.min.css"
+			]
 		},
 		js    : {
-			header : [ "js/app.min.css" ],
-			footer : []
+			src   : 'app/client/build/js',
+			dist  : 'dist/js',
+			files : [
+				"combined.min.js",
+				"app.header.min.js"
+			]
 		},
-		views : [ "views/**/*.html" ]
+		views : {
+			src   : 'app/client/views',
+			dist  : 'dist/views',
+			files : [
+				"views/**/*.html"
+			]
+		}
 	}
 };

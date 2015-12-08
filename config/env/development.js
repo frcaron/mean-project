@@ -36,10 +36,10 @@ module.exports = {
 	},
 	domain : 'http://localhost:3000',
 	strategies : {
-		local : {
+		local    : {
 			enabled : true
 		},
-		facebook: {
+		facebook : {
 			enabled      : false,
 			clientID     : 'DEFAULT_APP_ID',
 			clientSecret : 'APP_SECRET',
@@ -50,6 +50,8 @@ module.exports = {
 		secret : 'secretmeanproject',
 		delay  : 60,
 		cookie : {
+			// Only set the maxAge to null if the cookie shouldn't be expired
+			// at all. The cookie will expunge when the browser is closed.
 			maxAge   : 24 * (60 * 60 * 1000),
 			httpOnly : true,
 			secure   : false
