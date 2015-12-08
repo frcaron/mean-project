@@ -48,6 +48,11 @@ module.exports = {
 	},
 	session : {
 		secret : process.env.SESSION_SECRET,
-		delay  : 43200
+		delay  : 43200,
+		cookie : {
+			maxAge   : 24 * (60 * 60 * 1000),
+			httpOnly : true,
+			secure   : false
+		}
 	}
 };

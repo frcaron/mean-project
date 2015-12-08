@@ -5,35 +5,20 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<meta name="fragment" content="!">
 
-	<title>{{appName}} - {{title}}</title>
+	<title>{{ appName }} - {{ title }}</title>
 	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
-	<meta name="keywords" content="{{keyword}}>"
-	<meta name="description" content="{{description}}">
+	<meta name="keywords" content="{{ keyword }}>"
+	<meta name="description" content="{{ description }}">
 
-	<!-- <meta property="fb:app_id" content="APP_ID">
-	<meta property="og:title" content="{{appName}} - {{title}}">
-	<meta property="og:description" content="{{description}}">
-	<meta property="og:type" content="website">
-	<meta property="og:url" content="APP_URL">
-	<meta property="og:image" content="APP_LOGO">
-	<meta property="og:site_name" content="MEAN - A Modern Stack">
-	<meta property="fb:admins" content="APP_ADMIN"> -->
-
-	<link rel="stylesheet" href="/libs/bootstrap/dist/css/bootstrap.min.css">
-
-	<!-- {% for file in aggregatedassets.header.css %}
-		<link rel="stylesheet" href="{{file}}">
+	{% for file in aggregatedassets.header.css %}
+		<link rel="stylesheet" href="{{ file }}">
 	{% endfor %}
 
 	{% for file in aggregatedassets.footer.css %}
-		<link rel="stylesheet" href="{{file}}">
+		<link rel="stylesheet" href="{{ file }}">
 	{% endfor %}
 
 	{% for file in aggregatedassets.header.js %}
-		<script type="text/javascript" src="{{file}}"></script>
-	{% endfor %} -->
-
-	<!--[if lt IE 9]>
-		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
+		<script type="text/javascript" src="{{ file }}"></script>
+	{% endfor %}
 </head>

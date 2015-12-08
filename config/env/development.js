@@ -48,6 +48,11 @@ module.exports = {
 	},
 	session : {
 		secret : 'secretmeanproject',
-		delay  : 60
+		delay  : 60,
+		cookie : {
+			maxAge   : 24 * (60 * 60 * 1000),
+			httpOnly : true,
+			secure   : false
+		}
 	}
 };

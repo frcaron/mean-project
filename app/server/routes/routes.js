@@ -57,14 +57,19 @@ module.exports = function (app, passport) {
 	// PAGES ==========================================================
 	// ================================================================
 
-	app.use('/', basicRouter);
+	// Aggregation assets
+	app.use('/', function(req, res, next) {
+		res.locals.aggregatedassets = Config.files;
+		res.locals.appName          = Config.app.name;
+		res.locals.description      = Config.app.description;
+		res.locals.keywords         = Config.app.keywords;
+		next();
+
+	}, basicRouter);
 
 	// API unknow response
 	app.use('/*', function(req, res) {
-		res.redirect('index', {
-			appName : Config.app.name,
-			title   : 'Home'
-		});
+		res.redirect('index');
 	});
 
 	// Error handling

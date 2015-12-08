@@ -1,8 +1,8 @@
 module.exports =  {
 	app : {
 		name        : 'Budget',
-		description : '',
-		keyword     : ''
+		description : 'Test descripton',
+		keywords    : 'Budget Mean'
 	},
 	templateEngine : 'swig',
 	hostname : process.env.HOST || process.env.HOSTNAME || 'localhost',
@@ -25,7 +25,7 @@ module.exports =  {
 		currentLanguage : 'fr'
 	},
 	session : {
-		name : 'connect.sid'
+		name   : 'connect.sid'
 	},
 	bodyParser : {
 		json       : { type : 'application/vnd.api+json' },

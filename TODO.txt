@@ -8,7 +8,15 @@ SessionService delete token
 Code retour pour identifier les erreurs (traitement côté IHM)
 script demarrage test présence donnée en base
 
-expose config charger conf côté client (liste lib à charger)
-grunt env grunt process
+Title par rapport au page (conf i18n)
 
-Script post install
+Script post install :
+	npm install (natif)
+	bower install
+	grunt (prod) :
+		- uglyfy
+		- concat
+		- deplace
+
+Passage à gulp
+Env process (gulp ou grunt)

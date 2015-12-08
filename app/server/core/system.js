@@ -13,9 +13,9 @@ var  _                = require('lodash');
 // =========================================================================
 
 // Generate conf with env
-var defaultconfig = (function() {
-	var configPath = Path.join(process.cwd(), 'config/env');
-	var load = ~Fs.readdirSync(configPath).map(function(file) {
+let defaultconfig = (function() {
+	let configPath = Path.join(process.cwd(), 'config/env');
+	let load = ~Fs.readdirSync(configPath).map(function(file) {
 			return file.slice(0, -3);
 	}).indexOf(process.env.NODE_ENV) ? process.env.NODE_ENV : 'development';
 
@@ -28,10 +28,62 @@ var defaultconfig = (function() {
 })();
 
 // =========================================================================
+// Assets ==================================================================
+// =========================================================================
+
+// Get file by glob pattern
+/*var defaultAssets = (function () {
+
+	var configPath = Path.join(process.cwd(), 'config/assets');
+	var load = ~Fs.readdirSync(configPath).map(function(file) {
+			return file.slice(0, -3);
+	}).indexOf(process.env.NODE_ENV) ? process.env.NODE_ENV : 'default';
+
+	// URL paths regex
+	var urlRegex = new RegExp('^(?:[a-z]+:)?\/\/', 'i');
+
+	load.libs.css
+	load.libs.js
+	load.css
+	load.js
+	load.views
+
+	// The output array
+	var output = [];
+
+	// If glob pattern is array then we use each pattern in a recursive way, otherwise we use glob
+	if (_.isArray(globPatterns)) {
+		globPatterns.forEach(function (globPattern) {
+			output = _.union(output, getGlobbedPaths(globPattern, excludes));
+		});
+	} else if (_.isString(globPatterns)) {
+		if (urlRegex.test(globPatterns)) {
+			output.push(globPatterns);
+		} else {
+			var files = glob.sync(globPatterns);
+			if (excludes) {
+				files = files.map(function (file) {
+					if (_.isArray(excludes)) {
+						for (var i in excludes) {
+							file = file.replace(excludes[i], '');
+						}
+					} else {
+						file = file.replace(excludes, '');
+					}
+					return file;
+				});
+			}
+			output = _.union(output, files);
+		}
+	}
+	return output;
+};*/
+
+// =========================================================================
 // Logger ==================================================================
 // =========================================================================
 
-var customLevels = {
+let customLevels = {
 	levels : {
 		error : 0,
 		warn  : 1,
@@ -47,13 +99,13 @@ var customLevels = {
 };
 
 // Instance logger
-var defaultLogger = new Winston.Logger({
+let defaultLogger = new Winston.Logger({
 	levels : customLevels.levels,
 	colors : customLevels.colors
 });
 
 // Formatter
-var formatter = function(options, timestamp) {
+let formatter = function(options, timestamp) {
 	return  (timestamp ? (options.timestamp() + '\t') : '') + options.level.toUpperCase() + ' ' +
 		(undefined !== options.message ? options.message : '') +
 		(options.meta && Object.keys(options.meta).length ? '\n\t' + JSON.stringify(options.meta) : '' );

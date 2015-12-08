@@ -20,9 +20,7 @@ global.__dao     = Path.join(__dirname, 'app/server/data/dao');
 global.__route   = Path.join(__dirname, 'app/server/routes');
 global.__service = Path.join(__dirname, 'app/server/services');
 global.__views   = Path.join(__dirname, 'app/server/views');
-global.__assets  = Path.join(__dirname, 'app/client/assets');
-global.__dist    = Path.join(__dirname, 'app/client/dist');
-global.__libs    = Path.join(__dirname, 'app/client/libs');
+global.__client  = Path.join(__dirname, 'app/client');
 
 
 // =========================================================================

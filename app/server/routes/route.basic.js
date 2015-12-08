@@ -17,15 +17,17 @@ module.exports = function (router) {
 
 	router.use(function (req, res, next) {
 
-		Logger.debug('[WSB - MIDDL] reoute.basic#secure');
+		Logger.debug('[WSB - MIDDL] route.basic#secure');
 
 		if (req.isAuthenticated()) {
 			next();
 		} else {
-			res.render('index', {
+			res.render('index'
+				/*, {
 				appName : Config.app.name,
 				title   : 'Home'
-			});
+			}*/
+			);
 		}
 	});
 

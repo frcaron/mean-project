@@ -20,18 +20,33 @@ module.exports = function (app, passport) {
 
 	// Should be placed before express.static
 	app.use(compression({
+		filter: function (req, res) {
+			return (/json|text|javascript|css|font|svg/).test(res.getHeader('Content-Type'));
+		},
 		level: 9
 	}));
 
-	// Expose ressources
-	app.use('/libs', Express.static(global.__libs));
-	app.use('/static', Express.static(Path.join(global.__assets, 'static')));
+	// Environment dependent middleware
+	if (process.env.NODE_ENV === 'development') {
+		// Disable views cache
+		app.set('view cache', false);
+
+		// Create structure ressource exposed
+		app.use('/dist/libs', Express.static(Path.join(global.__client, 'libs')));
+		app.use('/dist/static', Express.static(Path.join(global.__client, 'assets', 'static')));
+		app.use('/dist/js', Express.static(Path.join(global.__client, 'controllers')));
+		app.use('/dist/views', Express.static(Path.join(global.__client, 'views')));
+		app.use('/dist/css', Express.static(Path.join(global.__client, 'assets', 'css')));
+
+	} else if (process.env.NODE_ENV === 'production') {
+		app.user('/dist', Express.static(Path.join(global.__client, 'build')));
+	}
 
 	// Setting favicon
-	app.use(Favicon(Path.join(global.__assets,'img/favicon.ico')));
+	app.use(Favicon(Path.join(global.__client, 'assets', 'img', 'favicon.ico')));
 
 	// Active form extended
- 	app.use(BodyParser.urlencoded(Config.bodyParser.urlencoded));
+	app.use(BodyParser.urlencoded(Config.bodyParser.urlencoded));
 	app.use(BodyParser.json(Config.bodyParser.json));
 
 	// Active cookie parser
@@ -60,7 +75,12 @@ module.exports = function (app, passport) {
 		name              : Config.session.name,
 		secret            : Config.session.secret,
 		resave            : true,
-		saveUninitialized : true
+		saveUninitialized : true,
+		cookie            : {
+			maxAge   : Config.session.cookie.maxAge,
+			httpOnly : Config.session.cookie.httpOnly,
+			secure   : Config.session.cookie.secure
+		},
 	}));
 	app.use(passport.initialize());
 	app.use(passport.session());

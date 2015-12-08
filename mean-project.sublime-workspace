@@ -223,6 +223,70 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "app/client/controllers/index.js",
+			"settings":
+			{
+				"buffer_size": 479,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "app/client/views/index.html",
+			"settings":
+			{
+				"buffer_size": 79,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "app/server/views/layouts/default.html",
+			"settings":
+			{
+				"buffer_size": 275,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "app/server/views/index.html",
+			"settings":
+			{
+				"buffer_size": 146,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "app/server/routes/routes.js",
+			"settings":
+			{
+				"buffer_size": 2349,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "config/env/all.js",
+			"settings":
+			{
+				"buffer_size": 665,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "app/server/views/includes/head.html",
+			"settings":
+			{
+				"buffer_size": 769,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "app/server/views/includes/foot.html",
+			"settings":
+			{
+				"buffer_size": 284,
+				"line_ending": "Windows"
+			}
+		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -505,68 +569,73 @@
 	[
 		"/C/App/Workspace/mean-project",
 		"/C/App/Workspace/mean-project/app",
+		"/C/App/Workspace/mean-project/app/client",
+		"/C/App/Workspace/mean-project/app/client/components",
 		"/C/App/Workspace/mean-project/app/server",
-		"/C/App/Workspace/mean-project/app/server/core",
-		"/C/App/Workspace/mean-project/app/server/data",
-		"/C/App/Workspace/mean-project/app/server/data/dao",
 		"/C/App/Workspace/mean-project/app/server/routes",
-		"/C/App/Workspace/mean-project/app/server/routes/api",
-		"/C/App/Workspace/mean-project/app/server/routes/api/public",
-		"/C/App/Workspace/mean-project/app/server/routes/api/public/unlog",
-		"/C/App/Workspace/mean-project/app/server/services",
+		"/C/App/Workspace/mean-project/app/server/views",
+		"/C/App/Workspace/mean-project/app/server/views/includes",
+		"/C/App/Workspace/mean-project/app/server/views/layouts",
+		"/C/App/Workspace/mean-project/bin",
 		"/C/App/Workspace/mean-project/config",
-		"/C/App/Workspace/mean-project/config/env",
-		"/C/App/Workspace/mean-project/config/strategies"
+		"/C/App/Workspace/mean-project/config/env"
 	],
 	"file_history":
 	[
-		"/C/App/Workspace/mean-project/app/server/routes/route.api.public.js",
-		"/C/App/Workspace/mean-project/app/server/routes/api/public/unlog/session.js",
-		"/C/App/Workspace/mean-project/app/server/routes/route.api.admin.js",
-		"/C/App/Workspace/mean-project/config/passport.js",
-		"/C/App/Workspace/mean-project/app/server/routes/routes.js",
+		"/C/App/Workspace/mean-project/app.js",
+		"/C/App/Workspace/mean-project/config/express.js",
 		"/C/App/Workspace/mean-project/app/server/routes/route.basic.js",
-		"/C/App/Workspace/mean-project/app/server/services/plan.js",
+		"/C/App/Workspace/mean-project/Gruntfile.js",
+		"/C/App/Workspace/mean-project/app/server/views/includes/foot.html",
 		"/C/App/Workspace/mean-project/package.json",
+		"/C/App/Workspace/mean-project/app/server/routes/routes.js",
+		"/C/App/Workspace/mean-project/config/assets.json",
+		"/C/App/Workspace/mean-project/app/server/views/includes/head.html",
+		"/C/App/Workspace/mean-project/bower.json",
+		"/C/App/Workspace/mean-project/bin/postinstall.js",
+		"/C/App/Workspace/mean-project/config/env/development.js",
+		"/C/App/Workspace/mean-project/config/env/production.js",
+		"/C/App/Workspace/mean-project/app/server/core/system.js",
+		"/C/App/Workspace/mean-project/config/middleware/logging.js",
+		"/C/App/Workspace/mean-project/logs/morgan/log.2015-12-07",
+		"/C/App/Workspace/mean-project/logs/winston/log.2015-12-07",
+		"/C/App/Workspace/mean-project/TODO.txt",
+		"/C/App/Workspace/mean-project/app/server/data/dao/manager.js",
+		"/C/App/Workspace/mean-project/app/server/data/dao/type-category.js",
+		"/C/App/Workspace/mean-project/app/server/data/dao/transaction.js",
+		"/C/App/Workspace/mean-project/app/server/data/dao/program.js",
+		"/C/App/Workspace/mean-project/app/server/data/dao/plan.js",
+		"/C/App/Workspace/mean-project/app/server/data/dao/category.js",
+		"/C/App/Workspace/mean-project/app/server/data/dao/user.js",
+		"/C/App/Workspace/mean-project/app/server/routes/route.api.public.js",
+		"/C/App/Workspace/mean-project/app/server/routes/route.api.admin.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public/unlog/session.js",
+		"/C/App/Workspace/mean-project/app/server/services/session.js",
+		"/C/App/Workspace/mean-project/app/server/services/response.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/admin/log/type-category.js",
+		"/C/App/Workspace/mean-project/app/server/services/user.js",
+		"/C/App/Workspace/mean-project/config/passport.js",
+		"/C/App/Workspace/mean-project/app/server/services/plan.js",
 		"/C/App/Workspace/mean-project/mean-project.sublime-project",
 		"/C/App/Workspace/mean-project/app/server/core/exception.js",
 		"/C/App/Workspace/mean-project/app/server/services/category.js",
-		"/C/App/Workspace/mean-project/app/server/services/session.js",
 		"/C/App/Workspace/mean-project/app/server/services/transaction.js",
 		"/C/App/Workspace/mean-project/app/server/services/type-category.js",
-		"/C/App/Workspace/mean-project/app/server/services/user.js",
 		"/C/App/Workspace/mean-project/app/server/services/program.js",
-		"/C/App/Workspace/mean-project/Gruntfile.js",
 		"/C/App/Workspace/mean-project/README.md",
-		"/C/App/Workspace/mean-project/TODO.txt",
 		"/C/App/Workspace/mean-project/config/assets.js",
 		"/C/App/SublimeText3/Data/Packages/SublimeLinter/SublimeLinter.sublime-settings",
 		"/C/App/Workspace/mean-project/config/strategies/local.js",
 		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/user.js",
 		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/transaction.js",
 		"/C/App/Workspace/mean-project/config/strategies/facebook.js",
-		"/C/App/Workspace/mean-project/app/server/data/dao/category.js",
-		"/C/App/Workspace/mean-project/app/server/data/dao/program.js",
-		"/C/App/Workspace/mean-project/app/server/data/dao/manager.js",
-		"/C/App/Workspace/mean-project/app/server/data/dao/plan.js",
-		"/C/App/Workspace/mean-project/app/server/data/dao/transaction.js",
-		"/C/App/Workspace/mean-project/app/server/data/dao/type-category.js",
-		"/C/App/Workspace/mean-project/app/server/data/dao/user.js",
-		"/C/App/Workspace/mean-project/app/server/routes/api/admin/log/type-category.js",
 		"/C/App/Workspace/mean-project/app/server/routes/api/admin/log/user.js",
 		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/category.js",
 		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/plan.js",
 		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/program.js",
-		"/C/App/Workspace/mean-project/app/server/core/system.js",
 		"/C/App/Workspace/mean-project/.gitignore",
-		"/C/App/Workspace/mean-project/config/env/production.js",
-		"/C/App/Workspace/mean-project/config/env/development.js",
 		"/C/App/Workspace/mean-project/config/env/all.js",
-		"/C/App/Workspace/mean-project/config/express.js",
-		"/C/App/Workspace/mean-project/app/server/views/includes/head.html",
 		"/C/App/Workspace/mean-project/app/client/views/index.html",
-		"/C/App/Workspace/mean-project/bower.json",
-		"/C/App/Workspace/mean-project/app/server/views/includes/foot.html",
 		"/C/App/Workspace/mean-project/app/server/views/index.html",
 		"/C/App/Workspace/mean-project/app/server/routes/api/admin/unlog/type-category.js",
 		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/me.js",
@@ -579,7 +648,6 @@
 		"/C/App/Workspace/mean-project/app/server/data/models/transaction.js",
 		"/C/App/Workspace/mean-project/app/server/data/models/type-category.js",
 		"/C/App/Workspace/mean-project/app/server/data/models/user.js",
-		"/C/App/Workspace/mean-project/app.js",
 		"/C/App/Workspace/mean-project/app/server/data/dao/UserDao.js",
 		"/C/App/Workspace/mean-project/bin/www",
 		"/C/App/Workspace/mean-project/app/server/data/dao/CategoryDao.js",
@@ -612,7 +680,6 @@
 		"/C/App/Workspace/mean-project/app/server/views/500.html",
 		"/C/App/Workspace/mean-project/app/client/dist/bootstrap-theme.min.css",
 		"/C/App/Workspace/mean-project/package/system.js",
-		"/C/App/Workspace/mean-project/config/middleware/logging.js",
 		"/C/App/Workspace/mean-project/config/database.js",
 		"/C/App/Workspace/mean-project/config/server.js",
 		"/C/App/Workspace/mean-project/config/auth.js",
@@ -642,12 +709,7 @@
 		"/C/App/Workspace/mean-project/app/data/dao/PlanDao.js",
 		"/C/App/Workspace/mean-project/app/data/dao/TransactionDao.js",
 		"/C/App/Workspace/mean-project/app/LoggerManager.js",
-		"/C/App/Workspace/mean-project/app/data/dao/CategoryDao.js",
-		"/C/App/Workspace/mean-project/app/data/dao/ProgramDao.js",
-		"/C/App/Workspace/mean-project/app/data/dao/UserDao.js",
-		"/C/App/Workspace/mean-project/app/services/share/BudgetService.js",
-		"/C/App/Workspace/mean-project/app/services/CategoryService.js",
-		"/C/App/Workspace/mean-project/app/services/PlanService.js"
+		"/C/App/Workspace/mean-project/app/data/dao/CategoryDao.js"
 	],
 	"find":
 	{
@@ -658,6 +720,7 @@
 		"height": 90.0,
 		"where_history":
 		[
+			"C:\\App\\Workspace\\mean-project\\app\\server",
 			"C:\\App\\Workspace\\mean-project\\config",
 			"C:\\App\\Workspace\\mean-project\\app",
 			"C:\\App\\Workspace\\mean-project",
@@ -690,6 +753,9 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"QueriesConfig",
+			"getQuery",
+			"console",
 			"transaport",
 			"__package",
 			"myCustomLevels",
@@ -814,9 +880,6 @@
 			"t",
 			"2",
 			"1",
-			"fail",
-			"status",
-			"4responseService",
 			"fail"
 		],
 		"highlight": true,
@@ -869,8 +932,713 @@
 	"groups":
 	[
 		{
+			"selected": 7,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "app/client/controllers/index.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 479,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								479,
+								479
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content"
+							],
+							"open_with_edit": true,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "app/client/views/index.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 79,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								65,
+								65
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content"
+							],
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "app/server/views/layouts/default.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 275,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								150,
+								150
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content"
+							],
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "app/server/views/index.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 146,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								119,
+								119
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content"
+							],
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "app/server/routes/routes.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2349,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2024,
+								2024
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content"
+							],
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 420.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "config/env/all.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 665,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								441,
+								441
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content"
+							],
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "app/server/views/includes/head.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 769,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								433,
+								433
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content"
+							],
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "app/server/views/includes/foot.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 284,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content"
+							],
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
 			]
 		}
 	],
