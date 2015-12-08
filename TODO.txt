@@ -20,3 +20,5 @@ Script post install :
 
 Passage à gulp
 Env process (gulp ou grunt)
+
+bluebird 3.0.6 catch
