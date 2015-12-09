@@ -1,7 +1,5 @@
 logs/
 node_modules/
 .DS_Store
-npm-debug.log
-app/client/dist/*.js
-.bower-*/
-app/client/libs/
+npm-debug*
+app/client/dist/
