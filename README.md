@@ -23,10 +23,10 @@ Outil à installer :
 
 	- NodeJS
 	- npm
-	- bower
 	- MongoDB
 	- nodemon
-	- grunt-cli
+	- gulp
+	- browserfy
 	- heroku
 	- jshint
 

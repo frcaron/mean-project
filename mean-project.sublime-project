@@ -3,7 +3,6 @@
 	[
 		{
 			"folder_exclude_patterns": [
-				".bower-*"
 			],
 			"file_exclude_patterns":
 			[
@@ -11,7 +10,7 @@
 				".jshintrc",
 				"api-skeleton.xls",
 				"npm-debug*",
-				".bowerrc"
+				".npmrc"
 			],
 			"follow_symlinks": true,
 			"path": "."

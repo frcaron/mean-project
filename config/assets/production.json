@@ -1,0 +1,28 @@
+{
+  "header" : {
+    "css" : {
+      "app/client/dist/css/*" : [
+        "node_modules/angular/angular-csp.css",
+        "node_modules/animate.css/animate.min.css",
+        "node_modules/bootstrap/dist/css/bootstrap.min.css"
+      ],
+      "app/client/dist/css/app.header.min.css" : [
+        "app/client/assets/css/**/*.css",
+        "app/client/components/*/assets/**/*.css"
+      ],
+    },
+    "js"  : {
+      "app/client/dist/js/app.header.min.js" : [ "app/client/client.js" ]
+    }
+  },
+  "footer" : {
+    "css" : {
+      "app/client/dist/css/*" : [],
+      "app/client/dist/css/app.footer.min.css" : [],
+    },
+    "js"  : {
+      "app/client/dist/js/app.footer.min.js" : []
+    }
+  },
+  "views" : [ "app/client/components/*/views/**/*.html" ]
+}

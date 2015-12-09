@@ -27,11 +27,8 @@ module.exports = function (app, passport) {
 	}));
 
 	// Expose ressource
-	if (process.env.NODE_ENV === 'production') {
-		app.use('/dist', Express.static(Path.join(global.__client, 'build')));
-	} else {
-		app.use('/dist', Express.static(global.__client));
-	}
+	app.use('/dist', Express.static(Path.join(global.__client, 'dist')));
+	app.use('/static', Express.static(Path.join(global.__client, 'assets', 'static')));
 
 	// Setting favicon
 	app.use(Favicon(Path.join(global.__client, 'assets', 'img', 'favicon.ico')));

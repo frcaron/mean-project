@@ -1,8 +1,0 @@
-{
-  "directory": "app/client/libs",
-  "storage": {
-          "packages": ".bower-cache",
-          "registry": ".bower-registry"
-  },
-  "tmp": ".bower-tmp"
-}

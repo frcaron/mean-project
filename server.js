@@ -1,10 +1,7 @@
 "use strict";
 
 // Inject
-var Express  = require('express');
-var Passport = require('passport');
-var Path     = require('path');
-var Mongoose = require('mongoose');
+var Path = require('path');
 
 // =========================================================================
 // Global variable =========================================================
@@ -22,27 +19,13 @@ global.__service = Path.join(__dirname, 'app/server/services');
 global.__views   = Path.join(__dirname, 'app/server/views');
 global.__client  = Path.join(__dirname, 'app/client');
 
-
 // =========================================================================
-// DataBase ================================================================
-// =========================================================================
-
-var Config = require(Path.join(global.__core, 'system')).Config;
-Mongoose.connect(Config.db.url);
-
-// =========================================================================
-// Server ==================================================================
+// Server start ============================================================
 // =========================================================================
 
-var app = Express();
+let App    = require(Path.join(global.__config, 'app'));
+let Config = require(Path.join(global.__core, 'system')).Config;
 
-// Express
-require(Path.join(global.__config, 'express'))(app, Passport);
-
-// Passport
-require(Path.join(global.__config, 'passport'))(Passport);
-
-// Route
-require(Path.join(global.__route, 'routes'))(app, Passport);
-
-module.exports = app;
+let server = App.listen(Config.http.port, function () {
+	console.log('Express server listening on port ' + server.address().port);
+});

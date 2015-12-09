@@ -57,12 +57,16 @@ module.exports = function (app, passport) {
 	// PAGES ==========================================================
 	// ================================================================
 
-	// Aggregation assets
+	// Aggregation
 	app.use('/', function(req, res, next) {
-		res.locals.aggregatedassets = Config.files;
+		// Global
 		res.locals.appName          = Config.app.name;
 		res.locals.description      = Config.app.description;
 		res.locals.keywords         = Config.app.keywords;
+
+		// Assets
+		res.locals.aggregatedassets = Config.files;
+
 		next();
 
 	}, basicRouter);
