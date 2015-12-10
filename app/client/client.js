@@ -19,11 +19,7 @@ app.config(function($routeProvider, $locationProvider) {
 		.when('/', {
 			templateUrl : 'components/home/views/index.html',
 			controller  : 'HomeCtrl'
-		})
-
-		// .otherwise({
-		// 	redirectTo : '/'
-		// });
+		});
 
 		// use the HTML5 History API
         $locationProvider.html5Mode(true);

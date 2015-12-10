@@ -26,12 +26,12 @@ module.exports = function (app, passport) {
 	app.use('/api/public', publicRouter);
 
 	// API unknow response
-	app.use('/api/*', function(req, res, next) {
+	app.use('/api/*', function (req, res, next) {
 		next(new Exception.RouteEx('API unknow - ' + req.method + ' ' + req.originalUrl));
 	});
 
 	// Error handling
-	app.use(function(err, req, res, next) {
+	app.use(function (err, req, res, next) {
 		if(err instanceof Exception.MetierEx) {
 			ResponseService.fail(res, {
 				reason : err.message,
@@ -58,34 +58,39 @@ module.exports = function (app, passport) {
 	// ================================================================
 
 	// Aggregation
-	app.use('/', function(req, res, next) {
+	app.use(function (req, res, next) {
 		// Global
 		res.locals.appName     = Config.app.name;
 		res.locals.description = Config.app.description;
 		res.locals.keywords    = Config.app.keywords;
 
+		// Todo
+		res.locals.title = 'Tite';
+
 		// Assets
 		res.locals.aggregatedassets = Config.aggregatedassets;
 
 		next();
-	}, function(req, res) {
-		console.log('why here')
-		res.render('index');
-	});
 
-	// Basic route unknow response
-	app.use('/*', function(req, res) {
-		console.log('test')
+	}, function (req, res, next) {
+		if(req.path && req.path !== '/') {
+			return next();
+		}
+		res.render('index');
+
+	}, function (req, res) {
 		res.render('404', {
 			error : 'Page inexistante'
 		});
 	});
 
 	// Error handling
-	app.use(function(err, req, res, next) {
+	app.use(function (err, req, res, next) {
 		Logger.debug('[WSG - ERROR] PAGES#ErrorHandling');
 		Logger.error('              -- message : ' + err.message);
 
-		res.render('500');
+		res.render('500', {
+			error : 'Erreur inconnue'
+		});
 	});
 };
