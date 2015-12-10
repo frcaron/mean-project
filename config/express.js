@@ -9,10 +9,10 @@ var Consolidate  = require('consolidate');
 var Express      = require('express');
 var Favicon      = require('serve-favicon');
 var Flash        = require('connect-flash');
-var Glob         = require('glob');
 var Session      = require('express-session');
-var Config       = require(Path.join(global.__core, 'system')).Config;
+var Glob         = require('glob');
 var Assets       = require(Path.join(global.__config, 'assets'));
+var Config       = require(Path.join(global.__core, 'system')).Config;
 
 module.exports = function (app, passport) {
 
@@ -22,7 +22,7 @@ module.exports = function (app, passport) {
 
 	// Should be placed before express.static
 	app.use(compression({
-		filter: function (req, res) {
+		filter : function (req, res) {
 			return (/json|text|javascript|css|font|svg/).test(res.getHeader('Content-Type'));
 		},
 		level: 9
@@ -32,13 +32,22 @@ module.exports = function (app, passport) {
 	app.use('/dist', Express.static(Path.join(global.__client, 'dist')));
 	app.use('/static', Express.static(Path.join(global.__client, 'assets', 'static')));
 
-	// Assets.dist.views.map(function (err, view) {
-	// 	if(err) continue;
-	// 	Glob(view, function (dir) {
-	// 		console.log(dir);
-	// 		app.use('dist/views', Express.static(dir));
-	// 	});
-	// });
+	// Environment dependent middleware
+	if (process.env.NODE_ENV === 'development') {
+		// Disable views cache
+		app.set('view cache', false);
+
+		// Expose views
+		Assets.client.views.folders.forEach(function (pattern) {
+			let folders = Glob.sync(pattern);
+			folders.map(function (staticPath) {
+				if(staticPath) {
+					let dist = staticPath.replace(Assets.client.root, '');
+					app.use(dist, Express.static(Path.resolve('./' + staticPath)));
+				}
+			});
+		});
+	}
 
 	// Setting favicon
 	app.use(Favicon(Path.join(global.__client, 'assets', 'img', 'favicon.ico')));

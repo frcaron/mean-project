@@ -1,10 +1,10 @@
 "use strict";
 
 // Inject
-var Angular = require('angular');
+var angular = require('angular');
 require('angular-route');
 
-var app = Angular.module('budgetApp', [ 'ngRoute' ]);
+var app = angular.module('app', [ 'ngRoute' ]);
 
 require('./components');
 
@@ -12,12 +12,19 @@ require('./components');
 // Config client ===========================================================
 // =========================================================================
 
-app.config(['$routeProvider', function($routeProvider) {
+app.config(function($routeProvider, $locationProvider) {
 	$routeProvider
 
 		// route for the home page
 		.when('/', {
-			templateUrl : 'dist/views/index.html',
+			templateUrl : 'components/home/views/index.html',
 			controller  : 'HomeCtrl'
+		})
+
+		.otherwise({
+			redirectTo : '/'
 		});
-}]);
+
+		// use the HTML5 History API
+        $locationProvider.html5Mode(true);
+});

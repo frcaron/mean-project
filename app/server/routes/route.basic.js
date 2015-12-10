@@ -22,12 +22,7 @@ module.exports = function (router) {
 		if (req.isAuthenticated()) {
 			next();
 		} else {
-			res.render('index'
-				/*, {
-				appName : Config.app.name,
-				title   : 'Home'
-			}*/
-			);
+			res.render('index');
 		}
 	});
 

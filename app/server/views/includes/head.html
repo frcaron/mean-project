@@ -10,17 +10,11 @@
 	<meta name="keywords" content="{{ keywords }}">
 	<meta name="description" content="{{ description }}">
 
-	<script type="text/javascript" src="dist/js/app.bundle.js" ></script>
-
-	<!-- {% for file in aggregatedassets.header.css %}
+	{% for file in aggregatedassets.css %}
 		<link rel="stylesheet" href="{{ file }}">
 	{% endfor %}
 
-	{% for file in aggregatedassets.footer.css %}
-		<link rel="stylesheet" href="{{ file }}">
-	{% endfor %}
-
-	{% for file in aggregatedassets.header.js %}
+	{% for file in aggregatedassets.js %}
 		<script type="text/javascript" src="{{ file }}"></script>
-	{% endfor %} -->
+	{% endfor %}
 </head>

@@ -65,15 +65,14 @@ module.exports = function (app, passport) {
 		res.locals.keywords         = Config.app.keywords;
 
 		// Assets
-		res.locals.aggregatedassets = Config.files;
+		res.locals.aggregatedassets = Config.aggregatedassets;
 
 		next();
-
 	}, basicRouter);
 
 	// API unknow response
 	app.use('/*', function(req, res) {
-		res.redirect('index');
+		res.render('index');
 	});
 
 	// Error handling

@@ -10,7 +10,11 @@ var _               = require('lodash');
 var path            = require('path');
 var gulpLoadPlugins = require('gulp-load-plugins');
 var defaultAssets   = require('./config/assets');
-var plugins         = gulpLoadPlugins();
+var plugins         = gulpLoadPlugins({
+	rename: {
+		'gulp-angular-templatecache': 'templateCache'
+	}
+  });
 
 // =========================================================================
 // Environnement ===========================================================
@@ -19,6 +23,11 @@ var plugins         = gulpLoadPlugins();
 // Set NODE_ENV to 'development'
 gulp.task('env:dev', function () {
 	process.env.NODE_ENV = 'development';
+});
+
+// Set NODE_ENV to 'test'
+gulp.task('env:test', function () {
+	process.env.NODE_ENV = 'test';
 });
 
 // Set NODE_ENV to 'production'
@@ -36,7 +45,7 @@ gulp.task('nodemon', function () {
 		script   : 'server.js',
 		// nodeArgs : ['--debug'],
 		ext      : 'js,html',
-		watch    : _.union(defaultAssets.pattern.server.views, defaultAssets.pattern.server.js)
+		watch    : _.union(defaultAssets.server.views.files, defaultAssets.server.js.files)
 	}).on('restart', function () {
 		// task in restart
 	});
@@ -44,15 +53,22 @@ gulp.task('nodemon', function () {
 
 // Watch Files For Changes
 gulp.task('watch', function () {
-  // Start livereload
-  plugins.livereload.listen();
+	// Start livereload
+	plugins.livereload.listen();
 
-  // Add watch rules
-  gulp.watch(defaultAssets.pattern.server.js).on('change', plugins.livereload.changed);
-  gulp.watch(defaultAssets.pattern.server.views).on('change', plugins.livereload.changed);
-  gulp.watch(defaultAssets.pattern.client.js, ['browserify']).on('change', plugins.livereload.changed);
-  gulp.watch(defaultAssets.pattern.client.css).on('change', plugins.livereload.changed);
-  gulp.watch(defaultAssets.pattern.client.view).on('change', plugins.livereload.changed);
+	// Add watch rules
+	gulp.watch(defaultAssets.server.js.files).on('change', plugins.livereload.changed);
+	gulp.watch(defaultAssets.server.views.files).on('change', plugins.livereload.changed);
+
+	if (process.env.NODE_ENV === 'test') {
+		gulp.watch(defaultAssets.client.js.files, ['browserify-min']).on('change', plugins.livereload.changed);
+		gulp.watch(defaultAssets.client.css.files, ['css-min']).on('change', plugins.livereload.changed);
+		gulp.watch(defaultAssets.client.views.files, ['templatecache']).on('change', plugins.livereload.changed);
+	} else {
+		gulp.watch(defaultAssets.client.js.files, ['browserify']).on('change', plugins.livereload.changed);
+		gulp.watch(defaultAssets.client.css.files, ['css']).on('change', plugins.livereload.changed);
+		gulp.watch(defaultAssets.client.views.files).on('change', plugins.livereload.changed);
+	}
 });
 
 // =========================================================================
@@ -61,40 +77,59 @@ gulp.task('watch', function () {
 
 // Clean task
 gulp.task('clean', function () {
-	return gulp.src([ defaultAssets.dist.dir] , {read: false})
+	return gulp.src([ defaultAssets.dist.dir ] , {read: false})
 		.pipe(vinylPaths(del));
 });
 
 // JS browserify task
 gulp.task('browserify', function () {
-	browserify({ entries : defaultAssets.dist.js })
+	return browserify({ entries : defaultAssets.dist.src })
 		.bundle()
-		.pipe(source('app.bundle.js'))
+		.pipe(source(defaultAssets.dist.output.development.js))
 		.pipe(gulp.dest(path.join(defaultAssets.dist.dir, 'js')));
 });
 
+// TODO ngAnnotate
 // JS browserify and minifying task
 gulp.task('browserify-min', function () {
-	return browserify({ entries : defaultAssets.dist.js })
+	return browserify({ entries : defaultAssets.dist.src })
 		.bundle()
-		.pipe(source('app.bundle.min.js'))
+		.pipe(source(defaultAssets.dist.output.production.js))
 		.pipe(plugins.streamify(plugins.uglify({mangle: false})))
 		.pipe(gulp.dest(path.join(defaultAssets.dist.dir, 'js')));
 });
 
 // CSS default task
 gulp.task('css', function () {
-  return gulp.src(defaultAssets.pattern.client.css)
-	.pipe(source('app.css'))
+  return gulp.src(defaultAssets.client.css.files)
+	.pipe(plugins.concat(defaultAssets.dist.output.development.css))
 	.pipe(gulp.dest(path.join(defaultAssets.dist.dir, 'css')));
 });
 
 // CSS minifying task
 gulp.task('css-min', function () {
-  return gulp.src(defaultAssets.pattern.client.css)
+  return gulp.src(defaultAssets.client.css.files)
 	.pipe(plugins.cssmin())
-	.pipe(source('app.min.css'))
+	.pipe(plugins.concat(defaultAssets.dist.output.production.css))
 	.pipe(gulp.dest(path.join(defaultAssets.dist.dir, 'css')));
+});
+
+// Angular template cache task
+gulp.task('templatecache', function () {
+	var re = new RegExp('\\' + path.sep + 'client\\' + path.sep, 'g');
+	return gulp.src(defaultAssets.client.views.files)
+		.pipe(plugins.templateCache(defaultAssets.dist.output.production.template, {
+			root   : 'components',
+			module : 'app',
+			templateHeader: '(function(){\'use strict\';angular.module(\'<%= module %>\'<%= standalone %>).run(templates);templates.$inject=[\'$templateCache\'];function templates($templateCache){',
+			templateBody: '$templateCache.put(\'<%= url %>\',\'<%= contents %>\');',
+			templateFooter: '}})();',
+			transformUrl: function (url) {
+				return url.replace(re, path.sep);
+			}
+
+		}))
+		.pipe(gulp.dest(path.join(defaultAssets.dist.dir, 'js')));
 });
 
 // =========================================================================
@@ -103,10 +138,15 @@ gulp.task('css-min', function () {
 
 // Run the project in development mode
 gulp.task('default', function (done) {
-	runSequence('env:dev', 'clean', ['browserify', 'css', 'nodemon', 'watch'], done);
+	runSequence('env:dev', 'clean', 'browserify', 'css', ['nodemon', 'watch'], done);
+});
+
+// Run the project in simulate mode
+gulp.task('test', function (done) {
+	runSequence('env:test', 'clean', 'browserify-min', 'css-min', 'templatecache', ['nodemon', 'watch'], done);
 });
 
 // Run the project in production mode
 gulp.task('prod', function (done) {
-	runSequence('env:prod', 'clean', 'browserify-min', 'css-min', done);
+	runSequence('env:prod', 'clean', 'browserify-min', 'css-min', 'templatecache', done);
 });
