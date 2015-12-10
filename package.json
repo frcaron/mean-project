@@ -7,11 +7,12 @@
     "email": "francois.caron59@gmail.com"
   },
   "scripts": {
+    "postinstall" : "gulp prod",
     "start": "node server"
   },
   "engines": {
-    "node": "5.0.0",
-    "npm": "3.4.0"
+    "node": "5.2.0",
+    "npm": "3.5.2"
   },
   "dependencies": {
     "angular": "1.4.8",
@@ -60,5 +61,8 @@
     "run-sequence": "1.1.5",
     "vinyl-paths": "2.1.0",
     "vinyl-source-stream": "1.1.0"
+  },
+  "config" : {
+    "unsafe-perm": "true"
   }
 }

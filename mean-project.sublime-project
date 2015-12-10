@@ -6,7 +6,6 @@
 			],
 			"file_exclude_patterns":
 			[
-				".npmrc",
 				".gitignore",
 				".jshintrc",
 				"api-skeleton.xls",
