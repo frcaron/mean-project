@@ -27,6 +27,7 @@
     "connect-flash": "0.1.1",
     "consolidate": "0.13.1",
     "cookie-parser": "1.4.0",
+    "del": "2.2.0",
     "express": "4.13.3",
     "express-session": "1.12.1",
     "file-stream-rotator": "0.0.6",
@@ -45,10 +46,7 @@
     "swig": "1.4.2",
     "validator": "4.4.0",
     "winston": "2.1.1",
-    "winston-daily-rotate-file": "1.0.1"
-  },
-  "devDependencies": {
-    "del": "2.2.0",
+    "winston-daily-rotate-file": "1.0.1",
     "gulp-angular-templatecache": "1.8.0",
     "gulp-concat": "2.6.0",
     "gulp-cssmin": "0.1.7",
