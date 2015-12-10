@@ -14,7 +14,7 @@ var plugins         = gulpLoadPlugins({
 	rename: {
 		'gulp-angular-templatecache': 'templateCache'
 	}
-  });
+});
 
 // =========================================================================
 // Environnement ===========================================================

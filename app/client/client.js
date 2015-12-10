@@ -21,9 +21,9 @@ app.config(function($routeProvider, $locationProvider) {
 			controller  : 'HomeCtrl'
 		})
 
-		.otherwise({
-			redirectTo : '/'
-		});
+		// .otherwise({
+		// 	redirectTo : '/'
+		// });
 
 		// use the HTML5 History API
         $locationProvider.html5Mode(true);

@@ -11,6 +11,5 @@ script demarrage test présence donnée en base
 Title par rapport au page (conf i18n)
 
 ngAnnotate
-livereload env test
 
 bluebird 3.0.6 catch

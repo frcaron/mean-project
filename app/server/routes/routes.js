@@ -60,19 +60,25 @@ module.exports = function (app, passport) {
 	// Aggregation
 	app.use('/', function(req, res, next) {
 		// Global
-		res.locals.appName          = Config.app.name;
-		res.locals.description      = Config.app.description;
-		res.locals.keywords         = Config.app.keywords;
+		res.locals.appName     = Config.app.name;
+		res.locals.description = Config.app.description;
+		res.locals.keywords    = Config.app.keywords;
 
 		// Assets
 		res.locals.aggregatedassets = Config.aggregatedassets;
 
 		next();
-	}, basicRouter);
-
-	// API unknow response
-	app.use('/*', function(req, res) {
+	}, function(req, res) {
+		console.log('why here')
 		res.render('index');
+	});
+
+	// Basic route unknow response
+	app.use('/*', function(req, res) {
+		console.log('test')
+		res.render('404', {
+			error : 'Page inexistante'
+		});
 	});
 
 	// Error handling

@@ -50,7 +50,7 @@ module.exports = function (app, passport) {
 	}
 
 	// Setting favicon
-	app.use(Favicon(Path.join(global.__client, 'assets', 'img', 'favicon.ico')));
+	app.use(Favicon(Path.join(global.__client, 'assets/img/favicon.ico')));
 
 	// Active form extended
 	app.use(BodyParser.urlencoded(Config.bodyParser.urlencoded));
