@@ -4,20 +4,15 @@
 Variable env :
 
 	// All
-	- ENV              (value   : 'development' or 'production')
+	- HOST / HOSTNAME  (default : 'localhost')
 	- PORT             (default : 3000)
-	- BDD_URL          (default : 'mongodb://localhost/mean-project')
-	- LEVEL_LOG_MORGAN (default : 'dev')
-	- LEVEL_LOG        (default : 'debug')
-	- SESSION_SECRET   (default : 'secretmeanproject')
-	- FB_ID            (default : undefined)
-	- FB_SECRET        (default : undefined)
-
-	// Local
-	- HOSTNAME         (default : 'localhost')
 
 	// Production
+	- DB_URL
 	- DOMAIN
+	- FB_ID
+	- FB_SECRET
+	- SESSION_SECRET
 
 Outil à installer :
 
