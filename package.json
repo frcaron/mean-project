@@ -7,8 +7,7 @@
     "email": "francois.caron59@gmail.com"
   },
   "scripts": {
-    "postinstall": "",
-    "start": "nodemon server"
+    "start": "node server"
   },
   "engines": {
     "node": "5.0.0",
@@ -30,6 +29,7 @@
     "express-session": "1.12.1",
     "file-stream-rotator": "0.0.6",
     "font-awesome": "4.5.0",
+    "glob": "6.0.1",
     "jquery": "2.1.4",
     "jsonwebtoken": "5.4.1",
     "lodash": "3.10.1",
@@ -48,8 +48,8 @@
   "devDependencies": {
     "browserify": "12.0.1",
     "del": "2.2.0",
-    "glob": "6.0.1",
     "gulp": "3.9.0",
+    "gulp-concat": "2.6.0",
     "gulp-cssmin": "0.1.7",
     "gulp-livereload": "3.8.1",
     "gulp-load-plugins": "1.1.0",

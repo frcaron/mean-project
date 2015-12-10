@@ -9,8 +9,10 @@ var Consolidate  = require('consolidate');
 var Express      = require('express');
 var Favicon      = require('serve-favicon');
 var Flash        = require('connect-flash');
+var Glob         = require('glob');
 var Session      = require('express-session');
 var Config       = require(Path.join(global.__core, 'system')).Config;
+var Assets       = require(Path.join(global.__config, 'assets'));
 
 module.exports = function (app, passport) {
 
@@ -30,6 +32,14 @@ module.exports = function (app, passport) {
 	app.use('/dist', Express.static(Path.join(global.__client, 'dist')));
 	app.use('/static', Express.static(Path.join(global.__client, 'assets', 'static')));
 
+	// Assets.dist.views.map(function (err, view) {
+	// 	if(err) continue;
+	// 	Glob(view, function (dir) {
+	// 		console.log(dir);
+	// 		app.use('dist/views', Express.static(dir));
+	// 	});
+	// });
+
 	// Setting favicon
 	app.use(Favicon(Path.join(global.__client, 'assets', 'img', 'favicon.ico')));
 
@@ -44,7 +54,7 @@ module.exports = function (app, passport) {
 	app.use(Flash());
 
 	// Add logging middleware
-	require(Path.join(global.__config, 'middleware/logging'))(app, Config.logging.morgan);
+	require(Path.join(global.__config, 'middleware', 'logging'))(app, Config.logging.morgan);
 
 	// =========================================================================
 	// Engine ==================================================================

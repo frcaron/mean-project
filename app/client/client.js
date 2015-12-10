@@ -1,9 +1,8 @@
 "use strict";
 
 // Inject
-require('jquery');
-require('angular-route');
 var Angular = require('angular');
+require('angular-route');
 
 var app = Angular.module('budgetApp', [ 'ngRoute' ]);
 
@@ -12,8 +11,8 @@ require('./components');
 // =========================================================================
 // Config client ===========================================================
 // =========================================================================
-//
-app.config(function($routeProvider) {
+
+app.config(['$routeProvider', function($routeProvider) {
 	$routeProvider
 
 		// route for the home page
@@ -21,4 +20,4 @@ app.config(function($routeProvider) {
 			templateUrl : 'dist/views/index.html',
 			controller  : 'HomeCtrl'
 		});
-});
+}]);
