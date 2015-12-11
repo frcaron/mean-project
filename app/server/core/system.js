@@ -68,9 +68,13 @@ let defaultLogger = new winston.Logger({
 	colors : customLevels.colors
 });
 
+console.log(winston.config);
+var a = winston.config.addColors(customLevels.colors);
+console.log(a);
+
 // Formatter
 let formatter = function(options, timestamp) {
-	return  (timestamp ? (options.timestamp() + '\t') : '') + options.level.toUpperCase() + ' ' +
+	return  (timestamp ? (options.timestamp() + '\t') : '') + winston.config.colorize(options.level.toUpperCase()) + ' ' +
 		(undefined !== options.message ? options.message : '') +
 		(options.meta && Object.keys(options.meta).length ? '\n\t' + JSON.stringify(options.meta) : '' );
 };
@@ -87,7 +91,9 @@ if(consoleConf.enabled) {
 		formatter : function(options) {
 			return formatter(options, consoleConf.timestamp.enabled);
 		},
-		colorize  : true
+		prettyPrint: true,
+		colorize: true,
+		silent: false
 	}));
 }
 
