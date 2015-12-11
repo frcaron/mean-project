@@ -1,29 +1,29 @@
 "use strict";
 
 //Inject
-var Path               = require('path');
-var Moment             = require('moment');
-var ResponseService    = require(Path.join(global.__service, 'response'));
-var TransactionService = require(Path.join(global.__service, 'transaction'));
-var Exception          = require(Path.join(global.__core, 'exception'));
-var Logger             = require(Path.join(global.__core, 'system')).Logger;
+var path               = require('path');
+var moment             = require('moment');
+var responseService    = require(path.join(global.__service, 'response'));
+var transactionService = require(path.join(global.__service, 'transaction'));
+var Exception          = require(path.join(global.__core, 'exception'));
+var logger             = require(path.join(global.__core, 'system')).Logger;
 
 // Properties
 var api_prefix = '/transactions';
 
-module.exports = function (router) {
+module.exports = function (router, auth) {
 
 	router.route(api_prefix)
 
 		// Create one transaction
-		.post(function (req, res, next) {
+		.post(auth, function (req, res, next) {
 
 			let category_id = req.body.category_id ||req.query.category_id;
 
-			Logger.debug('[WSP - VALID] TransactionRoute#post');
-			Logger.debug('              -- req.body.date         : ' + req.body.date);
-			Logger.debug('              -- req.body.sum          : ' + req.body.sum);
-			Logger.debug('              -- req.query.category_id : ' + category_id);
+			logger.debug('[WSP - VALID] TransactionRoute#post');
+			logger.debug('              -- req.body.date         : ' + req.body.date);
+			logger.debug('              -- req.body.sum          : ' + req.body.sum);
+			logger.debug('              -- req.query.category_id : ' + category_id);
 
 			// Validation
 			let msg = [];
@@ -40,20 +40,20 @@ module.exports = function (router) {
 				return next(new Exception.MetierEx('Param missing', msg));
 			}
 
-			var moment = Moment(req.body.date, "DD/MM/YYYY", true);
-			if(!moment.isValid()) {
+			var m = moment(req.body.date, "DD/MM/YYYY", true);
+			if(!m.isValid()) {
 				return next(new Exception.MetierEx('Param invalid', [ 'date' ]));
 			}
-			req.body.date = moment;
+			req.body.date = m;
 
 			next();
 
 		}, function (req, res, next) {
 
-			TransactionService.create(req, next, req.user.id);
+			transactionService.create(req, next, req.user.id);
 
 		}, function (req, res) {
-			ResponseService.success(res, {
+			responseService.success(res, {
 				result  : req.result
 			});
 		});
@@ -61,23 +61,23 @@ module.exports = function (router) {
 	router.route(api_prefix + '/:transaction_id')
 
 		// Get one transaction
-		.get(function (req, res, next) {
-			TransactionService.getByIdU(req, next, req.user.id);
+		.get(auth, function (req, res, next) {
+			transactionService.getByIdU(req, next, req.user.id);
 
 		}, function (req, res) {
-			ResponseService.success(res, {
+			responseService.success(res, {
 				result  : req.result
 			});
 		})
 
 		// Update one transaction
-		.put(function (req, res, next) {
+		.put(auth, function (req, res, next) {
 
 			let category_id = req.body.category_id ||req.query.category_id;
 
-			Logger.debug('[WSP - VALID] TransactionRoute#put');
-			Logger.debug('              -- req.body.date         : ' + req.body.date);
-			Logger.debug('              -- req.query.category_id : ' + category_id);
+			logger.debug('[WSP - VALID] TransactionRoute#put');
+			logger.debug('              -- req.body.date         : ' + req.body.date);
+			logger.debug('              -- req.query.category_id : ' + category_id);
 
 			// Validation
 			let msg = [];
@@ -91,29 +91,29 @@ module.exports = function (router) {
 				return next(new Exception.MetierEx('Param missing', msg));
 			}
 
-			var moment = Moment(req.body.date, "DD/MM/YYYY", true);
-			if(!moment.isValid()) {
+			var m = moment(req.body.date, "DD/MM/YYYY", true);
+			if(!m.isValid()) {
 				return next(new Exception.MetierEx('Param invalid', [ 'date' ]));
 			}
-			req.body.date = moment;
+			req.body.date = m;
 
 			next();
 
 		}, function (req, res, next) {
 
-			TransactionService.update(req, next, req.user.id);
+			transactionService.update(req, next, req.user.id);
 
 		}, function (req, res) {
-			ResponseService.success(res, {
+			responseService.success(res, {
 				result  : req.result
 			});
 		})
 
 		// Delete one transaction
-		.delete(function (req, res, next) {
-			TransactionService.remove(req, next, req.user.id);
+		.delete(auth, function (req, res, next) {
+			transactionService.remove(req, next, req.user.id);
 
 		}, function (req, res) {
-			ResponseService.success(res);
+			responseService.success(res);
 		});
 };

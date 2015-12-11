@@ -1,25 +1,25 @@
 "use strict";
 
 //Inject
-var Path            = require('path');
-var ResponseService = require(Path.join(global.__service, 'response'));
-var UserService     = require(Path.join(global.__service, 'user'));
-var Exception       = require(Path.join(global.__core, 'exception'));
-var Logger          = require(Path.join(global.__core, 'system')).Logger;
+var path            = require('path');
+var responseService = require(path.join(global.__service, 'response'));
+var userService     = require(path.join(global.__service, 'user'));
+var Exception       = require(path.join(global.__core, 'exception'));
+var logger          = require(path.join(global.__core, 'system')).Logger;
 
 // Properties
 var api_prefix = '/users';
 
-module.exports = function (router) {
+module.exports = function (router, auth) {
 
 	router.route(api_prefix)
 
 		// Get all users
-		.get(function (req, res, next) {
-			UserService.all(req, next);
+		.get(auth, function (req, res, next) {
+			userService.all(req, next);
 
 		}, function (req, res) {
-			ResponseService.success(res, {
+			responseService.success(res, {
 				result  : req.result
 			});
 		});
@@ -27,11 +27,11 @@ module.exports = function (router) {
 	router.route(api_prefix + '/:user_id')
 
 		// Get one user
-		.get(function (req, res, next) {
-			UserService.getById(req, next, req.params.user_id);
+		.get(auth, function (req, res, next) {
+			userService.getById(req, next, req.params.user_id);
 
 		}, function (req, res) {
-			ResponseService.success(res, {
+			responseService.success(res, {
 				result  : req.result
 			});
 		});
@@ -39,10 +39,10 @@ module.exports = function (router) {
 	router.route(api_prefix + '/:user_id')
 
 		// Manage permission
-		.put(function (req, res, next) {
+		.put(auth, function (req, res, next) {
 
-			Logger.debug('[WSA - VALID] UserRoute#put');
-			Logger.debug('              -- req.body.admin : ' + req.body.admin);
+			logger.debug('[WSA - VALID] UserRoute#put');
+			logger.debug('              -- req.body.admin : ' + req.body.admin);
 
 			// Validation
 			if ( req.body.admin === undefined ) {
@@ -52,10 +52,10 @@ module.exports = function (router) {
 
 		}, function (req, res, next) {
 
-			UserService.managePermission(req, next, req.params.user_id);
+			userService.managePermission(req, next, req.params.user_id);
 
 		}, function (req, res) {
-			ResponseService.success(res, {
+			responseService.success(res, {
 				result  : req.result
 			});
 		});

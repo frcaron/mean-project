@@ -1,13 +1,12 @@
 "use strict";
 
 // Inject
-var path              = require('path');
-var fs                = require('fs');
-var moment            = require('moment');
-var winston           = require('winston');
-var winstonRotateFile = require('winston-daily-rotate-file');
-var util              = require('util');
-var  _                = require('lodash');
+var path      = require('path');
+var fs        = require('fs');
+var moment    = require('moment');
+var winston   = require('winston');
+var winstonRF = require('winston-daily-rotate-file');
+var  _        = require('lodash');
 
 // =========================================================================
 // Config ==================================================================
@@ -23,36 +22,20 @@ let defaultconfig = (function() {
 	}).indexOf(process.env.NODE_ENV) ? process.env.NODE_ENV : 'development';
 
 	// Assets env
-	let dist = require(path.join(process.cwd(), 'config/assets')).dist || {};
+	let dist = require(path.join(process.cwd(), 'config/assets')).dist.root || 'app/client/dist';
+	if(!fs.existsSync(dist) || !fs.existsSync(path.join(dist, 'js')) || !fs.existsSync(path.join(dist, 'css'))) {
+		throw new Error('Error folder dist');
+	}
+
 	let aggregatedassets = { js : [], css : [] };
-	_.mapKeys(dist.output[process.env.NODE_ENV], function (value) {
-		if(_.endsWith(value, '.js')) {
-			aggregatedassets.js.push(path.join('dist/js', value));
-		} else if(_.endsWith(value, '.css')) {
-			aggregatedassets.css.push(path.join('dist/css', value));
-		}
+	fs.readdirSync(path.join(process.cwd(), dist, 'js')).map(function(file) {
+		aggregatedassets.js.push(path.join('dist/js', file));
+	});
+	fs.readdirSync(path.join(process.cwd(), dist, 'css')).map(function(file) {
+		aggregatedassets.css.push(path.join('dist/css', file));
 	});
 
-	// Assets all
-	_.mapKeys(dist.output.all, function (value) {
-		if(util.isArray(value)) {
-			value.map(function (v) {
-				if(_.endsWith(v, '.js')) {
-					aggregatedassets.js.push(path.join(v));
-				} else if(_.endsWith(v, '.css')) {
-					aggregatedassets.css.push(path.join(v));
-				}
-			});
-		} else {
-			if(_.endsWith(value, '.js')) {
-				aggregatedassets.js.push(path.join('dist/js', value));
-			} else if(_.endsWith(value, '.css')) {
-				aggregatedassets.css.push(path.join('dist/css', value));
-			}
-		}
-	});
-
-	// Extend the base configuration i nall.js with specific environnment
+	// Extend the base configuration in all.js with specific environnment and assets location
 	return _.extend(
 		require(configPath + '/all'),
 		require(configPath + '/' + load) || {},
@@ -121,7 +104,7 @@ if(fileConf.enabled) {
 		fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
 	});
 
-	defaultLogger.add(winstonRotateFile, ({
+	defaultLogger.add(winstonRF, ({
 		name        : 'file',
 		level       : fileConf.level,
 		filename    : fileConf.filename,

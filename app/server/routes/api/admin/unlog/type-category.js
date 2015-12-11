@@ -1,9 +1,9 @@
 "use strict";
 
 // Inject
-var Path                = require('path');
-var ResponseService     = require(Path.join(global.__service, 'response'));
-var TypeCategoryService = require(Path.join(global.__service, 'type-category'));
+var path                = require('path');
+var responseService     = require(path.join(global.__service, 'response'));
+var typeCategoryService = require(path.join(global.__service, 'type-category'));
 
 // Propeties
 var api_prefix = '/typecategories';
@@ -14,10 +14,10 @@ module.exports = function (router) {
 
 		// Get all type category
 		.get(function (req, res, next) {
-			TypeCategoryService.all(req, next);
+			typeCategoryService.all(req, next);
 
 		}, function (req, res) {
-			ResponseService.success(res, {
+			responseService.success(res, {
 				result  : req.result
 			});
 		});
@@ -26,10 +26,10 @@ module.exports = function (router) {
 
 		// Get one type category
 		.get(function (req, res, next) {
-			TypeCategoryService.getById(req, next);
+			typeCategoryService.getById(req, next);
 
 		}, function (req, res) {
-			ResponseService.success(res, {
+			responseService.success(res, {
 				result  : req.result
 			});
 		});

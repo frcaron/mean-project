@@ -1,7 +1,7 @@
 "use strict";
 
 // Inject
-var Util = require('util');
+var util = require('util');
 
 var MetierEx = function (message, detail) {
 	Error.captureStackTrace(this, this.constructor);
@@ -51,10 +51,10 @@ module.exports = {
 	RouteEx     : RouteEx
 };
 
-Util.inherits(MetierEx, Error);
-Util.inherits(DuplicateEx, MetierEx);
-Util.inherits(NoResultEx, MetierEx);
-Util.inherits(ValidatorEx, MetierEx);
-Util.inherits(ParamEx, MetierEx);
-Util.inherits(LoginEx, MetierEx);
-Util.inherits(RouteEx, Error);
+util.inherits(MetierEx, Error);
+util.inherits(DuplicateEx, MetierEx);
+util.inherits(NoResultEx, MetierEx);
+util.inherits(ValidatorEx, MetierEx);
+util.inherits(ParamEx, MetierEx);
+util.inherits(LoginEx, MetierEx);
+util.inherits(RouteEx, Error);

@@ -1,6 +1,7 @@
 "use strict";
 
-// Inject
+// Inject ordered
+require('jquery');
 var angular = require('angular');
 require('angular-route');
 

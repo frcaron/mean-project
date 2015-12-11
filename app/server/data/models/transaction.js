@@ -1,19 +1,19 @@
 "use strict";
 
 // Inject
-var Path       = require('path');
+var path       = require('path');
 var BPromise   = require('bluebird');
-var Mongoose   = BPromise.promisifyAll(require('mongoose'));
-var DatePlugin = require(Path.join(global.__plugin, 'date'));
-var UserPlugin = require(Path.join(global.__plugin, 'user'));
-var Config     = require(Path.join(global.__core, 'system')).Config;
+var mongoose   = BPromise.promisifyAll(require('mongoose'));
+var datePlugin = require(path.join(global.__plugin, 'date'));
+var userPlugin = require(path.join(global.__plugin, 'user'));
+var config     = require(path.join(global.__core, 'system')).Config;
 
-var Schema     = Mongoose.Schema;
+var Schema     = mongoose.Schema;
 var Types      = Schema.Types;
 
 // Schema
 var TransactionSchema = new Schema({
-	_id      : Config.db.seq ? Number : Types.ObjectId,
+	_id      : config.db.seq ? Number : Types.ObjectId,
 	date     : {
 		type     : Date,
 		required : true
@@ -24,15 +24,15 @@ var TransactionSchema = new Schema({
 	},
 	comment  : String,
 	_program : {
-		type     : Config.db.seq ? Number : Types.ObjectId,
+		type     : config.db.seq ? Number : Types.ObjectId,
 		ref      : 'Program',
 		required : true
 	}
 });
 
 // Plugin
-TransactionSchema.plugin(DatePlugin);
-TransactionSchema.plugin(UserPlugin);
+TransactionSchema.plugin(datePlugin);
+TransactionSchema.plugin(userPlugin);
 
 // Return
-module.exports = Mongoose.model('Transaction', TransactionSchema);
+module.exports = mongoose.model('Transaction', TransactionSchema);

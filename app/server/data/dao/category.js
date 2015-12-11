@@ -1,13 +1,13 @@
 "use strict";
 
 // Inject
-var Path          = require('path');
+var path          = require('path');
 var BPromise      = require('bluebird');
-var DaoManager    = require(Path.join(global.__dao, 'manager'))('category');
-var CategoryModel = require(Path.join(global.__model, 'category'));
-var CountersModel = require(Path.join(global.__model, 'counters'));
-var Exception     = require(Path.join(global.__core, 'exception'));
-var Logger        = require(Path.join(global.__core, 'system')).Logger;
+var daoManager    = require(path.join(global.__dao, 'manager'))('category');
+var categoryModel = require(path.join(global.__model, 'category'));
+var countersModel = require(path.join(global.__model, 'counters'));
+var Exception     = require(path.join(global.__core, 'exception'));
+var logger        = require(path.join(global.__core, 'system')).Logger;
 
 /**
  * @param  {Json} input     Data to create
@@ -17,11 +17,11 @@ var Logger        = require(Path.join(global.__core, 'system')).Logger;
  */
 function create (input) {
 
-	Logger.debug('[DAO - START] CategoryDao#create');
-	Logger.debug('              -- input : ' + JSON.stringify(input));
+	logger.debug('[DAO - START] CategoryDao#create');
+	logger.debug('              -- input : ' + JSON.stringify(input));
 
-	let category = new CategoryModel();
-	let promise = CountersModel.getNextSequence('category_id')
+	let category = new categoryModel();
+	let promise = countersModel.getNextSequence('category_id')
 		.then(function (seq){
 
 			category._id   = seq;
@@ -41,8 +41,8 @@ function create (input) {
 			return BPromise.resolve(category);
 		})
 		.catch(function (err) {
-			Logger.debug('[DAO - CATCH] CategoryDao#create');
-			Logger.error('              -- message : ' + err.message);
+			logger.debug('[DAO - CATCH] CategoryDao#create');
+			logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
 				throw new Exception.DuplicateEx('Category already exist');
@@ -57,7 +57,7 @@ function create (input) {
 			}
 		});
 
-	Logger.debug('[DAO -   END] CategoryDao#create');
+	logger.debug('[DAO -   END] CategoryDao#create');
 
 	return promise;
 }
@@ -72,9 +72,9 @@ function create (input) {
  */
 function update (input, filters) {
 
-	Logger.debug('[DAO - START] CategoryDao#update');
-	Logger.debug('              -- input   : ' + JSON.stringify(input));
-	Logger.debug('              -- filters : ' + JSON.stringify(filters));
+	logger.debug('[DAO - START] CategoryDao#update');
+	logger.debug('              -- input   : ' + JSON.stringify(input));
+	logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise;
 	if(filters) {
@@ -103,8 +103,8 @@ function update (input, filters) {
 
 	let promiseEnd = promise
 		.catch(function (err) {
-			Logger.debug('[DAO - CATCH] CategoryDao#update');
-			Logger.error('              -- message : ' + err.message);
+			logger.debug('[DAO - CATCH] CategoryDao#update');
+			logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
 				throw new Exception.DuplicateEx('Category already exist');
@@ -119,7 +119,7 @@ function update (input, filters) {
 			}
 		});
 
-	Logger.debug('[DAO -   END] CategoryDao#update');
+	logger.debug('[DAO -   END] CategoryDao#update');
 
 	return promiseEnd;
 }
@@ -134,15 +134,15 @@ function update (input, filters) {
  */
 function remove (name_query, filters) {
 
-	Logger.debug('[DAO - START] CategoryDao#remove');
-	Logger.debug('              -- name_query : ' + name_query);
-	Logger.debug('              -- filters : ' + JSON.stringify(filters));
+	logger.debug('[DAO - START] CategoryDao#remove');
+	logger.debug('              -- name_query : ' + name_query);
+	logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise;
 	try {
-		promise = DaoManager.getQuery('remove', name_query, filters)
+		promise = daoManager.getQuery('remove', name_query, filters)
 			.then(function (query) {
-				return CategoryModel.removeAsync(query);
+				return categoryModel.removeAsync(query);
 			});
 	} catch (err) {
 		promise = BPromise.reject(err);
@@ -154,13 +154,13 @@ function remove (name_query, filters) {
 
 	let promiseEnd = promise
 		.catch(function (err) {
-			Logger.debug('[DAO - CATCH] CategoryDao#remove');
-			Logger.error('              -- message : ' + err.message);
+			logger.debug('[DAO - CATCH] CategoryDao#remove');
+			logger.error('              -- message : ' + err.message);
 
 			throw err;
 		});
 
-	Logger.debug('[DAO -   END] CategoryDao#remove');
+	logger.debug('[DAO -   END] CategoryDao#remove');
 
 	return promiseEnd;
 }
@@ -174,15 +174,15 @@ function remove (name_query, filters) {
  */
 function getAll (name_query, filters) {
 
-	Logger.debug('[DAO - START] CategoryDao#getAll');
-	Logger.debug('              -- name_query : ' + name_query);
-	Logger.debug('              -- filters : ' + JSON.stringify(filters));
+	logger.debug('[DAO - START] CategoryDao#getAll');
+	logger.debug('              -- name_query : ' + name_query);
+	logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise;
 	try {
-		promise = DaoManager.getQuery('getAll', name_query, filters)
+		promise = daoManager.getQuery('getAll', name_query, filters)
 			.then(function (query) {
-				return CategoryModel.findAsync(query);
+				return categoryModel.findAsync(query);
 			});
 	} catch (err) {
 		promise = BPromise.reject(err);
@@ -190,13 +190,13 @@ function getAll (name_query, filters) {
 
 	let promiseEnd = promise
 		.catch(function (err) {
-			Logger.debug('[DAO - CATCH] CategoryDao#getAll');
-			Logger.error('              -- message : ' + err.message);
+			logger.debug('[DAO - CATCH] CategoryDao#getAll');
+			logger.error('              -- message : ' + err.message);
 
 			throw err;
 		});
 
-	Logger.debug('[DAO -   END] CategoryDao#getAll');
+	logger.debug('[DAO -   END] CategoryDao#getAll');
 
 	return promiseEnd;
 }
@@ -211,15 +211,15 @@ function getAll (name_query, filters) {
  */
 function getOne (name_query, filters) {
 
-	Logger.debug('[DAO - START] CategoryDao#getOne');
-	Logger.debug('              -- name_query : ' + name_query);
-	Logger.debug('              -- filters : ' + JSON.stringify(filters));
+	logger.debug('[DAO - START] CategoryDao#getOne');
+	logger.debug('              -- name_query : ' + name_query);
+	logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise;
 	try {
-		promise = DaoManager.getQuery('getOne', name_query, filters)
+		promise = daoManager.getQuery('getOne', name_query, filters)
 			.then(function (query) {
-				return CategoryModel.findOneAsync(query);
+				return categoryModel.findOneAsync(query);
 			});
 	} catch (err) {
 		promise = BPromise.reject(err);
@@ -233,13 +233,13 @@ function getOne (name_query, filters) {
 			return BPromise.resolve(category);
 		})
 		.catch(function (err) {
-			Logger.debug('[DAO - CATCH] CategoryDao#getOne');
-			Logger.error('              -- message : ' + err.message);
+			logger.debug('[DAO - CATCH] CategoryDao#getOne');
+			logger.error('              -- message : ' + err.message);
 
 			throw err;
 		});
 
-	Logger.debug('[DAO -   END] CategoryDao#getOne');
+	logger.debug('[DAO -   END] CategoryDao#getOne');
 
 	return promiseEnd;
 }

@@ -1,13 +1,13 @@
 "use strict";
 
 // Inject
-var Path             = require('path');
+var path             = require('path');
 var BPromise         = require('bluebird');
-var DaoManager       = require(Path.join(global.__dao, 'manager'))('transaction');
-var TransactionModel = require(Path.join(global.__model, 'transaction'));
-var CountersModel    = require(Path.join(global.__model, 'counters'));
-var Exception        = require(Path.join(global.__core, 'exception'));
-var Logger           = require(Path.join(global.__core, 'system')).Logger;
+var daoManager       = require(path.join(global.__dao, 'manager'))('transaction');
+var transactionModel = require(path.join(global.__model, 'transaction'));
+var countersModel    = require(path.join(global.__model, 'counters'));
+var Exception        = require(path.join(global.__core, 'exception'));
+var logger           = require(path.join(global.__core, 'system')).Logger;
 
 /**
  * @param  {Json} input 		Data to create
@@ -17,11 +17,11 @@ var Logger           = require(Path.join(global.__core, 'system')).Logger;
  */
 function create (input) {
 
-	Logger.debug('[DAO - START] TransactionDao#create');
-	Logger.debug('              -- input : ' + JSON.stringify(input));
+	logger.debug('[DAO - START] TransactionDao#create');
+	logger.debug('              -- input : ' + JSON.stringify(input));
 
-	let transaction = new TransactionModel();
-	let promise = CountersModel.getNextSequence('transaction_id')
+	let transaction = new transactionModel();
+	let promise = countersModel.getNextSequence('transaction_id')
 		.then(function (seq){
 
 			transaction._id      = seq;
@@ -39,8 +39,8 @@ function create (input) {
 			return BPromise.resolve(transaction);
 		})
 		.catch(function (err) {
-			Logger.debug('[DAO - CATCH] TransactionDao#create');
-			Logger.error('              -- message : ' + err.message);
+			logger.debug('[DAO - CATCH] TransactionDao#create');
+			logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
 				throw new Exception.DuplicateEx('Transaction already exist');
@@ -55,7 +55,7 @@ function create (input) {
 			}
 		});
 
-	Logger.debug('[DAO -   END] TransactionDao#create');
+	logger.debug('[DAO -   END] TransactionDao#create');
 
 	return promise;
 }
@@ -71,17 +71,17 @@ function create (input) {
  */
 function update (input, name_query, filters) {
 
-	Logger.debug('[DAO - START] TransactionDao#update');
-	Logger.debug('              -- input   : ' + JSON.stringify(input));
-	Logger.debug('              -- name_query : ' + name_query);
-	Logger.debug('              -- filters : ' + JSON.stringify(filters));
+	logger.debug('[DAO - START] TransactionDao#update');
+	logger.debug('              -- input   : ' + JSON.stringify(input));
+	logger.debug('              -- name_query : ' + name_query);
+	logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise;
 	if(filters) {
 		try {
-			promise = DaoManager.getQuery('update', name_query, filters)
+			promise = daoManager.getQuery('update', name_query, filters)
 				.then(function (query) {
-					return TransactionModel.updateAsync(query,{
+					return transactionModel.updateAsync(query,{
 						_program : input.program_id
 					});
 				});
@@ -115,8 +115,8 @@ function update (input, name_query, filters) {
 
 	let promiseEnd = promise
 		.catch(function (err) {
-			Logger.debug('[DAO - CATCH] TransactionDao#update');
-			Logger.error('              -- message : ' + err.message);
+			logger.debug('[DAO - CATCH] TransactionDao#update');
+			logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
 				throw new Exception.DuplicateEx('Transaction already exist');
@@ -131,7 +131,7 @@ function update (input, name_query, filters) {
 			}
 		});
 
-	Logger.debug('[DAO -   END] TransactionDao#update');
+	logger.debug('[DAO -   END] TransactionDao#update');
 
 	return promiseEnd;
 }
@@ -145,15 +145,15 @@ function update (input, name_query, filters) {
  */
 function remove (name_query, filters) {
 
-	Logger.debug('[DAO - START] TransactionDao#remove');
-	Logger.debug('              -- name_query : ' + name_query);
-	Logger.debug('              -- filters : ' + JSON.stringify(filters));
+	logger.debug('[DAO - START] TransactionDao#remove');
+	logger.debug('              -- name_query : ' + name_query);
+	logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise;
 	try {
-		promise = DaoManager.getQuery('remove', name_query, filters)
+		promise = daoManager.getQuery('remove', name_query, filters)
 			.then(function (query) {
-				return TransactionModel.removeAsync(query);
+				return transactionModel.removeAsync(query);
 			});
 	} catch (err) {
 		promise = BPromise.reject(err);
@@ -161,13 +161,13 @@ function remove (name_query, filters) {
 
 	let promiseEnd = promise
 		.catch(function (err) {
-			Logger.debug('[DAO - CATCH] TransactionDao#remove');
-			Logger.error('              -- message : ' + err.message);
+			logger.debug('[DAO - CATCH] TransactionDao#remove');
+			logger.error('              -- message : ' + err.message);
 
 			throw err;
 		});
 
-	Logger.debug('[DAO -   END] TransactionDao#remove');
+	logger.debug('[DAO -   END] TransactionDao#remove');
 
 	return promiseEnd;
 }
@@ -181,15 +181,15 @@ function remove (name_query, filters) {
  */
 function getAll (name_query, filters) {
 
-	Logger.debug('[DAO - START] TransactionDao#getAll');
-	Logger.debug('              -- name_query : ' + name_query);
-	Logger.debug('              -- filters : ' + JSON.stringify(filters));
+	logger.debug('[DAO - START] TransactionDao#getAll');
+	logger.debug('              -- name_query : ' + name_query);
+	logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise;
 	try {
-		promise = DaoManager.getQuery('getAll', name_query, filters)
+		promise = daoManager.getQuery('getAll', name_query, filters)
 			.then(function (query) {
-				return TransactionModel.findAsync(query);
+				return transactionModel.findAsync(query);
 			});
 	} catch (err) {
 		promise = BPromise.reject(err);
@@ -197,13 +197,13 @@ function getAll (name_query, filters) {
 
 	let promiseEnd = promise
 		.catch(function (err) {
-			Logger.debug('[DAO - CATCH] TransactionDao#getAll');
-			Logger.error('              -- message : ' + err.message);
+			logger.debug('[DAO - CATCH] TransactionDao#getAll');
+			logger.error('              -- message : ' + err.message);
 
 			throw err;
 		});
 
-	Logger.debug('[DAO -   END] TransactionDao#getAll');
+	logger.debug('[DAO -   END] TransactionDao#getAll');
 
 	return promiseEnd;
 }
@@ -218,15 +218,15 @@ function getAll (name_query, filters) {
  */
 function getOne (name_query, filters) {
 
-	Logger.debug('[DAO - START] TransactionDao#getOne');
-	Logger.debug('              -- name_query : ' + name_query);
-	Logger.debug('              -- filters : ' + JSON.stringify(filters));
+	logger.debug('[DAO - START] TransactionDao#getOne');
+	logger.debug('              -- name_query : ' + name_query);
+	logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise;
 	try {
-		promise = DaoManager.getQuery('getOne', name_query, filters)
+		promise = daoManager.getQuery('getOne', name_query, filters)
 			.then(function (query) {
-				return TransactionModel.findOneAsync(query);
+				return transactionModel.findOneAsync(query);
 			});
 	} catch (err) {
 		promise = BPromise.reject(err);
@@ -240,13 +240,13 @@ function getOne (name_query, filters) {
 			return BPromise.resolve(transaction);
 		})
 		.catch(function (err) {
-			Logger.debug('[DAO - CATCH] TransactionDao#getOne');
-			Logger.error('              -- message : ' + err.message);
+			logger.debug('[DAO - CATCH] TransactionDao#getOne');
+			logger.error('              -- message : ' + err.message);
 
 			throw err;
 		});
 
-	Logger.debug('[DAO -   END] TransactionDao#getOne');
+	logger.debug('[DAO -   END] TransactionDao#getOne');
 
 	return promiseEnd;
 }

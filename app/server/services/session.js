@@ -1,19 +1,19 @@
 "use strict";
 
 // Inject
-var Path      = require('path');
-var Jwt       = require('jsonwebtoken');
-var Exception = require(Path.join(global.__core, 'exception'));
-var Config    = require(Path.join(global.__core, 'system')).Config;
-var Logger    = require(Path.join(global.__core, 'system')).Logger;
+var path      = require('path');
+var jwt       = require('jsonwebtoken');
+var Exception = require(path.join(global.__core, 'exception'));
+var config    = require(path.join(global.__core, 'system')).Config;
+var logger    = require(path.join(global.__core, 'system')).Logger;
 
 module.exports = {
 
 	// Authenticate user
 	authenticate (req, res, next, passport, startegy) {
 
-		Logger.debug('[SER - START] SessionService#authenticate');
-		Logger.debug('              -- startegy : ' + startegy);
+		logger.debug('[SER - START] SessionService#authenticate');
+		logger.debug('              -- startegy : ' + startegy);
 
 		passport.authenticate(startegy, { failureFlash: true }, function (err, user, info) {
 			if(err) {
@@ -32,14 +32,14 @@ module.exports = {
 
 		})(req, res);
 
-		Logger.debug('[SER -   END] SessionService#authenticate');
+		logger.debug('[SER -   END] SessionService#authenticate');
 	},
 
 	// Authorize user
 	authorize (req, res, next, passport, startegy) {
 
-		Logger.debug('[SER - START] SessionService#authorize');
-		Logger.debug('              -- startegy : ' + startegy);
+		logger.debug('[SER - START] SessionService#authorize');
+		logger.debug('              -- startegy : ' + startegy);
 
 		passport.authorize(startegy, { failureFlash: true }, function (err, user, info) {
 			if(err) {
@@ -58,14 +58,14 @@ module.exports = {
 
 		})(req, res);
 
-		Logger.debug('[SER -   END] SessionService#authorize');
+		logger.debug('[SER -   END] SessionService#authorize');
 
 	},
 
 	// Login user
 	login (req, res, next) {
 
-		Logger.debug('[SER - START] SessionService#login');
+		logger.debug('[SER - START] SessionService#login');
 
 		let user = req.result;
 		req.login(user, function(err) {
@@ -74,28 +74,28 @@ module.exports = {
 			}
 
 			// Generate token
-			let token = Jwt.sign({
+			let token = jwt.sign({
 				id : user._id
-			}, Config.session.secret, {
-				expiresMinutes : Config.session.delay
+			}, config.session.secret, {
+				expiresMinutes : config.session.delay
 			});
 			req.result = token;
 
 			next();
 		});
 
-		Logger.debug('[SER -   END] SessionService#login');
+		logger.debug('[SER -   END] SessionService#login');
 	},
 
 	deleteToken (req, next, provider) {
 
-		Logger.debug('[SER - START] SessionService#unlink');
-		Logger.debug('              -- provider : ' + provider);
+		logger.debug('[SER - START] SessionService#unlink');
+		logger.debug('              -- provider : ' + provider);
 
 		// TODO delete token user
 		next();
 
-		Logger.debug('[SER -   END] SessionService#unlink');
+		logger.debug('[SER -   END] SessionService#unlink');
 
 	}
 };

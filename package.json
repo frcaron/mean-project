@@ -7,7 +7,7 @@
     "email": "francois.caron59@gmail.com"
   },
   "scripts": {
-    "postinstall" : "gulp prod",
+    "postinstall": "gulp prod",
     "start": "node server"
   },
   "engines": {
@@ -56,13 +56,14 @@
     "gulp-load-plugins": "1.1.0",
     "gulp-ng-annotate": "1.1.0",
     "gulp-nodemon": "2.0.4",
+    "gulp-rename": "1.2.2",
     "gulp-streamify": "1.0.2",
     "gulp-uglify": "1.5.1",
     "run-sequence": "1.1.5",
     "vinyl-paths": "2.1.0",
     "vinyl-source-stream": "1.1.0"
   },
-  "config" : {
+  "config": {
     "unsafe-perm": "true"
   }
 }

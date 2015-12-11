@@ -1,13 +1,13 @@
 "use strict";
 
 // Inject
-var Path          = require('path');
+var path          = require('path');
 var BPromise      = require('bluebird');
-var DaoManager    = require(Path.join(global.__dao, 'manager'))('user');
-var UserModel     = require(Path.join(global.__model, 'user'));
-var CountersModel = require(Path.join(global.__model, 'counters'));
-var Exception     = require(Path.join(global.__core, 'exception'));
-var Logger        = require(Path.join(global.__core, 'system')).Logger;
+var daoManager    = require(path.join(global.__dao, 'manager'))('user');
+var userModel     = require(path.join(global.__model, 'user'));
+var countersModel = require(path.join(global.__model, 'counters'));
+var Exception     = require(path.join(global.__core, 'exception'));
+var logger        = require(path.join(global.__core, 'system')).Logger;
 
 /**
  * @param  {Json} input 	Data to create
@@ -17,11 +17,11 @@ var Logger        = require(Path.join(global.__core, 'system')).Logger;
  */
 function create (input) {
 
-	Logger.debug('[DAO - START] UserDao#create');
-	Logger.debug('              -- input : ' + JSON.stringify(input));
+	logger.debug('[DAO - START] UserDao#create');
+	logger.debug('              -- input : ' + JSON.stringify(input));
 
-	let user = new UserModel();
-	let promise = CountersModel.getNextSequence('user_id')
+	let user = new userModel();
+	let promise = countersModel.getNextSequence('user_id')
 		.then(function (seq){
 
 			// Base
@@ -55,8 +55,8 @@ function create (input) {
 			return BPromise.resolve(user);
 		})
 		.catch(function (err) {
-			Logger.debug('[DAO - CATCH] UserDao#create');
-			Logger.error('              -- message : ' + err.message);
+			logger.debug('[DAO - CATCH] UserDao#create');
+			logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
 				throw new Exception.DuplicateEx('User already exist');
@@ -71,7 +71,7 @@ function create (input) {
 			}
 		});
 
-	Logger.debug('[DAO -   END] UserDao#create');
+	logger.debug('[DAO -   END] UserDao#create');
 
 	return promise;
 }
@@ -85,8 +85,8 @@ function create (input) {
  */
 function update (input) {
 
-	Logger.debug('[DAO - START] UserDao#update');
-	Logger.debug('              -- input : ' + JSON.stringify(input));
+	logger.debug('[DAO - START] UserDao#update');
+	logger.debug('              -- input : ' + JSON.stringify(input));
 
 	let promise = getOne('byId', { user_id : input.user_id })
 		.then(function (user) {
@@ -137,8 +137,8 @@ function update (input) {
 				});
 		})
 		.catch(function (err) {
-			Logger.debug('[DAO - CATCH] UserDao#update');
-			Logger.error('              -- message : ' + err.message);
+			logger.debug('[DAO - CATCH] UserDao#update');
+			logger.error('              -- message : ' + err.message);
 
 			if (err.code === 11000) {
 				throw new Exception.DuplicateEx('User already exist');
@@ -153,7 +153,7 @@ function update (input) {
 			}
 		});
 
-	Logger.debug('[DAO -   END] UserDao#update');
+	logger.debug('[DAO -   END] UserDao#update');
 
 	return promise;
 }
@@ -168,22 +168,22 @@ function update (input) {
  */
 function remove (name_query, filters) {
 
-	Logger.debug('[DAO - START] UserDao#remove');
-	Logger.debug('              -- name_query : ' + name_query);
-	Logger.debug('              -- filters : ' + JSON.stringify(filters));
+	logger.debug('[DAO - START] UserDao#remove');
+	logger.debug('              -- name_query : ' + name_query);
+	logger.debug('              -- filters : ' + JSON.stringify(filters));
 
 	let promise = getOne(name_query, filters)
 		.then(function(user){
 			return user.removeAsync();
 		})
 		.catch(function (err) {
-			Logger.debug('[DAO - CATCH] UserDao#remove');
-			Logger.error('              -- message : ' + err.message);
+			logger.debug('[DAO - CATCH] UserDao#remove');
+			logger.error('              -- message : ' + err.message);
 
 			throw err;
 		});
 
-	Logger.debug('[DAO -   END] UserDao#remove');
+	logger.debug('[DAO -   END] UserDao#remove');
 
 	return promise;
 }
@@ -194,20 +194,20 @@ function remove (name_query, filters) {
  */
 function getAll () {
 
-	Logger.debug('[DAO - START] UserDao#getAll');
+	logger.debug('[DAO - START] UserDao#getAll');
 
-	let promise = UserModel.findAsync()
+	let promise = userModel.findAsync()
 		.then(function (users) {
 			return BPromise.resolve(users);
 		})
 		.catch(function (err) {
-			Logger.debug('[DAO - CATCH] UserDao#getAll');
-			Logger.error('              -- message : ' + err.message);
+			logger.debug('[DAO - CATCH] UserDao#getAll');
+			logger.error('              -- message : ' + err.message);
 
 			throw err;
 		});
 
-	Logger.debug('[DAO -   END] UserDao#getAll');
+	logger.debug('[DAO -   END] UserDao#getAll');
 
 	return promise;
 }
@@ -222,15 +222,15 @@ function getAll () {
  */
 function getOne (name_query, filters) {
 
-	Logger.debug('[DAO - START] UserDao#getOne');
-	Logger.debug('              -- name_query : ' + name_query);
-	Logger.debug('              -- filters    : ' + JSON.stringify(filters));
+	logger.debug('[DAO - START] UserDao#getOne');
+	logger.debug('              -- name_query : ' + name_query);
+	logger.debug('              -- filters    : ' + JSON.stringify(filters));
 
 	let promise;
 	try {
-		promise = DaoManager.getQuery('getOne', name_query, filters)
+		promise = daoManager.getQuery('getOne', name_query, filters)
 			.then(function (query) {
-				return UserModel.findOneAsync(query);
+				return userModel.findOneAsync(query);
 			});
 
 	} catch (err) {
@@ -245,13 +245,13 @@ function getOne (name_query, filters) {
 			return BPromise.resolve(user);
 		})
 		.catch(function (err) {
-			Logger.debug('[DAO - CATCH] UserDao#getOne');
-			Logger.error('              -- message : ' + err.message);
+			logger.debug('[DAO - CATCH] UserDao#getOne');
+			logger.error('              -- message : ' + err.message);
 
 			throw err;
 		});
 
-	Logger.debug('[DAO -   END] UserDao#getOne');
+	logger.debug('[DAO -   END] UserDao#getOne');
 
 	return promiseEnd;
 }
@@ -266,9 +266,9 @@ function getOne (name_query, filters) {
  */
 function validatePassword (log, pass) {
 
-	Logger.debug('[DAO - START] UserDao#validatePassword');
+	logger.debug('[DAO - START] UserDao#validatePassword');
 
-	let promise = UserModel.findOne({ 'local.email' : log })
+	let promise = userModel.findOne({ 'local.email' : log })
 		.select('+local.password')
 		.then(function(user) {
 			if(!user) {
@@ -285,13 +285,13 @@ function validatePassword (log, pass) {
 			return BPromise.resolve(user);
 		})
 		.then(undefined, function (err){
-			Logger.debug('[DAO - CATCH] UserDao#validatePassword');
-			Logger.error('              -- message : ' + err.message);
+			logger.debug('[DAO - CATCH] UserDao#validatePassword');
+			logger.error('              -- message : ' + err.message);
 
 			throw err;
 		});
 
-		Logger.debug('[DAO -   END] UserDao#validatePassword');
+		logger.debug('[DAO -   END] UserDao#validatePassword');
 
 	return BPromise.resolve(promise);
 }

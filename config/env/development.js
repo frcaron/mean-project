@@ -5,7 +5,7 @@ module.exports = {
 	},
 	logging : {
 		morgan : {
-			format : '                    ** :url :method :status',
+			format : '>> :status :method  	:url',
 			stream :  {
 				enabled     : false,
 				filename    : 'logs/morgan/log',

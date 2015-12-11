@@ -1,24 +1,24 @@
 "use strict";
 
 // Inject
-var Path           = require('path');
+var path           = require('path');
 var BPromise       = require('bluebird');
-var BudgetService  = require(Path.join(global.__service, 'share'));
-var ProgramDao     = require(Path.join(global.__dao, 'program'));
-var CategoryDao    = require(Path.join(global.__dao, 'category'));
-var TransactionDao = require(Path.join(global.__dao, 'transaction'));
-var Exception      = require(Path.join(global.__core, 'exception'));
-var Logger         = require(Path.join(global.__core, 'system')).Logger;
+var shareService   = require(path.join(global.__service, 'share'));
+var programDao     = require(path.join(global.__dao, 'program'));
+var categoryDao    = require(path.join(global.__dao, 'category'));
+var transactionDao = require(path.join(global.__dao, 'transaction'));
+var Exception      = require(path.join(global.__core, 'exception'));
+var logger         = require(path.join(global.__core, 'system')).Logger;
 
 module.exports = {
 
 	// Create one program
 	create (req, next, user_id) {
 
-		Logger.debug('[SER - START] ProgramService#create');
-		Logger.debug('              -- user_id : ' + user_id);
+		logger.debug('[SER - START] ProgramService#create');
+		logger.debug('              -- user_id : ' + user_id);
 
-		BudgetService.createProgram({
+		shareService.createProgram({
 				category_id : req.body.category_id || req.query.category_id,
 				budget      : req.body.budget,
 				plan_id     : req.body.plan_id || req.query.plan_id,
@@ -32,14 +32,14 @@ module.exports = {
 				next(err);
 			});
 
-		Logger.debug('[SER -   END] ProgramService#create');
+		logger.debug('[SER -   END] ProgramService#create');
 	},
 
 	// Update one program
 	update (req, next, user_id) {
 
-		Logger.debug('[SER - START] ProgramService#update');
-		Logger.debug('              -- user_id : ' + user_id);
+		logger.debug('[SER - START] ProgramService#update');
+		logger.debug('              -- user_id : ' + user_id);
 
 		let category_id = req.body.category_id || req.query.category_id;
 
@@ -52,12 +52,12 @@ module.exports = {
 
 		let promise;
 		if(category_id) {
-			promise = CategoryDao.getOne('byIdU', {
+			promise = categoryDao.getOne('byIdU', {
 					category_id : category_id,
 					user_id     : user_id
 				})
 				.then(function (categoryNew) {
-					return ProgramDao.getOne('byIdU', {
+					return programDao.getOne('byIdU', {
 							program_id : req.params.program_id,
 							user_id    : user_id
 						})
@@ -66,7 +66,7 @@ module.exports = {
 								return BPromise.resolve(categoryNew);
 
 							} else {
-								return CategoryDao.getOne('byIdU', {
+								return categoryDao.getOne('byIdU', {
 									category_id : program._category,
 									user_id     : user_id
 								});
@@ -74,14 +74,14 @@ module.exports = {
 						})
 						.then(function (categoryOld) {
 							if(categoryOld._type === categoryNew._type) {
-								return ProgramDao.update(input);
+								return programDao.update(input);
 							} else {
 								throw new Exception.MetierEx('Category invalid');
 							}
 						});
 				});
 		} else {
-			promise = ProgramDao.update(input);
+			promise = programDao.update(input);
 		}
 
 		promise
@@ -93,40 +93,40 @@ module.exports = {
 				next(err);
 			});
 
-		Logger.debug('[SER -   END] ProgramService#update');
+		logger.debug('[SER -   END] ProgramService#update');
 	},
 
 	// Remove one program
 	remove (req, next, user_id) {
 
-		Logger.debug('[SER - START] ProgramService#remove');
-		Logger.debug('              -- user_id : ' + user_id);
+		logger.debug('[SER - START] ProgramService#remove');
+		logger.debug('              -- user_id : ' + user_id);
 
-		ProgramDao.getOne('byIdU', {
+		programDao.getOne('byIdU', {
 				program_id : req.params.program_id,
 				user_id    : user_id
 			})
 			.then(function (program) {
-				return CategoryDao.getOne('byIdU', {
+				return categoryDao.getOne('byIdU', {
 						category_id : program._category,
 						user_id     : user_id
 					})
 					.then(function (category) {
-						return CategoryDao.getOne('byNeutreTypeU', {
+						return categoryDao.getOne('byNeutreTypeU', {
 							neutre           : true,
 							type_category_id : category._type,
 							user_id          : user_id
 						});
 					})
 					.then(function (categoryNeutre) {
-						return ProgramDao.getOne('byCategoryPlanU', {
+						return programDao.getOne('byCategoryPlanU', {
 							plan_id     : program._plan,
 							category_id : categoryNeutre._id,
 							user_id     : user_id
 						});
 					})
 					.then(function (programNeutre) {
-						return TransactionDao.update({
+						return transactionDao.update({
 							program_id : programNeutre._id
 						}, 'byProgramU', {
 							program_id : program._id,
@@ -135,7 +135,7 @@ module.exports = {
 					});
 			})
 			.then(function () {
-				return ProgramDao.remove('byIdU', {
+				return programDao.remove('byIdU', {
 					program_id : req.params.program_id,
 					user_id    : user_id
 				});
@@ -147,18 +147,18 @@ module.exports = {
 				next(err);
 			});
 
-		Logger.debug('[SER -   END] ProgramService#remove');
+		logger.debug('[SER -   END] ProgramService#remove');
 	},
 
 	// Get programs by plan
 	allByPlanTypeU (req, next, user_id) {
 
-		Logger.debug('[SER - START] ProgramService#allByPlanU');
-		Logger.debug('              -- user_id : ' + user_id);
+		logger.debug('[SER - START] ProgramService#allByPlanU');
+		logger.debug('              -- user_id : ' + user_id);
 
 		let type_category_id = req.body.type_category_id || req.query.type_category_id;
 
-		CategoryDao.getAll('byTypeU', {
+		categoryDao.getAll('byTypeU', {
 				type_category_id : type_category_id,
 				user_id          : user_id
 			})
@@ -175,7 +175,7 @@ module.exports = {
 
 				return BPromise.all(categories)
 					.then(function () {
-						return ProgramDao.getAll('inCategoriesbyPlanU', {
+						return programDao.getAll('inCategoriesbyPlanU', {
 							categories_id : categories_id,
 							plan_id       : req.params.plan_id,
 							user_id       : user_id
@@ -190,16 +190,16 @@ module.exports = {
 				next(err);
 			});
 
-		Logger.debug('[SER -   END] ProgramService#allByPlanU');
+		logger.debug('[SER -   END] ProgramService#allByPlanU');
 	},
 
 	// Get one program by id
 	getByIdU (req, next, user_id) {
 
-		Logger.debug('[SER - START] ProgramService#getByIdU');
-		Logger.debug('              -- user_id : ' + user_id);
+		logger.debug('[SER - START] ProgramService#getByIdU');
+		logger.debug('              -- user_id : ' + user_id);
 
-		ProgramDao.getOne('byIdU', {
+		programDao.getOne('byIdU', {
 				program_id : req.params.program_id,
 				user_id    : user_id
 			})
@@ -211,6 +211,6 @@ module.exports = {
 				next(err);
 			});
 
-		Logger.debug('[SER -   END] ProgramService#getByIdU');
+		logger.debug('[SER -   END] ProgramService#getByIdU');
 	}
 };

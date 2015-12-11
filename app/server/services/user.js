@@ -1,25 +1,25 @@
 "use strict";
 
 // Inject
-var Path           = require('path');
+var path           = require('path');
 var BPromise       = require('bluebird');
-var UserDao        = require(Path.join(global.__dao, 'user'));
-var PlanDao        = require(Path.join(global.__dao, 'plan'));
-var ProgramDao     = require(Path.join(global.__dao, 'program'));
-var CategoryDao    = require(Path.join(global.__dao, 'category'));
-var TransactionDao = require(Path.join(global.__dao, 'transaction'));
-var Exception      = require(Path.join(global.__core, 'exception'));
-var Logger         = require(Path.join(global.__core, 'system')).Logger;
+var userDao        = require(path.join(global.__dao, 'user'));
+var planDao        = require(path.join(global.__dao, 'plan'));
+var programDao     = require(path.join(global.__dao, 'program'));
+var categoryDao    = require(path.join(global.__dao, 'category'));
+var transactionDao = require(path.join(global.__dao, 'transaction'));
+var Exception      = require(path.join(global.__core, 'exception'));
+var logger         = require(path.join(global.__core, 'system')).Logger;
 
 module.exports = {
 
 	// Update one user
 	update (req, next, user_id) {
 
-		Logger.debug('[SER - START] UserService#update');
-		Logger.debug('              -- user_id : ' + user_id);
+		logger.debug('[SER - START] UserService#update');
+		logger.debug('              -- user_id : ' + user_id);
 
-		UserDao.update({
+		userDao.update({
                 user_id        : user_id,
                 firstname      : req.body.firstname,
                 surname        : req.body.surname,
@@ -34,22 +34,22 @@ module.exports = {
 				next(err);
 			});
 
-		Logger.debug('[SER -   END] UserService#update');
+		logger.debug('[SER -   END] UserService#update');
 	},
 
 	// Remove one user
 	remove (req, next, user_id) {
 
-		Logger.debug('[SER - START] UserService#remove');
-		Logger.debug('              -- user_id : ' + user_id);
+		logger.debug('[SER - START] UserService#remove');
+		logger.debug('              -- user_id : ' + user_id);
 
 		let msg = [];
 		BPromise.map([
-				[UserDao, 'byId'],
-				[PlanDao, 'byU'],
-				[ProgramDao, 'byU'],
-				[CategoryDao, 'byU'],
-				[TransactionDao, 'byU']
+				[userDao, 'byId'],
+				[planDao, 'byU'],
+				[programDao, 'byU'],
+				[categoryDao, 'byU'],
+				[transactionDao, 'byU']
 			], function(dao) {
 				return dao[0].remove(dao[1], {
 						user_id : user_id
@@ -70,15 +70,15 @@ module.exports = {
 				next(err);
 			});
 
-		Logger.debug('[SER -   END] UserService#remove');
+		logger.debug('[SER -   END] UserService#remove');
 	},
 
 	// Get all users
 	all (req, next) {
 
-		Logger.debug('[SER - START] UserService#getAll');
+		logger.debug('[SER - START] UserService#getAll');
 
-		UserDao.getAll()
+		userDao.getAll()
 			.then(function(users) {
 				req.result = users;
 				next();
@@ -87,16 +87,16 @@ module.exports = {
 				next(err);
 			});
 
-		Logger.debug('[SER -   END] UserService#getAll');
+		logger.debug('[SER -   END] UserService#getAll');
 	},
 
 	// Get one user by id
 	getById (req, next, user_id) {
 
-		Logger.debug('[SER - START] UserService#getOne');
-		Logger.debug('              -- user_id : ' + user_id);
+		logger.debug('[SER - START] UserService#getOne');
+		logger.debug('              -- user_id : ' + user_id);
 
-		UserDao.getOne('byId', { user_id : user_id })
+		userDao.getOne('byId', { user_id : user_id })
 			.then(function(user) {
 				req.result = user;
 				next();
@@ -105,16 +105,16 @@ module.exports = {
 				next(err);
 			});
 
-		Logger.debug('[SER -   END] UserService#getOne');
+		logger.debug('[SER -   END] UserService#getOne');
 	},
 
 	// Set permission
 	managePermission (req, next, user_id) {
 
-		Logger.debug('[SER - START] UserService#managePermission');
-		Logger.debug('              -- user_id : ' + user_id);
+		logger.debug('[SER - START] UserService#managePermission');
+		logger.debug('              -- user_id : ' + user_id);
 
-		UserDao.update({
+		userDao.update({
                 user_id : user_id,
                 admin   : req.body.admin
             })
@@ -125,6 +125,6 @@ module.exports = {
 				next(err);
 			});
 
-		Logger.debug('[SER -   END] UserService#managePermission');
+		logger.debug('[SER -   END] UserService#managePermission');
 	}
 };

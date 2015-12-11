@@ -1,20 +1,20 @@
 "use strict";
 
 // Inject
-var Path       = require('path');
+var path       = require('path');
 var BPromise   = require('bluebird');
-var Bcrypt     = require('bcrypt-nodejs');
-var Validator  = require('validator');
-var Mongoose   = BPromise.promisifyAll(require('mongoose'));
-var DatePlugin = require(Path.join(global.__plugin, 'date'));
-var Config     = require(Path.join(global.__core, 'system')).Config;
+var bcrypt     = require('bcrypt-nodejs');
+var validator  = require('validator');
+var mongoose   = BPromise.promisifyAll(require('mongoose'));
+var datePlugin = require(path.join(global.__plugin, 'date'));
+var config     = require(path.join(global.__core, 'system')).Config;
 
-var Schema     = Mongoose.Schema;
+var Schema     = mongoose.Schema;
 var Types      = Schema.Types;
 
 // Schema
 var UserSchema = new Schema({
-	_id         : Config.db.seq ? Number : Types.ObjectId,
+	_id         : config.db.seq ? Number : Types.ObjectId,
 	firstname   : String,
 	surname     : String,
 	displayname : String,
@@ -31,7 +31,7 @@ var UserSchema = new Schema({
 			type     : String,
 			validate : {
 				validator : function(v) {
-					return Validator.isEmail(v);
+					return validator.isEmail(v);
 				},
 			message  : '{VALUE} is not a valid email'
 		    }
@@ -52,7 +52,7 @@ var UserSchema = new Schema({
 			type     : String,
 			validate : {
 				validator : function(v) {
-					return Validator.isEmail(v);
+					return validator.isEmail(v);
 				},
 			message  : '{VALUE} is not a valid email'
 		    }
@@ -61,11 +61,11 @@ var UserSchema = new Schema({
 });
 
 // Plugin
-UserSchema.plugin(DatePlugin);
+UserSchema.plugin(datePlugin);
 
 // Static methods
 UserSchema.methods.comparePassword = function (password) {
-	return Bcrypt.compareSync(password, this.local.password);
+	return bcrypt.compareSync(password, this.local.password);
 };
 
 // Index
@@ -91,7 +91,7 @@ UserSchema.pre('save', function (next) {
 		return next();
 	}
 
-	Bcrypt.hash(user.local.password, Bcrypt.genSaltSync(8), null, function (err, hash) {
+	bcrypt.hash(user.local.password, bcrypt.genSaltSync(8), null, function (err, hash) {
 		if (err) {
 			return next(err);
 		}
@@ -101,4 +101,4 @@ UserSchema.pre('save', function (next) {
 });
 
 // Return
-module.exports = Mongoose.model('User', UserSchema);
+module.exports = mongoose.model('User', UserSchema);

@@ -36,7 +36,7 @@ gulp.task('env:prod', function () {
 });
 
 // =========================================================================
-// Nodemon =================================================================
+// Server ==================================================================
 // =========================================================================
 
 // Nodemon task
@@ -77,7 +77,7 @@ gulp.task('watch', function () {
 
 // Clean task
 gulp.task('clean', function () {
-	return gulp.src([ defaultAssets.dist.dir ] , {read: false})
+	return gulp.src(path.join(defaultAssets.dist.root, '*'), {read: false})
 		.pipe(vinylPaths(del));
 });
 
@@ -86,32 +86,40 @@ gulp.task('browserify', function () {
 	return browserify({ entries : defaultAssets.dist.src })
 		.bundle()
 		.pipe(source(defaultAssets.dist.output.development.js))
-		.pipe(gulp.dest(path.join(defaultAssets.dist.dir, 'js')));
+		.pipe(gulp.dest(path.join(defaultAssets.dist.root, 'js')));
 });
 
-// TODO ngAnnotate
 // JS browserify and minifying task
 gulp.task('browserify-min', function () {
 	return browserify({ entries : defaultAssets.dist.src })
 		.bundle()
 		.pipe(source(defaultAssets.dist.output.production.js))
 		.pipe(plugins.streamify(plugins.uglify({mangle: false})))
-		.pipe(gulp.dest(path.join(defaultAssets.dist.dir, 'js')));
+		.pipe(gulp.dest(path.join(defaultAssets.dist.root, 'js')));
 });
 
 // CSS default task
 gulp.task('css', function () {
-  return gulp.src(defaultAssets.client.css.files)
-	.pipe(plugins.concat(defaultAssets.dist.output.development.css))
-	.pipe(gulp.dest(path.join(defaultAssets.dist.dir, 'css')));
+	gulp.src(defaultAssets.client.css.files)
+		.pipe(plugins.concat(defaultAssets.dist.output.development.css))
+		.pipe(gulp.dest(path.join(defaultAssets.dist.root, 'css')));
+	return gulp.src(defaultAssets.client.css.libs)
+		.pipe(gulp.dest(path.join(defaultAssets.dist.root, 'css')));
 });
 
 // CSS minifying task
 gulp.task('css-min', function () {
-  return gulp.src(defaultAssets.client.css.files)
-	.pipe(plugins.cssmin())
-	.pipe(plugins.concat(defaultAssets.dist.output.production.css))
-	.pipe(gulp.dest(path.join(defaultAssets.dist.dir, 'css')));
+	gulp.src(defaultAssets.client.css.files)
+		.pipe(plugins.cssmin())
+		.pipe(plugins.concat(defaultAssets.dist.output.production.css))
+		.pipe(gulp.dest(path.join(defaultAssets.dist.root, 'css')));
+	return gulp.src(defaultAssets.client.css.libs)
+		.pipe(plugins.cssmin())
+		.pipe(plugins.rename(function (path) {
+		    path.basename += '.min';
+		    path.extname = '.css';
+		}))
+		.pipe(gulp.dest(path.join(defaultAssets.dist.root, 'css')));
 });
 
 // Angular template cache task
@@ -129,7 +137,7 @@ gulp.task('templatecache', function () {
 			}
 
 		}))
-		.pipe(gulp.dest(path.join(defaultAssets.dist.dir, 'js')));
+		.pipe(gulp.dest(path.join(defaultAssets.dist.root, 'js')));
 });
 
 // =========================================================================
@@ -138,15 +146,15 @@ gulp.task('templatecache', function () {
 
 // Run the project in development mode
 gulp.task('default', function (done) {
-	runSequence('env:dev', 'clean', 'browserify', 'css', ['nodemon', 'watch'], done);
+	runSequence('env:dev', 'clean', ['browserify', 'css'], ['nodemon', 'watch'], done);
 });
 
 // Run the project in simulate mode
 gulp.task('test', function (done) {
-	runSequence('env:test', 'clean', 'browserify-min', 'css-min', 'templatecache', ['nodemon', 'watch'], done);
+	runSequence('env:test', 'clean', ['browserify-min', 'css-min', 'templatecache'], ['nodemon', 'watch'], done);
 });
 
 // Run the project in production mode
 gulp.task('prod', function (done) {
-	runSequence('env:prod', 'clean', 'browserify-min', 'css-min', 'templatecache', done);
+	runSequence('env:prod', 'clean', ['browserify-min', 'css-min', 'templatecache'], done);
 });

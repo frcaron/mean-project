@@ -1,18 +1,18 @@
 "use strict";
 
 // Inject
-var Path            = require('path');
-var TypeCategoryDao = require(Path.join(global.__dao, 'type-category'));
-var Logger          = require(Path.join(global.__core, 'system')).Logger;
+var path            = require('path');
+var typeCategoryDao = require(path.join(global.__dao, 'type-category'));
+var logger          = require(path.join(global.__core, 'system')).Logger;
 
 module.exports = {
 
 	// Create one type category
 	create (req, next) {
 
-		Logger.debug('[SER - START] TypeCategoryService#create');
+		logger.debug('[SER - START] TypeCategoryService#create');
 
-		TypeCategoryDao.create({
+		typeCategoryDao.create({
 				name : req.body.name
 			})
 			.then(function (typeCategory){
@@ -23,15 +23,15 @@ module.exports = {
 				next(err);
 			});
 
-		Logger.debug('[SER -   END] TypeCategoryService#create');
+		logger.debug('[SER -   END] TypeCategoryService#create');
 	},
 
 	// Update one type category
 	update (req, next) {
 
-		Logger.debug('[SER - START] TypeCategoryService#update');
+		logger.debug('[SER - START] TypeCategoryService#update');
 
-		TypeCategoryDao.update({
+		typeCategoryDao.update({
 				type_category_id : req.params.type_category_id,
 				name             : req.body.name
 			})
@@ -43,15 +43,15 @@ module.exports = {
 				next(err);
 			});
 
-		Logger.debug('[SER -   END] TypeCategoryService#update');
+		logger.debug('[SER -   END] TypeCategoryService#update');
 	},
 
 	// Get all type category
 	all (req, next) {
 
-		Logger.debug('[SER - START] TypeCategoryService#all');
+		logger.debug('[SER - START] TypeCategoryService#all');
 
-		TypeCategoryDao.getAll()
+		typeCategoryDao.getAll()
 			.then(function (typeCategories) {
 				req.result = typeCategories;
 				next();
@@ -60,15 +60,15 @@ module.exports = {
 				next(err);
 			});
 
-		Logger.debug('[SER -   END] TypeCategoryService#all');
+		logger.debug('[SER -   END] TypeCategoryService#all');
 	},
 
 	// Get one type category by id
 	getById (req, next) {
 
-		Logger.debug('[SER - START] TypeCategoryService#getById');
+		logger.debug('[SER - START] TypeCategoryService#getById');
 
-		TypeCategoryDao.getOne('byId', { type_category_id : req.params.type_category_id })
+		typeCategoryDao.getOne('byId', { type_category_id : req.params.type_category_id })
 			.then(function (typeCategory) {
 				req.result = typeCategory;
 				next();
@@ -77,6 +77,6 @@ module.exports = {
 				next(err);
 			});
 
-		Logger.debug('[SER -   END] TypeCategoryService#getById');
+		logger.debug('[SER -   END] TypeCategoryService#getById');
 	}
 };

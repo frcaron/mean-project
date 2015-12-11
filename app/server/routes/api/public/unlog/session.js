@@ -1,13 +1,13 @@
 "use strict";
 
 //Inject
-var Path            = require('path');
-var Validator       = require('validator');
-var ResponseService = require(Path.join(global.__service, 'response'));
-var SessionService  = require(Path.join(global.__service, 'session'));
-var Exception       = require(Path.join(global.__core, 'exception'));
-var Config          = require(Path.join(global.__core, 'system')).Config;
-var Logger          = require(Path.join(global.__core, 'system')).Logger;
+var path            = require('path');
+var validator       = require('validator');
+var responseService = require(path.join(global.__service, 'response'));
+var sessionService  = require(path.join(global.__service, 'session'));
+var Exception       = require(path.join(global.__core, 'exception'));
+var config          = require(path.join(global.__core, 'system')).Config;
+var logger          = require(path.join(global.__core, 'system')).Logger;
 
 // Properties
 var api_prefix = '/auth';
@@ -19,20 +19,20 @@ module.exports = function (router, passport) {
 		// Logout
 		.all(function (req, res) {
 			req.logout();
-			ResponseService.success(res);
+			responseService.success(res);
 		});
 
-	if(Config.strategies.local.enabled) {
+	if(config.strategies.local.enabled) {
 		router.route(api_prefix + '/signup')
 
 			// Signup local
 			.post(function (req, res, next) {
 
-				Logger.debug('[WSP - VALID] SessionRoute#post');
-				Logger.debug('              -- req.body.surname   : ' + req.body.surname);
-				Logger.debug('              -- req.body.firstname : ' + req.body.firstname);
-				Logger.debug('              -- req.body.email     : ' + req.body.email);
-				Logger.debug('              -- req.body.password  : ' + req.body.password);
+				logger.debug('[WSP - VALID] SessionRoute#post');
+				logger.debug('              -- req.body.surname   : ' + req.body.surname);
+				logger.debug('              -- req.body.firstname : ' + req.body.firstname);
+				logger.debug('              -- req.body.email     : ' + req.body.email);
+				logger.debug('              -- req.body.password  : ' + req.body.password);
 
 				// Validation
 				let msg = [];
@@ -52,17 +52,17 @@ module.exports = function (router, passport) {
 					return next(new Exception.MetierEx('Param missing', msg));
 				}
 
-				if(!Validator.isEmail(req.body.email)) {
+				if(!validator.isEmail(req.body.email)) {
 					return next(new Exception.MetierEx('Param invalid', [ 'email' ]));
 				}
 
 				next();
 
 			}, function (req, res, next) {
-				SessionService.authenticate(req, res, next, passport, 'local-signup');
+				sessionService.authenticate(req, res, next, passport, 'local-signup');
 
 			}, function (req, res) {
-				ResponseService.success(res);
+				responseService.success(res);
 			});
 
 		router.route(api_prefix + '/login')
@@ -70,9 +70,9 @@ module.exports = function (router, passport) {
 			// Login local
 			.post(function (req, res, next) {
 
-				Logger.debug('[WSP - VALID] SessionRoute#post');
-				Logger.debug('              -- req.body.email     : ' + req.body.email);
-				Logger.debug('              -- req.body.password  : ' + req.body.password);
+				logger.debug('[WSP - VALID] SessionRoute#post');
+				logger.debug('              -- req.body.email     : ' + req.body.email);
+				logger.debug('              -- req.body.password  : ' + req.body.password);
 
 				// Validation
 				let msg = [];
@@ -86,19 +86,19 @@ module.exports = function (router, passport) {
 					return next(new Exception.MetierEx('Param missing', msg));
 				}
 
-				if(!Validator.isEmail(req.body.email)) {
+				if(!validator.isEmail(req.body.email)) {
 					return next(new Exception.MetierEx('Param invalid', [ 'email' ]));
 				}
 				next();
 
 			}, function (req, res, next) {
-				SessionService.authenticate(req, res, next, passport, 'local-login');
+				sessionService.authenticate(req, res, next, passport, 'local-login');
 
 			}, function (req, res, next) {
-				SessionService.login(req, res, next);
+				sessionService.login(req, res, next);
 
 			}, function (req, res) {
-				ResponseService.success(res, {
+				responseService.success(res, {
 					result : {
 						user  : req.user,
 						token : req.result
@@ -107,7 +107,7 @@ module.exports = function (router, passport) {
 			});
 	}
 
-	if(Config.strategies.facebook.enabled) {
+	if(config.strategies.facebook.enabled) {
 		router.route(api_prefix + '/facebook')
 
 			// Login facebook
@@ -117,13 +117,13 @@ module.exports = function (router, passport) {
 
 			// Login facebook callback
 			.get(function (req, res, next) {
-				SessionService.authenticate(req, res, next, passport, 'facebook');
+				sessionService.authenticate(req, res, next, passport, 'facebook');
 
 			}, function (req, res, next) {
-				SessionService.login(req, res, next);
+				sessionService.login(req, res, next);
 
 			}, function (req, res) {
-				ResponseService.success(res, {
+				responseService.success(res, {
 					result : {
 						user  : req.user,
 						token : req.result
