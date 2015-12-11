@@ -85,7 +85,10 @@ gulp.task('clean', function () {
 gulp.task('browserify', function () {
 	return browserify({ entries : defaultAssets.dist.src })
 		.bundle()
-		.pipe(source(defaultAssets.dist.output.development.js))
+		.pipe(source(defaultAssets.dist.output.js))
+		.pipe(plugins.rename(function (path) {
+		    path.extname = '.js';
+		}))
 		.pipe(gulp.dest(path.join(defaultAssets.dist.root, 'js')));
 });
 
@@ -93,7 +96,11 @@ gulp.task('browserify', function () {
 gulp.task('browserify-min', function () {
 	return browserify({ entries : defaultAssets.dist.src })
 		.bundle()
-		.pipe(source(defaultAssets.dist.output.production.js))
+		.pipe(source(defaultAssets.dist.output.js))
+		.pipe(plugins.rename(function (path) {
+		    path.basename += '.min';
+		    path.extname = '.js';
+		}))
 		.pipe(plugins.streamify(plugins.uglify({mangle: false})))
 		.pipe(gulp.dest(path.join(defaultAssets.dist.root, 'js')));
 });
@@ -101,7 +108,10 @@ gulp.task('browserify-min', function () {
 // CSS default task
 gulp.task('css', function () {
 	gulp.src(defaultAssets.client.css.files)
-		.pipe(plugins.concat(defaultAssets.dist.output.development.css))
+		.pipe(plugins.concat(defaultAssets.dist.output.css))
+		.pipe(plugins.rename(function (path) {
+		    path.extname = '.css';
+		}))
 		.pipe(gulp.dest(path.join(defaultAssets.dist.root, 'css')));
 	return gulp.src(defaultAssets.client.css.libs)
 		.pipe(gulp.dest(path.join(defaultAssets.dist.root, 'css')));
@@ -111,7 +121,11 @@ gulp.task('css', function () {
 gulp.task('css-min', function () {
 	gulp.src(defaultAssets.client.css.files)
 		.pipe(plugins.cssmin())
-		.pipe(plugins.concat(defaultAssets.dist.output.production.css))
+		.pipe(plugins.concat(defaultAssets.dist.output.css))
+		.pipe(plugins.rename(function (path) {
+		    path.basename += '.min';
+		    path.extname = '.css';
+		}))
 		.pipe(gulp.dest(path.join(defaultAssets.dist.root, 'css')));
 	return gulp.src(defaultAssets.client.css.libs)
 		.pipe(plugins.cssmin())
@@ -126,7 +140,7 @@ gulp.task('css-min', function () {
 gulp.task('templatecache', function () {
 	var re = new RegExp('\\' + path.sep + 'client\\' + path.sep, 'g');
 	return gulp.src(defaultAssets.client.views.files)
-		.pipe(plugins.templateCache(defaultAssets.dist.output.production.template, {
+		.pipe(plugins.templateCache(defaultAssets.dist.output.template, {
 			root   : 'components',
 			module : 'app',
 			templateHeader: '(function(){\'use strict\';angular.module(\'<%= module %>\'<%= standalone %>).run(templates);templates.$inject=[\'$templateCache\'];function templates($templateCache){',
@@ -136,6 +150,10 @@ gulp.task('templatecache', function () {
 				return url.replace(re, path.sep);
 			}
 
+		}))
+		.pipe(plugins.rename(function (path) {
+		    path.basename += '.min';
+		    path.extname = '.js';
 		}))
 		.pipe(gulp.dest(path.join(defaultAssets.dist.root, 'js')));
 });

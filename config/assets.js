@@ -35,20 +35,23 @@ module.exports = {
 		root   : 'app/client/dist',
 		src    : 'app/client/client.js',
 		output : {
-			development : {
-				js  : 'app.js',
-				css : 'app.css'
-			},
-			production : {
-				js       : 'app.min.js',
-				css      : 'app.min.css',
-				template : 'template.min.js'
-			},
-			test : {
-				js       : 'app.min.js',
-				css      : 'app.min.css',
-				template : 'template.min.js'
-			}
+			js       : 'app',
+			css      : 'app',
+			template : 'template'
+			// development : {
+			// 	js  : 'app.js',
+			// 	css : 'app.css'
+			// },
+			// production : {
+			// 	js       : 'app.min.js',
+			// 	css      : 'app.min.css',
+			// 	template : 'template.min.js'
+			// },
+			// test : {
+			// 	js       : 'app.min.js',
+			// 	css      : 'app.min.css',
+			// 	template : 'template.min.js'
+			// }
 		}
 	}
 };
