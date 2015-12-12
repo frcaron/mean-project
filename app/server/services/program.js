@@ -8,15 +8,14 @@ var programDao     = require(path.join(global.__dao, 'program'));
 var categoryDao    = require(path.join(global.__dao, 'category'));
 var transactionDao = require(path.join(global.__dao, 'transaction'));
 var Exception      = require(path.join(global.__core, 'exception'));
-var logger         = require(path.join(global.__core, 'system')).Logger;
+var logger         = require(path.join(global.__core, 'logger'))('service', __filename);
 
 module.exports = {
 
 	// Create one program
 	create (req, next, user_id) {
 
-		logger.debug('[SER - START] ProgramService#create');
-		logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'create', point : logger.pt.start, params : { user_id : user_id } });
 
 		shareService.createProgram({
 				category_id : req.body.category_id || req.query.category_id,
@@ -32,14 +31,13 @@ module.exports = {
 				next(err);
 			});
 
-		logger.debug('[SER -   END] ProgramService#create');
+		logger.debug({ method : 'create', point : logger.pt.end });
 	},
 
 	// Update one program
 	update (req, next, user_id) {
 
-		logger.debug('[SER - START] ProgramService#update');
-		logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'update', point : logger.pt.start, params : { user_id : user_id } });
 
 		let category_id = req.body.category_id || req.query.category_id;
 
@@ -93,14 +91,13 @@ module.exports = {
 				next(err);
 			});
 
-		logger.debug('[SER -   END] ProgramService#update');
+		logger.debug({ method : 'update', point : logger.pt.end });
 	},
 
 	// Remove one program
 	remove (req, next, user_id) {
 
-		logger.debug('[SER - START] ProgramService#remove');
-		logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'remove', point : logger.pt.start, params : { user_id : user_id } });
 
 		programDao.getOne('byIdU', {
 				program_id : req.params.program_id,
@@ -147,14 +144,13 @@ module.exports = {
 				next(err);
 			});
 
-		logger.debug('[SER -   END] ProgramService#remove');
+		logger.debug({ method : 'remove', point : logger.pt.end });
 	},
 
 	// Get programs by plan
 	allByPlanTypeU (req, next, user_id) {
 
-		logger.debug('[SER - START] ProgramService#allByPlanU');
-		logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'allByPlanTypeU', point : logger.pt.start, params : { user_id : user_id } });
 
 		let type_category_id = req.body.type_category_id || req.query.type_category_id;
 
@@ -190,14 +186,13 @@ module.exports = {
 				next(err);
 			});
 
-		logger.debug('[SER -   END] ProgramService#allByPlanU');
+		logger.debug({ method : 'allByPlanTypeU', point : logger.pt.end });
 	},
 
 	// Get one program by id
 	getByIdU (req, next, user_id) {
 
-		logger.debug('[SER - START] ProgramService#getByIdU');
-		logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'getByIdU', point : logger.pt.start, params : { user_id : user_id } });
 
 		programDao.getOne('byIdU', {
 				program_id : req.params.program_id,
@@ -211,6 +206,6 @@ module.exports = {
 				next(err);
 			});
 
-		logger.debug('[SER -   END] ProgramService#getByIdU');
+		logger.debug({ method : 'getByIdU', point : logger.pt.end });
 	}
 };

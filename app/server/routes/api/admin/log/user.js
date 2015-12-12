@@ -5,7 +5,7 @@ var path            = require('path');
 var responseService = require(path.join(global.__service, 'response'));
 var userService     = require(path.join(global.__service, 'user'));
 var Exception       = require(path.join(global.__core, 'exception'));
-var logger          = require(path.join(global.__core, 'system')).Logger;
+var logger          = require(path.join(global.__core, 'logger'))('route', __filename);
 
 // Properties
 var api_prefix = '/users';
@@ -41,8 +41,9 @@ module.exports = function (router, auth) {
 		// Manage permission
 		.put(auth, function (req, res, next) {
 
-			logger.debug('[WSA - VALID] UserRoute#put');
-			logger.debug('              -- req.body.admin : ' + req.body.admin);
+			logger.debug({ method : 'users/:id@put', point : logger.pt.valid, params : {
+				'req.body.admin' : req.body.admin
+			} });
 
 			// Validation
 			if ( req.body.admin === undefined ) {

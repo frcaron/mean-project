@@ -7,7 +7,7 @@ var responseService = require(path.join(global.__service, 'response'));
 var sessionService  = require(path.join(global.__service, 'session'));
 var Exception       = require(path.join(global.__core, 'exception'));
 var config          = require(path.join(global.__core, 'system')).Config;
-var logger          = require(path.join(global.__core, 'system')).Logger;
+var logger          = require(path.join(global.__core, 'logger'))('route', __filename);
 
 // Properties
 var api_prefix = '/auth';
@@ -28,11 +28,12 @@ module.exports = function (router, passport) {
 			// Signup local
 			.post(function (req, res, next) {
 
-				logger.debug('[WSP - VALID] SessionRoute#post');
-				logger.debug('              -- req.body.surname   : ' + req.body.surname);
-				logger.debug('              -- req.body.firstname : ' + req.body.firstname);
-				logger.debug('              -- req.body.email     : ' + req.body.email);
-				logger.debug('              -- req.body.password  : ' + req.body.password);
+				logger.debug({ method : 'auth/signup@post', point : logger.pt.valid, params : {
+					'req.body.surname'   : req.body.surname,
+					'req.body.firstname' : req.body.firstname,
+					'req.body.email'     : req.body.email,
+					'req.body.password'  : req.body.password
+				} });
 
 				// Validation
 				let msg = [];
@@ -70,9 +71,10 @@ module.exports = function (router, passport) {
 			// Login local
 			.post(function (req, res, next) {
 
-				logger.debug('[WSP - VALID] SessionRoute#post');
-				logger.debug('              -- req.body.email     : ' + req.body.email);
-				logger.debug('              -- req.body.password  : ' + req.body.password);
+				logger.debug({ method : 'login@post', point : logger.pt.valid, params : {
+					'req.body.email'     : req.body.email,
+					'req.body.password'  : req.body.password
+				} });
 
 				// Validation
 				let msg = [];

@@ -6,7 +6,7 @@ var responseService    = require(path.join(global.__service, 'response'));
 var programService     = require(path.join(global.__service, 'program'));
 var transactionService = require(path.join(global.__service, 'transaction'));
 var Exception          = require(path.join(global.__core, 'exception'));
-var logger             = require(path.join(global.__core, 'system')).Logger;
+var logger             = require(path.join(global.__core, 'logger'))('route', __filename);
 
 // Properties
 var api_prefix = '/programs';
@@ -21,9 +21,10 @@ module.exports = function (router, auth) {
 			let category_id = req.body.category_id || req.query.category_id;
 			let plan_id     = req.body.plan_id || req.query.plan_id;
 
-			logger.debug('[WSP - VALID] ProgramRoute#post');
-			logger.debug('              -- req.query.category_id : ' + category_id);
-			logger.debug('              -- req.query.plan_id     : ' + plan_id);
+			logger.debug({ method : 'programs@post', point : logger.pt.valid, params : {
+				'category_id' : category_id,
+				'plan_id'     : plan_id
+			} });
 
 			// Validation
 			var msg = [];

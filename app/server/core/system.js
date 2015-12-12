@@ -1,12 +1,9 @@
 "use strict";
 
 // Inject
-var path      = require('path');
-var fs        = require('fs');
-var moment    = require('moment');
-var winston   = require('winston');
-var winstonRF = require('winston-daily-rotate-file');
-var  _        = require('lodash');
+var path = require('path');
+var fs   = require('fs');
+var  _   = require('lodash');
 
 // =========================================================================
 // Config ==================================================================
@@ -43,88 +40,6 @@ let defaultconfig = (function() {
 	);
 })();
 
-// =========================================================================
-// Logger ==================================================================
-// =========================================================================
-
-let customLevels = {
-	levels : {
-		error : 0,
-		warn  : 1,
-		info  : 2,
-		debug : 3
-	},
-	colors: {
-		error : 'red',
-		warn  : 'yellow',
-		info  : 'cyan',
-		debug : 'green'
-	}
-};
-
-// Instance logger
-let defaultLogger = new winston.Logger({
-	levels : customLevels.levels,
-	colors : customLevels.colors
-});
-
-console.log(winston.config);
-var a = winston.config.addColors(customLevels.colors);
-console.log(a);
-
-// Formatter
-let formatter = function(options, timestamp) {
-	return  (timestamp ? (options.timestamp() + '\t') : '') + winston.config.colorize(options.level.toUpperCase()) + ' ' +
-		(undefined !== options.message ? options.message : '') +
-		(options.meta && Object.keys(options.meta).length ? '\n\t' + JSON.stringify(options.meta) : '' );
-};
-
-// Activate log console
-let consoleConf = defaultconfig.logging.winston.console;
-if(consoleConf.enabled) {
-	defaultLogger.add(winston.transports.Console, ({
-		name      : 'console',
-		level     : consoleConf.level,
-		timestamp : function() {
-			return moment().format(consoleConf.timestamp.format);
-		},
-		formatter : function(options) {
-			return formatter(options, consoleConf.timestamp.enabled);
-		},
-		prettyPrint: true,
-		colorize: true,
-		silent: false
-	}));
-}
-
-// Activate log file
-let fileConf = defaultconfig.logging.winston.file;
-if(fileConf.enabled) {
-
-	let dirname = path.dirname(fileConf.filename);
-	let logDirectory = global.__root;
-	dirname.split('/').map(function(dir) {
-		logDirectory = path.join(logDirectory, dir);
-
-		// ensure log directory exists
-		fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
-	});
-
-	defaultLogger.add(winstonRF, ({
-		name        : 'file',
-		level       : fileConf.level,
-		filename    : fileConf.filename,
-  		datePattern : fileConf.date_format,
-		timestamp   : function() {
-			return moment().format(fileConf.timestamp.format);
-		},
-		formatter   : function(options) {
-			return formatter(options, fileConf.timestamp.enabled);
-		}
-	}));
-}
-
 module.exports = {
-	Config : defaultconfig,
-	Logger : defaultLogger
+	Config : defaultconfig
 };

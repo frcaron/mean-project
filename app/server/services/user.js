@@ -9,15 +9,14 @@ var programDao     = require(path.join(global.__dao, 'program'));
 var categoryDao    = require(path.join(global.__dao, 'category'));
 var transactionDao = require(path.join(global.__dao, 'transaction'));
 var Exception      = require(path.join(global.__core, 'exception'));
-var logger         = require(path.join(global.__core, 'system')).Logger;
+var logger         = require(path.join(global.__core, 'logger'))('service', __filename);
 
 module.exports = {
 
 	// Update one user
 	update (req, next, user_id) {
 
-		logger.debug('[SER - START] UserService#update');
-		logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'update', point : logger.pt.start, params : { user_id : user_id } });
 
 		userDao.update({
                 user_id        : user_id,
@@ -34,14 +33,13 @@ module.exports = {
 				next(err);
 			});
 
-		logger.debug('[SER -   END] UserService#update');
+		logger.debug({ method : 'update', point : logger.pt.end });
 	},
 
 	// Remove one user
 	remove (req, next, user_id) {
 
-		logger.debug('[SER - START] UserService#remove');
-		logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'remove', point : logger.pt.start, params : { user_id : user_id } });
 
 		let msg = [];
 		BPromise.map([
@@ -70,13 +68,13 @@ module.exports = {
 				next(err);
 			});
 
-		logger.debug('[SER -   END] UserService#remove');
+		logger.debug({ method : 'remove', point : logger.pt.end });
 	},
 
 	// Get all users
 	all (req, next) {
 
-		logger.debug('[SER - START] UserService#getAll');
+		logger.debug({ method : 'all', point : logger.pt.start });
 
 		userDao.getAll()
 			.then(function(users) {
@@ -87,14 +85,13 @@ module.exports = {
 				next(err);
 			});
 
-		logger.debug('[SER -   END] UserService#getAll');
+		logger.debug({ method : 'all', point : logger.pt.end });
 	},
 
 	// Get one user by id
 	getById (req, next, user_id) {
 
-		logger.debug('[SER - START] UserService#getOne');
-		logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'getById', point : logger.pt.start, params : { user_id : user_id } });
 
 		userDao.getOne('byId', { user_id : user_id })
 			.then(function(user) {
@@ -105,14 +102,13 @@ module.exports = {
 				next(err);
 			});
 
-		logger.debug('[SER -   END] UserService#getOne');
+		logger.debug({ method : 'getById', point : logger.pt.end });
 	},
 
 	// Set permission
 	managePermission (req, next, user_id) {
 
-		logger.debug('[SER - START] UserService#managePermission');
-		logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'managePermission', point : logger.pt.start, params : { user_id : user_id } });
 
 		userDao.update({
                 user_id : user_id,
@@ -125,6 +121,6 @@ module.exports = {
 				next(err);
 			});
 
-		logger.debug('[SER -   END] UserService#managePermission');
+		logger.debug({ method : 'managePermission', point : logger.pt.end });
 	}
 };

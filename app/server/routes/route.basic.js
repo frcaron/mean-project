@@ -2,11 +2,11 @@
 
 // Inject
 var path   = require('path');
-var logger = require(path.join(global.__core, 'system')).Logger;
+var logger = require(path.join(global.__core, 'logger'))('route', __filename);
 
 let auth = function (req, res, next) {
 
-	logger.debug('[WSB - MIDDL] route.basic#secure');
+	logger.debug({ method : 'auth', point : logger.pt.start });
 
 	if (req.isAuthenticated()) {
 		next();
@@ -15,6 +15,8 @@ let auth = function (req, res, next) {
 			message : 'Error session'
 		});
 	}
+
+	logger.debug({ method : 'auth', point : logger.pt.end });
 };
 
 module.exports = function (router) {
@@ -22,6 +24,8 @@ module.exports = function (router) {
 	// ================================================================
 	//  Public ========================================================
 	// ================================================================
+
+	router.use(auth);
 
 	// ================================================================
 	//  Private =======================================================

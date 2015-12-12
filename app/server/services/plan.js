@@ -8,15 +8,14 @@ var planDao        = require(path.join(global.__dao, 'plan'));
 var programDao     = require(path.join(global.__dao, 'program'));
 var transactionDao = require(path.join(global.__dao, 'transaction'));
 var Exception      = require(path.join(global.__core, 'exception'));
-var logger         = require(path.join(global.__core, 'system')).Logger;
+var logger         = require(path.join(global.__core, 'logger'))('service', __filename);
 
 module.exports = {
 
 	// Create one plan
 	create (req, next, user_id) {
 
-		logger.debug('[SER - START] PlanService#create');
-		logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'create', point : logger.pt.start, params : { user_id : user_id } });
 
 		budgetService.createPlan({
 				month   : req.body.month,
@@ -31,14 +30,13 @@ module.exports = {
 				next(err);
 			});
 
-		logger.debug('[SER -   END] PlanService#create');
+		logger.debug({ method : 'create', point : logger.pt.end });
 	},
 
 	// Delete plan user
 	remove (req, next, user_id) {
 
-		logger.debug('[SER - START] PlanService#remove');
-		logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'remove', point : logger.pt.start, params : { user_id : user_id } });
 
 		let msg = [];
 		BPromise.map([[
@@ -66,14 +64,13 @@ module.exports = {
 				next(err);
 			});
 
-		logger.debug('[SER -   END] PlanService#remove');
+		logger.debug({ method : 'remove', point : logger.pt.end });
 	},
 
 	// Get plans by user
 	allByU (req, next, user_id) {
 
-		logger.debug('[SER - START] PlanService#allByU');
-		logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'allByU', point : logger.pt.start, params : { user_id : user_id } });
 
 		planDao.getAll('byU', { user_id : user_id })
 			.then(function (plans) {
@@ -84,14 +81,13 @@ module.exports = {
 				next(err);
 			});
 
-		logger.debug('[SER -   END] PlanService#allByU');
+		logger.debug({ method : 'allByU', point : logger.pt.end });
 	},
 
 	// Get one plan by id
 	getById (req, next, user_id) {
 
-		logger.debug('[SER - START] PlanService#getById');
-		logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'getByIdU', point : logger.pt.start, params : { user_id : user_id } });
 
 		planDao.getOne('byIdU', {
 				plan_id : req.params.plan_id,
@@ -105,6 +101,6 @@ module.exports = {
 				next(err);
 			});
 
-		logger.debug('[SER -   END] PlanService#getById');
+		logger.debug({ method : 'getByIdU', point : logger.pt.end });
 	}
 };

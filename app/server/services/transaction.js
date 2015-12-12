@@ -9,7 +9,7 @@ var programDao     = require(path.join(global.__dao, 'program'));
 var transactionDao = require(path.join(global.__dao, 'transaction'));
 var categoryDao    = require(path.join(global.__dao, 'category'));
 var Exception      = require(path.join(global.__core, 'exception'));
-var logger         = require(path.join(global.__core, 'system')).Logger;
+var logger         = require(path.join(global.__core, 'logger'))('service', __filename);
 
 function fulfillProgram (input, category_id) {
 
@@ -45,8 +45,7 @@ module.exports = {
 	// Create one transaction
 	create (req, next, user_id) {
 
-		logger.debug('[SER - START] TransactionService#create');
-		logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'create', point : logger.pt.start, params : { user_id : user_id } });
 
 		let category_id = req.body.category_id || req.query.category_id;
 
@@ -67,14 +66,13 @@ module.exports = {
 				next(err);
 			});
 
-		logger.debug('[SER -   END] TransactionService#create');
+		logger.debug({ method : 'create', point : logger.pt.end });
 	},
 
 	// Update one transaction
 	update (req, next, user_id) {
 
-		logger.debug('[SER - START] TransactionService#update');
-		logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'update', point : logger.pt.start, params : { user_id : user_id } });
 
 		let category_id = req.body.category_id || req.query.category_id;
 
@@ -96,14 +94,13 @@ module.exports = {
 				next(err);
 			});
 
-		logger.debug('[SER -   END] TransactionService#update');
+		logger.debug({ method : 'update', point : logger.pt.end });
 	},
 
 	// Remove one transaction
 	remove (req, next, user_id) {
 
-		logger.debug('[SER - START] TransactionService#remove');
-		logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'remove', point : logger.pt.start, params : { user_id : user_id } });
 
 		transactionDao.remove('byIdU', {
 				transaction_id : req.params.transaction_id,
@@ -116,14 +113,13 @@ module.exports = {
 				next(err);
 			});
 
-		logger.debug('[SER -   END] TransactionService#remove');
+		logger.debug({ method : 'remove', point : logger.pt.end });
 	},
 
 	// Get transactions by type category
 	allByTypeU (req, next, user_id) {
 
-		logger.debug('[SER - START] TransactionService#allByTypeU');
-		logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'allByTypeU', point : logger.pt.start, params : { user_id : user_id } });
 
 		categoryDao.getAll('byTypeU', {
 				type_category_id : req.params.type_category_id,
@@ -177,14 +173,13 @@ module.exports = {
 				next(err);
 			});
 
-		logger.debug('[SER -   END] TransactionService#allByTypeU');
+		logger.debug({ method : 'allByTypeU', point : logger.pt.end });
 	},
 
 	// Get transactions by program
 	allByProgramU (req, next, user_id) {
 
-		logger.debug('[SER - START] TransactionService#allByProgramU');
-		logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'allByProgramU', point : logger.pt.start, params : { user_id : user_id } });
 
 		transactionDao.getAll('byProgramsU', {
 				programs_id : [ req.params.program_id ],
@@ -198,14 +193,13 @@ module.exports = {
 				next(err);
 			});
 
-		logger.debug('[SER -   END] TransactionService#allByProgramU');
+		logger.debug({ method : 'allByProgramU', point : logger.pt.end });
 	},
 
 	// Get one transaction by id
 	getByIdU (req, next, user_id) {
 
-		logger.debug('[SER - START] TransactionService#getByIdU');
-		logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'getByIdU', point : logger.pt.start, params : { user_id : user_id } });
 
 		transactionDao.getOne('byIdU', {
 				transaction_id : req.params.transaction_id,
@@ -219,6 +213,6 @@ module.exports = {
 				next(err);
 			});
 
-		logger.debug('[SER -   END] TransactionService#getByIdU');
+		logger.debug({ method : 'getByIdU', point : logger.pt.end });
 	}
 };

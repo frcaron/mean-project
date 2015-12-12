@@ -3,7 +3,7 @@
 // Inject
 var path    = require('path');
 var userDao = require(path.join(global.__dao, 'user'));
-var logger  = require(path.join(global.__core, 'system')).Logger;
+var logger  = require(path.join(global.__core, 'logger'))('session', __filename);
 
 module.exports = function(passport) {
 
@@ -14,19 +14,17 @@ module.exports = function(passport) {
 	// used to serialize the user for the session
 	passport.serializeUser(function(user, done) {
 
-		logger.debug('[PAS - START] passport#serializeUser');
-		logger.debug('              -- user.id : ' + user.id);
+		logger.debug({ method : 'serializeUser', point : logger.pt.start, params : { 'user.id' : user.id } });
 
 		done(null, user.id);
 
-		logger.debug('[PAS -   END] passport#serializeUser');
+		logger.debug({ method : 'serializeUser', point : logger.pt.end });
 	});
 
 	// used to deserialize the user
 	passport.deserializeUser(function(id, done) {
 
-		logger.debug('[PAS - START] passport#deserializeUser');
-		logger.debug('              -- user.id : ' + id);
+		logger.debug({ method : 'deserializeUser', point : logger.pt.start, params : { 'user.id' : id } });
 
 		userDao.getOne('byId', { user_id : id })
 			.then(function(user) {
@@ -39,13 +37,12 @@ module.exports = function(passport) {
 				});
 			})
 			.catch(function (err) {
-				logger.debug('[PAS - CATCH] passport#deserializeUser');
-				logger.error('              -- message : ' + err.message);
+				logger.debug(err.message, { method : 'deserializeUser', point : logger.pt.catch });
 
 				return done(err);
 			});
 
-		logger.debug('[PAS -   END] passport#deserializeUser');
+		logger.debug({ method : 'deserializeUser', point : logger.pt.end });
 	});
 
 	require('./strategies/local')(passport);

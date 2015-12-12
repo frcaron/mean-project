@@ -6,7 +6,7 @@ var moment             = require('moment');
 var responseService    = require(path.join(global.__service, 'response'));
 var transactionService = require(path.join(global.__service, 'transaction'));
 var Exception          = require(path.join(global.__core, 'exception'));
-var logger             = require(path.join(global.__core, 'system')).Logger;
+var logger             = require(path.join(global.__core, 'logger'))('route', __filename);
 
 // Properties
 var api_prefix = '/transactions';
@@ -20,10 +20,11 @@ module.exports = function (router, auth) {
 
 			let category_id = req.body.category_id ||req.query.category_id;
 
-			logger.debug('[WSP - VALID] TransactionRoute#post');
-			logger.debug('              -- req.body.date         : ' + req.body.date);
-			logger.debug('              -- req.body.sum          : ' + req.body.sum);
-			logger.debug('              -- req.query.category_id : ' + category_id);
+			logger.debug({ method : 'transactions@post', point : logger.pt.valid, params : {
+				'req.body.date' : req.body.date,
+				'req.body.sum'  : req.body.sum,
+				'category_id'   : category_id
+			} });
 
 			// Validation
 			let msg = [];
@@ -75,9 +76,10 @@ module.exports = function (router, auth) {
 
 			let category_id = req.body.category_id ||req.query.category_id;
 
-			logger.debug('[WSP - VALID] TransactionRoute#put');
-			logger.debug('              -- req.body.date         : ' + req.body.date);
-			logger.debug('              -- req.query.category_id : ' + category_id);
+			logger.debug({ method : 'transactions/:id@put', point : logger.pt.valid, params : {
+				'req.body.date' : req.body.date,
+				'category_id'   : category_id
+			} });
 
 			// Validation
 			let msg = [];

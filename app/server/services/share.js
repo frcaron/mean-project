@@ -8,14 +8,13 @@ var planDao         = require(path.join(global.__dao, 'plan'));
 var programDao      = require(path.join(global.__dao, 'program'));
 var categoryDao     = require(path.join(global.__dao, 'category'));
 var typeCategoryDao = require(path.join(global.__dao, 'type-category'));
-var logger          = require(path.join(global.__core, 'system')).Logger;
+var logger          = require(path.join(global.__core, 'logger'))('service', __filename);
 
 module.exports = {
 
 	createUser (input) {
 
-		logger.debug('[SER - START] BudgetService#createUser');
-		logger.debug('              -- input   : ' + JSON.stringify(input));
+		logger.debug({ method : 'createUser', point : logger.pt.start, params : { input : input } });
 
 		var promise = userDao.create({
 				firstname      : input.firstname,
@@ -45,23 +44,21 @@ module.exports = {
 						return BPromise.resolve(user);
 					})
 					.catch(function (err) {
-						logger.debug('[SER - CATCH] BudgetService#createUser');
-						logger.error('              -- message : ' + err.message);
+						logger.debug(err.message, { method : 'createUser', point : logger.pt.catch });
 
 						userDao.remove({ user_id : user._id });
 						throw err;
 					});
 			});
 
-		logger.debug('[SER -   END] BudgetService#createUser');
+		logger.debug({ method : 'createUser', point : logger.pt.end });
 
 		return promise;
 	},
 
 	createPlan (input) {
 
-		logger.debug('[SER - START] BudgetService#createPlan');
-		logger.debug('              -- input   : ' + JSON.stringify(input));
+		logger.debug({ method : 'createPlan', point : logger.pt.start, params : { input : input } });
 
 		let promise = planDao.create(input)
 			.then(function (plan) {
@@ -82,8 +79,7 @@ module.exports = {
 						return BPromise.resolve(plan);
 					})
 					.catch(function (err) {
-						logger.debug('[SER - CATCH] BudgetService#createPlan');
-						logger.error('              -- message : ' + err.message);
+						logger.debug(err.message, { method : 'createPlan', point : logger.pt.catch });
 
 						planDao.remove('byIdU', {
 							plan_id : plan._id,
@@ -93,15 +89,14 @@ module.exports = {
 					});
 			});
 
-		logger.debug('[SER -   END] BudgetService#createPlan');
+		logger.debug({ method : 'createPlan', point : logger.pt.end });
 
 		return promise;
 	},
 
 	createProgram (input) {
 
-		logger.debug('[SER - START] BudgetService#createProgram');
-		logger.debug('              -- input   : ' + JSON.stringify(input));
+		logger.debug({ method : 'createProgram', point : logger.pt.start, params : { input : input } });
 
 		let promise = categoryDao.getOne('byIdU', {
 				category_id : input.category_id,
@@ -117,7 +112,7 @@ module.exports = {
 				return programDao.create(input);
 			});
 
-		logger.debug('[SER -   END] BudgetService#createProgram');
+		logger.debug({ method : 'createProgram', point : logger.pt.end });
 
 		return promise;
 	}

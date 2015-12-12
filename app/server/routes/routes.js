@@ -6,7 +6,7 @@ var express         = require('express');
 var responseService = require(path.join(global.__service, 'response'));
 var Exception       = require(path.join(global.__core, 'exception'));
 var config          = require(path.join(global.__core, 'system')).Config;
-var logger          = require(path.join(global.__core, 'system')).Logger;
+var logger          = require(path.join(global.__core, 'logger'))('route', __filename);
 
 var adminRouter     = express.Router();
 var publicRouter    = express.Router();
@@ -32,12 +32,16 @@ module.exports = function (app, passport) {
 	// Error handling
 	app.use('/api/*', function (err, req, res, next) {
 		if(err instanceof Exception.MetierEx) {
+			logger.debug(err.message, { method : 'handlingWS', point : logger.pt.err });
+
 			responseService.fail(res, {
 				reason : err.message,
 				detail : err.detail
 			});
 
 		} else if(err instanceof Exception.RouteEx) {
+			logger.debug(err.message, { method : 'handlingWS', point : logger.pt.err });
+
 			responseService.fail(res, {
 				reason    : err.message,
 				detail    : err.detail,
@@ -45,8 +49,7 @@ module.exports = function (app, passport) {
 			});
 
 		} else {
-			logger.debug('[WSG - ERROR] API#ErrorHandling');
-			logger.error('              -- message : ' + err.message);
+			logger.error(err.message, { method : 'handlingWS', point : logger.pt.err, params : { stack : err } });
 
 			responseService.fail(res);
 		}
@@ -74,7 +77,7 @@ module.exports = function (app, passport) {
 		next();
 
 	} // Basic routing
-	//, basicRouter
+	, basicRouter
 	);
 
 	// Home page or 404
@@ -85,6 +88,8 @@ module.exports = function (app, passport) {
 		res.render('index');
 
 	}, function (req, res) {
+		logger.debug({ method : '404', point : logger.pt.err });
+
 		res.render('404', {
 			error : 'Page inexistante'
 		});
@@ -92,8 +97,7 @@ module.exports = function (app, passport) {
 
 	// Error handling
 	app.use(function (err, req, res, next) {
-		logger.debug('[WSG - ERROR] PAGES#ErrorHandling');
-		logger.error('              -- message : ' + err.message);
+		logger.error(err.message, { method : 'handlingPages', point : logger.pt.err, params : { stack : err } });
 
 		res.render('500', {
 			error : 'Erreur inconnue'

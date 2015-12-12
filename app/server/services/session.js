@@ -5,15 +5,14 @@ var path      = require('path');
 var jwt       = require('jsonwebtoken');
 var Exception = require(path.join(global.__core, 'exception'));
 var config    = require(path.join(global.__core, 'system')).Config;
-var logger    = require(path.join(global.__core, 'system')).Logger;
+var logger    = require(path.join(global.__core, 'logger'))('service', __filename);
 
 module.exports = {
 
 	// Authenticate user
 	authenticate (req, res, next, passport, startegy) {
 
-		logger.debug('[SER - START] SessionService#authenticate');
-		logger.debug('              -- startegy : ' + startegy);
+		logger.debug({ method : 'authenticate', point : logger.pt.start, params : { startegy : startegy } });
 
 		passport.authenticate(startegy, { failureFlash: true }, function (err, user, info) {
 			if(err) {
@@ -32,14 +31,13 @@ module.exports = {
 
 		})(req, res);
 
-		logger.debug('[SER -   END] SessionService#authenticate');
+		logger.debug({ method : 'authenticate', point : logger.pt.end });
 	},
 
 	// Authorize user
 	authorize (req, res, next, passport, startegy) {
 
-		logger.debug('[SER - START] SessionService#authorize');
-		logger.debug('              -- startegy : ' + startegy);
+		logger.debug({ method : 'authorize', point : logger.pt.start, params : { startegy : startegy } });
 
 		passport.authorize(startegy, { failureFlash: true }, function (err, user, info) {
 			if(err) {
@@ -58,14 +56,14 @@ module.exports = {
 
 		})(req, res);
 
-		logger.debug('[SER -   END] SessionService#authorize');
+		logger.debug({ method : 'authorize', point : logger.pt.end });
 
 	},
 
 	// Login user
 	login (req, res, next) {
 
-		logger.debug('[SER - START] SessionService#login');
+		logger.debug({ method : 'login', point : logger.pt.start });
 
 		let user = req.result;
 		req.login(user, function(err) {
@@ -84,18 +82,17 @@ module.exports = {
 			next();
 		});
 
-		logger.debug('[SER -   END] SessionService#login');
+		logger.debug({ method : 'login', point : logger.pt.end });
 	},
 
 	deleteToken (req, next, provider) {
 
-		logger.debug('[SER - START] SessionService#unlink');
-		logger.debug('              -- provider : ' + provider);
+		logger.debug({ method : 'deleteToken', point : logger.pt.start, params : { provider : provider } });
 
 		// TODO delete token user
 		next();
 
-		logger.debug('[SER -   END] SessionService#unlink');
+		logger.debug({ method : 'deleteToken', point : logger.pt.end });
 
 	}
 };

@@ -7,15 +7,14 @@ var programDao      = require(path.join(global.__dao, 'program'));
 var categoryDao     = require(path.join(global.__dao, 'category'));
 var typeCategoryDao = require(path.join(global.__dao, 'type-category'));
 var Exception       = require(path.join(global.__core, 'exception'));
-var logger          = require(path.join(global.__core, 'system')).Logger;
+var logger          = require(path.join(global.__core, 'logger'))('service', __filename);
 
 module.exports = {
 
 	// Create one category
 	create (req, next, user_id) {
 
-		logger.debug('[SER - START] CategoryService#create');
-		logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'create', point : logger.pt.start, params : { user_id : user_id } });
 
 		let type_category_id = req.body.type_category_id || req.query.type_category_id;
 
@@ -53,14 +52,13 @@ module.exports = {
 				next(err);
 			});
 
-		logger.debug('[SER -   END] CategoryService#create');
+		logger.debug({ method : 'create', point : logger.pt.end });
 	},
 
 	// Update one category
 	update (req, next, user_id) {
 
-		logger.debug('[SER - START] CategoryService#update');
-		logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'update', point : logger.pt.start, params : { user_id : user_id } });
 
 		categoryDao.update({
 				category_id : req.params.category_id,
@@ -75,14 +73,13 @@ module.exports = {
 				next(err);
 			});
 
-		logger.debug('[SER -   END] CategoryService#update');
+		logger.debug({ method : 'update', point : logger.pt.end });
 	},
 
 	// Desactivate one category
 	desactivate (req, next, user_id) {
 
-		logger.debug('[SER - START] CategoryService#desactivate');
-		logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'desactivate', point : logger.pt.start, params : { user_id : user_id } });
 
 		categoryDao.update({
 				category_id : req.params.category_id,
@@ -96,13 +93,12 @@ module.exports = {
 				next(err);
 			});
 
-		logger.debug('[SER -   END] CategoryService#desactivate');
+		logger.debug({ method : 'desactivate', point : logger.pt.end });
 	},
 
 	allByTypeCatUNoUse (req, next, user_id) {
 
-		logger.debug('[SER - START] CategoryService#allByTypeCatUNoUse');
-		logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'allByTypeCatUNoUse', point : logger.pt.start, params : { user_id : user_id } });
 
 		let plan_id          = req.body.plan_id || req.query.plan_id;
 		let type_category_id = req.body.type_category_id || req.query.type_category_id;
@@ -135,14 +131,13 @@ module.exports = {
 				next(err);
 			});
 
-		logger.debug('[SER -   END] CategoryService#allByTypeCatUNoUse');
+		logger.debug({ method : 'allByTypeCatUNoUse', point : logger.pt.end });
 	},
 
 	// Get active categories by type category
 	allByTypeU (req, next, user_id) {
 
-		logger.debug('[SER - START] CategoryService#allByTypeU');
-		logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'allByTypeU', point : logger.pt.start, params : { user_id : user_id } });
 
 		categoryDao.getAll('byTypeU', {
 				type_category_id : req.params.type_category_id,
@@ -156,14 +151,13 @@ module.exports = {
 				next(err);
 			});
 
-		logger.debug('[SER -   END] CategoryService#allByTypeU');
+		logger.debug({ method : 'allByTypeU', point : logger.pt.end });
 	},
 
 	// Get one category by id
 	getByIdU (req, next, user_id) {
 
-		logger.debug('[SER - START] CategoryService#getByIdU');
-		logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'getByIdU', point : logger.pt.start, params : { user_id : user_id } });
 
 		categoryDao.getOne('byIdU', {
 				category_id : req.params.category_id,
@@ -177,6 +171,6 @@ module.exports = {
 				next(err);
 			});
 
-		logger.debug('[SER -   END] CategoryService#getByIdU');
+		logger.debug({ method : 'getByIdU', point : logger.pt.end });
 	}
 };

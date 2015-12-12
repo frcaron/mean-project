@@ -5,7 +5,7 @@ var path            = require('path');
 var responseService = require(path.join(global.__service, 'response'));
 var categoryService = require(path.join(global.__service, 'category'));
 var Exception       = require(path.join(global.__core, 'exception'));
-var logger          = require(path.join(global.__core, 'system')).Logger;
+var logger          = require(path.join(global.__core, 'logger'))('route', __filename);
 
 // Properties
 var api_prefix = '/categories';
@@ -19,9 +19,10 @@ module.exports = function (router, auth) {
 
 			let type_category_id = req.body.type_category_id || req.query.type_category_id;
 
-			logger.debug('[WSP - VALID] CategoryRoute#post');
-			logger.debug('              -- req.body.name    : ' + req.body.name);
-			logger.debug('              -- type_category_id : ' + type_category_id);
+			logger.debug({ method : 'categories@post', point : logger.pt.valid, params : {
+				'req.body.name'    : req.body.name,
+				'type_category_id' : type_category_id
+			} });
 
 			// Validation
 			var msg = [];
@@ -54,9 +55,10 @@ module.exports = function (router, auth) {
 			let plan_id          = req.body.plan_id || req.query.plan_id;
 			let type_category_id = req.body.type_category_id || req.query.type_category_id;
 
-			logger.debug('[WSP - VALID] CategoryRoute#post');
-			logger.debug('              -- plan_id          : ' + plan_id);
-			logger.debug('              -- type_category_id : ' + type_category_id);
+			logger.debug({ method : 'categories/available@get', point : logger.pt.valid, params : {
+				'plan_id'          : plan_id,
+				'type_category_id' : type_category_id
+			} });
 
 			// Validation
 			var msg = [];

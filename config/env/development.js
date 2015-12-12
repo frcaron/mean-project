@@ -18,7 +18,7 @@ module.exports = {
 				enabled   : true,
 				level     : 'debug',
 				timestamp : {
-					enabled : false,
+					enabled : true,
 					format  : 'HH:mm:ss'
 				}
 			},
