@@ -45,7 +45,6 @@
 
 					options = _.extend(options, { 'stream' : accessLogStream });
 				}
-
 				app.use(morgan(format, options));
 			}
 		}
