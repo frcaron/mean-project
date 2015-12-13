@@ -17,7 +17,7 @@ var logger        = require(path.join(global.__core, 'logger'))('dao', __filenam
  */
 function create (input) {
 
-	logger.debug({ method : 'creat', point : logger.pt.start, params : {
+	logger.debug({ method : 'create', point : logger.pt.start, params : {
 		input : input,
 	} });
 
