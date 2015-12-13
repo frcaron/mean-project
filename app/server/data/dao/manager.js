@@ -5,7 +5,7 @@ var path      = require('path');
 var BPromise  = require('bluebird');
 var queries   = require(path.join(global.__config, 'queries'));
 var Exception = require(path.join(global.__core, 'exception'));
-var logger    = require(path.join(global.__core, 'system')).Logger;
+var logger    = require(path.join(global.__core, 'logger'))('dao', __filename);
 
 module.exports = function (name_collection) {
 
@@ -18,10 +18,11 @@ module.exports = function (name_collection) {
 
 		getQuery : BPromise.method(function (name_fct, name_query, filters) {
 
-			logger.debug('[DAO - START] DaoManager#getQuery');
-			logger.debug('              -- name_fct   : ' + name_fct);
-			logger.debug('              -- name_query : ' + name_query);
-			logger.debug('              -- filters    : ' + JSON.stringify(filters));
+			logger.debug({ method : 'getQuery', point : logger.pt.start, params : {
+				name_fct   : name_fct,
+				name_query : name_query,
+				filters    : filters
+			} });
 
 			let output = {};
 			if(!name_fct || !name_query || !filters) {
@@ -83,8 +84,9 @@ module.exports = function (name_collection) {
 				}
 			});
 
-			logger.debug('[DAO -   END] DaoManager#getQuery');
-			logger.debug('              -- output   : ' + JSON.stringify(output));
+			logger.debug({ method : 'getQuery', point : logger.pt.end, params : {
+				output : output
+			} });
 
 			return output;
 		})

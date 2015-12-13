@@ -7,7 +7,7 @@ var daoManager    = require(path.join(global.__dao, 'manager'))('program');
 var programModel  = require(path.join(global.__model, 'program'));
 var countersModel = require(path.join(global.__model, 'counters'));
 var Exception     = require(path.join(global.__core, 'exception'));
-var logger        = require(path.join(global.__core, 'system')).Logger;
+var logger        = require(path.join(global.__core, 'logger'))('dao', __filename);
 
 /**
  * @param  {Json} input 	Data to create
@@ -17,8 +17,9 @@ var logger        = require(path.join(global.__core, 'system')).Logger;
  */
 function create (input) {
 
-	logger.debug('[DAO - START] ProgramDao#create');
-	logger.debug('              -- input : ' + JSON.stringify(input));
+	logger.debug({ method : 'create', point : logger.pt.start, params : {
+		input : input
+	} });
 
 	let program = new programModel();
 	let promise = countersModel.getNextSequence('program_id')
@@ -35,11 +36,12 @@ function create (input) {
 			return program.saveAsync();
 		})
 		.then(function () {
+			logger.debug({ method : 'create', point : logger.pt.end });
+
 			return BPromise.resolve(program);
 		})
 		.catch(function (err) {
-			logger.debug('[DAO - CATCH] ProgramDao#create');
-			logger.error('              -- message : ' + err.message);
+			logger.debug(err.message, { method : 'create', point : logger.pt.catch });
 
 			if (err.code === 11000) {
 				throw new Exception.DuplicateEx('Program already exist');
@@ -54,8 +56,6 @@ function create (input) {
 			}
 		});
 
-	logger.debug('[DAO -   END] ProgramDao#create');
-
 	return promise;
 }
 
@@ -69,9 +69,10 @@ function create (input) {
  */
 function update (input, filters) {
 
-	logger.debug('[DAO - START] ProgramDao#update');
-	logger.debug('              -- input   : ' + JSON.stringify(input));
-	logger.debug('              -- filters : ' + JSON.stringify(filters));
+	logger.debug({ method : 'update', point : logger.pt.start, params : {
+		input   : input,
+		filters : filters
+	} });
 
 	let promise;
 	if (filters) {
@@ -96,9 +97,13 @@ function update (input, filters) {
 	}
 
 	let promiseEnd = promise
+		.then(function (program) {
+			logger.debug({ method : 'update', point : logger.pt.end });
+
+			return BPromise.resolve(program);
+		})
 		.catch(function (err) {
-			logger.debug('[DAO - CATCH] ProgramDao#update');
-			logger.error('              -- message : ' + err.message);
+			logger.debug(err.message, { method : 'update', point : logger.pt.catch });
 
 			if (err.code === 11000) {
 				throw new Exception.DuplicateEx('Program already exist');
@@ -113,8 +118,6 @@ function update (input, filters) {
 			}
 		});
 
-	logger.debug('[DAO -   END] ProgramDao#update');
-
 	return promiseEnd;
 }
 
@@ -127,31 +130,24 @@ function update (input, filters) {
  */
 function remove (name_query, filters) {
 
-	logger.debug('[DAO - START] ProgramDao#remove');
-	logger.debug('              -- name_query : ' + name_query);
-	logger.debug('              -- filters : ' + JSON.stringify(filters));
+	logger.debug({ method : 'remove', point : logger.pt.start, params : {
+		name_query : name_query,
+		filters    : filters
+	} });
 
-	let promise;
-	try {
-		promise = daoManager.getQuery('remove', name_query, filters)
+	let promise = daoManager.getQuery('remove', name_query, filters)
 			.then(function (query) {
 				return programModel.removeAsync(query);
-			});
-	} catch (err) {
-		promise = BPromise.reject(err);
-	}
-
-	let promiseEnd = promise
+			})
+		.then(function () {
+			logger.debug({ method : 'remove', point : logger.pt.end });
+		})
 		.catch(function (err) {
-			logger.debug('[DAO - CATCH] ProgramDao#remove');
-			logger.error('              -- message : ' + err.message);
-
+			logger.debug(err.message, { method : 'remove', point : logger.pt.catch });
 			throw err;
 		});
 
-	logger.debug('[DAO -   END] ProgramDao#remove');
-
-	return promiseEnd;
+	return promise;
 }
 
 /**
@@ -163,31 +159,26 @@ function remove (name_query, filters) {
  */
 function getAll (name_query, filters) {
 
-	logger.debug('[DAO - START] ProgramDao#getAll');
-	logger.debug('              -- name_query : ' + name_query);
-	logger.debug('              -- filters : ' + JSON.stringify(filters));
+	logger.debug({ method : 'getAll', point : logger.pt.start, params : {
+		name_query : name_query,
+		filters    : filters
+	} });
 
-	let promise;
-	try {
-		promise = daoManager.getQuery('getAll', name_query, filters)
-			.then(function (query) {
-				return programModel.findAsync(query);
-			});
-	} catch (err) {
-		promise = BPromise.reject(err);
-	}
+	let promise = daoManager.getQuery('getAll', name_query, filters)
+		.then(function (query) {
+			return programModel.findAsync(query);
+		})
+		.then(function (programs) {
+			logger.debug({ method : 'getAll', point : logger.pt.end });
 
-	let promiseEnd = promise
+			return BPromise.resolve(programs);
+		})
 		.catch(function (err) {
-			logger.debug('[DAO - CATCH] ProgramDao#getAll');
-			logger.error('              -- message : ' + err.message);
-
+			logger.debug(err.message, { method : 'getAll', point : logger.pt.catch });
 			throw err;
 		});
 
-	logger.debug('[DAO -   END] ProgramDao#getAll');
-
-	return promiseEnd;
+	return promise;
 }
 
 /**
@@ -200,37 +191,29 @@ function getAll (name_query, filters) {
  */
 function getOne (name_query, filters) {
 
-	logger.debug('[DAO - START] ProgramDao#getOne');
-	logger.debug('              -- name_query : ' + name_query);
-	logger.debug('              -- filters : ' + JSON.stringify(filters));
+	logger.debug({ method : 'getOne', point : logger.pt.start, params : {
+		name_query : name_query,
+		filters    : filters
+	} });
 
-	let promise;
-	try {
-		promise = daoManager.getQuery('getOne', name_query, filters)
-			.then(function (query) {
-				return programModel.findOneAsync(query);
-			});
-	} catch (err) {
-		promise = BPromise.reject(err);
-	}
-
-	let promiseEnd = promise
+	let promise = daoManager.getQuery('getOne', name_query, filters)
+		.then(function (query) {
+			return programModel.findOneAsync(query);
+		})
 		.then(function (program) {
-			if (!program ) {
+			logger.debug({ method : 'getOne', point : logger.pt.end });
+
+			if (!program) {
 				throw new Exception.NoResultEx('No program found');
 			}
 			return BPromise.resolve(program);
 		})
 		.catch(function (err) {
-			logger.debug('[DAO - CATCH] ProgramDao#getOne');
-			logger.error('              -- message : ' + err.message);
-
+			logger.debug(err.message, { method : 'getOne', point : logger.pt.catch });
 			throw err;
 		});
 
-	logger.debug('[DAO -   END] ProgramDao#getOne');
-
-	return promiseEnd;
+	return promise;
 }
 
 module.exports = {

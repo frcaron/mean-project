@@ -94,7 +94,7 @@ module.exports = {
 		logger.debug({ method : 'getById', point : logger.pt.start, params : { user_id : user_id } });
 
 		userDao.getOne('byId', { user_id : user_id })
-			.then(function(user) {
+			.then(function (user) {
 				req.result = user;
 				next();
 			})

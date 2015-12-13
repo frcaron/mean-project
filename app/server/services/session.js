@@ -27,11 +27,12 @@ module.exports = {
 			}
 
 			req.result = user;
+
+			logger.debug({ method : 'authenticate', point : logger.pt.end });
+
 			next();
 
 		})(req, res);
-
-		logger.debug({ method : 'authenticate', point : logger.pt.end });
 	},
 
 	// Authorize user
@@ -52,12 +53,12 @@ module.exports = {
 			}
 
 			req.result = user;
+
+			logger.debug({ method : 'authorize', point : logger.pt.end });
+
 			next();
 
 		})(req, res);
-
-		logger.debug({ method : 'authorize', point : logger.pt.end });
-
 	},
 
 	// Login user
@@ -79,10 +80,10 @@ module.exports = {
 			});
 			req.result = token;
 
+			logger.debug({ method : 'login', point : logger.pt.end });
+
 			next();
 		});
-
-		logger.debug({ method : 'login', point : logger.pt.end });
 	},
 
 	deleteToken (req, next, provider) {
@@ -90,9 +91,9 @@ module.exports = {
 		logger.debug({ method : 'deleteToken', point : logger.pt.start, params : { provider : provider } });
 
 		// TODO delete token user
-		next();
 
 		logger.debug({ method : 'deleteToken', point : logger.pt.end });
 
+		next();
 	}
 };

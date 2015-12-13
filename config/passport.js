@@ -28,6 +28,8 @@ module.exports = function(passport) {
 
 		userDao.getOne('byId', { user_id : id })
 			.then(function(user) {
+				logger.debug({ method : 'deserializeUser', point : logger.pt.end });
+
 				done(null, {
 					id       : user._id,
 					name     : user.displayname || user.firstname + ' ' + user.surname,
@@ -35,14 +37,15 @@ module.exports = function(passport) {
 					verified : user.verified,
 					admin    : user.admin
 				});
+
+				return null;
 			})
 			.catch(function (err) {
 				logger.debug(err.message, { method : 'deserializeUser', point : logger.pt.catch });
 
-				return done(err);
+				done(err);
+				return null;
 			});
-
-		logger.debug({ method : 'deserializeUser', point : logger.pt.end });
 	});
 
 	require('./strategies/local')(passport);

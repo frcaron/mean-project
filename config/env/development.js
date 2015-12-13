@@ -5,8 +5,9 @@ module.exports = {
 	},
 	logging : {
 		morgan : {
-			format : '>> :status :method  	:url',
-			stream :  {
+			enabled : false,
+			format  : '>> :status :method  	:url',
+			stream  : {
 				enabled     : false,
 				filename    : 'logs/morgan/log',
 				frequency   : 'daily',
