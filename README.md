@@ -1,35 +1,18 @@
 
 # MEAN-PROJECT
 
-Variable env :
+Variable environement :
 
 	// All
-	- ENV              (value   : 'development' or 'production')
+	- HOST / HOSTNAME  (default : 'localhost')
 	- PORT             (default : 3000)
-	- BDD_URL          (default : 'mongodb://localhost/mean-project')
-	- LEVEL_LOG_MORGAN (default : 'dev')
-	- LEVEL_LOG        (default : 'debug')
+
+	// Production
+	- DB_URL           (default : 'mongodb://localhost/mean-project')
+	- DOMAIN           (default : 'http://localhost:3000')
 	- SESSION_SECRET   (default : 'secretmeanproject')
 	- FB_ID            (default : undefined)
 	- FB_SECRET        (default : undefined)
-
-	// Local
-	- HOSTNAME         (default : 'localhost')
-
-	// Production
-	- DOMAIN
-
-Outil à installer :
-
-	- NodeJS
-	- npm
-	- MongoDB
-	- nodemon
-	- gulp
-	- browserfy
-	- heroku
-	- jshint
-
 
 ## Usage
 
@@ -41,7 +24,10 @@ Francois Caron
 
 ### Tools
 
-Created with [Nodeclipse](https://github.com/Nodeclipse/nodeclipse-1)
- ([Eclipse Marketplace](http://marketplace.eclipse.org/content/nodeclipse), [site](http://www.nodeclipse.org))
-
-Nodeclipse is free open-source project that grows with your contributions.
+- NodeJS
+- npm
+- MongoDB
+- nodemon
+- gulp
+- heroku
+- jshint
