@@ -60,13 +60,14 @@ module.exports = {
 			})
 			.then(function (transaction) {
 				req.result = transaction;
+
+				logger.debug({ method : 'create', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'create', point : logger.pt.catch });
 				next(err);
 			});
-
-		logger.debug({ method : 'create', point : logger.pt.end });
 	},
 
 	// Update one transaction
@@ -88,13 +89,14 @@ module.exports = {
 			})
 			.then(function (transaction) {
 				req.result = transaction;
+
+				logger.debug({ method : 'update', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'update', point : logger.pt.catch });
 				next(err);
 			});
-
-		logger.debug({ method : 'update', point : logger.pt.end });
 	},
 
 	// Remove one transaction
@@ -107,13 +109,13 @@ module.exports = {
 				user_id        : user_id
 			})
 			.then(function () {
+				logger.debug({ method : 'remove', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'remove', point : logger.pt.catch });
 				next(err);
 			});
-
-		logger.debug({ method : 'remove', point : logger.pt.end });
 	},
 
 	// Get transactions by type category
@@ -163,17 +165,19 @@ module.exports = {
 			})
 			.then(function (transactions) {
 				req.result = transactions;
+
+				logger.debug({ method : 'allByTypeU', point : logger.pt.end });
 				next();
 			})
 			.catch(Exception.NoResultEx, function () {
 				req.result = [];
+				logger.debug({ method : 'allByTypeU', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'allByTypeU', point : logger.pt.catch });
 				next(err);
 			});
-
-		logger.debug({ method : 'allByTypeU', point : logger.pt.end });
 	},
 
 	// Get transactions by program
@@ -187,13 +191,14 @@ module.exports = {
 			})
 			.then(function (transactions) {
 				req.result = transactions;
+
+				logger.debug({ method : 'allByProgramU', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'allByProgramU', point : logger.pt.catch });
 				next(err);
 			});
-
-		logger.debug({ method : 'allByProgramU', point : logger.pt.end });
 	},
 
 	// Get one transaction by id
@@ -207,12 +212,13 @@ module.exports = {
 			})
 			.then(function (transaction) {
 				req.result = transaction;
+
+				logger.debug({ method : 'getByIdU', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'getByIdU', point : logger.pt.catch });
 				next(err);
 			});
-
-		logger.debug({ method : 'getByIdU', point : logger.pt.end });
 	}
 };

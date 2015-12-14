@@ -46,13 +46,14 @@ module.exports = {
 			})
 			.then(function (category) {
 				req.result = category;
+
+				logger.debug({ method : 'create', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'create', point : logger.pt.catch });
 				next(err);
 			});
-
-		logger.debug({ method : 'create', point : logger.pt.end });
 	},
 
 	// Update one category
@@ -67,13 +68,14 @@ module.exports = {
 			})
 			.then(function (category) {
 				req.result = category;
+
+				logger.debug({ method : 'update', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'update', point : logger.pt.catch });
 				next(err);
 			});
-
-		logger.debug({ method : 'update', point : logger.pt.end });
 	},
 
 	// Desactivate one category
@@ -87,13 +89,13 @@ module.exports = {
 				user_id     : user_id
 			})
 			.then(function () {
+				logger.debug({ method : 'desactivate', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'desactivate', point : logger.pt.catch });
 				next(err);
 			});
-
-		logger.debug({ method : 'desactivate', point : logger.pt.end });
 	},
 
 	allByTypeCatUNoUse (req, next, user_id) {
@@ -125,13 +127,14 @@ module.exports = {
 			})
 			. then(function (categories) {
 				req.result = categories;
+
+				logger.debug({ method : 'allByTypeCatUNoUse', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'allByTypeCatUNoUse', point : logger.pt.catch });
 				next(err);
 			});
-
-		logger.debug({ method : 'allByTypeCatUNoUse', point : logger.pt.end });
 	},
 
 	// Get active categories by type category
@@ -145,13 +148,14 @@ module.exports = {
 			})
 			.then(function (categories) {
 				req.result = categories;
+
+				logger.debug({ method : 'allByTypeU', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'allByTypeU', point : logger.pt.catch });
 				next(err);
 			});
-
-		logger.debug({ method : 'allByTypeU', point : logger.pt.end });
 	},
 
 	// Get one category by id
@@ -165,12 +169,13 @@ module.exports = {
 			})
 			.then(function (category) {
 				req.result = category;
+
+				logger.debug({ method : 'getByIdU', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'getByIdU', point : logger.pt.catch });
 				next(err);
 			});
-
-		logger.debug({ method : 'getByIdU', point : logger.pt.end });
 	}
 };

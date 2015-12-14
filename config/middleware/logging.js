@@ -57,11 +57,10 @@
 		app.use(function (req, res, next) {
 			logger.start({
 				params : {
-					'req.method'  : req.method,
-					'req.path'    : req.path,
-					'req.body'    : req.body,
-					'req.query'   : req.query,
-					'req.params'  : req.params
+					'req.method' : req.method,
+					'req.path'   : req.path,
+					'req.body'   : req.body,
+					'req.query'  : req.query
 				}
 			});
 			onFinished(res, function () {

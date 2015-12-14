@@ -24,13 +24,14 @@ module.exports = {
 			})
 			.then(function (plan) {
 				req.result = plan;
+
+				logger.debug({ method : 'create', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'create', point : logger.pt.catch });
 				next(err);
 			});
-
-		logger.debug({ method : 'create', point : logger.pt.end });
 	},
 
 	// Delete plan user
@@ -58,13 +59,14 @@ module.exports = {
 				if(msg.length) {
 					throw new Error(msg);
 				}
+
+				logger.debug({ method : 'remove', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'remove', point : logger.pt.catch });
 				next(err);
 			});
-
-		logger.debug({ method : 'remove', point : logger.pt.end });
 	},
 
 	// Get plans by user
@@ -75,13 +77,14 @@ module.exports = {
 		planDao.getAll('byU', { user_id : user_id })
 			.then(function (plans) {
 				req.result = plans;
+
+				logger.debug({ method : 'allByU', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'allByU', point : logger.pt.catch });
 				next(err);
 			});
-
-		logger.debug({ method : 'allByU', point : logger.pt.end });
 	},
 
 	// Get one plan by id
@@ -95,12 +98,13 @@ module.exports = {
 			})
 			.then(function (plan) {
 				req.result = plan;
+
+				logger.debug({ method : 'getByIdU', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'getByIdU', point : logger.pt.catch });
 				next(err);
 			});
-
-		logger.debug({ method : 'getByIdU', point : logger.pt.end });
 	}
 };

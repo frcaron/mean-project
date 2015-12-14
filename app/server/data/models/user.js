@@ -8,6 +8,7 @@ var validator  = require('validator');
 var mongoose   = BPromise.promisifyAll(require('mongoose'));
 var datePlugin = require(path.join(global.__plugin, 'date'));
 var config     = require(path.join(global.__core, 'system')).Config;
+var logger     = require(path.join(global.__core, 'logger'))('model', __filename);
 
 var Schema     = mongoose.Schema;
 var Types      = Schema.Types;
@@ -86,8 +87,11 @@ UserSchema.index({
 // MiddleWare
 UserSchema.pre('save', function (next) {
 
+	logger.debug({ method : 'preSave', point : logger.pt.start });
+
 	var user = this;
 	if (!user.local.password || !user.isModified('local.password')) {
+		logger.debug({ method : 'preSave', point : logger.pt.end });
 		return next();
 	}
 
@@ -96,7 +100,9 @@ UserSchema.pre('save', function (next) {
 			return next(err);
 		}
 		user.local.password = hash;
-		return next();
+
+		logger.debug({ method : 'preSave', point : logger.pt.end });
+		next();
 	});
 });
 

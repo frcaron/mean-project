@@ -41,17 +41,18 @@ module.exports = {
 						});
 					})
 					.then(function() {
+						logger.debug({ method : 'createUser', point : logger.pt.end });
 						return BPromise.resolve(user);
 					})
 					.catch(function (err) {
-						logger.debug(err.message, { method : 'createUser', point : logger.pt.catch });
-
 						userDao.remove({ user_id : user._id });
 						throw err;
 					});
+			})
+			.catch(function (err) {
+				logger.debug(err.message, { method : 'createUser', point : logger.pt.catch });
+				throw err;
 			});
-
-		logger.debug({ method : 'createUser', point : logger.pt.end });
 
 		return promise;
 	},
@@ -76,20 +77,21 @@ module.exports = {
 						});
 					})
 					.then(function () {
+						logger.debug({ method : 'createPlan', point : logger.pt.end });
 						return BPromise.resolve(plan);
 					})
 					.catch(function (err) {
-						logger.debug(err.message, { method : 'createPlan', point : logger.pt.catch });
-
 						planDao.remove('byIdU', {
 							plan_id : plan._id,
 							user_id : input.user_id
 						});
 						throw err;
 					});
+			})
+			.catch(function (err) {
+				logger.debug(err.message, { method : 'createPlan', point : logger.pt.catch });
+				throw err;
 			});
-
-		logger.debug({ method : 'createPlan', point : logger.pt.end });
 
 		return promise;
 	},
@@ -104,15 +106,17 @@ module.exports = {
 			})
 			.then(function () {
 				return planDao.getOne('byIdU', {
-							plan_id : input.plan_id,
-							user_id : input.user_id
-						});
+					plan_id : input.plan_id,
+					user_id : input.user_id
+				});
 			})
 			.then(function () {
 				return programDao.create(input);
+			})
+			.then(function (program) {
+				logger.debug({ method : 'createProgram', point : logger.pt.end });
+				return BPromise.resolve(program);
 			});
-
-		logger.debug({ method : 'createProgram', point : logger.pt.end });
 
 		return promise;
 	}

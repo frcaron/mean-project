@@ -17,13 +17,14 @@ module.exports = {
 			})
 			.then(function (typeCategory){
 				req.result = typeCategory;
+
+				logger.debug({ method : 'create', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err){
+				logger.debug(err.message, { method : 'create', point : logger.pt.catch });
 				next(err);
 			});
-
-		logger.debug({ method : 'create', point : logger.pt.end });
 	},
 
 	// Update one type category
@@ -37,13 +38,14 @@ module.exports = {
 			})
 			.then(function (typeCategory) {
 				req.result = typeCategory;
+
+				logger.debug({ method : 'update', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'update', point : logger.pt.catch });
 				next(err);
 			});
-
-		logger.debug({ method : 'update', point : logger.pt.end });
 	},
 
 	// Get all type category
@@ -54,13 +56,14 @@ module.exports = {
 		typeCategoryDao.getAll()
 			.then(function (typeCategories) {
 				req.result = typeCategories;
+
+				logger.debug({ method : 'all', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'all', point : logger.pt.catch });
 				next(err);
 			});
-
-		logger.debug({ method : 'all', point : logger.pt.end });
 	},
 
 	// Get one type category by id
@@ -71,12 +74,13 @@ module.exports = {
 		typeCategoryDao.getOne('byId', { type_category_id : req.params.type_category_id })
 			.then(function (typeCategory) {
 				req.result = typeCategory;
+
+				logger.debug({ method : 'getById', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'getById', point : logger.pt.catch });
 				next(err);
 			});
-
-		logger.debug({ method : 'getById', point : logger.pt.end });
 	}
 };

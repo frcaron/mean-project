@@ -29,7 +29,6 @@ module.exports = {
 			req.result = user;
 
 			logger.debug({ method : 'authenticate', point : logger.pt.end });
-
 			next();
 
 		})(req, res);
@@ -55,7 +54,6 @@ module.exports = {
 			req.result = user;
 
 			logger.debug({ method : 'authorize', point : logger.pt.end });
-
 			next();
 
 		})(req, res);
@@ -81,7 +79,6 @@ module.exports = {
 			req.result = token;
 
 			logger.debug({ method : 'login', point : logger.pt.end });
-
 			next();
 		});
 	},

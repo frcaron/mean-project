@@ -235,6 +235,62 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "app/server/core/system.js",
+			"settings":
+			{
+				"buffer_size": 3852,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "Remote:   origin @ https://github.com/frcaron/mean-project.git\nLocal:    master C:\\App\\Workspace\\mean-project\nHead:     4730cb8 qq\n\n\nNothing to commit (working directory clean)\n\n# Movement:\n#    r = refresh status\n#    1-5 = jump to section\n#    n = next item, N = next section\n#    p = previous item, P = previous section\n#\n# Staging:\n#    s = stage file/section, S = stage all unstaged files\n#    ctrl+shift+s = stage all unstaged and untracked files\n#    u = unstage file/section, U = unstage all files\n#    backspace = discard file/section, shift+backspace = discard everything\n#\n# Commit:\n#    c = commit, C = commit -a (add unstaged)\n#    ctrl+shift+c = commit --amend (amend previous commit)\n#\n# Other:\n#    i = ignore file, I = ignore pattern\n#    enter = open file\n#    d = view diff\n#\n# Stashes:\n#    a = apply stash, A = pop stash\n#    z = create stash, Z = create stash including untracked files\n#    backspace = discard stash",
+			"settings":
+			{
+				"buffer_size": 938,
+				"line_ending": "Windows",
+				"name": "*git-status*: mean-project",
+				"read_only": true,
+				"scratch": true
+			}
+		},
+		{
+			"contents": "/*\n * config.js: Default settings for all levels that winston knows about\n *\n * (C) 2010 Charlie Robbins\n * MIT LICENCE\n *\n */\n\nvar colors = require('colors/safe');\n\n// Fix colors not appearing in non-tty environments\ncolors.enabled = true;\n\nvar config = exports,\n    allColors = exports.allColors = {};\n\nconfig.addColors = function (colors) {\n  mixin(allColors, colors);\n};\n\nconfig.colorize = function (level, message) {\n  if (typeof message === 'undefined') message = level;\n\n  var colorized = message;\n  if (allColors[level] instanceof Array) {\n    for (var i = 0, l = allColors[level].length; i < l; ++i) {\n      colorized = colors[allColors[level][i]](colorized);\n    }\n  }\n  else if (allColors[level].match(/\\s/)) {\n    var colorArr = allColors[level].split(/\\s+/);\n    for (var i = 0; i < colorArr.length; ++i) {\n      colorized = colors[colorArr[i]](colorized);\n    }\n    allColors[level] = colorArr;\n  }\n  else {\n    colorized = colors[allColors[level]](colorized);\n  } \n\n  return colorized;\n};\n\n//\n// Export config sets\n//\nconfig.cli    = require('./config/cli-config');\nconfig.npm    = require('./config/npm-config');\nconfig.syslog = require('./config/syslog-config');\n\n//\n// Add colors for pre-defined config sets\n//\nconfig.addColors(config.cli.colors);\nconfig.addColors(config.npm.colors);\nconfig.addColors(config.syslog.colors);\n\nfunction mixin (target) {\n  var args = Array.prototype.slice.call(arguments, 1);\n\n  args.forEach(function (a) {\n    var keys = Object.keys(a);\n    for (var i = 0; i < keys.length; i++) {\n      target[keys[i]] = a[keys[i]];\n    }\n  });\n  return target;\n};\n",
+			"file": "node_modules/winston/lib/winston/config.js",
+			"file_size": 1598,
+			"file_write_time": 130937159652302156,
+			"settings":
+			{
+				"buffer_size": 1599,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "node_modules/winston/lib/winston/common.js",
+			"settings":
+			{
+				"buffer_size": 13173,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "Searching 41 files for \"colorize(\" (case sensitive, whole word)\n\nC:\\App\\Workspace\\mean-project\\node_modules\\winston\\lib\\winston\\common.js:\n  221    if (showLevel) {\n  222      output += options.colorize === 'all' || options.colorize === 'level' || options.colorize === true\n  223:       ? config.colorize(options.level)\n  224        : options.level;\n  225    }\n  ...\n  229    output += options.label ? ('[' + options.label + '] ') : '';\n  230    output += options.colorize === 'all' || options.colorize === 'message'\n  231:     ? config.colorize(options.level, options.message)\n  232      : options.message;\n  233  \n\n2 matches in 1 file\n",
+			"settings":
+			{
+				"buffer_size": 637,
+				"line_ending": "Windows",
+				"name": "Find Results",
+				"scratch": true
+			}
+		},
+		{
+			"file": "node_modules/winston/lib/winston/logger.js",
+			"settings":
+			{
+				"buffer_size": 19718,
+				"line_ending": "Unix"
+			}
+		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -243,17 +299,17 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 375.0,
-		"last_filter": "stat",
+		"height": 260.0,
+		"last_filter": "pull",
 		"selected_items":
 		[
 			[
-				"stat",
-				"Git: Status"
-			],
-			[
 				"pull",
 				"Git: Pull"
+			],
+			[
+				"stat",
+				"Git: Status"
 			],
 			[
 				"pul",
@@ -525,13 +581,17 @@
 		"/C/App/Workspace/mean-project/app/client/components/home/controllers",
 		"/C/App/Workspace/mean-project/app/client/components/home/views",
 		"/C/App/Workspace/mean-project/app/server",
+		"/C/App/Workspace/mean-project/app/server/core",
 		"/C/App/Workspace/mean-project/app/server/views",
 		"/C/App/Workspace/mean-project/app/server/views/layouts",
 		"/C/App/Workspace/mean-project/config",
-		"/C/App/Workspace/mean-project/node_modules/bootstrap/dist",
-		"/C/App/Workspace/mean-project/node_modules/bootstrap/dist/css",
-		"/C/App/Workspace/mean-project/node_modules/express/lib",
-		"/C/App/Workspace/mean-project/node_modules/font-awesome/css"
+		"/C/App/Workspace/mean-project/node_modules",
+		"/C/App/Workspace/mean-project/node_modules/winston",
+		"/C/App/Workspace/mean-project/node_modules/winston/lib",
+		"/C/App/Workspace/mean-project/node_modules/winston/lib/winston",
+		"/C/App/Workspace/mean-project/node_modules/winston/lib/winston/config",
+		"/C/App/Workspace/mean-project/node_modules/winston/lib/winston/transports",
+		"/C/App/Workspace/mean-project/node_modules/wordwrap"
 	],
 	"file_history":
 	[
@@ -673,6 +733,9 @@
 		"height": 90.0,
 		"where_history":
 		[
+			"C:\\App\\Workspace\\mean-project\\node_modules\\winston",
+			"C:\\App\\Workspace\\mean-project\\node_modules\\winston\\lib\\winston",
+			"C:\\App\\Workspace\\mean-project\\node_modules\\winston",
 			"C:\\App\\Workspace\\mean-project",
 			"C:\\App\\Workspace\\mean-project\\config",
 			"C:\\App\\Workspace\\mean-project\\app",
@@ -709,6 +772,17 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"config",
+			"exports",
+			"config",
+			"colorize(",
+			"colorize",
+			"configure",
+			"config",
+			"this.confi",
+			"config",
+			"color",
+			"formatter",
 			"Logger",
 			"CountersModel",
 			"DaoManager",
@@ -825,18 +899,7 @@
 			"Validator",
 			"Path",
 			"Logger",
-			"Config",
-			"UserDao",
-			"Jwt",
-			"Path",
-			"exception",
-			"Logger",
-			"Config",
-			"Exception",
-			"UserDao",
-			"Jwt",
-			"Path",
-			"Logger"
+			"Config"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -882,14 +945,574 @@
 		"reverse": false,
 		"show_context": true,
 		"use_buffer2": true,
-		"whole_word": false,
+		"whole_word": true,
 		"wrap": true
 	},
 	"groups":
 	[
 		{
+			"selected": 1,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "app/server/core/system.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3852,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2036,
+								2036
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 546.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 938,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								773,
+								773
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"__vi_external_disable": true,
+							"bh_regions":
+							[
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"default_dir": "C:\\App\\Workspace\\mean-project",
+							"draw_white_space": "none",
+							"git_repo": "C:\\App\\Workspace\\mean-project",
+							"git_status": true,
+							"git_view": "status",
+							"syntax": "Packages/SublimeGit/syntax/SublimeGit Status.tmLanguage",
+							"translate_tabs_to_spaces": false,
+							"word_wrap": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "node_modules/winston/lib/winston/config.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1599,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								312,
+								321
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 84.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "node_modules/winston/lib/winston/common.js",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 13173,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": -0.0,
+						"translation.y": 1638.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 637,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										296,
+										305
+									],
+									[
+										537,
+										546
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"default_dir": "C:\\App\\Workspace\\mean-project",
+							"detect_indentation": false,
+							"line_numbers": false,
+							"output_tag": 1,
+							"result_base_dir": "",
+							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "node_modules/winston/lib/winston/logger.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 19718,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								201,
+								207
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content"
+							],
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 4.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				}
 			]
 		}
 	],

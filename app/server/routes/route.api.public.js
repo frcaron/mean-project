@@ -16,14 +16,15 @@ var auth = function (req, res, next) {
 	logger.debug({ method : 'auth', point : logger.pt.start, params : { token : token } });
 
 	if (req.isAuthenticated()) {
+		logger.debug({ method : 'auth', point : logger.pt.end });
 		next();
 	} else if (token) {
 		jwt.verify(token, config.session.secret, function (err, decoded) {
+
 			logger.debug({ method : 'auth', point : logger.pt.in, params : { token : decoded } });
 
 			if (err) {
-				next(new Exception.RouteEx('Session Expired'));
-
+				 next(new Exception.RouteEx('Session Expired'));
 			} else {
 				userDao.getOne('byId', { user_id : decoded.id })
 					.then(function (user) {
@@ -34,6 +35,8 @@ var auth = function (req, res, next) {
 							verified : user.verified,
 							admin    : user.admin
 						};
+
+						logger.debug({ method : 'auth', point : logger.pt.end });
 						next();
 					});
 			}
@@ -42,7 +45,6 @@ var auth = function (req, res, next) {
 		next(new Exception.RouteEx('No session'));
 	}
 
-	logger.debug({ method : 'auth', point : logger.pt.end });
 };
 
 module.exports = function (router, passport) {

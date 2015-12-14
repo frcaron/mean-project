@@ -19,8 +19,8 @@ let logging = {
 	},
 	colors : {
 		// Tier
-		'model'   : 'yellow',
-		'dao'     : 'blue',
+		'model'   : 'blue',
+		'dao'     : 'yellow',
 		'service' : 'green',
 		'route'   : 'red',
 		'session' : 'magenta',
@@ -34,12 +34,12 @@ let logging = {
 		'bg-white'   : 'bgWhite',
 
 		// Point
-		'err'   : 'reset',
-		'valid' : 'reset',
-		'catch' : 'reset',
-		'start' : 'reset',
-		'end'   : 'dim',
-		'in'    : 'reset',
+		'p-error' : 'dim',
+		'p-valid' : 'dim',
+		'p-catch' : 'dim',
+		'p-start' : 'dim',
+		'p-end'   : 'dim',
+		'p-in'    : 'dim',
 
 		// Other
 		'param' : 'cyan',
@@ -87,7 +87,7 @@ let formatter = function(options, timestamp) {
 		output += '[' + colorize(options.timestamp(), ['time']) + ']\t';
 	}
 
-	if(options.meta && Object.keys(options.meta).length) {
+	if(options.meta && _.keys(options.meta).length) {
 		if(options.meta.start || options.meta.end) {
 
 			// Start mode
@@ -125,7 +125,7 @@ let formatter = function(options, timestamp) {
 								first = false;
 							});
 						} else {
-							output += (n.length > 10) ? _.trunc(n, 30) : n;
+							output += (n && n.length > 10) ? _.trunc(n, 30) : n;
 						}
 					}
 				});
@@ -178,12 +178,12 @@ let formatter = function(options, timestamp) {
 					} else if(_.isObject(n)) {
 						output += JSON.stringify(n);
 					} else {
-						output += (n.length > 10) ? _.trunc(n, 30) : n;
+						output += (n && n.length > 10) ? _.trunc(n, 30) : n;
 					}
 				});
 			}
 
-			output = colorize(output, options.meta.point);
+			output = colorize(output, 'p-' + options.meta.point);
 		}
 	}
 	return output;

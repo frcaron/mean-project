@@ -25,13 +25,14 @@ module.exports = {
 			})
 			.then(function (program) {
 				req.result = program;
+
+				logger.debug({ method : 'create', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'create', point : logger.pt.catch });
 				next(err);
 			});
-
-		logger.debug({ method : 'create', point : logger.pt.end });
 	},
 
 	// Update one program
@@ -85,13 +86,14 @@ module.exports = {
 		promise
 			.then(function (program) {
 				req.result = program;
+
+				logger.debug({ method : 'update', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'update', point : logger.pt.catch });
 				next(err);
 			});
-
-		logger.debug({ method : 'update', point : logger.pt.end });
 	},
 
 	// Remove one program
@@ -138,13 +140,13 @@ module.exports = {
 				});
 			})
 			.then(function () {
+				logger.debug({ method : 'remove', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'remove', point : logger.pt.catch });
 				next(err);
 			});
-
-		logger.debug({ method : 'remove', point : logger.pt.end });
 	},
 
 	// Get programs by plan
@@ -180,13 +182,14 @@ module.exports = {
 			})
 			.then(function (programs) {
 				req.result = programs;
+
+				logger.debug({ method : 'allByPlanTypeU', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'allByPlanTypeU', point : logger.pt.catch });
 				next(err);
 			});
-
-		logger.debug({ method : 'allByPlanTypeU', point : logger.pt.end });
 	},
 
 	// Get one program by id
@@ -200,12 +203,13 @@ module.exports = {
 			})
 			.then(function (program) {
 				req.result = program;
+
+				logger.debug({ method : 'getByIdU', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'getByIdU', point : logger.pt.catch });
 				next(err);
 			});
-
-		logger.debug({ method : 'getByIdU', point : logger.pt.end });
 	}
 };

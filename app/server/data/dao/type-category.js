@@ -109,8 +109,9 @@ function getAll () {
 	logger.debug({ method : 'getAll', point : logger.pt.start });
 
 	let promise = typeCategoryModel.findAsync()
-		.then(function () {
+		.then(function (typecategories) {
 			logger.debug({ method : 'getAll', point : logger.pt.end });
+			return BPromise.resolve(typecategories);
 		})
 		.catch(function (err) {
 			logger.debug(err.message, { method : 'getAll', point : logger.pt.catch });

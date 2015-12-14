@@ -27,13 +27,14 @@ module.exports = {
             })
 			.then(function (user) {
 				req.result = user;
+
+				logger.debug({ method : 'update', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'update', point : logger.pt.catch });
 				next(err);
 			});
-
-		logger.debug({ method : 'update', point : logger.pt.end });
 	},
 
 	// Remove one user
@@ -62,13 +63,14 @@ module.exports = {
 				if(msg.length) {
 					throw new Error(msg);
 				}
+
+				logger.debug({ method : 'remove', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'remove', point : logger.pt.catch });
 				next(err);
 			});
-
-		logger.debug({ method : 'remove', point : logger.pt.end });
 	},
 
 	// Get all users
@@ -79,13 +81,14 @@ module.exports = {
 		userDao.getAll()
 			.then(function(users) {
 				req.result = users;
+
+				logger.debug({ method : 'all', point : logger.pt.end });
 				next();
 			})
 			.catch(function(err) {
+				logger.debug(err.message, { method : 'all', point : logger.pt.catch });
 				next(err);
 			});
-
-		logger.debug({ method : 'all', point : logger.pt.end });
 	},
 
 	// Get one user by id
@@ -96,13 +99,14 @@ module.exports = {
 		userDao.getOne('byId', { user_id : user_id })
 			.then(function (user) {
 				req.result = user;
+
+				logger.debug({ method : 'getById', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'getById', point : logger.pt.catch });
 				next(err);
 			});
-
-		logger.debug({ method : 'getById', point : logger.pt.end });
 	},
 
 	// Set permission
@@ -115,12 +119,12 @@ module.exports = {
                 admin   : req.body.admin
             })
 			.then(function() {
+				logger.debug({ method : 'managePermission', point : logger.pt.end });
 				next();
 			})
 			.catch(function(err) {
+				logger.debug(err.message, { method : 'managePermission', point : logger.pt.catch });
 				next(err);
 			});
-
-		logger.debug({ method : 'managePermission', point : logger.pt.end });
 	}
 };

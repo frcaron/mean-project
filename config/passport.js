@@ -8,17 +8,15 @@ var logger  = require(path.join(global.__core, 'logger'))('session', __filename)
 module.exports = function(passport) {
 
 	// =========================================================================
-	// passport session setup ==================================================
+	// Passport session setup ==================================================
 	// =========================================================================
 
 	// used to serialize the user for the session
 	passport.serializeUser(function(user, done) {
 
-		logger.debug({ method : 'serializeUser', point : logger.pt.start, params : { 'user.id' : user.id } });
+		logger.debug({ method : 'serializeUser', point : logger.pt.valid, params : { 'user.id' : user.id } });
 
 		done(null, user.id);
-
-		logger.debug({ method : 'serializeUser', point : logger.pt.end });
 	});
 
 	// used to deserialize the user
@@ -37,14 +35,11 @@ module.exports = function(passport) {
 					verified : user.verified,
 					admin    : user.admin
 				});
-
-				return null;
 			})
 			.catch(function (err) {
 				logger.debug(err.message, { method : 'deserializeUser', point : logger.pt.catch });
 
 				done(err);
-				return null;
 			});
 	});
 

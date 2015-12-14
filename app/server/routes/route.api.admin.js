@@ -21,6 +21,7 @@ var auth = function (req, res, next) {
 		if (!req.user.admin) {
 			next(new Exception.RouteEx('Permission refused'));
 		} else {
+			logger.debug({ method : 'auth', point : logger.pt.end });
 			next();
 		}
 	} else if (token) {
@@ -44,6 +45,8 @@ var auth = function (req, res, next) {
 								verified : user.verified,
 								admin    : user.admin
 							};
+
+							logger.debug({ method : 'auth', point : logger.pt.end });
 							next();
 						}
 					});
@@ -52,8 +55,6 @@ var auth = function (req, res, next) {
 	} else {
 		next(new Exception.RouteEx('No session'));
 	}
-
-	logger.debug({ method : 'auth', point : logger.pt.end });
 };
 
 module.exports = function (router) {
