@@ -2,6 +2,6 @@
 
 module.exports = ['$scope',
 	function($scope) {
-		$scope.message = 'core content';
+		$scope.message='header content';
 	}
 ];

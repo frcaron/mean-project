@@ -11,42 +11,41 @@
 
 	module.exports = function(app, config) {
 
+		config = config || {};
+
 		// =========================================================================
 		// Morgan ==================================================================
 		// =========================================================================
 
-		if (config !== false) {
-			config = config || {};
+		let configMorgan = config.morgan || {};
+		if(configMorgan.enabled) {
+			let format, options, stream;
+			format  = configMorgan.format || 'dev';
+			options = configMorgan.options || {};
+			stream  = configMorgan.stream || {};
 
-			if(config.enabled) {
-				let format, options, stream;
-				format  = config.format || 'dev';
-				options = config.options || {};
-				stream  = config.stream || {};
+			if(stream.enabled) {
 
-				if(stream.enabled) {
+				let dirname = path.dirname(stream.filename);
+				let logDirectory = global.__root;
+				dirname.split('/').map(function(dir) {
+					logDirectory = path.join(logDirectory, dir);
 
-					let dirname = path.dirname(stream.filename);
-					let logDirectory = global.__root;
-					dirname.split('/').map(function(dir) {
-						logDirectory = path.join(logDirectory, dir);
+					// ensure log directory exists
+					fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
+				});
 
-						// ensure log directory exists
-						fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
-					});
+				// create a rotating write stream
+				var accessLogStream = fsRotator.getStream({
+					filename    : path.join(logDirectory, path.basename(stream.filename)),
+					frequency   : stream.frequency,
+					verbose     : false,
+					date_format : stream.date_format
+				});
 
-					// create a rotating write stream
-					var accessLogStream = fsRotator.getStream({
-						filename    : path.join(logDirectory, path.basename(stream.filename)),
-						frequency   : stream.frequency,
-						verbose     : false,
-						date_format : stream.date_format
-					});
-
-					options = _.extend(options, { 'stream' : accessLogStream });
-				}
-				app.use(morgan(format, options));
+				options = _.extend(options, { 'stream' : accessLogStream });
 			}
+			app.use(morgan(format, options));
 		}
 
 		// =========================================================================

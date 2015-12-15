@@ -6,6 +6,7 @@ module.exports = {
 			libs  : [ 'node_modules/angular/angular-csp.css',
 				'node_modules/animate.css/animate.css',
 				'node_modules/bootstrap/dist/css/bootstrap.css',
+				'node_modules/bootstrap/dist/css/bootstrap.css.map',
 				'node_modules/font-awesome/css/font-awesome.css' ]
 		},
 		js : {

@@ -193,7 +193,7 @@ let formatter = function(options, timestamp) {
 let defaultLogger = new winston.Logger();
 
 // Activate log console
-let consoleConf = config.logging.winston.console;
+let consoleConf = config.logging.winston.console || {};
 if(consoleConf.enabled) {
 	defaultLogger.add(winston.transports.Console, ({
 		name        : 'console',
@@ -210,7 +210,7 @@ if(consoleConf.enabled) {
 }
 
 // Activate log file
-let fileConf = config.logging.winston.file;
+let fileConf = config.logging.winston.file || {};
 if(fileConf.enabled) {
 
 	let dirname = path.dirname(fileConf.filename);

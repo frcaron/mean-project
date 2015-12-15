@@ -29,8 +29,8 @@ module.exports = function (app, passport) {
 	}));
 
 	// Expose ressource
-	app.use('/dist', express.static(path.join(global.__client, 'dist')));
-	app.use('/static', express.static(path.join(global.__client, 'assets', 'static')));
+	app.use('/dist', express.static(path.resolve('./', assets.dist.root)));
+	app.use('/static', express.static(path.join(global.__client, 'assets/static')));
 
 	// Environment dependent middleware
 	if (process.env.NODE_ENV === 'development') {
@@ -63,7 +63,7 @@ module.exports = function (app, passport) {
 	app.use(flash());
 
 	// Add logging middleware
-	require(path.join(global.__config, 'middleware/logging'))(app, config.logging.morgan);
+	require(path.join(global.__config, 'middleware/logging'))(app, config.logging);
 
 	// =========================================================================
 	// Engine ==================================================================
