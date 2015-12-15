@@ -2,7 +2,12 @@ module.exports = {
 	client : {
 		root : 'app/client',
 		css : {
-			files : [ 'app/client/**/assets/css/**/*.css' ]
+			files : [ 'app/client/**/assets/css/**/*.css' ],
+			libs  : [ 'node_modules/angular/angular-csp.css',
+				'node_modules/animate.css/animate.css',
+				'node_modules/bootstrap/dist/css/bootstrap.css',
+				'node_modules/bootstrap/dist/css/bootstrap.css.map',
+				'node_modules/font-awesome/css/font-awesome.css' ]
 		},
 		js : {
 			files : [ 'app/client/client.js',
@@ -28,26 +33,12 @@ module.exports = {
 		}
 	},
 	dist : {
-		dir    : 'app/client/dist',
-		src    : 'app/client/client.js' ,
+		root   : 'app/client/dist',
+		src    : 'app/client/client.js',
 		output : {
-			all : {
-				css : [  ]
-			},
-			development  : {
-				js      : 'app.js',
-				css     : 'app.css'
-			},
-			production : {
-				js       : 'app.min.js',
-				css      : 'app.min.css',
-				template : 'template.min.js'
-			},
-			test       : {
-				js       : 'app.min.js',
-				css      : 'app.min.css',
-				template : 'template.min.js'
-			}
+			js       : 'app',
+			css      : 'app',
+			template : 'template'
 		}
 	}
 };

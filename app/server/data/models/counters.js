@@ -1,13 +1,13 @@
 "use strict";
 
 // Inject application
-var Path     = require('path');
+var path     = require('path');
 var BPromise = require('bluebird');
-var Mongoose = BPromise.promisifyAll(require('mongoose'));
-var Config   = require(Path.join(global.__core, 'system')).Config;
+var mongoose = BPromise.promisifyAll(require('mongoose'));
+var config   = require(path.join(global.__core, 'system')).Config;
 
-var Schema   = Mongoose.Schema;
-var Types    = Mongoose.Types;
+var Schema   = mongoose.Schema;
+var Types    = mongoose.Types;
 
 // Schema
 var CountersSchema = new Schema({
@@ -23,14 +23,14 @@ var CountersSchema = new Schema({
 });
 
 // Model
-var CountersModel = Mongoose.model('Counters', CountersSchema);
+var CountersModel = mongoose.model('Counters', CountersSchema);
 
 module.exports = {
 
 	// Get next id table
 	getNextSequence : function (name) {
 		var promise;
-		if(Config.db.seq) {
+		if(config.db.seq) {
 			promise = CountersModel.findByIdAndUpdateAsync(
 				name,
 				{ $inc : { seq : 1 } },

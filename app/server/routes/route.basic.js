@@ -1,33 +1,31 @@
 "use strict";
 
 // Inject
-var Path   = require('path');
-var Logger = require(Path.join(global.__core, 'system')).Logger;
-var Config = require(Path.join(global.__core, 'system')).Config;
+var path   = require('path');
+var logger = require(path.join(global.__core, 'logger'))('route', __filename);
+
+let auth = function (req, res, next) {
+
+	logger.debug({ method : 'auth', point : logger.pt.start });
+
+	if (req.isAuthenticated()) {
+		next();
+	} else {
+		res.render('index', {
+			message : 'Error session'
+		});
+	}
+
+	logger.debug({ method : 'auth', point : logger.pt.end });
+};
 
 module.exports = function (router) {
 
-	// =========================================================================================
-	// Public
-	// =========================================================================================
+	// ================================================================
+	//  Public ========================================================
+	// ================================================================
 
-	// =========================================================================================
-	// Middleware
-	// =========================================================================================
-
-	router.use(function (req, res, next) {
-
-		Logger.debug('[WSB - MIDDL] route.basic#secure');
-
-		if (req.isAuthenticated()) {
-			next();
-		} else {
-			res.render('index');
-		}
-	});
-
-	// =========================================================================================
-	// Private
-	// =========================================================================================
-
+	// ================================================================
+	//  Private =======================================================
+	// ================================================================
 };

@@ -1,24 +1,25 @@
 "use strict";
 
 // Inject
-var Path                = require('path');
-var ResponseService     = require(Path.join(global.__service, 'response'));
-var TypeCategoryService = require(Path.join(global.__service, 'type-category'));
-var Exception           = require(Path.join(global.__core, 'exception'));
-var Logger              = require(Path.join(global.__core, 'system')).Logger;
+var path                = require('path');
+var responseService     = require(path.join(global.__service, 'response'));
+var typeCategoryService = require(path.join(global.__service, 'type-category'));
+var Exception           = require(path.join(global.__core, 'exception'));
+var logger              = require(path.join(global.__core, 'logger'))('route', __filename);
 
 // Properties
 var api_prefix = '/typeCategories';
 
-module.exports = function (router) {
+module.exports = function (router, auth) {
 
 	router.route(api_prefix)
 
 		// Create type category
-		.post(function (req, res, next) {
+		.post(auth, function (req, res, next) {
 
-			Logger.debug('[WSA - VALID] TypeCategoryRoute#post');
-			Logger.debug('              -- req.body.name : ' + req.body.name);
+			logger.debug({ method : 'typeCategories@post', point : logger.pt.valid, params : {
+				'req.body.name' : req.body.name
+			} });
 
 			// Validation
 			if (!req.body.name) {
@@ -27,10 +28,10 @@ module.exports = function (router) {
 			next();
 
 		}, function (req, res, next) {
-			TypeCategoryService.create(req, next);
+			typeCategoryService.create(req, next);
 
 		}, function (req, res) {
-			ResponseService.success(res, {
+			responseService.success(res, {
 				result  : req.result
 			});
 		});
@@ -38,11 +39,11 @@ module.exports = function (router) {
 	router.route(api_prefix + '/:type_category_id')
 
 		// Update one type category
-		.put(function (req, res, next) {
-			TypeCategoryService.update(req, next);
+		.put(auth, function (req, res, next) {
+			typeCategoryService.update(req, next);
 
 		}, function (req, res) {
-			ResponseService.success(res, {
+			responseService.success(res, {
 				result  : req.result
 			});
 		});

@@ -5,8 +5,9 @@ module.exports = {
 	},
 	logging : {
 		morgan : {
-			format : 'combined',
-			stream :  {
+			enabled : true,
+			format  : 'combined',
+			stream  : {
 				enabled     : true,
 				filename    : 'logs/morgan/app.%DATE%',
 				frequency   : 'daily',
@@ -26,7 +27,7 @@ module.exports = {
 				enabled     : true,
 				filename    : 'logs/winston/app',
 				date_format : ".yyyy-MM-dd",
-				level       : 'debug',
+				level       : 'info',
 				timestamp   : {
 					enabled : true,
 					format  : 'HH:mm:ss'

@@ -1,15 +1,15 @@
 "use strict";
 
 // Inject
-var Path           = require('path');
+var path           = require('path');
 var BPromise       = require('bluebird');
-var BudgetService  = require(Path.join(global.__service, 'share'));
-var PlanDao        = require(Path.join(global.__dao, 'plan'));
-var ProgramDao     = require(Path.join(global.__dao, 'program'));
-var TransactionDao = require(Path.join(global.__dao, 'transaction'));
-var CategoryDao    = require(Path.join(global.__dao, 'category'));
-var Exception      = require(Path.join(global.__core, 'exception'));
-var Logger         = require(Path.join(global.__core, 'system')).Logger;
+var shareService   = require(path.join(global.__service, 'share'));
+var planDao        = require(path.join(global.__dao, 'plan'));
+var programDao     = require(path.join(global.__dao, 'program'));
+var transactionDao = require(path.join(global.__dao, 'transaction'));
+var categoryDao    = require(path.join(global.__dao, 'category'));
+var Exception      = require(path.join(global.__core, 'exception'));
+var logger         = require(path.join(global.__core, 'logger'))('service', __filename);
 
 function fulfillProgram (input, category_id) {
 
@@ -19,9 +19,9 @@ function fulfillProgram (input, category_id) {
 		user_id : input.user_id
 	};
 
-	return PlanDao.getOne('byMonthYearU', inputPlan)
+	return planDao.getOne('byMonthYearU', inputPlan)
 		.catch(Exception.NoResultEx, function () {
-			return BudgetService.createPlan(inputPlan);
+			return shareService.createPlan(inputPlan);
 		})
 		.then(function (plan) {
 			let inputProgram = {
@@ -29,9 +29,9 @@ function fulfillProgram (input, category_id) {
 				category_id : category_id,
 				user_id     : input.user_id
 			};
-			return ProgramDao.getOne('byCategoryPlanU', inputProgram)
+			return programDao.getOne('byCategoryPlanU', inputProgram)
 				.catch(Exception.NoResultEx, function () {
-					return BudgetService.createProgram(inputProgram);
+					return shareService.createProgram(inputProgram);
 				});
 			})
 		.then(function (program) {
@@ -45,8 +45,7 @@ module.exports = {
 	// Create one transaction
 	create (req, next, user_id) {
 
-		Logger.debug('[SER - START] TransactionService#create');
-		Logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'create', point : logger.pt.start, params : { user_id : user_id } });
 
 		let category_id = req.body.category_id || req.query.category_id;
 
@@ -57,24 +56,24 @@ module.exports = {
 				user_id : user_id
 			}, category_id)
 			.then(function(transaction) {
-				return TransactionDao.create(transaction);
+				return transactionDao.create(transaction);
 			})
 			.then(function (transaction) {
 				req.result = transaction;
+
+				logger.debug({ method : 'create', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'create', point : logger.pt.catch });
 				next(err);
 			});
-
-		Logger.debug('[SER -   END] TransactionService#create');
 	},
 
 	// Update one transaction
 	update (req, next, user_id) {
 
-		Logger.debug('[SER - START] TransactionService#update');
-		Logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'update', point : logger.pt.start, params : { user_id : user_id } });
 
 		let category_id = req.body.category_id || req.query.category_id;
 
@@ -86,46 +85,45 @@ module.exports = {
 				user_id        : user_id
 			}, category_id)
 			.then(function (transaction) {
-				return TransactionDao.update(transaction);
+				return transactionDao.update(transaction);
 			})
 			.then(function (transaction) {
 				req.result = transaction;
+
+				logger.debug({ method : 'update', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'update', point : logger.pt.catch });
 				next(err);
 			});
-
-		Logger.debug('[SER -   END] TransactionService#update');
 	},
 
 	// Remove one transaction
 	remove (req, next, user_id) {
 
-		Logger.debug('[SER - START] TransactionService#remove');
-		Logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'remove', point : logger.pt.start, params : { user_id : user_id } });
 
-		TransactionDao.remove('byIdU', {
+		transactionDao.remove('byIdU', {
 				transaction_id : req.params.transaction_id,
 				user_id        : user_id
 			})
 			.then(function () {
+				logger.debug({ method : 'remove', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'remove', point : logger.pt.catch });
 				next(err);
 			});
-
-		Logger.debug('[SER -   END] TransactionService#remove');
 	},
 
 	// Get transactions by type category
 	allByTypeU (req, next, user_id) {
 
-		Logger.debug('[SER - START] TransactionService#allByTypeU');
-		Logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'allByTypeU', point : logger.pt.start, params : { user_id : user_id } });
 
-		CategoryDao.getAll('byTypeU', {
+		categoryDao.getAll('byTypeU', {
 				type_category_id : req.params.type_category_id,
 				user_id          : user_id
 			})
@@ -141,7 +139,7 @@ module.exports = {
 
 				return BPromise.all(categories_id)
 					.then(function () {
-						return ProgramDao.getAll('inCategoriesByU', {
+						return programDao.getAll('inCategoriesByU', {
 							categories_id : categories_id,
 							user_id       : user_id
 						});
@@ -158,7 +156,7 @@ module.exports = {
 
 						return BPromise.all(programs_id)
 							.then(function () {
-								return TransactionDao.getAll('byProgramsU', {
+								return transactionDao.getAll('byProgramsU', {
 									programs_id : programs_id,
 									user_id     : user_id
 								});
@@ -167,58 +165,60 @@ module.exports = {
 			})
 			.then(function (transactions) {
 				req.result = transactions;
+
+				logger.debug({ method : 'allByTypeU', point : logger.pt.end });
 				next();
 			})
 			.catch(Exception.NoResultEx, function () {
 				req.result = [];
+				logger.debug({ method : 'allByTypeU', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'allByTypeU', point : logger.pt.catch });
 				next(err);
 			});
-
-		Logger.debug('[SER -   END] TransactionService#allByTypeU');
 	},
 
 	// Get transactions by program
 	allByProgramU (req, next, user_id) {
 
-		Logger.debug('[SER - START] TransactionService#allByProgramU');
-		Logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'allByProgramU', point : logger.pt.start, params : { user_id : user_id } });
 
-		TransactionDao.getAll('byProgramsU', {
+		transactionDao.getAll('byProgramsU', {
 				programs_id : [ req.params.program_id ],
 				user_id     : user_id
 			})
 			.then(function (transactions) {
 				req.result = transactions;
+
+				logger.debug({ method : 'allByProgramU', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'allByProgramU', point : logger.pt.catch });
 				next(err);
 			});
-
-		Logger.debug('[SER -   END] TransactionService#allByProgramU');
 	},
 
 	// Get one transaction by id
 	getByIdU (req, next, user_id) {
 
-		Logger.debug('[SER - START] TransactionService#getByIdU');
-		Logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'getByIdU', point : logger.pt.start, params : { user_id : user_id } });
 
-		TransactionDao.getOne('byIdU', {
+		transactionDao.getOne('byIdU', {
 				transaction_id : req.params.transaction_id,
 				user_id        : user_id
 			})
 			.then(function (transaction) {
 				req.result = transaction;
+
+				logger.debug({ method : 'getByIdU', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'getByIdU', point : logger.pt.catch });
 				next(err);
 			});
-
-		Logger.debug('[SER -   END] TransactionService#getByIdU');
 	}
 };

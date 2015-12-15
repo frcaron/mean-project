@@ -1,30 +1,47 @@
 "use strict";
 
-// Inject
+// Inject ordered
+require('jquery');
 var angular = require('angular');
-require('angular-route');
+require('angular-ui-router');
 
-var app = angular.module('app', [ 'ngRoute' ]);
+// Init the application configuration module for AngularJS application
+var AppConfig = (function () {
 
-require('./components');
+	// Init module configuration options
+	var appModuleName = 'app';
+	var appModuleDep  =  [ 'ui.router' ];
 
-// =========================================================================
-// Config client ===========================================================
-// =========================================================================
+	// Add a new vertical module
+	var registerModule = function (moduleName, dependencies) {
+		// Create angular module
+		angular.module(moduleName, dependencies || []);
 
-app.config(function($routeProvider, $locationProvider) {
-	$routeProvider
+		// Add the module to the AngularJS configuration file
+		angular.module(appModuleName).requires.push(moduleName);
+	};
 
-		// route for the home page
-		.when('/', {
-			templateUrl : 'components/home/views/index.html',
-			controller  : 'HomeCtrl'
-		})
+	return {
+		appModuleName  : appModuleName,
+		appModuleDep   : appModuleDep,
+		registerModule : registerModule
+	};
+})();
 
-		.otherwise({
-			redirectTo : '/'
-		});
+//Start by defining the main module and adding the module dependencies
+angular.module('app', ['ui.router']);
 
-		// use the HTML5 History API
-        $locationProvider.html5Mode(true);
-});
+angular.module('app').config(['$locationProvider',
+	function ($locationProvider) {
+		$locationProvider.html5Mode(true);
+	}
+]);
+
+angular.module('app').run([
+	function() {
+		// TODO load static data
+	}
+]);
+
+// Module app
+require('./components')(AppConfig);

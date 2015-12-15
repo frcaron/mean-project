@@ -1,24 +1,24 @@
 "use strict";
 
 //Inject
-var Path            = require('path');
-var Validator       = require('validator');
-var ResponseService = require(Path.join(global.__service, 'response'));
-var UserService     = require(Path.join(global.__service, 'user'));
-var Exception       = require(Path.join(global.__core, 'exception'));
+var path            = require('path');
+var validator       = require('validator');
+var responseService = require(path.join(global.__service, 'response'));
+var userService     = require(path.join(global.__service, 'user'));
+var Exception       = require(path.join(global.__core, 'exception'));
 
 // Properties
 var api_prefix = '/users';
 
-module.exports = function (router) {
+module.exports = function (router, auth) {
 
 	router.route(api_prefix)
 
 		// Update one user
-		.put(function (req, res, next) {
+		.put(auth, function (req, res, next) {
 
 			if(req.body.email) {
-				if(!Validator.isEmail(req.body.email)) {
+				if(!validator.isEmail(req.body.email)) {
 					return next(new Exception.MetierEx('Format email invalid'));
 				}
 			}
@@ -26,20 +26,20 @@ module.exports = function (router) {
 
 		}, function (req, res, next) {
 
-			UserService.update(req, next, req.user.id);
+			userService.update(req, next, req.user.id);
 
 		}, function (req, res) {
-			ResponseService.success(res, {
+			responseService.success(res, {
 				result  : req.result
 			});
 		})
 
 		// Delete one user
-		.delete(function (req, res, next) {
-			UserService.remove(req, next, req.user.id);
+		.delete(auth, function (req, res, next) {
+			userService.remove(req, next, req.user.id);
 			req.logout();
 
 		}, function (req, res) {
-			ResponseService.success(res);
+			responseService.success(res);
 		});
 };

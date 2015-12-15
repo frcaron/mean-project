@@ -1,82 +1,86 @@
 "use strict";
 
 // Inject
-var Path            = require('path');
-var TypeCategoryDao = require(Path.join(global.__dao, 'type-category'));
-var Logger          = require(Path.join(global.__core, 'system')).Logger;
+var path            = require('path');
+var typeCategoryDao = require(path.join(global.__dao, 'type-category'));
+var logger          = require(path.join(global.__core, 'logger'))('service', __filename);
 
 module.exports = {
 
 	// Create one type category
 	create (req, next) {
 
-		Logger.debug('[SER - START] TypeCategoryService#create');
+		logger.debug({ method : 'create', point : logger.pt.start });
 
-		TypeCategoryDao.create({
+		typeCategoryDao.create({
 				name : req.body.name
 			})
 			.then(function (typeCategory){
 				req.result = typeCategory;
+
+				logger.debug({ method : 'create', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err){
+				logger.debug(err.message, { method : 'create', point : logger.pt.catch });
 				next(err);
 			});
-
-		Logger.debug('[SER -   END] TypeCategoryService#create');
 	},
 
 	// Update one type category
 	update (req, next) {
 
-		Logger.debug('[SER - START] TypeCategoryService#update');
+		logger.debug({ method : 'update', point : logger.pt.start });
 
-		TypeCategoryDao.update({
+		typeCategoryDao.update({
 				type_category_id : req.params.type_category_id,
 				name             : req.body.name
 			})
 			.then(function (typeCategory) {
 				req.result = typeCategory;
+
+				logger.debug({ method : 'update', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'update', point : logger.pt.catch });
 				next(err);
 			});
-
-		Logger.debug('[SER -   END] TypeCategoryService#update');
 	},
 
 	// Get all type category
 	all (req, next) {
 
-		Logger.debug('[SER - START] TypeCategoryService#all');
+		logger.debug({ method : 'all', point : logger.pt.start });
 
-		TypeCategoryDao.getAll()
+		typeCategoryDao.getAll()
 			.then(function (typeCategories) {
 				req.result = typeCategories;
+
+				logger.debug({ method : 'all', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'all', point : logger.pt.catch });
 				next(err);
 			});
-
-		Logger.debug('[SER -   END] TypeCategoryService#all');
 	},
 
 	// Get one type category by id
 	getById (req, next) {
 
-		Logger.debug('[SER - START] TypeCategoryService#getById');
+		logger.debug({ method : 'getById', point : logger.pt.start });
 
-		TypeCategoryDao.getOne('byId', { type_category_id : req.params.type_category_id })
+		typeCategoryDao.getOne('byId', { type_category_id : req.params.type_category_id })
 			.then(function (typeCategory) {
 				req.result = typeCategory;
+
+				logger.debug({ method : 'getById', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'getById', point : logger.pt.catch });
 				next(err);
 			});
-
-		Logger.debug('[SER -   END] TypeCategoryService#getById');
 	}
 };

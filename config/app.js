@@ -1,31 +1,31 @@
 "use strict";
 
 // Inject
-var Express  = require('express');
-var Passport = require('passport');
-var Path     = require('path');
-var Mongoose = require('mongoose');
+var express  = require('express');
+var passport = require('passport');
+var path     = require('path');
+var mongoose = require('mongoose');
 
 // =========================================================================
 // DataBase ================================================================
 // =========================================================================
 
-let Config = require(Path.join(global.__core, 'system')).Config;
-Mongoose.connect(Config.db.url);
+let Config = require(path.join(global.__core, 'system')).Config;
+mongoose.connect(Config.db.url);
 
 // =========================================================================
 // Server ==================================================================
 // =========================================================================
 
-let app = Express();
+let app = express();
 
-// Express
-require(Path.join(global.__config, 'express'))(app, Passport);
+// express
+require(path.join(global.__config, 'express'))(app, passport);
 
 // Passport
-require(Path.join(global.__config, 'passport'))(Passport);
+require(path.join(global.__config, 'passport'))(passport);
 
 // Route
-require(Path.join(global.__route, 'routes'))(app, Passport);
+require(path.join(global.__route, 'routes'))(app, passport);
 
 module.exports = app;

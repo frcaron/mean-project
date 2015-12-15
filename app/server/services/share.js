@@ -1,23 +1,22 @@
 "use strict";
 
 // Inject
-var Path            = require('path');
+var path            = require('path');
 var BPromise        = require('bluebird');
-var UserDao         = require(Path.join(global.__dao, 'user'));
-var PlanDao         = require(Path.join(global.__dao, 'plan'));
-var ProgramDao      = require(Path.join(global.__dao, 'program'));
-var CategoryDao     = require(Path.join(global.__dao, 'category'));
-var TypeCategoryDao = require(Path.join(global.__dao, 'type-category'));
-var Logger          = require(Path.join(global.__core, 'system')).Logger;
+var userDao         = require(path.join(global.__dao, 'user'));
+var planDao         = require(path.join(global.__dao, 'plan'));
+var programDao      = require(path.join(global.__dao, 'program'));
+var categoryDao     = require(path.join(global.__dao, 'category'));
+var typeCategoryDao = require(path.join(global.__dao, 'type-category'));
+var logger          = require(path.join(global.__core, 'logger'))('service', __filename);
 
 module.exports = {
 
 	createUser (input) {
 
-		Logger.debug('[SER - START] BudgetService#createUser');
-		Logger.debug('              -- input   : ' + JSON.stringify(input));
+		logger.debug({ method : 'createUser', point : logger.pt.start, params : { input : input } });
 
-		var promise = UserDao.create({
+		var promise = userDao.create({
 				firstname      : input.firstname,
 				surname        : input.surname,
 				displayname    : input.displayname,
@@ -30,10 +29,10 @@ module.exports = {
 				facebook_email : input.facebook_email
 			})
 			.then(function (user) {
-				return TypeCategoryDao.getAll()
+				return typeCategoryDao.getAll()
 					.then(function (typeCategories) {
 						return BPromise.map(typeCategories, function (typeCategory) {
-							return CategoryDao.create({
+							return categoryDao.create({
 								name             : 'Autres',
 								type_category_id : typeCategory._id,
 								neutre           : true,
@@ -42,36 +41,35 @@ module.exports = {
 						});
 					})
 					.then(function() {
+						logger.debug({ method : 'createUser', point : logger.pt.end });
 						return BPromise.resolve(user);
 					})
 					.catch(function (err) {
-						Logger.debug('[SER - CATCH] BudgetService#createUser');
-						Logger.error('              -- message : ' + err.message);
-
-						UserDao.remove({ user_id : user._id });
+						userDao.remove({ user_id : user._id });
 						throw err;
 					});
+			})
+			.catch(function (err) {
+				logger.debug(err.message, { method : 'createUser', point : logger.pt.catch });
+				throw err;
 			});
-
-		Logger.debug('[SER -   END] BudgetService#createUser');
 
 		return promise;
 	},
 
 	createPlan (input) {
 
-		Logger.debug('[SER - START] BudgetService#createPlan');
-		Logger.debug('              -- input   : ' + JSON.stringify(input));
+		logger.debug({ method : 'createPlan', point : logger.pt.start, params : { input : input } });
 
-		let promise = PlanDao.create(input)
+		let promise = planDao.create(input)
 			.then(function (plan) {
-				return CategoryDao.getAll('byNeutreU', {
+				return categoryDao.getAll('byNeutreU', {
 						neutre  : true,
 						user_id : input.user_id
 					})
 					.then(function (categories) {
 						return BPromise.map(categories, function (category) {
-							return ProgramDao.create({
+							return programDao.create({
 								category_id : category._id,
 								plan_id     : plan._id,
 								user_id     : input.user_id
@@ -79,45 +77,46 @@ module.exports = {
 						});
 					})
 					.then(function () {
+						logger.debug({ method : 'createPlan', point : logger.pt.end });
 						return BPromise.resolve(plan);
 					})
 					.catch(function (err) {
-						Logger.debug('[SER - CATCH] BudgetService#createPlan');
-						Logger.error('              -- message : ' + err.message);
-
-						PlanDao.remove('byIdU', {
+						planDao.remove('byIdU', {
 							plan_id : plan._id,
 							user_id : input.user_id
 						});
 						throw err;
 					});
+			})
+			.catch(function (err) {
+				logger.debug(err.message, { method : 'createPlan', point : logger.pt.catch });
+				throw err;
 			});
-
-		Logger.debug('[SER -   END] BudgetService#createPlan');
 
 		return promise;
 	},
 
 	createProgram (input) {
 
-		Logger.debug('[SER - START] BudgetService#createProgram');
-		Logger.debug('              -- input   : ' + JSON.stringify(input));
+		logger.debug({ method : 'createProgram', point : logger.pt.start, params : { input : input } });
 
-		let promise = CategoryDao.getOne('byIdU', {
+		let promise = categoryDao.getOne('byIdU', {
 				category_id : input.category_id,
 				user_id     : input.user_id
 			})
 			.then(function () {
-				return PlanDao.getOne('byIdU', {
-							plan_id : input.plan_id,
-							user_id : input.user_id
-						});
+				return planDao.getOne('byIdU', {
+					plan_id : input.plan_id,
+					user_id : input.user_id
+				});
 			})
 			.then(function () {
-				return ProgramDao.create(input);
+				return programDao.create(input);
+			})
+			.then(function (program) {
+				logger.debug({ method : 'createProgram', point : logger.pt.end });
+				return BPromise.resolve(program);
 			});
-
-		Logger.debug('[SER -   END] BudgetService#createProgram');
 
 		return promise;
 	}

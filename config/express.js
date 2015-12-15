@@ -1,18 +1,18 @@
 "use strict";
 
 // Inject
-var Path         = require('path');
-var BodyParser   = require('body-parser');
+var path         = require('path');
+var bodyParser   = require('body-parser');
 var compression  = require('compression');
-var CookieParser = require('cookie-parser');
-var Consolidate  = require('consolidate');
-var Express      = require('express');
-var Favicon      = require('serve-favicon');
-var Flash        = require('connect-flash');
-var Session      = require('express-session');
-var Glob         = require('glob');
-var Assets       = require(Path.join(global.__config, 'assets'));
-var Config       = require(Path.join(global.__core, 'system')).Config;
+var cookieParser = require('cookie-parser');
+var consolidate  = require('consolidate');
+var express      = require('express');
+var favicon      = require('serve-favicon');
+var flash        = require('connect-flash');
+var session      = require('express-session');
+var glob         = require('glob');
+var assets       = require(path.join(global.__config, 'assets'));
+var config       = require(path.join(global.__core, 'system')).Config;
 
 module.exports = function (app, passport) {
 
@@ -29,8 +29,8 @@ module.exports = function (app, passport) {
 	}));
 
 	// Expose ressource
-	app.use('/dist', Express.static(Path.join(global.__client, 'dist')));
-	app.use('/static', Express.static(Path.join(global.__client, 'assets', 'static')));
+	app.use('/dist', express.static(path.resolve('./', assets.dist.root)));
+	app.use('/static', express.static(path.join(global.__client, 'assets/static')));
 
 	// Environment dependent middleware
 	if (process.env.NODE_ENV === 'development') {
@@ -38,32 +38,32 @@ module.exports = function (app, passport) {
 		app.set('view cache', false);
 
 		// Expose views
-		Assets.client.views.folders.forEach(function (pattern) {
-			let folders = Glob.sync(pattern);
+		assets.client.views.folders.forEach(function (pattern) {
+			let folders = glob.sync(pattern);
 			folders.map(function (staticPath) {
 				if(staticPath) {
-					let dist = staticPath.replace(Assets.client.root, '');
-					app.use(dist, Express.static(Path.resolve('./' + staticPath)));
+					let dist = staticPath.replace(assets.client.root, '');
+					app.use(dist, express.static(path.resolve('./' + staticPath)));
 				}
 			});
 		});
 	}
 
 	// Setting favicon
-	app.use(Favicon(Path.join(global.__client, 'assets', 'img', 'favicon.ico')));
+	app.use(favicon(path.join(global.__client, 'assets/img/favicon.ico')));
 
 	// Active form extended
-	app.use(BodyParser.urlencoded(Config.bodyParser.urlencoded));
-	app.use(BodyParser.json(Config.bodyParser.json));
+	app.use(bodyParser.urlencoded(config.bodyParser.urlencoded));
+	app.use(bodyParser.json(config.bodyParser.json));
 
 	// Active cookie parser
-	app.use(CookieParser());
+	app.use(cookieParser());
 
 	// Active flash message
-	app.use(Flash());
+	app.use(flash());
 
 	// Add logging middleware
-	require(Path.join(global.__config, 'middleware', 'logging'))(app, Config.logging.morgan);
+	require(path.join(global.__config, 'middleware/logging'))(app, config.logging);
 
 	// =========================================================================
 	// Engine ==================================================================
@@ -71,22 +71,22 @@ module.exports = function (app, passport) {
 
 	// Setting path views public
 	app.set('views', [ global.__views ]);
-	app.engine('html', Consolidate[Config.templateEngine]);
+	app.engine('html', consolidate[config.templateEngine]);
 	app.set('view engine', 'html');
 
 	// =========================================================================
 	// Auth Strategies =========================================================
 	// =========================================================================
 
-	app.use(Session({
-		name              : Config.session.name,
-		secret            : Config.session.secret,
+	app.use(session({
+		name              : config.session.name,
+		secret            : config.session.secret,
 		resave            : true,
 		saveUninitialized : true,
 		cookie            : {
-			maxAge   : Config.session.cookie.maxAge,
-			httpOnly : Config.session.cookie.httpOnly,
-			secure   : Config.session.cookie.secure
+			maxAge   : config.session.cookie.maxAge,
+			httpOnly : config.session.cookie.httpOnly,
+			secure   : config.session.cookie.secure
 		},
 	}));
 	app.use(passport.initialize());

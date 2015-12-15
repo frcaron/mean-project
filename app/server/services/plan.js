@@ -1,50 +1,49 @@
 "use strict";
 
 // Inject
-var Path           = require('path');
+var path           = require('path');
 var BPromise       = require('bluebird');
-var BudgetService  = require(Path.join(global.__service, 'share'));
-var PlanDao        = require(Path.join(global.__dao, 'plan'));
-var ProgramDao     = require(Path.join(global.__dao, 'program'));
-var TransactionDao = require(Path.join(global.__dao, 'transaction'));
-var Exception      = require(Path.join(global.__core, 'exception'));
-var Logger         = require(Path.join(global.__core, 'system')).Logger;
+var budgetService  = require(path.join(global.__service, 'share'));
+var planDao        = require(path.join(global.__dao, 'plan'));
+var programDao     = require(path.join(global.__dao, 'program'));
+var transactionDao = require(path.join(global.__dao, 'transaction'));
+var Exception      = require(path.join(global.__core, 'exception'));
+var logger         = require(path.join(global.__core, 'logger'))('service', __filename);
 
 module.exports = {
 
 	// Create one plan
 	create (req, next, user_id) {
 
-		Logger.debug('[SER - START] PlanService#create');
-		Logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'create', point : logger.pt.start, params : { user_id : user_id } });
 
-		BudgetService.createPlan({
+		budgetService.createPlan({
 				month   : req.body.month,
 				year    : req.body.year,
 				user_id : user_id
 			})
 			.then(function (plan) {
 				req.result = plan;
+
+				logger.debug({ method : 'create', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'create', point : logger.pt.catch });
 				next(err);
 			});
-
-		Logger.debug('[SER -   END] PlanService#create');
 	},
 
 	// Delete plan user
 	remove (req, next, user_id) {
 
-		Logger.debug('[SER - START] PlanService#remove');
-		Logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'remove', point : logger.pt.start, params : { user_id : user_id } });
 
 		let msg = [];
 		BPromise.map([[
-				PlanDao, 'byIdU'],
-				[ProgramDao, 'byPlanU'],
-				[TransactionDao, 'byPlanU']
+				planDao, 'byIdU'],
+				[programDao, 'byPlanU'],
+				[transactionDao, 'byPlanU']
 			], function(dao) {
 				return dao[0].remove(dao[1], {
 						plan_id : req.params.plan_id,
@@ -60,51 +59,52 @@ module.exports = {
 				if(msg.length) {
 					throw new Error(msg);
 				}
+
+				logger.debug({ method : 'remove', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'remove', point : logger.pt.catch });
 				next(err);
 			});
-
-		Logger.debug('[SER -   END] PlanService#remove');
 	},
 
 	// Get plans by user
 	allByU (req, next, user_id) {
 
-		Logger.debug('[SER - START] PlanService#allByU');
-		Logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'allByU', point : logger.pt.start, params : { user_id : user_id } });
 
-		PlanDao.getAll('byU', { user_id : user_id })
+		planDao.getAll('byU', { user_id : user_id })
 			.then(function (plans) {
 				req.result = plans;
+
+				logger.debug({ method : 'allByU', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'allByU', point : logger.pt.catch });
 				next(err);
 			});
-
-		Logger.debug('[SER -   END] PlanService#allByU');
 	},
 
 	// Get one plan by id
 	getById (req, next, user_id) {
 
-		Logger.debug('[SER - START] PlanService#getById');
-		Logger.debug('              -- user_id : ' + user_id);
+		logger.debug({ method : 'getByIdU', point : logger.pt.start, params : { user_id : user_id } });
 
-		PlanDao.getOne('byIdU', {
+		planDao.getOne('byIdU', {
 				plan_id : req.params.plan_id,
 				user_id : user_id
 			})
 			.then(function (plan) {
 				req.result = plan;
+
+				logger.debug({ method : 'getByIdU', point : logger.pt.end });
 				next();
 			})
 			.catch(function (err) {
+				logger.debug(err.message, { method : 'getByIdU', point : logger.pt.catch });
 				next(err);
 			});
-
-		Logger.debug('[SER -   END] PlanService#getById');
 	}
 };

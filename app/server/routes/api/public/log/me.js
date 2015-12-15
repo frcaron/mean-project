@@ -1,23 +1,23 @@
 "use strict";
 
 //Inject
-var Path            = require('path');
-var ResponseService = require(Path.join(global.__service, 'response'));
-var UserService     = require(Path.join(global.__service, 'user'));
+var path            = require('path');
+var responseService = require(path.join(global.__service, 'response'));
+var userService     = require(path.join(global.__service, 'user'));
 
 // Properties
 var api_prefix = '/me';
 
-module.exports = function (router) {
+module.exports = function (router, auth) {
 
 	router.route(api_prefix)
 
 		// Get one user
-		.get(function (req, res, next) {
-			UserService.getById(req, next, req.user.id);
+		.get(auth, function (req, res, next) {
+			userService.getById(req, next, req.user.id);
 
 		}, function (req, res) {
-			ResponseService.success(res, {
+			responseService.success(res, {
 				result  : req.result
 			});
 		});

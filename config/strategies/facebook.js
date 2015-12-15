@@ -1,13 +1,13 @@
 "use strict";
 
 // Inject
-var Path             = require('path');
-var Url              = require('url');
-var FacebookStrategy = require('passport-facebook').Strategy;
-var BudgetService    = require(Path.join(global.__service, 'share'));
-var UserDao          = require(Path.join(global.__dao, 'user'));
-var Exception        = require(Path.join(global.__core, 'exception'));
-var Config           = require(Path.join(global.__core, 'system')).Config;
+var path             = require('path');
+var url              = require('url');
+var facebookStrategy = require('passport-facebook').Strategy;
+var shareService     = require(path.join(global.__service, 'share'));
+var userDao          = require(path.join(global.__dao, 'user'));
+var Exception        = require(path.join(global.__core, 'exception'));
+var config           = require(path.join(global.__core, 'system')).Config;
 
 module.exports = function(passport) {
 
@@ -15,10 +15,10 @@ module.exports = function(passport) {
 	// Facebook ================================================================
 	// =========================================================================
 
-	passport.use(new FacebookStrategy({
-		clientID          : Config.strategies.facebook.clientID,
-		clientSecret      : Config.strategies.facebook.clientSecret,
-		callbackURL       : Url.resolve(Config.domain, Config.strategies.facebook.callbackURL),
+	passport.use(new facebookStrategy({
+		clientID          : config.strategies.facebook.clientID,
+		clientSecret      : config.strategies.facebook.clientSecret,
+		callbackURL       : url.resolve(config.domain, config.strategies.facebook.callbackURL),
 		passReqToCallback : true
 
 	}, function(req, token, refreshToken, profile, done) {
@@ -28,7 +28,7 @@ module.exports = function(passport) {
 			if (req.user) {
 
 				// Link
-				UserDao.update({
+				userDao.update({
 						user_id        : req.user.id,
 						displayname    : profile.displayName,
 						facebook_id    : profile.id,
@@ -44,11 +44,11 @@ module.exports = function(passport) {
 
 			} else {
 
-				UserDao.getOne('byFbId', { facebook_id : profile.id })
+				userDao.getOne('byFbId', { facebook_id : profile.id })
 					.then(function (user) {
 
 						// Re link
-						return UserDao.update({
+						return userDao.update({
 								user_id        : user._id,
 								displayname    : profile.displayName,
 								facebook_token : token,
@@ -61,7 +61,7 @@ module.exports = function(passport) {
 					.catch(Exception.NoResultEx, function () {
 
 						// Create
-						return BudgetService.createUser({
+						return shareService.createUser({
 								firstname      : profile.name.givenName,
 								surname        : profile.name.familyName,
 								displayname    : profile.displayName,

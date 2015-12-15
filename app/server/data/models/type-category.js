@@ -1,18 +1,18 @@
 "use strict";
 
 // Inject application
-var Path       = require('path');
+var path       = require('path');
 var BPromise   = require('bluebird');
-var Mongoose   = BPromise.promisifyAll(require('mongoose'));
-var DatePlugin = require(Path.join(global.__plugin, 'date'));
-var Config     = require(Path.join(global.__core, 'system')).Config;
+var mongoose   = BPromise.promisifyAll(require('mongoose'));
+var datePlugin = require(path.join(global.__plugin, 'date'));
+var config     = require(path.join(global.__core, 'system')).Config;
 
-var Schema     = Mongoose.Schema;
+var Schema     = mongoose.Schema;
 var Types      = Schema.Types;
 
 // Schema
 var TypeCategorySchema = new Schema({
-	_id    : Config.db.seq ? Number : Types.ObjectId,
+	_id    : config.db.seq ? Number : Types.ObjectId,
 	name   : {
 		type     : String,
 		required : true
@@ -20,7 +20,7 @@ var TypeCategorySchema = new Schema({
 });
 
 // Plugin
-TypeCategorySchema.plugin(DatePlugin);
+TypeCategorySchema.plugin(datePlugin);
 
 // Index
 TypeCategorySchema.index({
@@ -30,4 +30,4 @@ TypeCategorySchema.index({
 });
 
 // Return
-module.exports = Mongoose.model('TypeCategory', TypeCategorySchema);
+module.exports = mongoose.model('TypeCategory', TypeCategorySchema);

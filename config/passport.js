@@ -1,35 +1,33 @@
 "use strict";
 
 // Inject
-var Path    = require('path');
-var UserDao = require(Path.join(global.__dao, 'user'));
-var Logger  = require(Path.join(global.__core, 'system')).Logger;
+var path    = require('path');
+var userDao = require(path.join(global.__dao, 'user'));
+var logger  = require(path.join(global.__core, 'logger'))('session', __filename);
 
 module.exports = function(passport) {
 
 	// =========================================================================
-	// passport session setup ==================================================
+	// Passport session setup ==================================================
 	// =========================================================================
 
 	// used to serialize the user for the session
 	passport.serializeUser(function(user, done) {
 
-		Logger.debug('[PAS - START] passport#serializeUser');
-		Logger.debug('              -- user.id : ' + user.id);
+		logger.debug({ method : 'serializeUser', point : logger.pt.valid, params : { 'user.id' : user.id } });
 
 		done(null, user.id);
-
-		Logger.debug('[PAS -   END] passport#serializeUser');
 	});
 
 	// used to deserialize the user
 	passport.deserializeUser(function(id, done) {
 
-		Logger.debug('[PAS - START] passport#deserializeUser');
-		Logger.debug('              -- user.id : ' + id);
+		logger.debug({ method : 'deserializeUser', point : logger.pt.start, params : { 'user.id' : id } });
 
-		UserDao.getOne('byId', { user_id : id })
+		userDao.getOne('byId', { user_id : id })
 			.then(function(user) {
+				logger.debug({ method : 'deserializeUser', point : logger.pt.end });
+
 				done(null, {
 					id       : user._id,
 					name     : user.displayname || user.firstname + ' ' + user.surname,
@@ -39,13 +37,10 @@ module.exports = function(passport) {
 				});
 			})
 			.catch(function (err) {
-				Logger.debug('[PAS - CATCH] passport#deserializeUser');
-				Logger.error('              -- message : ' + err.message);
+				logger.debug(err.message, { method : 'deserializeUser', point : logger.pt.catch });
 
-				return done(err);
+				done(err);
 			});
-
-		Logger.debug('[PAS -   END] passport#deserializeUser');
 	});
 
 	require('./strategies/local')(passport);

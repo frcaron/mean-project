@@ -1,13 +1,13 @@
 "use strict";
 
 // Inject
-var Path             = require('path');
+var path             = require('path');
 var BPromise         = require('bluebird');
-var DaoManager       = require(Path.join(global.__dao, 'manager'))('transaction');
-var TransactionModel = require(Path.join(global.__model, 'transaction'));
-var CountersModel    = require(Path.join(global.__model, 'counters'));
-var Exception        = require(Path.join(global.__core, 'exception'));
-var Logger           = require(Path.join(global.__core, 'system')).Logger;
+var daoManager       = require(path.join(global.__dao, 'manager'))('transaction');
+var transactionModel = require(path.join(global.__model, 'transaction'));
+var countersModel    = require(path.join(global.__model, 'counters'));
+var Exception        = require(path.join(global.__core, 'exception'));
+var logger           = require(path.join(global.__core, 'logger'))('dao', __filename);
 
 /**
  * @param  {Json} input 		Data to create
@@ -17,11 +17,12 @@ var Logger           = require(Path.join(global.__core, 'system')).Logger;
  */
 function create (input) {
 
-	Logger.debug('[DAO - START] TransactionDao#create');
-	Logger.debug('              -- input : ' + JSON.stringify(input));
+	logger.debug({ method : 'create', point : logger.pt.start, params : {
+		input : input
+	} });
 
-	let transaction = new TransactionModel();
-	let promise = CountersModel.getNextSequence('transaction_id')
+	let transaction = new transactionModel();
+	let promise = countersModel.getNextSequence('transaction_id')
 		.then(function (seq){
 
 			transaction._id      = seq;
@@ -36,11 +37,12 @@ function create (input) {
 			return transaction.saveAsync();
 		})
 		.then(function () {
+			logger.debug({ method : 'create', point : logger.pt.end });
+
 			return BPromise.resolve(transaction);
 		})
 		.catch(function (err) {
-			Logger.debug('[DAO - CATCH] TransactionDao#create');
-			Logger.error('              -- message : ' + err.message);
+			logger.debug(err.message, { method : 'create', point : logger.pt.catch });
 
 			if (err.code === 11000) {
 				throw new Exception.DuplicateEx('Transaction already exist');
@@ -54,8 +56,6 @@ function create (input) {
 				throw err;
 			}
 		});
-
-	Logger.debug('[DAO -   END] TransactionDao#create');
 
 	return promise;
 }
@@ -71,17 +71,18 @@ function create (input) {
  */
 function update (input, name_query, filters) {
 
-	Logger.debug('[DAO - START] TransactionDao#update');
-	Logger.debug('              -- input   : ' + JSON.stringify(input));
-	Logger.debug('              -- name_query : ' + name_query);
-	Logger.debug('              -- filters : ' + JSON.stringify(filters));
+	logger.debug({ method : 'update', point : logger.pt.start, params : {
+		input      : input,
+		name_query : name_query,
+		filters    : filters
+	} });
 
 	let promise;
 	if(filters) {
 		try {
-			promise = DaoManager.getQuery('update', name_query, filters)
+			promise = daoManager.getQuery('update', name_query, filters)
 				.then(function (query) {
-					return TransactionModel.updateAsync(query,{
+					return transactionModel.updateAsync(query,{
 						_program : input.program_id
 					});
 				});
@@ -114,9 +115,13 @@ function update (input, name_query, filters) {
 	}
 
 	let promiseEnd = promise
+		.then(function (transaction) {
+			logger.debug({ method : 'update', point : logger.pt.end });
+
+			return BPromise.resolve(transaction);
+		})
 		.catch(function (err) {
-			Logger.debug('[DAO - CATCH] TransactionDao#update');
-			Logger.error('              -- message : ' + err.message);
+			logger.debug(err.message, { method : 'update', point : logger.pt.catch });
 
 			if (err.code === 11000) {
 				throw new Exception.DuplicateEx('Transaction already exist');
@@ -131,8 +136,6 @@ function update (input, name_query, filters) {
 			}
 		});
 
-	Logger.debug('[DAO -   END] TransactionDao#update');
-
 	return promiseEnd;
 }
 
@@ -145,31 +148,24 @@ function update (input, name_query, filters) {
  */
 function remove (name_query, filters) {
 
-	Logger.debug('[DAO - START] TransactionDao#remove');
-	Logger.debug('              -- name_query : ' + name_query);
-	Logger.debug('              -- filters : ' + JSON.stringify(filters));
+	logger.debug({ method : 'remove', point : logger.pt.start, params : {
+		name_query : name_query,
+		filters    : filters
+	} });
 
-	let promise;
-	try {
-		promise = DaoManager.getQuery('remove', name_query, filters)
+	let promise = daoManager.getQuery('remove', name_query, filters)
 			.then(function (query) {
-				return TransactionModel.removeAsync(query);
-			});
-	} catch (err) {
-		promise = BPromise.reject(err);
-	}
-
-	let promiseEnd = promise
+				return transactionModel.removeAsync(query);
+			})
+		.then(function () {
+			logger.debug({ method : 'remove', point : logger.pt.end });
+		})
 		.catch(function (err) {
-			Logger.debug('[DAO - CATCH] TransactionDao#remove');
-			Logger.error('              -- message : ' + err.message);
-
+			logger.debug(err.message, { method : 'remove', point : logger.pt.catch });
 			throw err;
 		});
 
-	Logger.debug('[DAO -   END] TransactionDao#remove');
-
-	return promiseEnd;
+	return promise;
 }
 
 /**
@@ -181,31 +177,26 @@ function remove (name_query, filters) {
  */
 function getAll (name_query, filters) {
 
-	Logger.debug('[DAO - START] TransactionDao#getAll');
-	Logger.debug('              -- name_query : ' + name_query);
-	Logger.debug('              -- filters : ' + JSON.stringify(filters));
+	logger.debug({ method : 'getAll', point : logger.pt.start, params : {
+		name_query : name_query,
+		filters    : filters
+	} });
 
-	let promise;
-	try {
-		promise = DaoManager.getQuery('getAll', name_query, filters)
+	let promise = daoManager.getQuery('getAll', name_query, filters)
 			.then(function (query) {
-				return TransactionModel.findAsync(query);
-			});
-	} catch (err) {
-		promise = BPromise.reject(err);
-	}
+				return transactionModel.findAsync(query);
+			})
+		.then(function (transactions) {
+			logger.debug({ method : 'getAll', point : logger.pt.end });
 
-	let promiseEnd = promise
+			return BPromise.resolve(transactions);
+		})
 		.catch(function (err) {
-			Logger.debug('[DAO - CATCH] TransactionDao#getAll');
-			Logger.error('              -- message : ' + err.message);
-
+			logger.debug(err.message, { method : 'getAll', point : logger.pt.catch });
 			throw err;
 		});
 
-	Logger.debug('[DAO -   END] TransactionDao#getAll');
-
-	return promiseEnd;
+	return promise;
 }
 
 /**
@@ -218,45 +209,37 @@ function getAll (name_query, filters) {
  */
 function getOne (name_query, filters) {
 
-	Logger.debug('[DAO - START] TransactionDao#getOne');
-	Logger.debug('              -- name_query : ' + name_query);
-	Logger.debug('              -- filters : ' + JSON.stringify(filters));
+	logger.debug({ method : 'getOne', point : logger.pt.start, params : {
+		name_query : name_query,
+		filters    : filters
+	} });
 
-	let promise;
-	try {
-		promise = DaoManager.getQuery('getOne', name_query, filters)
+	let promise = daoManager.getQuery('getOne', name_query, filters)
 			.then(function (query) {
-				return TransactionModel.findOneAsync(query);
-			});
-	} catch (err) {
-		promise = BPromise.reject(err);
-	}
-
-	let promiseEnd = promise
+				return transactionModel.findOneAsync(query);
+			})
 		.then(function (transaction) {
+			logger.debug({ method : 'getOne', point : logger.pt.end });
+
 			if (!transaction) {
 				throw new Exception.NoResultEx('No transaction found');
 			}
 			return BPromise.resolve(transaction);
 		})
 		.catch(function (err) {
-			Logger.debug('[DAO - CATCH] TransactionDao#getOne');
-			Logger.error('              -- message : ' + err.message);
-
+			logger.debug(err.message, { method : 'getOne', point : logger.pt.catch });
 			throw err;
 		});
 
-	Logger.debug('[DAO -   END] TransactionDao#getOne');
-
-	return promiseEnd;
+	return promise;
 }
 
 module.exports = {
 	create (input) {
 		return create(input);
 	},
-	update (input,name_query,  filters) {
-		return update(input,name_query,  filters);
+	update (input,name_query, filters) {
+		return update(input,name_query, filters);
 	},
 	remove (name_query, filters) {
 		return remove(name_query, filters);

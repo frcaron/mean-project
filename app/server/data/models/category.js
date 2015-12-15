@@ -1,25 +1,25 @@
 "use strict";
 
 // Inject
-var Path       = require('path');
+var path       = require('path');
 var BPromise   = require('bluebird');
-var Mongoose   = BPromise.promisifyAll(require('mongoose'));
-var DatePlugin = require(Path.join(global.__plugin, 'date'));
-var UserPlugin = require(Path.join(global.__plugin, 'user'));
-var Config     = require(Path.join(global.__core, 'system')).Config;
+var mongoose   = BPromise.promisifyAll(require('mongoose'));
+var datePlugin = require(path.join(global.__plugin, 'date'));
+var userPlugin = require(path.join(global.__plugin, 'user'));
+var config     = require(path.join(global.__core, 'system')).Config;
 
-var Schema     = Mongoose.Schema;
+var Schema     = mongoose.Schema;
 var Types      = Schema.Types;
 
 // Schema
 var CategorySchema = new Schema({
-	_id       : Config.db.seq ? Number : Types.ObjectId,
+	_id       : config.db.seq ? Number : Types.ObjectId,
 	name      : {
 		type     : String,
 		required : true
 	},
 	_type      : {
-		type     : Config.db.seq ? Number : Types.ObjectId,
+		type     : config.db.seq ? Number : Types.ObjectId,
 		ref      : 'TypeCategory',
 		required : true
 	},
@@ -44,8 +44,8 @@ CategorySchema.index({
 });
 
 // Plugin
-CategorySchema.plugin(DatePlugin);
-CategorySchema.plugin(UserPlugin);
+CategorySchema.plugin(datePlugin);
+CategorySchema.plugin(userPlugin);
 
 // Return
-module.exports = Mongoose.model('Category', CategorySchema);
+module.exports = mongoose.model('Category', CategorySchema);

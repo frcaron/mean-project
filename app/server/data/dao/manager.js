@@ -1,15 +1,15 @@
 "use strict";
 
 // Inject
-var Path      = require('path');
+var path      = require('path');
 var BPromise  = require('bluebird');
-var Queries   = require(Path.join(global.__config, 'queries'));
-var Exception = require(Path.join(global.__core, 'exception'));
-var Logger    = require(Path.join(global.__core, 'system')).Logger;
+var queries   = require(path.join(global.__config, 'queries'));
+var Exception = require(path.join(global.__core, 'exception'));
+var logger    = require(path.join(global.__core, 'logger'))('dao', __filename);
 
 module.exports = function (name_collection) {
-	let collection = Queries[name_collection];
 
+	let collection = queries[name_collection];
 	if(!collection) {
 		throw new Error('Collection not found');
 	}
@@ -18,10 +18,11 @@ module.exports = function (name_collection) {
 
 		getQuery : BPromise.method(function (name_fct, name_query, filters) {
 
-			Logger.debug('[DAO - START] DaoManager#getQuery');
-			Logger.debug('              -- name_fct   : ' + name_fct);
-			Logger.debug('              -- name_query : ' + name_query);
-			Logger.debug('              -- filters    : ' + JSON.stringify(filters));
+			logger.debug({ method : 'getQuery', point : logger.pt.start, params : {
+				name_fct   : name_fct,
+				name_query : name_query,
+				filters    : filters
+			} });
 
 			let output = {};
 			if(!name_fct || !name_query || !filters) {
@@ -83,8 +84,9 @@ module.exports = function (name_collection) {
 				}
 			});
 
-			Logger.debug('[DAO -   END] DaoManager#getQuery');
-			Logger.debug('              -- output   : ' + JSON.stringify(output));
+			logger.debug({ method : 'getQuery', point : logger.pt.end, params : {
+				output : output
+			} });
 
 			return output;
 		})

@@ -1,29 +1,30 @@
 "use strict";
 
 //Inject
-var Path               = require('path');
-var ResponseService    = require(Path.join(global.__service, 'response'));
-var ProgramService     = require(Path.join(global.__service, 'program'));
-var TransactionService = require(Path.join(global.__service, 'transaction'));
-var Exception          = require(Path.join(global.__core, 'exception'));
-var Logger             = require(Path.join(global.__core, 'system')).Logger;
+var path               = require('path');
+var responseService    = require(path.join(global.__service, 'response'));
+var programService     = require(path.join(global.__service, 'program'));
+var transactionService = require(path.join(global.__service, 'transaction'));
+var Exception          = require(path.join(global.__core, 'exception'));
+var logger             = require(path.join(global.__core, 'logger'))('route', __filename);
 
 // Properties
 var api_prefix = '/programs';
 
-module.exports = function (router) {
+module.exports = function (router, auth) {
 
 	router.route(api_prefix)
 
 		// Create one program
-		.post(function (req, res, next) {
+		.post(auth, function (req, res, next) {
 
 			let category_id = req.body.category_id || req.query.category_id;
 			let plan_id     = req.body.plan_id || req.query.plan_id;
 
-			Logger.debug('[WSP - VALID] ProgramRoute#post');
-			Logger.debug('              -- req.query.category_id : ' + category_id);
-			Logger.debug('              -- req.query.plan_id     : ' + plan_id);
+			logger.debug({ method : 'programs@post', point : logger.pt.valid, params : {
+				'category_id' : category_id,
+				'plan_id'     : plan_id
+			} });
 
 			// Validation
 			var msg = [];
@@ -40,10 +41,10 @@ module.exports = function (router) {
 
 		}, function (req, res, next) {
 
-			ProgramService.create(req, next, req.user.id);
+			programService.create(req, next, req.user.id);
 
 		}, function (req, res) {
-			ResponseService.success(res, {
+			responseService.success(res, {
 				result  : req.result
 			});
 		});
@@ -51,41 +52,41 @@ module.exports = function (router) {
 	router.route(api_prefix + '/:program_id')
 
 		// Get one program
-		.get(function (req, res, next) {
-			ProgramService.getByIdU(req, next, req.user.id);
+		.get(auth, function (req, res, next) {
+			programService.getByIdU(req, next, req.user.id);
 
 		}, function (req, res) {
-			ResponseService.success(res, {
+			responseService.success(res, {
 				result  : req.result
 			});
 		})
 
 		// Update one program
-		.put(function (req, res, next) {
-			ProgramService.update(req, next, req.user.id);
+		.put(auth, function (req, res, next) {
+			programService.update(req, next, req.user.id);
 
 		}, function (req, res) {
-			ResponseService.success(res, {
+			responseService.success(res, {
 				result  : req.result
 			});
 		})
 
 		// Delete one program
-		.delete(function (req, res, next) {
-			ProgramService.remove(req, next, req.user.id);
+		.delete(auth, function (req, res, next) {
+			programService.remove(req, next, req.user.id);
 
 		}, function (req, res) {
-			ResponseService.success(res);
+			responseService.success(res);
 		});
 
 	router.route(api_prefix + '/:program_id/transactions')
 
 		// Get all transactions by program
-		.get(function (req, res, next) {
-			TransactionService.allByProgramU(req, next, req.user.id);
+		.get(auth, function (req, res, next) {
+			transactionService.allByProgramU(req, next, req.user.id);
 
 		}, function (req, res) {
-			ResponseService.success(res, {
+			responseService.success(res, {
 				result  : req.result
 			});
 		});
