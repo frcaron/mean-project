@@ -1,6 +1,10 @@
 {% extends 'layouts/default.html' %}
-{% block main %}
-	<section ui-view ></section>
+
+{% block content %}
+	<section ui-view >
+		Loading
+	</section>
 	<script type="text/javascript">
+		var user = {{ user | json | safe }};
 	</script>
 {% endblock %}

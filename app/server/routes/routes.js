@@ -68,39 +68,19 @@ module.exports = function (app, passport) {
 		res.locals.description = config.app.description;
 		res.locals.keywords    = config.app.keywords;
 
-		// Todo
-		res.locals.title = 'Tite';
-
 		// Assets
 		res.locals.aggregatedassets = config.aggregatedassets;
 
 		next();
 
-	} // Basic routing
-	, basicRouter
-	);
-
-	// Home page or 404
-	app.use(function (req, res, next) {
-		if(req.path && req.path !== '/') {
-			return next();
-		}
-		res.render('index');
-
-	}, function (req, res) {
-		logger.debug({ method : '404', point : logger.pt.err });
-
-		res.render('404', {
-			error : 'Page inexistante'
-		});
-	});
+	}, basicRouter);
 
 	// Error handling
 	app.use(function (err, req, res, next) {
 		logger.error(err.message, { method : 'handlingPages', point : logger.pt.err, params : { stack : err } });
 
-		res.render('500', {
-			error : 'Erreur inconnue'
+		res.status(500).render('500', {
+			error : err.message
 		});
 	});
 };

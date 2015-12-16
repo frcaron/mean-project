@@ -3,9 +3,7 @@
 module.exports = [
 	function () {
 		return {
-			templateUrl: function (){
-				return 'components/home/views/header.html';
-			}
+			templateUrl : 'components/home/views/header.html'
 		};
 	}
 ];

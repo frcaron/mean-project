@@ -2,6 +2,6 @@
 
 module.exports = ['$scope',
 	function($scope) {
-		$scope.message = 'Core content';
+		$scope.message='Error content';
 	}
 ];
