@@ -6,11 +6,12 @@
 			],
 			"file_exclude_patterns":
 			[
-				".gitignore",
-				".jshintrc",
-				"api-skeleton.xls",
-				"npm-debug*",
-				".npmrc"
+				".gitignore",       // git pattern ignore
+				".npmrc",           // npm rules default
+				".jshintrc",        // js hint rules default
+				"tslint.json",      // ts lint rules default
+				"npm-debug*",       // npm file log
+				"api-skeleton.xls"  // api doc
 			],
 			"follow_symlinks": true,
 			"path": "."

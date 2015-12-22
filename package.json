@@ -17,6 +17,7 @@
   "dependencies": {
     "angular": "1.4.8",
     "angular-ui-router": "0.2.15",
+    "angular2": "2.0.0-beta.0",
     "animate.css": "3.4.0",
     "bcrypt-nodejs": "0.0.3",
     "bluebird": "2.10.2",
@@ -46,8 +47,8 @@
     "validator": "4.4.0",
     "winston": "2.1.1",
     "winston-daily-rotate-file": "1.0.1"
-},
-"devDependencies" : {
+  },
+  "devDependencies": {
     "del": "2.2.0",
     "gulp": "3.9.0",
     "gulp-angular-templatecache": "1.8.0",
