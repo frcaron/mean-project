@@ -1,5 +1,6 @@
 Git
 	* git clone https://github.com/frcaron/mean-project.git
+	* git config credential.helper store
 
 NodeJs
 	* Module
