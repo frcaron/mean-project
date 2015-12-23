@@ -4,56 +4,184 @@
 		"selected_items":
 		[
 			[
-				"ty",
-				"typeCategory"
+				"basicR",
+				"basicRouter"
 			],
 			[
-				"tr",
-				"transaction"
+				"temp",
+				"templatecache"
 			],
 			[
-				"tim",
-				"timestamp"
+				"stat",
+				"staticPath"
 			],
 			[
-				"v",
-				"validator"
+				"local",
+				"local_active"
 			],
 			[
-				"che",
-				"checkMeta"
+				"Val",
+				"Validator"
 			],
 			[
 				"pro",
-				"prototype"
+				"program"
 			],
 			[
-				"de",
-				"defaultLogger"
+				"tra",
+				"transaction"
 			],
 			[
-				"defau",
-				"defaultAssets"
+				"string",
+				"stringify"
 			],
 			[
-				"categ",
-				"category_id"
+				"type_categor",
+				"type_category_id"
+			],
+			[
+				"Da",
+				"DaoManager"
+			],
+			[
+				"faceboo",
+				"facebook_id"
+			],
+			[
+				"pass",
+				"passport"
+			],
+			[
+				"No",
+				"NoResultEx"
+			],
+			[
+				"fun",
+				"function"
+			],
+			[
+				"new",
+				"newUser"
 			],
 			[
 				"category",
 				"category_id"
 			],
 			[
-				"Categ",
-				"CategorySchema"
+				"ca",
+				"category"
 			],
 			[
-				"type",
+				"get",
+				"getOne"
+			],
+			[
+				"cate",
+				"categories"
+			],
+			[
+				"pr",
+				"programs"
+			],
+			[
+				"Err",
+				"ErrMng"
+			],
+			[
+				"err",
+				"err"
+			],
+			[
+				"re",
+				"reason"
+			],
+			[
+				"m",
+				"MetierError"
+			],
+			[
+				"categor",
+				"categories_id"
+			],
+			[
+				"typ",
 				"type_category_id"
 			],
 			[
-				"ca",
-				"categories"
+				"Category",
+				"CategoryDao"
+			],
+			[
+				"_",
+				"_user"
+			],
+			[
+				"Categ",
+				"CategoryDao"
+			],
+			[
+				"programs",
+				"programs_id"
+			],
+			[
+				"Trans",
+				"TransactionDao"
+			],
+			[
+				"progr",
+				"programs_id"
+			],
+			[
+				"Plan",
+				"PlanDao"
+			],
+			[
+				"type_",
+				"type_category_id"
+			],
+			[
+				"tr",
+				"transaction"
+			],
+			[
+				"categ",
+				"category"
+			],
+			[
+				"type",
+				"type_id"
+			],
+			[
+				"catego",
+				"categories_id"
+			],
+			[
+				"tran",
+				"transactions"
+			],
+			[
+				"Tran",
+				"TransactionDao"
+			],
+			[
+				"transa",
+				"transaction_id"
+			],
+			[
+				"user",
+				"user_id"
+			],
+			[
+				"filters",
+				"filters"
+			],
+			[
+				"u",
+				"update"
+			],
+			[
+				"res",
+				"resolve"
 			],
 			[
 				"plan",
@@ -64,80 +192,40 @@
 				"UserDao"
 			],
 			[
-				"cat",
-				"category"
+				"th",
+				"throws	@throws"
 			],
 			[
-				"get",
-				"getAll"
+				"t",
+				"throws	@throws"
+			],
+			[
+				"cat",
+				"categoryNew"
+			],
+			[
+				"sav",
+				"saveAsync"
+			],
+			[
+				"Car",
+				"CategoryModel"
+			],
+			[
+				"Categor",
+				"CategoryModel"
 			],
 			[
 				"Progr",
-				"ProgramDao"
-			],
-			[
-				"tye",
-				"typeCategory"
-			],
-			[
-				"in",
-				"inputCategory"
-			],
-			[
-				"typ",
-				"typeCategoryTmp"
-			],
-			[
-				"res",
-				"resolve"
-			],
-			[
-				"inpu",
-				"inputCategory"
-			],
-			[
-				"req",
-				"require"
-			],
-			[
-				"Err",
-				"error"
-			],
-			[
-				"mess",
-				"messageError"
-			],
-			[
-				"M",
-				"messageSuccess"
-			],
-			[
-				"message",
-				"messageSuccess"
-			],
-			[
-				"promise",
-				"promiseEnd"
-			],
-			[
-				"user",
-				"user_id"
+				"ProgramModel"
 			],
 			[
 				"remo",
 				"removeLinkCategory"
 			],
 			[
-				"re",
-				"removeLinkPlan"
-			],
-			[
 				"e",
 				"execAsync"
-			],
-			[
-				"pr",
-				"programService"
 			],
 			[
 				"a",
@@ -147,6 +235,14 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "test/test.js",
+			"settings":
+			{
+				"buffer_size": 145,
+				"line_ending": "Windows"
+			}
+		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -155,17 +251,13 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 137.0,
-		"last_filter": "remove",
+		"height": 375.0,
+		"last_filter": "stat",
 		"selected_items":
 		[
 			[
-				"remove",
-				"Package Control: Remove Package"
-			],
-			[
-				"type",
-				"TypeScript: Rename"
+				"stat",
+				"Git: Status"
 			],
 			[
 				"install",
@@ -176,19 +268,35 @@
 				"Git: Pull"
 			],
 			[
+				"slinter",
+				"SublimeLinter: Enable Linter"
+			],
+			[
+				"sublimeLinter",
+				"SublimeLinter: Choose Gutter Theme"
+			],
+			[
+				"sublimelinter",
+				"SublimeLinter: Disable Linter"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"pul",
+				"Git: Pull"
+			],
+			[
 				"push",
 				"Git: Push"
 			],
 			[
-				"st",
-				"Git: Status"
-			],
-			[
-				"stat",
-				"Git: Status"
-			],
-			[
 				"sta",
+				"Git: Status"
+			],
+			[
+				"statu",
 				"Git: Status"
 			],
 			[
@@ -196,72 +304,100 @@
 				"Git: Quick Commit"
 			],
 			[
-				"merge",
-				"Git: Merge"
+				"quic",
+				"Git: Quick Commit"
 			],
 			[
-				"mer",
-				"Git: Merge"
+				"quci",
+				"Git: Quick Commit"
 			],
 			[
-				"diff",
-				"Git: Diff"
+				"remo",
+				"Package Control: Remove Package"
 			],
 			[
-				"git",
-				"Git: Quick Status"
+				"color",
+				"Colorsublime: Install Theme"
 			],
 			[
-				"git mer",
-				"Git: Merge"
-			],
-			[
-				"me",
-				"Git: Merge"
+				"insta",
+				"Package Control: Install Package"
 			],
 			[
 				"status",
 				"Git: Status"
 			],
 			[
-				"com",
+				"quick",
 				"Git: Quick Commit"
 			],
 			[
-				"add",
+				"commit",
+				"Git: Quick Commit"
+			],
+			[
+				"git quic",
 				"Git: Quick Add"
 			],
 			[
-				"git add",
-				"Git: Add Current File"
+				"git",
+				"Git: Commit"
 			],
 			[
-				"quic",
-				"Git: Quick Commit"
-			],
-			[
-				"PULL",
-				"Git: Pull"
+				"commi",
+				"Git: Commit"
 			],
 			[
 				"q",
 				"Git: Quick Commit"
 			],
 			[
-				"quick",
-				"Git: Quick Commit"
+				"com",
+				"Git: Commit"
 			],
 			[
-				"git push",
-				"Git: Push"
+				"gommit",
+				"Git: Commit"
 			],
 			[
-				"git status",
-				"Git: Status"
+				"remote",
+				"Git: Remote"
 			],
 			[
-				"commit",
-				"Git: Quick Commit"
+				"add",
+				"Git: Quick Add"
+			],
+			[
+				"linter",
+				"SublimeLinter: Clear Caches"
+			],
+			[
+				"sublim",
+				"SublimeLinter: Disable Linter"
+			],
+			[
+				"rem",
+				"Package Control: Remove Package"
+			],
+			[
+				"install ",
+				"Package Control: Install Package"
+			],
+			[
+				"remov",
+				"Package Control: Remove Package"
+			],
+			[
+				"re",
+				"Package Control: Remove Package"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
 			],
 			[
 				"at",
@@ -284,8 +420,8 @@
 				"Set Syntax: SublimeGit Show"
 			],
 			[
-				"statu",
-				"Git: Status"
+				"merge",
+				"Git: Merge"
 			],
 			[
 				"instal",
@@ -296,24 +432,8 @@
 				"SublimeLinter: Lint This View"
 			],
 			[
-				"rem",
-				"Package Control: Remove Package"
-			],
-			[
-				"insta",
-				"Package Control: Install Package"
-			],
-			[
-				"remo",
-				"Package Control: Remove Package"
-			],
-			[
 				"fet",
 				"Git: Fetch"
-			],
-			[
-				"inst",
-				"Package Control: Install Package"
 			],
 			[
 				"git p",
@@ -348,10 +468,6 @@
 				"Git: Checkout Current File"
 			],
 			[
-				"pul",
-				"Git: Pull Current Branch"
-			],
-			[
 				"c",
 				"Git: Checkout"
 			],
@@ -365,10 +481,6 @@
 			],
 			[
 				"remot",
-				"Git: Remote"
-			],
-			[
-				"remote",
 				"Git: Remote"
 			],
 			[
@@ -386,15 +498,29 @@
 			[
 				"Git",
 				"Git: Status"
+			],
+			[
+				"mer",
+				"Git: Merge"
 			]
 		],
-		"width": 507.0
+		"width": 450.0
 	},
 	"console":
 	{
-		"height": 428.0,
+		"height": 288.0,
 		"history":
 		[
+			"where jshint;",
+			"where jshint",
+			"npm -v",
+			"npm",
+			"which jshint",
+			"where \"SublimeLinter-jshint\";",
+			"where linter;",
+			"where linter",
+			"where linter;",
+			"where linter",
 			"ls",
 			"import urllib.request,os,hashlib; h = 'eb2297e1a458f27d836c04bb0cbaf282' + 'd0e7a3098092775ccb37ca9d6b2e4b7d'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
 		]
@@ -410,168 +536,181 @@
 	},
 	"expanded_folders":
 	[
-		"/Users/francois/Documents/workspace/mean-project",
-		"/Users/francois/Documents/workspace/mean-project/app",
-		"/Users/francois/Documents/workspace/mean-project/app/client",
-		"/Users/francois/Documents/workspace/mean-project/app/client/components",
-		"/Users/francois/Documents/workspace/mean-project/app/client/components/home",
-		"/Users/francois/Documents/workspace/mean-project/app/client/components/home/controllers",
-		"/Users/francois/Documents/workspace/mean-project/app/client/components/home/routes",
-		"/Users/francois/Documents/workspace/mean-project/app/client/components/home/views",
-		"/Users/francois/Documents/workspace/mean-project/app/client/components/user",
-		"/Users/francois/Documents/workspace/mean-project/app/client/components/user/routes",
-		"/Users/francois/Documents/workspace/mean-project/app/server",
-		"/Users/francois/Documents/workspace/mean-project/app/server/core",
-		"/Users/francois/Documents/workspace/mean-project/app/server/data",
-		"/Users/francois/Documents/workspace/mean-project/app/server/data/dao"
+		"/C/App/workspace/mean-project",
+		"/C/App/workspace/mean-project/test"
 	],
 	"file_history":
 	[
-		"/Users/francois/Documents/workspace/mean-project/app/client/components/home/test/test.ts",
-		"/Users/francois/Documents/workspace/mean-project/package.json",
-		"/Users/francois/Documents/workspace/mean-project/app/client/components/home/routes/header.js",
-		"/Users/francois/Documents/workspace/mean-project/app/client/components/home/routes/test.ts",
-		"/Users/francois/Documents/workspace/mean-project/app/server/core/logger.js",
-		"/Users/francois/Documents/workspace/mean-project/app/client/components/home/views/index.html",
-		"/Users/francois/Documents/workspace/mean-project/app/server/data/dao/plan.js",
-		"/Users/francois/Documents/workspace/mean-project/TODO.txt",
-		"/Users/francois/Documents/workspace/mean-project/README.md",
-		"/Users/francois/Documents/workspace/mean-project/config/express.js",
-		"/Users/francois/Documents/workspace/mean-project/config/middleware/logging.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/data/dao/manager.js",
-		"/Users/francois/Documents/workspace/mean-project/config/passport.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/routes/route.api.public.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/services/user.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/routes/route.api.admin.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/routes/routes.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/data/dao/user.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/data/dao/category.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/data/dao/program.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/data/dao/transaction.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/data/dao/type-category.js",
-		"/Users/francois/Documents/workspace/mean-project/config/env/development.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/services/session.js",
-		"/Users/francois/Documents/workspace/mean-project/config/env/production.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/routes/api/public/log/transaction.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/routes/api/public/log/program.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/routes/api/public/log/plan.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/routes/api/admin/log/user.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/routes/api/public/log/category.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/routes/api/admin/log/type-category.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/routes/api/public/unlog/session.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/services/transaction.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/services/category.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/services/plan.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/services/program.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/services/share.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/services/type-category.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/core/system.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/routes/route.basic.js",
-		"/Users/francois/Documents/workspace/mean-project/node_modules/winston/lib/winston/logger.js",
-		"/Users/francois/Documents/workspace/mean-project/config/assets.js",
-		"/Users/francois/Documents/workspace/mean-project/node_modules/winston/lib/winston/config.js",
-		"/Users/francois/Documents/workspace/mean-project/app/client/components/home/index.js",
-		"/Users/francois/Documents/workspace/mean-project/app/client/components/home/routes/home.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/views/layouts/default.html",
-		"/Users/francois/Documents/workspace/mean-project/app/client/client.js",
-		"/Users/francois/Documents/workspace/mean-project/gulpfile.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/views/404.html",
-		"/Users/francois/Documents/workspace/mean-project/app/server/views/includes/head.html",
-		"/Users/francois/Documents/workspace/mean-project/app/server/views/includes/foot.html",
-		"/Users/francois/Documents/workspace/mean-project/app/client/dist/js/app.bundle.js",
-		"/Users/francois/Documents/workspace/mean-project/config/assets/all.js",
-		"/Users/francois/Documents/workspace/mean-project/app/client/dist/js/bundle.js",
-		"/Users/francois/Documents/workspace/mean-project/config/assets/production.js",
-		"/Users/francois/Documents/workspace/mean-project/config/env/all.js",
-		"/Users/francois/Documents/workspace/mean-project/mean-project.sublime-project",
-		"/Users/francois/Documents/workspace/mean-project/config/assets/development.js",
-		"/Users/francois/Documents/workspace/mean-project/bin/postinstall.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/data/models/counters.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/data/models/user.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/data/models/type-category.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/data/models/transaction.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/data/models/program.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/data/models/plan.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/data/models/category.js",
-		"/Users/francois/Documents/workspace/mean-project/app.js",
-		"/Users/francois/Documents/workspace/mean-project/.gitignore",
-		"/Users/francois/Documents/workspace/mean-project/.bowerrc",
-		"/Users/francois/Documents/workspace/mean-project/app/server/LoggerManager.js",
-		"/Users/francois/Documents/workspace/mean-project/app/client/views/index.html",
-		"/Users/francois/Documents/workspace/mean-project/package/system.js",
-		"/Users/francois/Documents/workspace/mean-project/app/server/services/ResponseService.js",
-		"/Users/francois/Documents/workspace/mean-project/app/client/assets/css/style.css",
-		"/Users/francois/Documents/workspace/mean-project/app/client/js/main.js",
-		"/Users/francois/Documents/workspace/test-meanio/packages/core/system/public/views/index.html",
-		"/Users/francois/Documents/workspace/test-meanio/mean.json",
-		"/Users/francois/Documents/workspace/mean-project/src/client/app/views/index.html",
-		"/Users/francois/Documents/workspace/mean-project/app/client/js/test.js",
-		"/Users/francois/Documents/workspace/mean-project/Gruntfile.js",
-		"/Users/francois/Documents/workspace/mean-project/app/client/dist/MeanProject.js",
-		"/Users/francois/Documents/workspace/mean-project/app/client/dist/test.js",
-		"/Users/francois/Documents/workspace/mean-project/app/client/js/components/test1.js",
-		"/Users/francois/Documents/workspace/mean-project/app/client/dist/MeanProject.min.js",
-		"/Users/francois/Documents/workspace/mean-project/app/client/js/components/subfolder/test2.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/data/dao/CategoryDao.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/data/dao/PlanDao.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/data/dao/ProgramDao.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/data/dao/TransactionDao.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/data/dao/TypeCategoryDao.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/data/dao/UserDao.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/data/dao/DaoManager.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/data/models/ProgramModel.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/data/models/UserModel.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/data/models/TypeCategoryModel.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/data/models/TransactionModel.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/data/models/PlanModel.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/data/models/CountersModel.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/data/models/CategoryModel.js",
-		"/Users/francois/Documents/workspace/mean-project/config/strategies/facebook.js",
-		"/Users/francois/Documents/workspace/mean-project/config/strategies/local.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/routes/routes.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/routes/route.basic.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/routes/route.api.public.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/routes/route.api.admin.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/routes/api/public/unlog/SessionRoute.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/routes/api/public/log/UserRoute.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/routes/api/public/log/TypeCategoryRoute.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/routes/api/public/log/TransactionRoute.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/routes/api/public/log/SessionRoute.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/routes/api/public/log/ProgramRoute.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/routes/api/public/log/PlanRoute.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/routes/api/public/log/MeRoute.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/routes/api/public/log/CategoryRoute.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/routes/api/admin/unlog/TypeCategoryRoute.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/routes/api/admin/log/UserRoute.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/routes/api/admin/log/TypeCategoryRoute.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/services/share/BudgetService.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/services/CategoryService.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/services/PlanService.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/services/ProgramService.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/services/ResponseService.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/services/SessionService.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/services/TransactionService.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/services/UserService.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/services/TypeCategoryService.js",
-		"/Users/francois/Documents/workspace/mean-project/src/server/LoggerManager.js",
-		"/Users/francois/Documents/workspace/mean-project/src/client/app/components/test.html"
+		"/C/App/workspace/mean-project/mean-project.sublime-project",
+		"/C/App/workspace/mean-project/gulpfile.js",
+		"/C/App/sublimeText/Data/Packages/User/SublimeLinter.sublime-settings",
+		"/C/App/workspace/mean-project/.jshintrc",
+		"/C/App/sublimeText/Data/Packages/SublimeLinter/SublimeLinter.sublime-settings",
+		"/C/App/sublimeText/Data/Packages/User/Preferences.sublime-settings",
+		"/C/App/sublimeText/Data/Packages/SublimeGit/SublimeGit.sublime-settings",
+		"/C/App/workspace/mean-project/app/client/client.js",
+		"/C/App/workspace/mean-project/README.md",
+		"/C/App/workspace/mean-project/package.json",
+		"/C/App/sublimeText/Data/Packages/User/Default (Windows).sublime-keymap",
+		"/C/App/workspace/mean-project/config/passport.js",
+		"/C/App/workspace/mean-project/app/server/data/models/user.js",
+		"/C/App/Workspace/mean-project/app/server/routes/route.basic.js",
+		"/C/App/Workspace/mean-project/app/server/data/dao/type-category.js",
+		"/C/App/Workspace/mean-project/app/server/services/program.js",
+		"/C/App/Workspace/mean-project/app/server/services/plan.js",
+		"/C/App/Workspace/mean-project/app/server/services/category.js",
+		"/C/App/Workspace/mean-project/app/server/services/share.js",
+		"/C/App/Workspace/mean-project/config/middleware/logging.js",
+		"/C/App/Workspace/mean-project/app/server/services/transaction.js",
+		"/C/App/Workspace/mean-project/app/server/services/type-category.js",
+		"/C/App/Workspace/mean-project/app/server/core/logger.js",
+		"/C/App/Workspace/mean-project/app/server/core/system.js",
+		"/C/App/Workspace/mean-project/app/server/services/user.js",
+		"/C/App/Workspace/mean-project/app/server/routes/route.api.public.js",
+		"/C/App/Workspace/mean-project/app/server/routes/route.api.admin.js",
+		"/C/App/Workspace/mean-project/config/passport.js",
+		"/C/App/Workspace/mean-project/app/server/services/session.js",
+		"/C/App/Workspace/mean-project/node_modules/winston/lib/winston/logger.js",
+		"/C/App/Workspace/mean-project/node_modules/winston/lib/winston/config.js",
+		"/C/App/Workspace/mean-project/config/assets.js",
+		"/C/App/Workspace/mean-project/gulpfile.js",
+		"/C/App/Workspace/mean-project/app/client/client.js",
+		"/C/App/Workspace/mean-project/app/client/components/home/views/index.html",
+		"/C/App/Workspace/mean-project/app/client/components/home/controllers/home.js",
+		"/C/App/Workspace/mean-project/app/server/data/dao/manager.js",
+		"/C/App/Workspace/mean-project/config/env/production.js",
+		"/C/App/Workspace/mean-project/app/server/data/dao/transaction.js",
+		"/C/App/Workspace/mean-project/app/server/data/dao/program.js",
+		"/C/App/Workspace/mean-project/app/server/data/dao/plan.js",
+		"/C/App/Workspace/mean-project/app/server/data/dao/category.js",
+		"/C/App/Workspace/mean-project/config/env/development.js",
+		"/C/App/Workspace/mean-project/app/server/data/dao/user.js",
+		"/C/App/Workspace/mean-project/app/server/data/models/category.js",
+		"/C/App/Workspace/mean-project/app/server/data/models/program.js",
+		"/C/App/Workspace/mean-project/app/server/data/models/transaction.js",
+		"/C/App/Workspace/mean-project/app/server/data/models/type-category.js",
+		"/C/App/Workspace/mean-project/app/server/data/models/user.js",
+		"/C/App/Workspace/mean-project/app/server/data/models/counters.js",
+		"/C/App/Workspace/mean-project/app/server/data/models/plan.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/admin/log/type-category.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/admin/log/user.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/admin/unlog/type-category.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/category.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/me.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/user.js",
+		"/C/App/Workspace/mean-project/config/strategies/local.js",
+		"/C/App/Workspace/mean-project/app/server/routes/routes.js",
+		"/C/App/Workspace/mean-project/config/strategies/facebook.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public/unlog/session.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/type-category.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/transaction.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/plan.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/program.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/session.js",
+		"/C/App/Workspace/mean-project/server.js",
+		"/C/App/Workspace/mean-project/config/express.js",
+		"/C/App/Workspace/mean-project/app/server/core/exception.js",
+		"/C/App/Workspace/mean-project/config/app.js",
+		"/C/App/SublimeText3/Data/Packages/User/Preferences.sublime-settings",
+		"/C/App/Workspace/mean-project/package.json",
+		"/C/App/Workspace/mean-project/app/client/assets/css/style.css",
+		"/C/App/Workspace/mean-project/app/server/views/includes/head.html",
+		"/C/App/Workspace/mean-project/TODO.txt",
+		"/C/App/Workspace/mean-project/app/server/views/includes/foot.html",
+		"/C/App/Workspace/mean-project/config/env/test.js",
+		"/C/App/Workspace/mean-project/app/client/dist/js/template.min.js",
+		"/C/App/Workspace/mean-project/app/server/views/layouts/default.html",
+		"/C/App/Workspace/mean-project/app/client/components/home/index.js",
+		"/C/App/Workspace/mean-project/app/client/dist/js/templates.js",
+		"/C/App/Workspace/mean-project/.gitignore",
+		"/C/App/Workspace/mean-project/mean-project.sublime-project",
+		"/C/App/Workspace/mean-project/app/client/components/index.js",
+		"/C/App/Workspace/mean-project/app/client/dist/css/app.css",
+		"/C/App/Workspace/mean-project/config/assets/all.js",
+		"/C/App/Workspace/mean-project/README.md",
+		"/C/App/Workspace/mean-project/config/assets/production.json",
+		"/C/App/Workspace/mean-project/config/assets.json",
+		"/C/App/Workspace/mean-project/app/client/index.js",
+		"/C/App/Workspace/mean-project/.npmrc",
+		"/C/App/Workspace/mean-project/config/assets/development.js",
+		"/C/App/Workspace/mean-project/app/server/views/index.html",
+		"/C/App/Workspace/mean-project/config/env/all.js",
+		"/C/App/Workspace/mean-project/config/assets/production.js",
+		"/C/App/Workspace/mean-project/app.js",
+		"/C/App/Workspace/mean-project/Gruntfile.js",
+		"/C/App/Workspace/mean-project/bower.json",
+		"/C/App/Workspace/mean-project/bin/postinstall.js",
+		"/C/App/Workspace/mean-project/logs/morgan/log.2015-12-07",
+		"/C/App/Workspace/mean-project/logs/winston/log.2015-12-07",
+		"/C/App/Workspace/mean-project/app/server/services/response.js",
+		"/C/App/SublimeText3/Data/Packages/SublimeLinter/SublimeLinter.sublime-settings",
+		"/C/App/Workspace/mean-project/app/client/views/index.html",
+		"/C/App/Workspace/mean-project/app/server/data/dao/UserDao.js",
+		"/C/App/Workspace/mean-project/bin/www",
+		"/C/App/Workspace/mean-project/app/server/data/dao/CategoryDao.js",
+		"/C/App/Workspace/mean-project/app/server/data/dao/DaoManager.js",
+		"/C/App/Workspace/mean-project/app/server/data/dao/PlanDao.js",
+		"/C/App/Workspace/mean-project/app/server/data/dao/ProgramDao.js",
+		"/C/App/Workspace/mean-project/app/server/data/dao/TransactionDao.js",
+		"/C/App/Workspace/mean-project/app/server/data/dao/TypeCategoryDao.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/admin/log/TypeCategoryRoute.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/admin/log/UserRoute.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/CategoryRoute.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/PlanRoute.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/ProgramRoute.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public/log/TransactionRoute.js",
+		"/C/App/Workspace/mean-project/app/server/routes/api/public/unlog/SessionRoute.js",
+		"/C/App/Workspace/mean-project/app/server/services/CategoryService.js",
+		"/C/App/Workspace/mean-project/app/server/services/PlanService.js",
+		"/C/App/Workspace/mean-project/app/server/services/ProgramService.js",
+		"/C/App/Workspace/mean-project/app/server/services/SessionService.js",
+		"/C/App/Workspace/mean-project/app/server/services/share/BudgetService.js",
+		"/C/App/Workspace/mean-project/app/server/services/TransactionService.js",
+		"/C/App/Workspace/mean-project/app/server/services/TypeCategoryService.js",
+		"/C/App/Workspace/mean-project/app/server/services/UserService.js",
+		"/C/App/Workspace/mean-project/app/server/LoggerManager.js"
 	],
 	"find":
 	{
-		"height": 35.0
+		"height": 22.0
 	},
 	"find_in_files":
 	{
-		"height": 93.0,
+		"height": 90.0,
 		"where_history":
 		[
-			"/Users/francois/Documents/workspace/mean-project/app/server",
-			"/Users/francois/Documents/workspace/mean-project/node_modules/winston/lib/winston",
-			"/Users/francois/Documents/workspace/mean-project/config/assets.js",
-			"/Users/francois/Documents/workspace/mean-project",
-			"/Users/francois/Documents/workspace/mean-project/app/server",
-			"/Users/francois/Documents/workspace/mean-project/app",
-			"/Users/francois/Documents/workspace/mean-project/app/server"
+			"C:\\App\\Workspace\\mean-project\\node_modules\\winston",
+			"C:\\App\\Workspace\\mean-project\\node_modules\\winston\\lib\\winston",
+			"C:\\App\\Workspace\\mean-project\\node_modules\\winston",
+			"C:\\App\\Workspace\\mean-project",
+			"C:\\App\\Workspace\\mean-project\\config",
+			"C:\\App\\Workspace\\mean-project\\app",
+			"C:\\App\\Workspace\\mean-project\\app\\server",
+			"C:\\App\\Workspace\\mean-project\\config",
+			"C:\\App\\Workspace\\mean-project\\app",
+			"C:\\App\\Workspace\\mean-project",
+			"C:\\App\\Workspace\\mean-project\\app",
+			"C:\\App\\Workspace\\mean-project\\app\\server\\services",
+			"C:\\App\\Workspace\\mean-project\\app",
+			"C:\\App\\Workspace\\mean-project",
+			"C:\\App\\Workspace\\mean-project\\app\\server\\routes\\api\\public\\log",
+			"C:\\App\\Workspace\\mean-project",
+			"C:\\App\\Workspace\\mean-project\\app\\server\\routes",
+			"C:\\App\\Workspace\\mean-project",
+			"C:\\App\\Workspace\\mean-project\\app",
+			"C:\\App\\Workspace\\mean-project\\app\\server\\data\\dao",
+			"C:\\App\\Workspace\\mean-project\\app\\server\\services",
+			"C:\\App\\Workspace\\mean-project\\app",
+			"C:\\App\\Workspace\\mean-project\\app\\server\\services",
+			"C:\\App\\Workspace\\mean-project",
+			"C:\\App\\Workspace\\mean-project\\app",
+			"C:\\App\\Workspace\\mean-project",
+			"C:\\App\\Workspace\\mean-project\\app\\",
+			"C:\\App\\Workspace\\mean-project\\app\\routes",
+			"C:\\App\\Workspace\\mean-project\\app\\services",
+			"C:\\App\\Workspace\\mean-project\\app\\routes",
+			"C:\\App\\Workspace\\mean-project\\app\\services",
+			"C:\\App\\Workspace\\mean-project\\node_modules\\bluebird"
 		]
 	},
 	"find_state":
@@ -579,134 +718,134 @@
 		"case_sensitive": true,
 		"find_history":
 		[
-			"onFinished",
-			"method : 'getOne'",
-			"body",
-			"silent",
-			"align",
-			"output",
-			"push(levels)",
-			"push(level",
-			"log",
-			"Logger",
-			"created",
-			"silent",
-			"Logger.",
-			"Logger.prototype",
-			" : '',\n	'ws'      : '',\n\n	// Param\n	'' : ''",
-			": 'blue',\n	'service' : '',\n	'ws' : ''",
+			"length",
+			"lenght",
+			"length",
 			"config",
-			"addColors",
-			"server",
-			"watch",
-			"\"",
-			"'",
-			": 'app/client/dist',\n		js : [ \"app/client/client.js\" ],\n		views :",
-			"watching",
-			"matching",
-			"a",
-			"Assets",
-			"js",
-			" : ",
-			"WinstonRotateFile",
-			"FS",
-			"Fs",
-			"FileStreamRotator",
-			"   :",
-			"\n						token : req.result",
-			"src",
-			": \"1.4.8\",\n    \"angular-route\": \"1.4.8\",\n    \"animate.css\": \"3.4.0\",\n    \"bcrypt-nodejs\": \"0.0.3\",\n    \"bluebird\": \"2.10.2\",\n    \"body-parser\": \"1.14.1\",\n    \"bootstrap\": \"3.3.6\",\n    \"connect-flash\": \"0.1.1\",\n    \"cookie-parser\": \"1.4.0\",\n    \"express\": \"4.13.3\",\n    \"express-session\": \"1.12.1\",\n    \"font-awesome\": \"4.4.0\",\n    \"jquery\": \"2.1.4\",\n    \"moment\": \"2.10.6\",\n    \"mongoose\": \"4.2.7\",\n    \"morgan\": \"1.6.1\",\n    \"passport\": \"0.3.2\",\n    \"passport-facebook\": \"2.0.0\",\n    \"passport-local\": \"1.0.0\",\n    \"serve-favicon\": \"2.3.0\",\n    \"validator\": \"4.3.0\",\n    \"winston\": \"2.1.1\"",
-			"app",
-			"me = process.env.HOSTNAME || 'localhost';\nlet port = pr",
-			"ry",
-			"' : '_id',\n				'user_id' : '",
-			"getOne",
-			"Transaction not found",
-			"Type No category found",
-			"Type category not found",
-			"Category not found",
-			"Program not found",
-			"Plan not found",
-			"User not found",
-			"user",
-			"et : process.env.SECRET || SecretConfig.secret,\n	resave : true,\n	save",
-			"TokenConfig",
-			"__app",
-			"__base",
-			"0",
-			"ParamsError",
-			"ErrorManager",
-			"ErrMng",
-			"global.__service_share + '/",
-			"global.__app",
-			"active",
-			"category_id",
-			"plan_id",
-			"transaction_id",
-			"type_category_id",
-			"\"\n",
+			"exports",
+			"config",
+			"colorize(",
+			"colorize",
+			"configure",
+			"config",
+			"this.confi",
+			"config",
+			"color",
+			"formatter",
+			"Logger",
+			"CountersModel",
+			"DaoManager",
+			"Path",
+			"Queries",
+			"Logger",
+			"Queries",
+			"Path",
+			"Logger",
+			"CountersModel",
+			"DaoManager",
+			"Path",
+			"Logger",
+			"CountersModel",
+			"ProgramModel",
+			"DaoManager",
+			"Path",
+			"Logger",
+			"CountersModel",
+			"DaoManager",
+			"Path",
+			"Logger",
+			"CountersModel",
+			"DaoManager",
+			"Path",
+			"UserModel",
+			"Logger",
+			"UserModel",
+			"DaoManager",
+			"Path",
+			"Config",
+			"UserPlugin",
+			"DatePlugin",
+			"Mongoose",
+			"Path",
+			"Config",
+			"Mongoose",
+			"Path",
+			"Config",
+			"UserPlugin",
+			"DatePlugin",
+			"Mongoose",
+			"Path",
+			"Config",
+			"UserPlugin",
+			"DatePlugin",
+			"Mongoose",
+			"Path",
+			"Config",
+			"UserPlugin",
+			"DatePlugin",
+			"Mongoose",
+			"Path",
+			"Config",
+			"DatePlugin",
+			"Mongoose",
+			"Path",
+			"Config",
+			"DatePlugin",
+			"Mongoose",
+			"Validator",
+			"Bcrypt",
+			"Path",
+			"Logger",
+			"function",
+			"TypeCategoryService",
+			"ResponseService",
+			"Path",
+			"Logger",
 			"UserService",
-			"ctrl+e",
-			"ctrl+a",
-			"super+é",
-			"super+&",
-			"super+a",
-			"super+s",
-			"super+q",
-			"super+e",
-			"super+d",
-			"super+a",
-			"super+e",
-			" : req.body.firstname,\n			surname  : req.body.surname,\n			email     : req.body.email,\n			password  : req.body.password,\n			admin    ",
-			"alt+a",
-			"alt+e",
-			"inputCategory",
-			"typeCategory",
+			"ResponseService",
+			"Path",
+			"TypeCategoryService",
+			"ResponseService",
+			"Path",
+			"Logger",
+			"CategoryService",
+			"ResponseService",
+			"Path",
 			"UserService",
-			"query",
-			"__model",
-			"Start",
-			"Promise",
-			"\n//",
-			"Promise",
-			"\n//",
-			"Promise",
-			"promise",
-			"Promise",
-			"promise",
-			"Promise",
-			"promise",
-			"Promise",
-			"promise",
-			"Promise",
-			"responseService",
 			"ResponseService",
-			"responseService",
-			"Dwt",
-			"Password",
-			"password",
-			"responseService",
+			"Path",
+			"Logger",
+			"Exception",
+			"ProgramService",
+			"PlanService",
 			"ResponseService",
-			"responseService",
-			"tokenConfig",
-			"        ",
-			"jwt",
-			"active",
-			"express",
-			"tokenConfig",
-			"jwt",
-			"responseService",
+			"Path",
+			"Logger",
+			"TransactionService",
+			"ProgramService",
 			"ResponseService",
-			"responseService",
-			"tokenConfig",
-			"jwt",
-			"responseService",
+			"Path",
+			"SessionService",
 			"ResponseService",
-			"responseService",
-			"tokenConfig",
-			"jwt",
-			"userService",
-			"UserService"
+			"Path",
+			"Logger",
+			"TransactionService",
+			"ResponseService",
+			"Moment",
+			"Path",
+			"TransactionService",
+			"CategoryService",
+			"ResponseService",
+			"Path",
+			"UserService",
+			"ResponseService",
+			"Validator",
+			"Path",
+			"Logger",
+			"Config",
+			"SessionService",
+			"ResponseService",
+			"Validator"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -714,39 +853,152 @@
 		"regex": false,
 		"replace_history":
 		[
-			"'",
-			"No transaction found",
-			"No type category found",
-			"No category found",
-			"No program found",
-			"No plan found",
-			"No user found",
-			"SecretConfig",
-			"MetierError",
-			"ErrMng",
-			"ErrorManager",
-			"global.__service + '/share/",
-			"global.__server",
-			"start",
-			"BPromise"
+			"__core",
+			"/ResponseService",
+			"req.user.id",
+			"req.user.user_id",
+			"req.user.id",
+			"Exception",
+			"ParamEx",
+			"DuplicateEx",
+			"NoResultEx",
+			"ExManager",
+			"ExMng",
+			"ExceptionManager",
+			"user_id",
+			"Logger.error('              --",
+			"Logger.debug('              --",
+			"Logger.debug('              -- input",
+			"[WSP - VALID]",
+			"[WSA - VALID]",
+			"[SER - CATCH]",
+			"[DAO - CATCH]",
+			"[WSB - START]",
+			"[WSB -   END]",
+			"[WSP -   END]",
+			"[WSA -   END]",
+			"[SER -   END]",
+			"[DAO -   END]",
+			"[WSA - START]",
+			"[WSP - START]",
+			"[SER - START]",
+			"[DAO - START]",
+			"global.__service_share",
+			"require(global.__service_trans + '/ResponseService');",
+			"var ResponseService = require(global.__service_trans + '/ResponseService');",
+			"C:\\App\\Workspace\\mean-project\nvar ResponseService = require(global.__service_trans + '/ResponseService');"
 		],
-		"reverse": false,
+		"reverse": true,
 		"show_context": true,
 		"use_buffer2": true,
-		"whole_word": false,
+		"whole_word": true,
 		"wrap": true
 	},
 	"groups":
 	[
 		{
+			"selected": 0,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "test/test.js",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 145,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content"
+							],
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"typescript_plugin_format_options":
+							{
+								"convertTabsToSpaces": false,
+								"indentSize": 4,
+								"tabSize": 4
+							}
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
 			]
 		}
 	],
 	"incremental_find":
 	{
-		"height": 44.0
+		"height": 22.0
 	},
 	"input":
 	{
@@ -797,7 +1049,7 @@
 	},
 	"output.git-pull":
 	{
-		"height": 159.0
+		"height": 106.0
 	},
 	"output.git-push":
 	{
@@ -807,15 +1059,11 @@
 	{
 		"height": 156.0
 	},
-	"output.unsaved_changes":
-	{
-		"height": 100.0
-	},
 	"pinned_build_system": "",
 	"project": "mean-project.sublime-project",
 	"replace":
 	{
-		"height": 64.0
+		"height": 40.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -825,12 +1073,20 @@
 		"selected_items":
 		[
 			[
-				"tra",
-				"app\\routes\\api\\log\\transaction.js"
+				"progra",
+				"app\\data\\dao\\ProgramDao.js"
+			],
+			[
+				"programdao",
+				"app\\data\\dao\\ProgramDao.js"
 			],
 			[
 				"program",
-				"app\\routes\\api\\log\\program.js"
+				"app\\data\\dao\\ProgramDao.js"
+			],
+			[
+				"tra",
+				"app\\routes\\api\\log\\transaction.js"
 			],
 			[
 				"planser",
@@ -906,12 +1162,12 @@
 	},
 	"select_symbol":
 	{
-		"height": 392.0,
+		"height": 0.0,
 		"last_filter": "",
 		"selected_items":
 		[
 		],
-		"width": 880.0
+		"width": 0.0
 	},
 	"selected_group": 0,
 	"settings":
@@ -921,7 +1177,7 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 249.0,
+	"side_bar_width": 321.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{
